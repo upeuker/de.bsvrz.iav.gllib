@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.iav.gllib.gllib;
+package de.bsvrz.iav.gllib.gllib;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.TreeSet;
 
-import de.sys.funclib.i18n.Messages;
+import de.bsvrz.sys.funclib.i18n.Messages;
 
 
 /**

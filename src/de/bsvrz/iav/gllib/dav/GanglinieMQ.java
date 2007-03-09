@@ -1,9 +1,9 @@
-package de.iav.gllib.dav;
+package de.bsvrz.iav.gllib.dav;
 
 import java.util.ArrayList;
 
-import de.iav.gllib.gllib.Approximation;
-import de.iav.gllib.gllib.Ganglinie;
+import de.bsvrz.iav.gllib.gllib.Approximation;
+import de.bsvrz.iav.gllib.gllib.Ganglinie;
 
 
 

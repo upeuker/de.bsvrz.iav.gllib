@@ -1,4 +1,4 @@
-package de.iav.gllib.gllib;
+package de.bsvrz.iav.gllib.gllib;
 
 import java.util.TreeSet;
 

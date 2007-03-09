@@ -1,8 +1,8 @@
-package de.iav.gllib.gllib;
+package de.bsvrz.iav.gllib.gllib;
 
 import java.util.ResourceBundle;
 
-import de.sys.funclib.i18n.MessageHandler;
+import de.bsvrz.sys.funclib.i18n.MessageHandler;
 
 /**
  * Versorgt das Package de.bwl.rpt.ref95.iav, samt Subpackages, mit
@@ -52,7 +52,7 @@ public enum GlLibMessages implements MessageHandler {
 			.getBundle(BUNDLE_NAME);
 
 	/**
-	 * @see de.sys.funclib.i18n.MessageHandler#getResourceBundle()
+	 * @see de.bsvrz.sys.funclib.i18n.MessageHandler#getResourceBundle()
 	 */
 	public ResourceBundle getResourceBundle() {
 		return RESOURCE_BUNDLE;

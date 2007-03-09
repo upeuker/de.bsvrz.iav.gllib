@@ -1,6 +1,6 @@
-package de.iav.gllib.gllib;
+package de.bsvrz.iav.gllib.gllib;
 
-import de.sys.funclib.i18n.Messages;
+import de.bsvrz.sys.funclib.i18n.Messages;
 
 
 /**

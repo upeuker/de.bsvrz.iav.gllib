@@ -1,9 +1,9 @@
 /**
  * 
  */
-package de.iav.gllib.dav;
+package de.bsvrz.iav.gllib.dav;
 
-import de.iav.gllib.gllib.Stuetzstelle;
+import de.bsvrz.iav.gllib.gllib.Stuetzstelle;
 
 /**
  * F&uuml;r Messquerschnitte angepasste St&uuml;tzstelle, die die Werte QKfz, QLkw, VLkw

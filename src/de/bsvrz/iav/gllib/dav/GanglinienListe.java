@@ -1,4 +1,4 @@
-package de.iav.gllib.dav;
+package de.bsvrz.iav.gllib.dav;
 
 import java.util.ArrayList;
 import stauma.dav.clientside.ClientDavInterface;
