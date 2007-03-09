@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Funktionen Ganglinie (SWE 5.5)
+Bundle-SymbolicName: de.bitctrl.iav.gllib
+Bundle-Version: 1.0.0
+Bundle-Vendor: BitCtrl Systems GmbH
+Bundle-Localization: plugin
+Require-Bundle: de.bitctrl.sys.funclib,
+ de.bitctrl.dav.daf
