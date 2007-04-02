@@ -2,7 +2,7 @@ package de.bsvrz.iav.gllib.gllib;
 
 import java.util.ResourceBundle;
 
-import de.bsvrz.sys.funclib.i18n.MessageHandler;
+import de.bsvrz.sys.funclib.bitctrl.i18n.MessageHandler;
 
 /**
  * Versorgt das Package de.bwl.rpt.ref95.iav, samt Subpackages, mit
