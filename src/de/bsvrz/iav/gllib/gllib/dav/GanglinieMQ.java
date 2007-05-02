@@ -1,4 +1,4 @@
-package de.bsvrz.iav.gllib.dav;
+package de.bsvrz.iav.gllib.gllib.dav;
 
 import java.util.ArrayList;
 
