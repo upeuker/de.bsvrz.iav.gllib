@@ -1,0 +1,39 @@
+<uml>
+   <greenVersion="20500"/>
+   <type>
+      <name="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib{Ganglinie.java[Ganglinie"/>
+      <height="-1"/>
+      <width="-1"/>
+      <x="35"/>
+      <y="154"/>
+   </type>
+   <type>
+      <name="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib{Stuetzstelle.java[Stuetzstelle"/>
+      <height="-1"/>
+      <width="-1"/>
+      <x="402"/>
+      <y="251"/>
+   </type>
+   <type>
+      <name="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib{Intervall.java[Intervall"/>
+      <height="-1"/>
+      <width="-1"/>
+      <x="419"/>
+      <y="24"/>
+   </type>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.dependency.DependencyIPart"/>
+      <sourceType="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib{Ganglinie.java[Ganglinie"/>
+      <targetType="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib{Intervall.java[Intervall"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.dependency.DependencyLPart"/>
+      <sourceType="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib{Ganglinie.java[Ganglinie"/>
+      <targetType="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib{Stuetzstelle.java[Stuetzstelle"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+</uml>
+

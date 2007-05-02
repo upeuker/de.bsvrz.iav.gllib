@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Ganglinien" company="BitCtrl Systems GmbH" webLink="http://www.bitctrl.de" view-date="2007-05-02" view-index="0" gantt-divider-location="395" resource-divider-location="377" version="2.0">
+<description></description>
+<view zooming-state="default:2"/>
+<!-- -->
+<calendars>
+<day-types>
+<day-type id="0"/>
+<day-type id="1"/>
+<calendar id="1" name="default">
+<default-week sun="1" mon="0" tue="0" wed="0" thu="0" fri="0" sat="1"/>
+<overriden-day-types/>
+<days/>
+</calendar>
+</day-types>
+</calendars>
+<tasks color="#8cb6ce">
+<taskproperties>
+<taskproperty id="tpd0" name="type" type="default" valuetype="icon"/>
+<taskproperty id="tpd1" name="priority" type="default" valuetype="icon"/>
+<taskproperty id="tpd2" name="info" type="default" valuetype="icon"/>
+<taskproperty id="tpd3" name="name" type="default" valuetype="text"/>
+<taskproperty id="tpd4" name="begindate" type="default" valuetype="date"/>
+<taskproperty id="tpd5" name="enddate" type="default" valuetype="date"/>
+<taskproperty id="tpd6" name="duration" type="default" valuetype="int"/>
+<taskproperty id="tpd7" name="completion" type="default" valuetype="int"/>
+<taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
+<taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
+</taskproperties>
+<task id="0" name="SWE 5.5 Funktionen Ganglinien" color="#8cb6ce" shape="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0" meeting="false" start="2007-05-02" duration="10" complete="9" priority="1" expand="true">
+<task id="1" name="Ganglinie" color="#8cb6ce" meeting="false" start="2007-05-02" duration="6" complete="16" priority="1" expand="true">
+<task id="3" name="Definition" color="#8cb6ce" meeting="false" start="2007-05-02" duration="1" complete="100" priority="1" expand="true">
+<depend id="4" type="2" difference="0" hardness="Strong"/>
+<depend id="5" type="2" difference="0" hardness="Strong"/>
+</task>
+<task id="4" name="Approximation" color="#8cb6ce" meeting="false" start="2007-05-03" duration="2" complete="0" priority="1" expand="true">
+<depend id="5" type="2" difference="0" hardness="Strong"/>
+</task>
+<task id="5" name="Math. Operationen" color="#8cb6ce" meeting="false" start="2007-05-07" duration="1" complete="0" priority="1" expand="true">
+<depend id="6" type="2" difference="0" hardness="Strong"/>
+</task>
+<task id="6" name="Pattern Matching" color="#8cb6ce" meeting="false" start="2007-05-08" duration="2" complete="0" priority="1" expand="true"/>
+</task>
+<task id="2" name="Verwaltung" color="#8cb6ce" meeting="false" start="2007-05-10" duration="4" complete="0" priority="1" expand="true">
+<task id="7" name="Erweiterung MQ" color="#8cb6ce" meeting="false" start="2007-05-10" duration="1" complete="0" priority="1" expand="true">
+<depend id="8" type="2" difference="0" hardness="Strong"/>
+</task>
+<task id="8" name="Kommunikation mit DaV" color="#8cb6ce" meeting="false" start="2007-05-11" duration="3" complete="0" priority="1" expand="true"/>
+</task>
+</task>
+</tasks>
+<resources>
+<resource id="0" name="Falko Schumann" function="Default:1" contacts="" phone=""/>
+</resources>
+<allocations>
+<allocation task-id="3" resource-id="0" function="Default:1" responsible="true" load="100.0"/>
+<allocation task-id="4" resource-id="0" function="Default:1" responsible="true" load="100.0"/>
+<allocation task-id="5" resource-id="0" function="Default:1" responsible="true" load="100.0"/>
+<allocation task-id="6" resource-id="0" function="Default:1" responsible="true" load="100.0"/>
+<allocation task-id="7" resource-id="0" function="Default:1" responsible="true" load="100.0"/>
+<allocation task-id="8" resource-id="0" function="Default:1" responsible="true" load="100.0"/>
+</allocations>
+<vacations/>
+<taskdisplaycolumns>
+<displaycolumn property-id="tpd3" order="0" width="182"/>
+<displaycolumn property-id="tpd4" order="1" width="22"/>
+<displaycolumn property-id="tpd5" order="2" width="21"/>
+</taskdisplaycolumns>
+<previous/>
+<roles roleset-name="Default"/>
+</project>

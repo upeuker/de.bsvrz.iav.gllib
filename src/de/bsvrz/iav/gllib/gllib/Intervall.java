@@ -2,31 +2,39 @@ package de.bsvrz.iav.gllib.gllib;
 
 import de.bsvrz.sys.funclib.bitctrl.i18n.Messages;
 
-
 /**
- * Repr&auml;sentiert ein Intervall f&uuml;r <code>long</code>-Werte. Wird f&uuml;r
- * Zeitintervalle genutzt, die mit Zeitstempeln arbeiten.
+ * Repr&auml;sentiert ein Intervall f&uuml;r <code>long</code>-Werte. Wird
+ * f&uuml;r Zeitintervalle genutzt, die mit Zeitstempeln arbeiten.
  * 
  * @author BitCtrl, Schumann
  * @version $Id: Intervall.java 160 2007-02-23 15:09:31Z Schumann $
  */
 public class Intervall {
 
-	private long start;
-	private long ende;
-	
-	
+	/** Startzeitpunkt des Intervall */
+	public final long start;
+
+	/** Endzeitpunkt des Intervall */
+	public final long ende;
+
 	/**
 	 * Konstruiert das Intervall mit dem angegebenen Grenzen
 	 * 
-	 * @param start Start des Intervalls
-	 * @param ende Ende des Intervalls
+	 * @param start
+	 *            Start des Intervalls
+	 * @param ende
+	 *            Ende des Intervalls
 	 */
-	public Intervall(long start, long ende){
-		setStart(start);
-		setEnde(ende);
+	public Intervall(long start, long ende) {
+		if (start > ende) {
+			throw new IllegalArgumentException(Messages.get(
+					GlLibMessages.Common_BadIntervall, start, ende));
+		}
+
+		this.start = start;
+		this.ende = ende;
 	}
-		
+
 	/**
 	 * Gibt den Anfang des Intervalls zur&uuml;ck
 	 * 
@@ -34,16 +42,6 @@ public class Intervall {
 	 */
 	public long getStart() {
 		return start;
-	}
-
-	/**
-	 * Legt den Anfang des Intervalls fest
-	 * 
-	 * @param start Zeitstempel
-	 */
-	public void setStart(long start) {
-		check(start, ende);		
-		this.start = start;
 	}
 
 	/**
@@ -56,21 +54,11 @@ public class Intervall {
 	}
 
 	/**
-	 * Legt das Ende des Intervalls fest
-	 *  
-	 * @param ende Zeitstempel
+	 * @see java.lang.Object#toString()
 	 */
-	public void setEnde(long ende) {
-		check(start, ende);
-		this.ende = ende;
-	}
-	
-	private void check(long s, long e) {
-		if (s > e) {
-			throw new IllegalArgumentException(
-				Messages.get(GlLibMessages.Common_BadIntervall, s, e)
-			);
-		}
+	@Override
+	public String toString() {
+		return "[" + start + ", " + ende + "]";
 	}
 
 }
