@@ -3,6 +3,7 @@
  */
 package de.bsvrz.iav.gllib.gllib;
 
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 /**
@@ -15,7 +16,10 @@ import java.util.TreeSet;
  * @version $Id: Ganglinie.java 160 2007-02-23 15:09:31Z Schumann $
  */
 @SuppressWarnings("serial")
-public class Ganglinie extends TreeSet<Stuetzstelle> {
+public class Ganglinie extends TreeSet<Stuetzstelle> implements Approximation {
+
+	/** Verfahren zur Berechnung der Punkte zwischen den St&uuml;tzstellen */
+	private Approximation approximation = new BSpline(this);
 
 	/**
 	 * Gibt das Zeitintervall der Ganglinie zur&uuml;ck
@@ -49,11 +53,38 @@ public class Ganglinie extends TreeSet<Stuetzstelle> {
 	}
 
 	/**
+	 * Legt das Approximationsverfahren fest, mit dem die Werte zwischen den
+	 * St&uuml;tzstellen bestimmt werden soll
+	 * 
+	 * @param approximation
+	 *            Klasse eines Approximationsverfahrens
+	 */
+	public void setApproximation(Class<? extends Approximation> approximation) {
+		AbstractApproximation a;
+
+		try {
+			a = (AbstractApproximation) approximation.newInstance();
+			a.setGanglinie(this);
+			this.approximation = a;
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new IllegalArgumentException(e.getLocalizedMessage());
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new IllegalArgumentException(e.getLocalizedMessage());
+		}
+	}
+
+	/**
 	 * Gibt die St&uuml;tzstelle zu einem bestimmten Zeitstempel zur&uuml;ck.
 	 * Existiert die St&uuml;tzstelle wird diese zur&uuml;ckgegeben. Andernfalls
 	 * wird der Wert zum Zeitstempel approximiert.
 	 * <p>
 	 * TODO: Approximation einbauen
+	 * <p>
+	 * {@inheritDoc}
 	 * 
 	 * @param zeitstempel
 	 *            Ein Zeitpunkt
@@ -63,11 +94,24 @@ public class Ganglinie extends TreeSet<Stuetzstelle> {
 		if (contains(zeitstempel)) {
 			Stuetzstelle s;
 
+			// Wenn echte Stützstelle vorhanden, diese benutzen
 			s = new Stuetzstelle(zeitstempel);
-			return tailSet(s).first();
+			s = tailSet(s).first();
+			if (s.zeitstempel == zeitstempel)
+				return s;
+
+			// Ansonsten genäherte Stützstelle verwenden
+			return approximation.getStuetzstelle(zeitstempel);
 		}
 
 		return null;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public SortedSet<Stuetzstelle> getInterpolation(int anzahlIntervalle) {
+		return approximation.getInterpolation(anzahlIntervalle);
 	}
 
 	/**

@@ -21,7 +21,7 @@ public class BSpline extends AbstractApproximation {
 	 * @param ganglinie 
 	 */
 	public BSpline(Ganglinie ganglinie) {
-		super(ganglinie);
+		//super(ganglinie);
 		setOrdnung(5);
 	}
 	
@@ -33,14 +33,14 @@ public class BSpline extends AbstractApproximation {
 	 * @param ordnung Ordnung
 	 */
 	public BSpline(Ganglinie ganglinie, int ordnung) {
-		super(ganglinie);
+		//super(ganglinie);
 		setOrdnung(ordnung);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public Stuetzstelle getWert(long zeitstempel) {
+	public Stuetzstelle getStuetzstelle(long zeitstempel) {
 		// TODO Automatisch erstellter Methoden-Stub
 		return null;
 	}

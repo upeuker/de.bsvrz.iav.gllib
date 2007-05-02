@@ -38,11 +38,11 @@ public class GanglinieTest {
 	public void beforeTest() {
 		ganglinie = new Ganglinie();
 
-		s1 = new Stuetzstelle(10, 34);
-		s2 = new Stuetzstelle(20, 23);
-		s3 = new Stuetzstelle(30, 54);
-		s4 = new Stuetzstelle(40, 22);
-		s5 = new Stuetzstelle(50, 43);
+		s1 = new Stuetzstelle(0, 0);
+		s2 = new Stuetzstelle(30, 30);
+		s3 = new Stuetzstelle(40, 20);
+		s4 = new Stuetzstelle(60, 40);
+		s5 = new Stuetzstelle(90, 10);
 
 		ganglinie.add(s4);
 		ganglinie.add(s2);
@@ -61,8 +61,8 @@ public class GanglinieTest {
 		Ganglinie g;
 
 		intervall = ganglinie.getIntervall();
-		assertEquals(10L, intervall.start);
-		assertEquals(50L, intervall.ende);
+		assertEquals(0L, intervall.start);
+		assertEquals(90L, intervall.ende);
 
 		// Sonderfall, eine Ganglinie ohne Stützstellen
 		g = new Ganglinie();
@@ -78,16 +78,16 @@ public class GanglinieTest {
 		Ganglinie g;
 
 		// davor
-		assertFalse(ganglinie.contains(5));
+		assertFalse(ganglinie.contains(-10));
 
 		// dazwischen, auf Stützstelle
-		assertTrue(ganglinie.contains(20));
+		assertTrue(ganglinie.contains(30));
 
 		// dazwischen, nicht auf Stützstelle
-		assertTrue(ganglinie.contains(33));
+		assertTrue(ganglinie.contains(50));
 
 		// dahinter
-		assertFalse(ganglinie.contains(55));
+		assertFalse(ganglinie.contains(100));
 
 		// Sonderfall, eine Ganglinie ohne Stützstellen
 		g = new Ganglinie();
@@ -99,18 +99,20 @@ public class GanglinieTest {
 	 */
 	@Test
 	public void testGetStuetzstelle() {
-		Stuetzstelle s;
-		
+		Stuetzstelle s, s0;
+
 		// existierende Stützstelle
 		s = ganglinie.getStuetzstelle(30);
-		assertEquals(s3, s);
-		
+		assertEquals(s2, s);
+
 		// innerhalb der Ganglinie, aber keine Stützstelle
-		s = ganglinie.getStuetzstelle(35);
-		assertEquals(s4, s);
-		
+		ganglinie.setApproximation(Polyline.class);
+		s = ganglinie.getStuetzstelle(50);
+		s0 = new Stuetzstelle(50, 30);
+		assertEquals(s0, s);
+
 		// außerhalb der Ganglinie
-		s = ganglinie.getStuetzstelle(70);
+		s = ganglinie.getStuetzstelle(100);
 		assertNull(s);
 	}
 

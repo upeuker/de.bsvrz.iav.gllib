@@ -20,7 +20,7 @@ public class CubicSpline extends AbstractApproximation {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Stuetzstelle getWert(long zeitstempel) {
+	public Stuetzstelle getStuetzstelle(long zeitstempel) {
 		// TODO Automatisch erstellter Methoden-Stub
 		return null;
 	}
