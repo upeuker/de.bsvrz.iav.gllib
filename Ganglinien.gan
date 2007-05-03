@@ -27,13 +27,13 @@
 <taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
 <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
 </taskproperties>
-<task id="0" name="SWE 5.5 Funktionen Ganglinien" color="#8cb6ce" shape="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0" meeting="false" start="2007-05-02" duration="10" complete="9" priority="1" expand="true">
-<task id="1" name="Ganglinie" color="#8cb6ce" meeting="false" start="2007-05-02" duration="6" complete="16" priority="1" expand="true">
+<task id="0" name="SWE 5.5 Funktionen Ganglinien" color="#8cb6ce" shape="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0" meeting="false" start="2007-05-02" duration="10" complete="12" priority="1" expand="true">
+<task id="1" name="Ganglinie" color="#8cb6ce" meeting="false" start="2007-05-02" duration="6" complete="21" priority="1" expand="true">
 <task id="3" name="Definition" color="#8cb6ce" meeting="false" start="2007-05-02" duration="1" complete="100" priority="1" expand="true">
 <depend id="4" type="2" difference="0" hardness="Strong"/>
 <depend id="5" type="2" difference="0" hardness="Strong"/>
 </task>
-<task id="4" name="Approximation" color="#8cb6ce" meeting="false" start="2007-05-03" duration="2" complete="0" priority="1" expand="true">
+<task id="4" name="Approximation" color="#8cb6ce" meeting="false" start="2007-05-03" duration="2" complete="15" priority="1" expand="true">
 <depend id="5" type="2" difference="0" hardness="Strong"/>
 </task>
 <task id="5" name="Math. Operationen" color="#8cb6ce" meeting="false" start="2007-05-07" duration="1" complete="0" priority="1" expand="true">
