@@ -1,39 +1,61 @@
+/*
+ * Segment 5 Intelligente Analyseverfahren, SWE 5.5 Funktionen Ganglinie
+ * Copyright (C) 2007 BitCtrl Systems GmbH 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * Contact Information:
+ * BitCtrl Systems GmbH
+ * Weißenfelser Straße 67
+ * 04229 Leipzig
+ * Phone: +49 341-490670
+ * mailto: info@bitctrl.de
+ */
+
 package de.bsvrz.iav.gllib.gllib;
 
 import de.bsvrz.sys.funclib.bitctrl.i18n.Messages;
 
-
 /**
- * Approximation einer Ganglinie mit Hilfe eines B-Splines beliebiger Ordung
+ * Approximation einer Ganglinie mit Hilfe eines B-Splines beliebiger Ordung.
  * 
  * @author BitCtrl, Schumann
  * @version $Id: BSpline.java 160 2007-02-23 15:09:31Z Schumann $
  */
 public class BSpline extends AbstractApproximation {
-	
+
+	/** Die Ordnung des B-Splines. */
 	private int ordnung;
-	
-	
+
 	/**
-	 * Erstellt einen B-Spline der Ordung 5 
+	 * Erstellt einen B-Spline der Ordung 5.
 	 * 
 	 * @see AbstractApproximation
-	 * @param ganglinie 
 	 */
-	public BSpline(Ganglinie ganglinie) {
-		//super(ganglinie);
+	public BSpline() {
 		setOrdnung(5);
 	}
-	
+
 	/**
-	 * Erstellt einen B-Spline beliebiger Ordnung
+	 * Erstellt einen B-Spline beliebiger Ordnung.
 	 * 
 	 * @see AbstractApproximation
-	 * @param ganglinie
-	 * @param ordnung Ordnung
+	 * @param ordnung
+	 *            Ordnung
 	 */
-	public BSpline(Ganglinie ganglinie, int ordnung) {
-		//super(ganglinie);
+	public BSpline(int ordnung) {
 		setOrdnung(ordnung);
 	}
 
@@ -45,8 +67,8 @@ public class BSpline extends AbstractApproximation {
 		return null;
 	}
 
-	/** 
-	 * Gibt die Ordgung des B-Splines zur&uuml;ck
+	/**
+	 * Gibt die Ordgung des B-Splines zur&uuml;ck.
 	 * 
 	 * @return Ordnung
 	 */
@@ -54,15 +76,16 @@ public class BSpline extends AbstractApproximation {
 		return ordnung;
 	}
 
-	/** 
-	 * Legt die Ordnung des B-Splines fest
-	 *  
-	 * @param ordnung Ordung
+	/**
+	 * Legt die Ordnung des B-Splines fest.
+	 * 
+	 * @param ordnung
+	 *            Ordnung
 	 */
 	public void setOrdnung(int ordnung) {
-		assert ordnung > 0 :
-			Messages.get(GlLibMessages.Ganglinie_BadBSplineDegree, ordnung);
-		
+		assert ordnung > 0 : Messages.get(GlLibMessages.BadBSplineDegree,
+				ordnung);
+
 		this.ordnung = ordnung;
 	}
 

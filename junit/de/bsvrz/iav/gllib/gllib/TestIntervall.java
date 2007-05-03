@@ -26,49 +26,37 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
 /**
- * Approximation einer Ganglinie mit Hilfe eines Cubic-Splines.
+ * Testet relevante Funktionen der Klasse.
  * 
- * @author BitCtrl, Schumann
- * @version $Id: CubicSpline.java 31 2006-12-11 09:27:45Z Schumann $
+ * @author BitCtrl Systems GmbH, Schumann
+ * @version $Id$
  */
-public class CubicSpline extends AbstractApproximation {
+public class TestIntervall {
 
 	/**
-	 * {@inheritDoc}
+	 * Testet pro forma die Getter-Methoden.
 	 */
-	public Stuetzstelle getStuetzstelle(long zeitstempel) {
-		Stuetzstelle[] s = getNaechsteStuetzstellen(zeitstempel);
+	@Test
+	public void testGetter() {
+		Intervall a;
 
-		switch (s.length) {
-		case 0:
-			// Zeitstempel gehört nicht zu Ganglinie oder keine Stützstellen
-			return null;
-		case 1:
-			// Stützstelle zum Zeitstempel ist in Ganglinie vorhanden
-			return s[0];
-		case 2:
-			// Stützstelle muss berechnet werden
-			return new Stuetzstelle(zeitstempel,
-					berechneStuetzstelle(zeitstempel));
-		default:
-			throw new IllegalStateException();
-		}
+		a = new Intervall(3, 6);
+		assertEquals(3L, a.getStart());
+		assertEquals(6L, a.getEnde());
 	}
 
 	/**
-	 * Berechnet die St&uuml;tzstelle.
-	 * 
-	 * @param zeitstempel
-	 *            Zeitstempel der gesuchten St&uuml;tzstelle
-	 * @return Die gesuchte St&uuml;tzstelle
+	 * Wenn Start und Ende vertauscht sind, also Start gr&ouml;&szlig;er als
+	 * Ende, dann muss eine Exception geworfen werden.
 	 */
-	private int berechneStuetzstelle(long zeitstempel) {
-		Stuetzstelle [] grenzen;
-		int a, b, c, d;
-		
-		grenzen = getNaechsteStuetzstellen(zeitstempel);
-		
-		return 0;
+	@Test(expected = IllegalArgumentException.class)
+	public void testKonstruktor() {
+		new Intervall(8, 2);
 	}
+
 }

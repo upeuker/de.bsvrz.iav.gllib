@@ -1,3 +1,29 @@
+/*
+ * Segment 5 Intelligente Analyseverfahren, SWE 5.5 Funktionen Ganglinie
+ * Copyright (C) 2007 BitCtrl Systems GmbH 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * Contact Information:
+ * BitCtrl Systems GmbH
+ * Weiﬂenfelser Straﬂe 67
+ * 04229 Leipzig
+ * Phone: +49 341-490670
+ * mailto: info@bitctrl.de
+ */
+
 package de.bsvrz.iav.gllib.gllib;
 
 import static org.junit.Assert.*;
@@ -6,33 +32,33 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Testet relevante Funktionen der Klasse
+ * Testet relevante Funktionen der Klasse.
  * 
  * @author BitCtrl Systems GmbH, Schumann
  * @version $Id$
  */
-public class GanglinieTest {
+public class TestGanglinie {
 
-	/** Eine Testst&uuml;tzstelle */
+	/** Eine Testst&uuml;tzstelle. */
 	private Stuetzstelle s1;
 
-	/** Eine Testst&uuml;tzstelle */
+	/** Eine Testst&uuml;tzstelle. */
 	private Stuetzstelle s2;
 
-	/** Eine Testst&uuml;tzstelle */
+	/** Eine Testst&uuml;tzstelle. */
 	private Stuetzstelle s3;
 
-	/** Eine Testst&uuml;tzstelle */
+	/** Eine Testst&uuml;tzstelle. */
 	private Stuetzstelle s4;
 
-	/** Eine Testst&uuml;tzstelle */
+	/** Eine Testst&uuml;tzstelle. */
 	private Stuetzstelle s5;
 
-	/** Eine Testganglinie */
+	/** Eine Testganglinie. */
 	private Ganglinie ganglinie;
 
 	/**
-	 * Initialisiert die Testganglinie vor jedem Test
+	 * Initialisiert die Testganglinie vor jedem Test.
 	 */
 	@Before
 	public void beforeTest() {
@@ -53,7 +79,7 @@ public class GanglinieTest {
 
 	/**
 	 * Testet die korrekte Bestimmung des Intervalls der
-	 * St&uuml;tzstellenzeitstempel
+	 * St&uuml;tzstellenzeitstempel.
 	 */
 	@Test
 	public void testGetIntervall() {
@@ -71,7 +97,7 @@ public class GanglinieTest {
 	}
 
 	/**
-	 * Pr&uuml;ft ob konkrete Zeitstempel innerhalb der Ganglinien liegen
+	 * Pr&uuml;ft ob konkrete Zeitstempel innerhalb der Ganglinien liegen.
 	 */
 	@Test
 	public void testContains() {
@@ -95,7 +121,7 @@ public class GanglinieTest {
 	}
 
 	/**
-	 * Testet die Suche nach St&uuml;tzstellen
+	 * Testet die Suche nach St&uuml;tzstellen.
 	 */
 	@Test
 	public void testGetStuetzstelle() {
@@ -117,11 +143,28 @@ public class GanglinieTest {
 	}
 
 	/**
-	 * Testet pro forma die toString()-Methode
+	 * Testet pro forma die toString()-Methode.
 	 */
 	@Test
 	public void testToString() {
 		System.out.println(ganglinie);
+	}
+
+	/**
+	 * Testet die Mengenbedingungen. Zu jedem Zeitstempel, darf nur genau ein
+	 * Wert existieren. Ein Hinzuf&uuml;gen eines Wertes zu einem existierenden
+	 * Zeitstemepel wird ignoriert.
+	 */
+	@Test
+	public void testMengen() {
+		Stuetzstelle s = new Stuetzstelle(30, 666);
+
+		ganglinie.add(s);
+		assertEquals(s2, ganglinie.getStuetzstelle(30));
+
+		ganglinie.remove(s2);
+		ganglinie.add(s);
+		assertEquals(s, ganglinie.getStuetzstelle(30));
 	}
 
 }

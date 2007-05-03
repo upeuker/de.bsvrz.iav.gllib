@@ -1,3 +1,29 @@
+/*
+ * Segment 5 Intelligente Analyseverfahren, SWE 5.5 Funktionen Ganglinie
+ * Copyright (C) 2007 BitCtrl Systems GmbH 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * Contact Information:
+ * BitCtrl Systems GmbH
+ * Weißenfelser Straße 67
+ * 04229 Leipzig
+ * Phone: +49 341-490670
+ * mailto: info@bitctrl.de
+ */
+
 package de.bsvrz.iav.gllib.gllib;
 
 import java.util.ResourceBundle;
@@ -5,54 +31,41 @@ import java.util.ResourceBundle;
 import de.bsvrz.sys.funclib.bitctrl.i18n.MessageHandler;
 
 /**
- * Versorgt das Package de.bwl.rpt.ref95.iav, samt Subpackages, mit
- * lokalisierten Meldungen
+ * Versorgt das Package {@link de.bsvrz.iav.gllib.gllib}, samt Subpackages, mit
+ * lokalisierten Meldungen.
  * 
  * @author BitCtrl, Schumann
  * @version $Id: IavMessage.java 160 2007-02-23 15:09:31Z Schumann $
  */
 public enum GlLibMessages implements MessageHandler {
 
-	/** Anzahl muss >0 sein, Argumente: Anzahl */
-	Common_BadCount,
+	/** Das Wort "Ganglinie". */
+	Ganglinie,
 
-	/** Prozentzahl muss >=0 und <=1 sein, Argumente: Wert */
-	Common_BadPercentage,
+	/** Das Wort "St&uuml;tzstelle". */
+	Node,
 
-	/** Anfang muss vor Ende des Intervalls liegen, Argumente: Anfang, Ende */
-	Common_BadIntervall,
+	/** Anzahl muss >0 sein. Argumente: Anzahl */
+	BadCount,
 
-	/** Zeitstempel muss >=0 sein, Argumente: Wert */
-	Common_BadTimestamp,
+	/** Anfang muss vor Ende des Intervalls liegen. Argumente: Anfang, Ende */
+	BadIntervall,
 
-	/** Zugeh&ouml;rigkeit muss >=0 und <=1 sein, Argumente: Wert */
-	Fuzzy_BadMembership,
+	/** B-Spline-Ordnung muss > 0 sein. Argumente: Ordnung */
+	BadBSplineDegree;
 
-	/** Die Trapezecke des Fuzzy-Sets sind nicht aufsteigend sortiert. */
-	Fuzzy_UnorderedTrapeziumEdges,
+	/** Name des Ressource-Bundles. */
+	private static final String BUNDLE_NAME = GlLibMessages.class
+			.getCanonicalName();
 
-	/** Der Name eines Terms darf nicht null oder leer "" sein. */
-	Fuzzy_BadTermName,
-
-	/** Der Name einer Variable darf nicht null oder leer "" sein. */
-	Fuzzy_BadVariableName,
-	
-	/** Fuzzy-Set ung&uuml;ltig  */
-	Fuzzy_BadFuzzySetDefinitions,
-	
-	/** Fuzzy-Variable und linguistische Variable passen nicht zusammen **/
-	Fuzzy_WrongFuzzyVariabble,
-
-	/** B-Spline-Ordnung muss > 0 sein, Argumente: Ordnung */
-	Ganglinie_BadBSplineDegree;
-
-	private static final String BUNDLE_NAME = GlLibMessages.class.getCanonicalName();
-
+	/** Das Ressource-Bundle. */
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle
 			.getBundle(BUNDLE_NAME);
 
 	/**
-	 * @see de.bsvrz.sys.funclib.i18n.MessageHandler#getResourceBundle()
+	 * {@inheritDoc}
+	 * 
+	 * @see de.bsvrz.sys.funclib.bitctrl.i18n.MessageHandler#getResourceBundle()
 	 */
 	public ResourceBundle getResourceBundle() {
 		return RESOURCE_BUNDLE;

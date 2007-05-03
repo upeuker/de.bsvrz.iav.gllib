@@ -1,3 +1,29 @@
+/*
+ * Segment 5 Intelligente Analyseverfahren, SWE 5.5 Funktionen Ganglinie
+ * Copyright (C) 2007 BitCtrl Systems GmbH 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * Contact Information:
+ * BitCtrl Systems GmbH
+ * Weißenfelser Straße 67
+ * 04229 Leipzig
+ * Phone: +49 341-490670
+ * mailto: info@bitctrl.de
+ */
+
 package de.bsvrz.iav.gllib.gllib;
 
 import de.bsvrz.sys.funclib.bitctrl.i18n.Messages;
@@ -11,14 +37,14 @@ import de.bsvrz.sys.funclib.bitctrl.i18n.Messages;
  */
 public class Intervall {
 
-	/** Startzeitpunkt des Intervall */
+	/** Startzeitpunkt des Intervall. */
 	public final long start;
 
-	/** Endzeitpunkt des Intervall */
+	/** Endzeitpunkt des Intervall. */
 	public final long ende;
 
 	/**
-	 * Konstruiert das Intervall mit dem angegebenen Grenzen
+	 * Konstruiert das Intervall mit dem angegebenen Grenzen.
 	 * 
 	 * @param start
 	 *            Start des Intervalls
@@ -28,7 +54,7 @@ public class Intervall {
 	public Intervall(long start, long ende) {
 		if (start > ende) {
 			throw new IllegalArgumentException(Messages.get(
-					GlLibMessages.Common_BadIntervall, start, ende));
+					GlLibMessages.BadIntervall, start, ende));
 		}
 
 		this.start = start;
@@ -36,7 +62,7 @@ public class Intervall {
 	}
 
 	/**
-	 * Gibt den Anfang des Intervalls zur&uuml;ck
+	 * Gibt den Anfang des Intervalls zur&uuml;ck.
 	 * 
 	 * @return Zeitstempel
 	 */
@@ -45,7 +71,7 @@ public class Intervall {
 	}
 
 	/**
-	 * Gibt das Ende des Intervalls zur&uuml;ck
+	 * Gibt das Ende des Intervalls zur&uuml;ck.
 	 * 
 	 * @return Zeitstempel
 	 */
@@ -54,8 +80,11 @@ public class Intervall {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
+	@SuppressWarnings("nls")
 	@Override
 	public String toString() {
 		return "[" + start + ", " + ende + "]";

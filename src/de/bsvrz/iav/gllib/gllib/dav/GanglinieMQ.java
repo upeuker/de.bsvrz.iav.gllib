@@ -124,7 +124,6 @@ public class GanglinieMQ extends Ganglinie {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public void mittelwert(Ganglinie ganglinie) {
 		// TODO Automatisch erstellter Methoden-Stub
 	}
@@ -132,7 +131,6 @@ public class GanglinieMQ extends Ganglinie {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public Float basisAbstand(Ganglinie ganglinie) {
 		// TODO Automatisch erstellter Methoden-Stub
 		return null;
@@ -141,7 +139,6 @@ public class GanglinieMQ extends Ganglinie {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public void konkatenation(Ganglinie ganglinie) {
 		// TODO Automatisch erstellter Methoden-Stub
 	}
@@ -149,7 +146,6 @@ public class GanglinieMQ extends Ganglinie {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public void addiere(Ganglinie ganglinie) {
 		// TODO Automatisch erstellter Methoden-Stub
 	}
@@ -157,7 +153,6 @@ public class GanglinieMQ extends Ganglinie {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public void ausschneiden(long start, long end) {
 		// TODO Automatisch erstellter Methoden-Stub
 	}
@@ -165,7 +160,6 @@ public class GanglinieMQ extends Ganglinie {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public void dividiere(Ganglinie ganglinie) {
 		// TODO Automatisch erstellter Methoden-Stub
 	}
@@ -173,7 +167,6 @@ public class GanglinieMQ extends Ganglinie {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public Float komplexerAbstand(Ganglinie ganglinie) {
 		// TODO Automatisch erstellter Methoden-Stub
 		return null;
@@ -182,7 +175,6 @@ public class GanglinieMQ extends Ganglinie {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public void multipliziere(Ganglinie ganglinie) {
 		// TODO Automatisch erstellter Methoden-Stub
 	}
@@ -190,7 +182,6 @@ public class GanglinieMQ extends Ganglinie {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public int patternMatching(Ganglinie ganglinien[], long offset, int maxAbstand) {
 		// TODO Automatisch erstellter Methoden-Stub
 		return -1;
@@ -199,7 +190,6 @@ public class GanglinieMQ extends Ganglinie {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public void verschiebe(long time) {
 		// TODO Automatisch erstellter Methoden-Stub
 	}
@@ -207,7 +197,6 @@ public class GanglinieMQ extends Ganglinie {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public void subtrahiere(Ganglinie ganglinie) {
 		// TODO Automatisch erstellter Methoden-Stub
 	}

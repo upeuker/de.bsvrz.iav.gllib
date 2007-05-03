@@ -39,7 +39,7 @@ public class CopyOfGanglinie extends TreeSet<Stuetzstelle> {
 	}
 
 	/** Verfahren zur Berechnung der Punkte zwischen den St&uuml;tzstellen */
-	private Approximation approximation = new BSpline(this);
+	private Approximation approximation = new BSpline();
 
 	/** Der Typ der Ganglinie */
 	private Typ typ;
@@ -51,9 +51,9 @@ public class CopyOfGanglinie extends TreeSet<Stuetzstelle> {
 	 *            Objekt einer Approximation
 	 */
 	public void setApproximation(Approximation approximation) {
-		if (approximation.getGanglinie() != this) {
-			throw new IllegalArgumentException();
-		}
+		//if (approximation.getGanglinie() != this) {
+		//	throw new IllegalArgumentException();
+		//}
 
 		this.approximation = approximation;
 	}
@@ -183,8 +183,7 @@ public class CopyOfGanglinie extends TreeSet<Stuetzstelle> {
 		// TODO Automatisch erstellter Methoden-Stub
 		float abstand = 0;
 
-		assert (0 <= abstand && abstand <= 1) : Messages.get(
-				GlLibMessages.Common_BadPercentage, abstand);
+		assert (0 <= abstand && abstand <= 1);
 
 		return abstand;
 	}
@@ -253,8 +252,7 @@ public class CopyOfGanglinie extends TreeSet<Stuetzstelle> {
 		// TODO Automatisch erstellter Methoden-Stub
 		float abstand = 0;
 
-		assert (0 <= abstand && abstand <= 1) : Messages.get(
-				GlLibMessages.Common_BadPercentage, abstand);
+		assert (0 <= abstand && abstand <= 1);
 
 		return abstand;
 	}
