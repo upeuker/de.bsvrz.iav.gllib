@@ -42,25 +42,28 @@ public class Polyline extends AbstractApproximation {
 	 * {@inheritDoc}
 	 */
 	public Stuetzstelle getStuetzstelle(long zeitstempel) {
-		Stuetzstelle[] s = getNaechsteStuetzstellen(zeitstempel);
+		Stuetzstelle s0;
+		Stuetzstelle s1;
+		Stuetzstelle s;
 		Long wert;
 
-		switch (s.length) {
-		case 0:
-			// Zeitstempel gehört nicht zu Ganglinie oder keine Stützstellen
+		if (!ganglinie.contains(zeitstempel)) {
+			// Zeitstempel gehört nicht zur Ganglinie
 			return null;
-		case 1:
-			// Stützstelle zum Zeitstempel ist in Ganglinie vorhanden
-			return s[0];
-		case 2:
-			// Stützstelle muss berechnet werden
-			wert = s[0].wert + (s[1].wert - s[0].wert)
-					/ (s[1].zeitstempel - s[0].zeitstempel)
-					* (zeitstempel - s[0].zeitstempel);
-			return new Stuetzstelle(zeitstempel, wert.intValue());
-		default:
-			throw new IllegalStateException();
 		}
+
+		s = new Stuetzstelle(zeitstempel);
+		if (ganglinie.contains(s)) {
+			return ganglinie.getStuetzstelle(zeitstempel);
+		}
+
+		// Stützstelle muss berechnet werden
+		s0 = naechsteStuetzstelleDavor(zeitstempel);
+		s1 = naechsteStuetzstelleDanach(zeitstempel);
+		wert = s0.wert + (s1.wert - s0.wert)
+				/ (s1.zeitstempel - s0.zeitstempel)
+				* (zeitstempel - s0.zeitstempel);
+		return new Stuetzstelle(zeitstempel, wert.intValue());
 	}
 
 }

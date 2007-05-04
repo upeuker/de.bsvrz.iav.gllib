@@ -167,7 +167,7 @@ public class Ganglinie extends TreeSet<Stuetzstelle> implements Approximation {
 		result = Messages.get(GlLibMessages.Ganglinie) + " " + getIntervall()
 				+ ":\n";
 		for (Stuetzstelle s : this) {
-			result += s + "\n";
+			result += "\t" + s + "\n";
 		}
 
 		return result;

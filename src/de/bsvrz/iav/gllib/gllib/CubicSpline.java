@@ -38,22 +38,20 @@ public class CubicSpline extends AbstractApproximation {
 	 * {@inheritDoc}
 	 */
 	public Stuetzstelle getStuetzstelle(long zeitstempel) {
-		Stuetzstelle[] s = getNaechsteStuetzstellen(zeitstempel);
+		Stuetzstelle s;
 
-		switch (s.length) {
-		case 0:
-			// Zeitstempel gehört nicht zu Ganglinie oder keine Stützstellen
+		if (!ganglinie.contains(zeitstempel)) {
+			// Zeitstempel gehört nicht zur Ganglinie
 			return null;
-		case 1:
-			// Stützstelle zum Zeitstempel ist in Ganglinie vorhanden
-			return s[0];
-		case 2:
-			// Stützstelle muss berechnet werden
-			return new Stuetzstelle(zeitstempel,
-					berechneStuetzstelle(zeitstempel));
-		default:
-			throw new IllegalStateException();
 		}
+
+		s = new Stuetzstelle(zeitstempel);
+		if (ganglinie.contains(s)) {
+			return ganglinie.getStuetzstelle(zeitstempel);
+		}
+
+		// Stützstelle muss berechnet werden
+		return new Stuetzstelle(zeitstempel, berechneStuetzstelle(zeitstempel));
 	}
 
 	/**
@@ -64,11 +62,25 @@ public class CubicSpline extends AbstractApproximation {
 	 * @return Die gesuchte St&uuml;tzstelle
 	 */
 	private int berechneStuetzstelle(long zeitstempel) {
-		Stuetzstelle [] grenzen;
-		int a, b, c, d;
-		
-		grenzen = getNaechsteStuetzstellen(zeitstempel);
-		
+		Stuetzstelle s0; // vorletzte vor Zeitstempel
+		Stuetzstelle s1; // vor Zeitstempel
+		Stuetzstelle s2; // nach Zeitstempel
+		long h0, c0;
+		long h1, a1, b1, c1, d1;
+		long a2, c2;
+
+		s1 = naechsteStuetzstelleDavor(zeitstempel);
+		s2 = naechsteStuetzstelleDanach(zeitstempel);
+		s0 = naechsteStuetzstelleDavor(s1.zeitstempel);
+
+		h0 = s1.zeitstempel - s0.zeitstempel;
+		h1 = s2.zeitstempel - s1.zeitstempel;
+		a1 = s1.wert;
+		a2 = s2.wert;		
+		b1 = (a2 - a1) / h1;
+		//b1 -= (2 * c1 + c2) / 3 * h1;
+		//d1 = (c2 - c1) / (3 * h1);
+
 		return 0;
 	}
 }
