@@ -35,7 +35,7 @@ import de.bsvrz.sys.funclib.bitctrl.i18n.Messages;
  * Implementiert nur die Property <code>Ganglinie</code> der Schnittstelle.
  * 
  * @author BitCtrl, Schumann
- * @version $Id: AbstractApproximation.java 160 2007-02-23 15:09:31Z Schumann $
+ * @version $Id$
  */
 public abstract class AbstractApproximation implements Approximation {
 

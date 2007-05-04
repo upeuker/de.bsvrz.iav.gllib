@@ -33,7 +33,7 @@ import de.bsvrz.sys.funclib.bitctrl.i18n.Messages;
  * f&uuml;r Zeitintervalle genutzt, die mit Zeitstempeln arbeiten.
  * 
  * @author BitCtrl, Schumann
- * @version $Id: Intervall.java 160 2007-02-23 15:09:31Z Schumann $
+ * @version $Id$
  */
 public class Intervall {
 

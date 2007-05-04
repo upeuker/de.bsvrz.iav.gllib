@@ -13,7 +13,7 @@ import de.bsvrz.iav.gllib.gllib.Ganglinie;
  * lassen sich die drei davon abh&auml;ngigen Gr&ouml;&szlig;e QPkw, VKfz und QB berechnen.
  * 
  * @author BitCtrl, Schumann
- * @version $Id: GanglinieMQ.java 160 2007-02-23 15:09:31Z Schumann $
+ * @version $Id$
  */
 public class GanglinieMQ extends Ganglinie {
 

@@ -34,7 +34,7 @@ package de.bsvrz.iav.gllib.gllib;
  * 
  * 
  * @author BitCtrl, Schumann
- * @version $Id: Polyline.java 160 2007-02-23 15:09:31Z Schumann $
+ * @version $Id$
  */
 public class Polyline extends AbstractApproximation {
 

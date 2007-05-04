@@ -42,7 +42,7 @@ import de.bsvrz.sys.funclib.bitctrl.i18n.Messages;
  * Zeitstempeln und ignoriert die Werte.
  * 
  * @author BitCtrl, Schumann
- * @version $Id: Stuetzstelle.java 160 2007-02-23 15:09:31Z Schumann $
+ * @version $Id$
  */
 public class Stuetzstelle implements Comparable<Stuetzstelle> {
 

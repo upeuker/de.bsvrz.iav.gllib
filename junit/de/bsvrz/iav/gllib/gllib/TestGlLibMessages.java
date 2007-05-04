@@ -35,7 +35,7 @@ import de.bsvrz.sys.funclib.bitctrl.i18n.Messages;
  * Testet den Message-Handler der Ganglinienbibliothek.
  * 
  * @author BitCtrl, Schumann
- * @version $Id: TestFuzzyLibMessages.java 560 2007-04-02 12:25:55Z peuker $
+ * @version $Id$
  */
 public class TestGlLibMessages {
 

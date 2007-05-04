@@ -35,7 +35,7 @@ import de.bsvrz.sys.funclib.bitctrl.i18n.MessageHandler;
  * lokalisierten Meldungen.
  * 
  * @author BitCtrl, Schumann
- * @version $Id: IavMessage.java 160 2007-02-23 15:09:31Z Schumann $
+ * @version $Id$
  */
 public enum GlLibMessages implements MessageHandler {
 

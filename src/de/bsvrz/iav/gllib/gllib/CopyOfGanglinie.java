@@ -18,7 +18,7 @@ import de.bsvrz.sys.funclib.bitctrl.i18n.Messages;
  * {@link BSpline B-Spline} mit Standardordnung angenommen.
  * 
  * @author BitrCtrl, Schumann
- * @version $Id: Ganglinie.java 160 2007-02-23 15:09:31Z Schumann $
+ * @version $Id$
  */
 public class CopyOfGanglinie extends TreeSet<Stuetzstelle> {
 
@@ -27,7 +27,7 @@ public class CopyOfGanglinie extends TreeSet<Stuetzstelle> {
 	 * relative Ganglinie kann wiederum additiv oder multiplikativ sein.
 	 * 
 	 * @author BitCtrl, Schumann
-	 * @version $Id: Ganglinie.java 160 2007-02-23 15:09:31Z Schumann $
+	 * @version $Id$
 	 */
 	public enum Typ {
 		/** Eine absolute Ganglinie */

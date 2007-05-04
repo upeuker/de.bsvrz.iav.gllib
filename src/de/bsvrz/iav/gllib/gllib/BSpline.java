@@ -32,7 +32,7 @@ import de.bsvrz.sys.funclib.bitctrl.i18n.Messages;
  * Approximation einer Ganglinie mit Hilfe eines B-Splines beliebiger Ordung.
  * 
  * @author BitCtrl, Schumann
- * @version $Id: BSpline.java 160 2007-02-23 15:09:31Z Schumann $
+ * @version $Id$
  */
 public class BSpline extends AbstractApproximation {
 

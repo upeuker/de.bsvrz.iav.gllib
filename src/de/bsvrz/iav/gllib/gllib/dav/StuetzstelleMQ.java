@@ -18,7 +18,7 @@ import de.bsvrz.iav.gllib.gllib.Stuetzstelle;
  * </p>
  * 
  * @author BitCtrl, Schumann
- * @version $Id: StuetzstelleMQ.java 160 2007-02-23 15:09:31Z Schumann $
+ * @version $Id$
  */
 public class StuetzstelleMQ extends Stuetzstelle {
 

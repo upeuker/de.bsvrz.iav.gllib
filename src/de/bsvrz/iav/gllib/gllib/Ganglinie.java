@@ -38,7 +38,7 @@ import de.bsvrz.sys.funclib.bitctrl.i18n.Messages;
  * {@link BSpline B-Spline} mit Standardordnung angenommen.
  * 
  * @author BitrCtrl, Schumann
- * @version $Id: Ganglinie.java 160 2007-02-23 15:09:31Z Schumann $
+ * @version $Id$
  */
 @SuppressWarnings("serial")
 public class Ganglinie extends TreeSet<Stuetzstelle> implements Approximation {

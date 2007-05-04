@@ -19,7 +19,7 @@ import stauma.dav.clientside.ReceiverRole;
  * zwischengespeichert. Die Ordnung der Liste entspricht der im Datenverteiler.
  * 
  * @author BitCtrl, Schumann
- * @version $Id: GanglinienListe.java 160 2007-02-23 15:09:31Z Schumann $
+ * @version $Id$
  */
 public class GanglinienListe extends ArrayList {
 

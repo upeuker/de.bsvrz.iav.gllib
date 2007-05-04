@@ -34,7 +34,7 @@ import java.util.SortedSet;
  * besitzen.
  * 
  * @author BitCtrl, Schumann
- * @version $Id: Approximation.java 160 2007-02-23 15:09:31Z Schumann $
+ * @version $Id$
  */
 public interface Approximation {
 
