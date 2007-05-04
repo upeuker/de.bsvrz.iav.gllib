@@ -41,7 +41,7 @@ public class Vektor implements Cloneable {
 	public static final int RAUM = 3;
 
 	/** Interner Speicher der Vektorkomponenten. */
-	private long[] vektor;
+	private RationaleZahl[] vektor;
 
 	/**
 	 * Addiert zwei Vektoren.
@@ -65,7 +65,7 @@ public class Vektor implements Cloneable {
 
 		v = new Vektor(a.anzahlKomponenten());
 		for (int i = 0; i < a.anzahlKomponenten(); i++) {
-			v.set(i, a.get(i) + b.get(i));
+			v.set(i, RationaleZahl.addiere(a.get(i), b.get(i)));
 		}
 
 		return v;
@@ -93,7 +93,7 @@ public class Vektor implements Cloneable {
 
 		v = new Vektor(a.anzahlKomponenten());
 		for (int i = 0; i < a.anzahlKomponenten(); i++) {
-			v.set(i, a.get(i) - b.get(i));
+			v.set(i, RationaleZahl.subtrahiere(a.get(i), b.get(i)));
 		}
 
 		return v;
@@ -113,7 +113,7 @@ public class Vektor implements Cloneable {
 
 		v = new Vektor(a.anzahlKomponenten());
 		for (int i = 0; i < a.anzahlKomponenten(); i++) {
-			v.set(i, a.get(i) * s);
+			v.set(i, RationaleZahl.multipliziere(a.get(i), s));
 		}
 
 		return v;
@@ -131,7 +131,7 @@ public class Vektor implements Cloneable {
 	 *             Wenn die beiden Vektoren nicht die gleiche Komponentenanzahl
 	 *             von 2 oder 3 aufweisen
 	 */
-	public static long skalarprodukt(Vektor a, Vektor b) {
+	public static RationaleZahl skalarprodukt(Vektor a, Vektor b) {
 		if (a.anzahlKomponenten() != b.anzahlKomponenten()) {
 			throw new IllegalArgumentException(
 					"Die beiden Vektoren haben nicht die selbe Komponentenanzahl.");
@@ -142,11 +142,12 @@ public class Vektor implements Cloneable {
 					"Die Komponentenanzahl entspricht nicht 2 oder 3.");
 		}
 
-		long s;
+		RationaleZahl s;
 
-		s = 0;
+		s = new RationaleZahl(0);
 		for (int i = 0; i < a.anzahlKomponenten(); i++) {
-			s += a.get(i) * b.get(i);
+			s = RationaleZahl.addiere(s, RationaleZahl.multipliziere(a.get(i),
+					b.get(i)));
 		}
 
 		return s;
@@ -179,9 +180,15 @@ public class Vektor implements Cloneable {
 		Vektor v;
 
 		v = new Vektor(a.anzahlKomponenten());
-		v.set(0, a.get(1) * b.get(2) - a.get(2) * b.get(1));
-		v.set(1, a.get(2) * b.get(0) - a.get(0) * b.get(2));
-		v.set(2, a.get(0) * b.get(1) - a.get(1) * b.get(0));
+		v.set(0, RationaleZahl.subtrahiere(RationaleZahl.multipliziere(
+				a.get(1), b.get(2)), RationaleZahl.multipliziere(a.get(2), b
+				.get(1))));
+		v.set(1, RationaleZahl.subtrahiere(RationaleZahl.multipliziere(
+				a.get(2), b.get(0)), RationaleZahl.multipliziere(a.get(0), b
+				.get(2))));
+		v.set(2, RationaleZahl.subtrahiere(RationaleZahl.multipliziere(
+				a.get(0), b.get(1)), RationaleZahl.multipliziere(a.get(1), b
+				.get(0))));
 
 		return v;
 
@@ -201,7 +208,7 @@ public class Vektor implements Cloneable {
 					"Anzahl der Komponenten muss größer oder gleich 1 sein.");
 		}
 
-		vektor = new long[n];
+		vektor = new RationaleZahl[n];
 	}
 
 	/**
@@ -214,7 +221,24 @@ public class Vektor implements Cloneable {
 	 */
 	public Vektor(long... vektor) {
 		this(vektor.length);
-		System.arraycopy(vektor, 0, this.vektor, 0, vektor.length);
+		for (int i = 0; i < vektor.length; i++) {
+			this.vektor[i] = new RationaleZahl(vektor[i]);
+		}
+	}
+
+	/**
+	 * Konstruiert einen Vektor aus einem Feld.
+	 * 
+	 * @param vektor
+	 *            Ein Feld
+	 * @throws IllegalArgumentException
+	 *             Wenn die L&auml;nge des Felds kleiner als 1 ist
+	 */
+	public Vektor(RationaleZahl... vektor) {
+		this(vektor.length);
+		for (int i = 0; i < vektor.length; i++) {
+			this.vektor[i] = new RationaleZahl(vektor[i]);
+		}
 	}
 
 	/**
@@ -224,9 +248,10 @@ public class Vektor implements Cloneable {
 	 *            Ein Vektor
 	 */
 	public Vektor(Vektor vektor) {
-		this.vektor = new long[vektor.anzahlKomponenten()];
-		System.arraycopy(vektor.vektor, 0, this.vektor, 0, vektor
-				.anzahlKomponenten());
+		this(vektor.anzahlKomponenten());
+		for (int i = 0; i < vektor.anzahlKomponenten(); i++) {
+			this.vektor[i] = new RationaleZahl(vektor.get(i));
+		}
 	}
 
 	/**
@@ -245,7 +270,7 @@ public class Vektor implements Cloneable {
 	 *            Index der gesuchten Komponente
 	 * @return Wert der gesuchten Komponente
 	 */
-	public long get(int i) {
+	public RationaleZahl get(int i) {
 		return vektor[i];
 	}
 
@@ -258,7 +283,19 @@ public class Vektor implements Cloneable {
 	 *            Neuer Wert der Vektorkomponenten
 	 */
 	public void set(int i, long wert) {
-		vektor[i] = wert;
+		vektor[i] = new RationaleZahl(wert);
+	}
+
+	/**
+	 * Setzt den Wert einer Vektorkomponente.
+	 * 
+	 * @param i
+	 *            Index der Komponente
+	 * @param wert
+	 *            Neuer Wert der Vektorkomponenten
+	 */
+	public void set(int i, RationaleZahl wert) {
+		vektor[i] = new RationaleZahl(wert);
 	}
 
 	/**
@@ -267,12 +304,13 @@ public class Vektor implements Cloneable {
 	 * 
 	 * @return Der Betrag des Vektors zum Quadrat
 	 */
-	public long betragQuadrat() {
-		long bq;
+	public RationaleZahl betragQuadrat() {
+		RationaleZahl bq;
 
-		bq = 0;
+		bq = new RationaleZahl(0);
 		for (int i = 0; i < anzahlKomponenten(); i++) {
-			bq += vektor[i] * vektor[i];
+			bq = RationaleZahl.addiere(bq, RationaleZahl.multipliziere(
+					vektor[i], vektor[i]));
 		}
 
 		return bq;
@@ -300,7 +338,7 @@ public class Vektor implements Cloneable {
 
 			gleich = true;
 			for (int i = 0; i < anzahlKomponenten(); i++) {
-				if (vektor[i] != v.vektor[i]) {
+				if (!vektor[i].equals(v.vektor[i])) {
 					gleich = false;
 					break;
 				}

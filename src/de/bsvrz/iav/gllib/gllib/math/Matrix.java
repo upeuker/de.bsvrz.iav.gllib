@@ -36,7 +36,7 @@ package de.bsvrz.iav.gllib.gllib.math;
 public class Matrix {
 
 	/** Interner Speicher der Matrixelemente. */
-	private long[][] matrix;
+	private RationaleZahl[][] matrix;
 
 	/**
 	 * Addiert zwei Matrizen.
@@ -61,7 +61,7 @@ public class Matrix {
 		m = new Matrix(a.anzahlZeilen(), a.anzahlSpalten());
 		for (int i = 0; i < a.anzahlZeilen(); i++) {
 			for (int j = 0; j < a.anzahlSpalten(); j++) {
-				m.set(i, j, a.get(i, j) + b.get(i, j));
+				m.set(i, j, RationaleZahl.addiere(a.get(i, j), b.get(i, j)));
 			}
 		}
 
@@ -91,7 +91,9 @@ public class Matrix {
 		m = new Matrix(a.anzahlZeilen(), a.anzahlSpalten());
 		for (int i = 0; i < a.anzahlZeilen(); i++) {
 			for (int j = 0; j < a.anzahlSpalten(); j++) {
-				m.set(i, j, a.get(i, j) - b.get(i, j));
+				m
+						.set(i, j, RationaleZahl.subtrahiere(a.get(i, j), b
+								.get(i, j)));
 			}
 		}
 
@@ -113,7 +115,7 @@ public class Matrix {
 		m = new Matrix(a.anzahlZeilen(), a.anzahlSpalten());
 		for (int i = 0; i < a.anzahlZeilen(); i++) {
 			for (int j = 0; j < a.anzahlSpalten(); j++) {
-				m.set(i, j, a.get(i, j) * s);
+				m.set(i, j, RationaleZahl.multipliziere(a.get(i, j), s));
 			}
 		}
 
@@ -205,7 +207,7 @@ public class Matrix {
 					"Die Zeilen- und Spaltenanzahl muss größer oder gleich 1 sein.");
 		}
 
-		matrix = new long[n][m];
+		matrix = new RationaleZahl[n][m];
 	}
 
 	/**
@@ -222,12 +224,12 @@ public class Matrix {
 	 */
 	public Matrix(Vektor vektor, boolean zeilenvektor) {
 		if (zeilenvektor) {
-			matrix = new long[1][vektor.anzahlKomponenten()];
+			matrix = new RationaleZahl[1][vektor.anzahlKomponenten()];
 			for (int j = 0; j < vektor.anzahlKomponenten(); j++) {
 				matrix[0][j] = vektor.get(j);
 			}
 		} else {
-			matrix = new long[vektor.anzahlKomponenten()][1];
+			matrix = new RationaleZahl[vektor.anzahlKomponenten()][1];
 			for (int i = 0; i < vektor.anzahlKomponenten(); i++) {
 				matrix[i][0] = vektor.get(i);
 			}
@@ -276,7 +278,7 @@ public class Matrix {
 	 *            Spaltenindex des gesuchten Elements
 	 * @return Wert des gesuchten Elements
 	 */
-	public long get(int i, int j) {
+	public RationaleZahl get(int i, int j) {
 		return matrix[i][j];
 	}
 
@@ -291,7 +293,21 @@ public class Matrix {
 	 *            Neuer Wert des Elements
 	 */
 	public void set(int i, int j, long wert) {
-		matrix[i][j] = wert;
+		matrix[i][j] = new RationaleZahl(wert);
+	}
+
+	/**
+	 * Legt den Wert eines bestimmten Elements der Matrix fest.
+	 * 
+	 * @param i
+	 *            Zeilenindex des Elements
+	 * @param j
+	 *            Spaltenindex des Elements
+	 * @param wert
+	 *            Neuer Wert des Elements
+	 */
+	public void set(int i, int j, RationaleZahl wert) {
+		matrix[i][j] = new RationaleZahl(wert);
 	}
 
 	/**
@@ -374,7 +390,7 @@ public class Matrix {
 			gleich = true;
 			for (int i = 0; i < anzahlZeilen(); i++) {
 				for (int j = 0; j < anzahlSpalten(); j++) {
-					if (matrix[i][j] != m.matrix[i][j]) {
+					if (!matrix[i][j].equals(m.matrix[i][j])) {
 						gleich = false;
 						break;
 					}

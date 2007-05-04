@@ -80,6 +80,19 @@ public class RationaleZahl extends Number {
 	}
 
 	/**
+	 * Multipliziert eine rationale Zahlen mit einer ganzen Zahl.
+	 * 
+	 * @param a
+	 *            Eine rationale Zahl
+	 * @param b
+	 *            Eine ganze Zahl
+	 * @return Das Ergebnis der Multiplikation
+	 */
+	public static RationaleZahl multipliziere(RationaleZahl a, long b) {
+		return multipliziere(a, new RationaleZahl(b));
+	}
+
+	/**
 	 * Multipliziert zwei rationale Zahlen.
 	 * 
 	 * @param a
@@ -98,6 +111,19 @@ public class RationaleZahl extends Number {
 	}
 
 	/**
+	 * Dividiert eine rationale Zahlen durch eine ganze Zahl.
+	 * 
+	 * @param a
+	 *            Eine rationale Zahl
+	 * @param b
+	 *            Eine ganze Zahl
+	 * @return Das Ergebnis der Division
+	 */
+	public static RationaleZahl dividiere(RationaleZahl a, long b) {
+		return dividiere(a, new RationaleZahl(b));
+	}
+
+	/**
 	 * Dividiert zwei rationale Zahlen.
 	 * 
 	 * @param a
@@ -113,6 +139,38 @@ public class RationaleZahl extends Number {
 		n = a.nenner * b.zaehler;
 
 		return new RationaleZahl(z, n);
+	}
+
+	/**
+	 * Bestimmt den gr&ouml;&szlig;ten gemeinsamen Teiler zweier ganzer Zahlen.
+	 * 
+	 * @param a
+	 *            Erste ganze Zahl
+	 * @param b
+	 *            Zweite ganze Zahl
+	 * @return Der gr&ouml;&szlig;te gemeinsame Teiler
+	 */
+	public static long ggT(long a, long b) {
+		if (b == 0) {
+			return a;
+		}
+
+		return ggT(b, a % b);
+	}
+
+	/**
+	 * K&uuml;rzt einen Bruch.
+	 * 
+	 * @param a
+	 *            Ein Bruch als rationale Zahl
+	 * @return Der gek&uuml;rzte Bruch
+	 */
+	public static RationaleZahl kuerze(RationaleZahl a) {
+		long ggT;
+
+		ggT = ggT(a.zaehler, a.nenner);
+
+		return new RationaleZahl(a.zaehler / ggT, a.nenner / ggT);
 	}
 
 	/**
@@ -139,6 +197,17 @@ public class RationaleZahl extends Number {
 		}
 		this.zaehler = zaehler;
 		this.nenner = nenner;
+	}
+
+	/**
+	 * Konstruiert eine rationale Zahl aus einer anderen.
+	 * 
+	 * @param zahl
+	 *            Eine rationale Zahl
+	 */
+	public RationaleZahl(RationaleZahl zahl) {
+		zaehler = zahl.zaehler;
+		nenner = zahl.nenner;
 	}
 
 	/**
@@ -209,4 +278,37 @@ public class RationaleZahl extends Number {
 		return Math.round(doubleValue());
 	}
 
+	/**
+	 * Zwei rationale Zahlen sind identisch, wenn.
+	 * <p>
+	 * {@inheritDoc}
+	 * 
+	 * @see java.lang.Object#equals(Object)
+	 */
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof RationaleZahl) {
+			RationaleZahl r1, r2;
+
+			r1 = kuerze(this);
+			r2 = (RationaleZahl) o;
+			return r1.zaehler == r2.zaehler && r1.nenner == r2.nenner;
+		}
+
+		return false;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		if (nenner == 1) {
+			return String.valueOf(zaehler);
+		}
+
+		return zaehler + "/" + nenner;
+	}
 }

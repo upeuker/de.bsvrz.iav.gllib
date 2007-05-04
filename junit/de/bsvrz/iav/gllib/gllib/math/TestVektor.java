@@ -61,13 +61,13 @@ public class TestVektor {
 	public void testKonstruktorA() {
 		new Vektor(0);
 	}
-	
+
 	/**
 	 * Testet das Eintreten der Ausnahme.
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void testKonstruktorB() {
-		new Vektor();
+		new Vektor(0);
 	}
 
 	/**
@@ -135,8 +135,8 @@ public class TestVektor {
 	 */
 	@Test
 	public void testSkalarprodukt() {
-		assertEquals(38L, Vektor.skalarprodukt(a, b));
-		assertEquals(38L, Vektor.skalarprodukt(b, a));
+		assertEquals(new RationaleZahl(38), Vektor.skalarprodukt(a, b));
+		assertEquals(new RationaleZahl(38), Vektor.skalarprodukt(b, a));
 	}
 
 	/**
@@ -205,8 +205,8 @@ public class TestVektor {
 	 */
 	@Test
 	public void testBetragQuadrat() {
-		assertEquals(62L, a.betragQuadrat());
-		assertEquals(90L, b.betragQuadrat());
+		assertEquals(new RationaleZahl(62), a.betragQuadrat());
+		assertEquals(new RationaleZahl(90), b.betragQuadrat());
 	}
 
 	/**
@@ -218,7 +218,7 @@ public class TestVektor {
 
 		assertEquals(a, a);
 		assertEquals(b, b);
-		
+
 		c = new Vektor(a);
 		assertEquals(a, c);
 
