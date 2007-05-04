@@ -293,7 +293,7 @@ public class Matrix {
 	 *            Neuer Wert des Elements
 	 */
 	public void set(int i, int j, long wert) {
-		matrix[i][j] = new RationaleZahl(wert);
+		set(i, j, new RationaleZahl(wert));
 	}
 
 	/**

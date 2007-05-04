@@ -291,7 +291,7 @@ public class RationaleZahl extends Number {
 			RationaleZahl r1, r2;
 
 			r1 = kuerze(this);
-			r2 = (RationaleZahl) o;
+			r2 = kuerze((RationaleZahl) o);
 			return r1.zaehler == r2.zaehler && r1.nenner == r2.nenner;
 		}
 

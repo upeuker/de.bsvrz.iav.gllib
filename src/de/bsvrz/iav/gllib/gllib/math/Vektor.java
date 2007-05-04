@@ -222,7 +222,7 @@ public class Vektor implements Cloneable {
 	public Vektor(long... vektor) {
 		this(vektor.length);
 		for (int i = 0; i < vektor.length; i++) {
-			this.vektor[i] = new RationaleZahl(vektor[i]);
+			set(i, vektor[i]);
 		}
 	}
 
@@ -237,7 +237,7 @@ public class Vektor implements Cloneable {
 	public Vektor(RationaleZahl... vektor) {
 		this(vektor.length);
 		for (int i = 0; i < vektor.length; i++) {
-			this.vektor[i] = new RationaleZahl(vektor[i]);
+			set(i, new RationaleZahl(vektor[i]));
 		}
 	}
 
@@ -250,7 +250,7 @@ public class Vektor implements Cloneable {
 	public Vektor(Vektor vektor) {
 		this(vektor.anzahlKomponenten());
 		for (int i = 0; i < vektor.anzahlKomponenten(); i++) {
-			this.vektor[i] = new RationaleZahl(vektor.get(i));
+			set(i, new RationaleZahl(vektor.get(i)));
 		}
 	}
 
@@ -283,7 +283,7 @@ public class Vektor implements Cloneable {
 	 *            Neuer Wert der Vektorkomponenten
 	 */
 	public void set(int i, long wert) {
-		vektor[i] = new RationaleZahl(wert);
+		set(i, new RationaleZahl(wert));
 	}
 
 	/**

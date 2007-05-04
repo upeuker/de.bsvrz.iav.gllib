@@ -39,84 +39,203 @@ import org.junit.Test;
  */
 public class TestRationaleZahl {
 
+	/** Erste rationale Zahl f&uuml;r alle Testf&auml;lle. */
 	private RationaleZahl a;
 
+	/** Zweite rationale Zahl f&uuml;r alle Testf&auml;lle. */
 	private RationaleZahl b;
 
+	/**
+	 * Initialisiert die Testzahlen vor jedem Testfall.
+	 */
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		a = new RationaleZahl(1, 4);
-		b = new RationaleZahl(3, 8);
+		b = new RationaleZahl(5, 8);
 	}
 
+	/**
+	 * Testet das Eintreten der Ausnahme beim Konstruktor.
+	 */
+	@Test(expected = ArithmeticException.class)
+	public void testKonstruktor() {
+		new RationaleZahl(3, 0);
+	}
+
+	/**
+	 * Testet pro forma den Getter des Z&auml;hlers.
+	 * 
+	 */
+	@Test
+	public void testGetZaehler() {
+		assertEquals(1L, a.getZaehler());
+		assertEquals(5L, b.getZaehler());
+	}
+
+	/**
+	 * Testet pro forma den Getter des Nenners.
+	 * 
+	 */
+	@Test
+	public void testGetNenenr() {
+		assertEquals(4L, a.getNenner());
+		assertEquals(8L, b.getNenner());
+	}
+
+	/**
+	 * Testet die Methode {@link RationaleZahl#intValue()}.
+	 */
 	@Test
 	public void testIntValue() {
-		fail("Not yet implemented");
+		assertEquals(0, a.intValue());
+		assertEquals(1, b.intValue());
 	}
 
+	/**
+	 * Testet die Methode {@link RationaleZahl#longValue()}.
+	 */
 	@Test
 	public void testLongValue() {
-		fail("Not yet implemented");
+		assertEquals(0L, a.longValue());
+		assertEquals(1L, b.longValue());
 	}
 
+	/**
+	 * Testet die Methode {@link RationaleZahl#floatValue()}.
+	 */
 	@Test
 	public void testFloatValue() {
-		fail("Not yet implemented");
+		assertEquals(0.25f, a.floatValue());
+		assertEquals(0.625f, b.floatValue());
 	}
 
+	/**
+	 * Testet die Methode {@link RationaleZahl#doubleValue()}.
+	 */
 	@Test
 	public void testDoubleValue() {
-		fail("Not yet implemented");
+		assertEquals(0.25, a.doubleValue());
+		assertEquals(0.625, b.doubleValue());
 	}
 
+	/**
+	 * Testet die Methode
+	 * {@link RationaleZahl#addiere(RationaleZahl, RationaleZahl)}.
+	 */
 	@Test
 	public void testAddiere() {
-		fail("Not yet implemented");
+		RationaleZahl r;
+
+		r = new RationaleZahl(7, 8);
+		assertEquals(r, RationaleZahl.addiere(a, b));
 	}
 
+	/**
+	 * Testet die Methode
+	 * {@link RationaleZahl#subtrahiere(RationaleZahl, RationaleZahl)}.
+	 */
 	@Test
 	public void testSubtrahiere() {
-		fail("Not yet implemented");
+		RationaleZahl r;
+
+		r = new RationaleZahl(-3, 8);
+		assertEquals(r, RationaleZahl.subtrahiere(a, b));
 	}
 
+	/**
+	 * Testet die Methode
+	 * {@link RationaleZahl#multipliziere(RationaleZahl, long)}.
+	 */
 	@Test
 	public void testMultipliziereRationaleZahlLong() {
-		fail("Not yet implemented");
+		RationaleZahl r;
+
+		r = new RationaleZahl(3, 4);
+		assertEquals(r, RationaleZahl.multipliziere(a, 3));
 	}
 
+	/**
+	 * Testet die Methode
+	 * {@link RationaleZahl#multipliziere(RationaleZahl, RationaleZahl)}.
+	 */
 	@Test
 	public void testMultipliziereRationaleZahlRationaleZahl() {
-		fail("Not yet implemented");
+		RationaleZahl r;
+
+		r = new RationaleZahl(5, 32);
+		assertEquals(r, RationaleZahl.multipliziere(a, b));
 	}
 
+	/**
+	 * Testet die Methode {@link RationaleZahl#dividiere(RationaleZahl, long)}.
+	 */
 	@Test
 	public void testDividiereRationaleZahlLong() {
-		fail("Not yet implemented");
+		RationaleZahl r;
+
+		r = new RationaleZahl(1, 16);
+		assertEquals(r, RationaleZahl.dividiere(a, 4));
 	}
 
+	/**
+	 * Testet die Methode
+	 * {@link RationaleZahl#dividiere(RationaleZahl, RationaleZahl)}.
+	 */
 	@Test
 	public void testDividiereRationaleZahlRationaleZahl() {
-		fail("Not yet implemented");
+		RationaleZahl r;
+
+		r = new RationaleZahl(8, 20);
+		assertEquals(r, RationaleZahl.dividiere(a, b));
 	}
 
+	/**
+	 * Testet die Methode {@link RationaleZahl#ggT(long, long)}.
+	 */
 	@Test
 	public void testGgT() {
-		fail("Not yet implemented");
+		assertEquals(1L, RationaleZahl.ggT(1, 3));
+		assertEquals(1L, RationaleZahl.ggT(13, 19));
+		assertEquals(2L, RationaleZahl.ggT(22, 8));
+		assertEquals(3L, RationaleZahl.ggT(9, 3));
+		assertEquals(4L, RationaleZahl.ggT(12, 28));
 	}
 
+	/**
+	 * Testet die Methode {@link RationaleZahl#kuerze(RationaleZahl)}.
+	 */
 	@Test
 	public void testKuerze() {
-		fail("Not yet implemented");
+		RationaleZahl r;
+
+		r = new RationaleZahl(2, 8);
+		assertEquals(a, RationaleZahl.kuerze(r));
 	}
 
+	/**
+	 * Testet die Methode {@link RationaleZahl#equals(Object)}.
+	 */
 	@Test
 	public void testEqualsObject() {
-		fail("Not yet implemented");
+		RationaleZahl r;
+
+		r = new RationaleZahl(2, 8);
+		assertEquals(r, a);
+		assertEquals(a, r);
+
+		assertFalse(a.equals(b));
+		assertFalse(b.equals(a));
+		assertFalse(b.equals("Unsinn"));
 	}
 
+	/**
+	 * Testet pro forma die toString()-Methode.
+	 */
 	@Test
 	public void testToString() {
-		fail("Not yet implemented");
+		System.out.println(a);
+		System.out.println(b);
+		System.out.println(new RationaleZahl(7));
 	}
 
 }
