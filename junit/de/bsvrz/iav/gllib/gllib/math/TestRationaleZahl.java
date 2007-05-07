@@ -26,7 +26,13 @@
 
 package de.bsvrz.iav.gllib.gllib.math;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Iterator;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -77,7 +83,7 @@ public class TestRationaleZahl {
 	 * 
 	 */
 	@Test
-	public void testGetNenenr() {
+	public void testGetNenner() {
 		assertEquals(4L, a.getNenner());
 		assertEquals(8L, b.getNenner());
 	}
@@ -190,6 +196,18 @@ public class TestRationaleZahl {
 	}
 
 	/**
+	 * Testet die Methode {@link RationaleZahl#kgV(long, long)}.
+	 */
+	@Test
+	public void testKgV() {
+		assertEquals(3L, RationaleZahl.kgV(1, 3));
+		assertEquals(247L, RationaleZahl.kgV(13, 19));
+		assertEquals(24L, RationaleZahl.kgV(24, 8));
+		assertEquals(12L, RationaleZahl.kgV(4, 3));
+		assertEquals(36L, RationaleZahl.kgV(12, 36));
+	}
+
+	/**
 	 * Testet die Methode {@link RationaleZahl#ggT(long, long)}.
 	 */
 	@Test
@@ -202,6 +220,19 @@ public class TestRationaleZahl {
 	}
 
 	/**
+	 * Testet die Methode {@link RationaleZahl#kehrwert(RationaleZahl)}.
+	 */
+	@Test
+	public void testKehrwert() {
+		RationaleZahl r;
+
+		r = new RationaleZahl(4, 1);
+		assertEquals(r, RationaleZahl.kehrwert(a));
+
+		assertEquals(RationaleZahl.EINS, RationaleZahl.multipliziere(a, r));
+	}
+
+	/**
 	 * Testet die Methode {@link RationaleZahl#kuerze(RationaleZahl)}.
 	 */
 	@Test
@@ -210,6 +241,31 @@ public class TestRationaleZahl {
 
 		r = new RationaleZahl(2, 8);
 		assertEquals(a, RationaleZahl.kuerze(r));
+	}
+
+	/**
+	 * Testet die Methode {@link RationaleZahl#compareTo(RationaleZahl)}.
+	 */
+	@Test
+	public void testCompareTo() {
+		SortedSet<RationaleZahl> s;
+		Iterator<RationaleZahl> iterator;
+		RationaleZahl letzte;
+
+		s = new TreeSet<RationaleZahl>();
+		s.add(new RationaleZahl(5));
+		s.add(new RationaleZahl(1, 7));
+		s.add(RationaleZahl.EINS);
+		s.add(new RationaleZahl(64));
+		s.add(RationaleZahl.NULL);
+		s.add(new RationaleZahl(41));
+		s.add(new RationaleZahl(55, 4));
+
+		iterator = s.iterator();
+		do {
+			letzte = iterator.next();
+			assertTrue(letzte.doubleValue() < iterator.next().doubleValue());
+		} while (iterator.hasNext());
 	}
 
 	/**
@@ -233,9 +289,9 @@ public class TestRationaleZahl {
 	 */
 	@Test
 	public void testToString() {
-		System.out.println(a);
-		System.out.println(b);
-		System.out.println(new RationaleZahl(7));
+		System.out.println(a.toString());
+		System.out.println(b.toString());
+		System.out.println(new RationaleZahl(7).toString());
 	}
 
 }

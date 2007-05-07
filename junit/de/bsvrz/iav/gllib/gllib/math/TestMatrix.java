@@ -218,7 +218,7 @@ public class TestMatrix {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void testMultipliziereMatrixVektorException() {
-		Matrix.multipliziere(a, a.spaltenvektor(1));
+		Matrix.multipliziere(a, a.getSpaltenvektor(1));
 	}
 
 	/**
@@ -250,31 +250,92 @@ public class TestMatrix {
 	}
 
 	/**
-	 * Test f&uuml;r {@link Matrix#zeilenvektor(int)}.
+	 * Test f&uuml;r {@link Matrix#getZeilenvektor(int)}.
 	 */
 	@Test
-	public void testZeilenvektor() {
+	public void testGetZeilenvektor() {
 		Vektor v;
 
 		v = new Vektor(3, 5);
-		assertEquals(v, a.zeilenvektor(2));
+		assertEquals(v, a.getZeilenvektor(2));
 
 		v = new Vektor(5, 4, 4);
-		assertEquals(v, b.zeilenvektor(1));
+		assertEquals(v, b.getZeilenvektor(1));
 	}
 
 	/**
-	 * Test f&uuml;r {@link Matrix#spaltenvektor(int)}.
+	 * Test f&uuml;r {@link Matrix#setZeilenvektor(int, Vektor)}.
 	 */
 	@Test
-	public void testSpaltenvektor() {
+	public void testSetZeilenvektor() {
+		Vektor v;
+		Matrix m;
+
+		v = new Vektor(2, 5);
+
+		m = new Matrix(a);
+		m.set(1, 0, 2);
+		m.set(1, 1, 5);
+
+		a.setZeilenvektor(1, v);
+		assertEquals(m, a);
+	}
+
+	/**
+	 * Test f&uuml;r das Auftreten einer Exception in
+	 * {@link Matrix#setZeilenvektor(int, Vektor)}.
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void testSetZeilenvektorException() {
+		Vektor v;
+
+		v = new Vektor(2, 5, 3);
+		a.setZeilenvektor(1, v);
+	}
+
+	/**
+	 * Test f&uuml;r {@link Matrix#getSpaltenvektor(int)}.
+	 */
+	@Test
+	public void testGetSpaltenvektor() {
 		Vektor v;
 
 		v = new Vektor(5, 7, 3);
-		assertEquals(v, a.spaltenvektor(0));
+		assertEquals(v, a.getSpaltenvektor(0));
 
 		v = new Vektor(3, 4);
-		assertEquals(v, b.spaltenvektor(1));
+		assertEquals(v, b.getSpaltenvektor(1));
+	}
+
+	/**
+	 * Test f&uuml;r das Auftreten einer Exception in
+	 * {@link Matrix#setSpaltenvektor(int, Vektor)}.
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void testSetSpaltenvektorException() {
+		Vektor v;
+
+		v = new Vektor(1, 1);
+		a.setSpaltenvektor(1, v);
+	}
+
+	/**
+	 * Test f&uuml;r {@link Matrix#setSpaltenvektor(int, Vektor)}.
+	 */
+	@Test
+	public void testSetSpaltenvektor() {
+		Vektor v;
+		Matrix m;
+
+		v = new Vektor(1, 1, 1);
+
+		m = new Matrix(a);
+		m.set(0, 1, 1);
+		m.set(1, 1, 1);
+		m.set(2, 1, 1);
+
+		a.setSpaltenvektor(1, v);
+		assertEquals(m, a);
 	}
 
 	/**
@@ -350,8 +411,8 @@ public class TestMatrix {
 	 */
 	@Test
 	public void testToString() {
-		System.out.println(a);
-		System.out.println(b);
+		System.out.println("Ausgabe Matrix:\n" + a.toString());
+		System.out.println("Ausgabe Matrix:\n" + b.toString());
 	}
 
 }

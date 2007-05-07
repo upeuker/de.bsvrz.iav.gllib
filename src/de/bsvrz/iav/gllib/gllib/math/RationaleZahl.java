@@ -32,7 +32,13 @@ package de.bsvrz.iav.gllib.gllib.math;
  * @author BitCtrl Systems GmbH, Schumann
  * @version $Id$
  */
-public class RationaleZahl extends Number {
+public class RationaleZahl extends Number implements Comparable<RationaleZahl> {
+
+	/** Repr&auml;sentiert 0 als rationale Zahl. */
+	public static final RationaleZahl NULL = new RationaleZahl(0);
+
+	/** Repr&auml;sentiert 1 als rationale Zahl. */
+	public static final RationaleZahl EINS = new RationaleZahl(1);
 
 	/** Serialisierungs-ID. */
 	private static final long serialVersionUID = 1L;
@@ -107,7 +113,7 @@ public class RationaleZahl extends Number {
 		z = a.zaehler * b.zaehler;
 		n = a.nenner * b.nenner;
 
-		return new RationaleZahl(z, n);
+		return kuerze(new RationaleZahl(z, n));
 	}
 
 	/**
@@ -133,12 +139,7 @@ public class RationaleZahl extends Number {
 	 * @return Das Ergebnis der Division
 	 */
 	public static RationaleZahl dividiere(RationaleZahl a, RationaleZahl b) {
-		long z, n;
-
-		z = a.zaehler * b.nenner;
-		n = a.nenner * b.zaehler;
-
-		return new RationaleZahl(z, n);
+		return multipliziere(a, kehrwert(b));
 	}
 
 	/**
@@ -148,7 +149,7 @@ public class RationaleZahl extends Number {
 	 *            Erste ganze Zahl
 	 * @param b
 	 *            Zweite ganze Zahl
-	 * @return Der gr&ouml;&szlig;te gemeinsame Teiler
+	 * @return Der gr&ouml;&szlig;te gemeinsame Teiler beider Zahlen
 	 */
 	public static long ggT(long a, long b) {
 		if (b == 0) {
@@ -156,6 +157,31 @@ public class RationaleZahl extends Number {
 		}
 
 		return ggT(b, a % b);
+	}
+
+	/**
+	 * Bestimmt das kleinste gemeinsame Vielfache zweier ganzer Zahlen.
+	 * 
+	 * @param a
+	 *            Erste ganze Zahl
+	 * @param b
+	 *            Zweite ganze Zahl
+	 * @return Das kleinste gemeinsame Vielfache beider Zahlen
+	 */
+	public static long kgV(long a, long b) {
+		return Math.abs(a * b) / ggT(a, b);
+	}
+
+	/**
+	 * Bildet den Kehrwert einer rationalen Zahl. Es werden Z&auml.hler und
+	 * Nenner vertauscht.
+	 * 
+	 * @param a
+	 *            Eine rationale Zahl
+	 * @return Der Kehrwert der rationalen Zahl
+	 */
+	public static RationaleZahl kehrwert(RationaleZahl a) {
+		return new RationaleZahl(a.nenner, a.zaehler);
 	}
 
 	/**
@@ -195,8 +221,14 @@ public class RationaleZahl extends Number {
 		if (nenner == 0) {
 			throw new ArithmeticException("Null als Nenner ist nicht erlaubt.");
 		}
-		this.zaehler = zaehler;
-		this.nenner = nenner;
+
+		if ((zaehler > 0 && nenner < 0) || (zaehler < 0 && nenner < 0)) {
+			this.zaehler = -zaehler;
+			this.nenner = -nenner;
+		} else {
+			this.zaehler = zaehler;
+			this.nenner = nenner;
+		}
 	}
 
 	/**
@@ -206,8 +238,7 @@ public class RationaleZahl extends Number {
 	 *            Eine rationale Zahl
 	 */
 	public RationaleZahl(RationaleZahl zahl) {
-		zaehler = zahl.zaehler;
-		nenner = zahl.nenner;
+		this(zahl.zaehler, zahl.nenner);
 	}
 
 	/**
@@ -276,6 +307,22 @@ public class RationaleZahl extends Number {
 	@Override
 	public long longValue() {
 		return Math.round(doubleValue());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see java.lang.Comparable#compareTo(Object)
+	 */
+	public int compareTo(RationaleZahl zahl) {
+		long kgv;
+		Long a, b;
+
+		kgv = kgV(nenner, zahl.nenner);
+		a = zaehler * kgv;
+		b = zahl.zaehler * kgv;
+
+		return a.compareTo(b);
 	}
 
 	/**

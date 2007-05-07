@@ -34,12 +34,6 @@ package de.bsvrz.iav.gllib.gllib.math;
  */
 public class Vektor implements Cloneable {
 
-	/** Anzahl der Komponenten f&uuml;r einen Vektor in der Ebene. */
-	public static final int EBENE = 2;
-
-	/** Anzahl der Komponenten f&uuml;r einen Vektor im Raum. */
-	public static final int RAUM = 3;
-
 	/** Interner Speicher der Vektorkomponenten. */
 	private RationaleZahl[] vektor;
 
@@ -109,11 +103,57 @@ public class Vektor implements Cloneable {
 	 * @return Das Vielfache des Vektors
 	 */
 	public static Vektor multipliziere(Vektor a, long s) {
+		return multipliziere(a, new RationaleZahl(s));
+	}
+
+	/**
+	 * Multipliziert einen Vektor mit einem Skalar.
+	 * 
+	 * @param a
+	 *            Ein Vektor
+	 * @param s
+	 *            Ein Skalar
+	 * @return Das Vielfache des Vektors
+	 */
+	public static Vektor multipliziere(Vektor a, RationaleZahl s) {
 		Vektor v;
 
 		v = new Vektor(a.anzahlKomponenten());
 		for (int i = 0; i < a.anzahlKomponenten(); i++) {
 			v.set(i, RationaleZahl.multipliziere(a.get(i), s));
+		}
+
+		return v;
+	}
+
+	/**
+	 * Dividiert einen Vektor mit einem Skalar.
+	 * 
+	 * @param a
+	 *            Ein Vektor
+	 * @param s
+	 *            Ein Skalar
+	 * @return Das Vielfache des Vektors
+	 */
+	public static Vektor dividiere(Vektor a, long s) {
+		return dividiere(a, new RationaleZahl(s));
+	}
+
+	/**
+	 * Dividiert einen Vektor mit einem Skalar.
+	 * 
+	 * @param a
+	 *            Ein Vektor
+	 * @param s
+	 *            Ein Skalar
+	 * @return Das Vielfache des Vektors
+	 */
+	public static Vektor dividiere(Vektor a, RationaleZahl s) {
+		Vektor v;
+
+		v = new Vektor(a.anzahlKomponenten());
+		for (int i = 0; i < a.anzahlKomponenten(); i++) {
+			v.set(i, RationaleZahl.dividiere(a.get(i), s));
 		}
 
 		return v;
@@ -135,11 +175,6 @@ public class Vektor implements Cloneable {
 		if (a.anzahlKomponenten() != b.anzahlKomponenten()) {
 			throw new IllegalArgumentException(
 					"Die beiden Vektoren haben nicht die selbe Komponentenanzahl.");
-		}
-
-		if (a.anzahlKomponenten() != EBENE && a.anzahlKomponenten() != RAUM) {
-			throw new IllegalArgumentException(
-					"Die Komponentenanzahl entspricht nicht 2 oder 3.");
 		}
 
 		RationaleZahl s;
@@ -172,7 +207,7 @@ public class Vektor implements Cloneable {
 					"Die beiden Vektoren haben nicht die selbe Komponentenanzahl.");
 		}
 
-		if (a.anzahlKomponenten() != RAUM) {
+		if (a.anzahlKomponenten() != 3) {
 			throw new IllegalArgumentException(
 					"Die Komponentenanzahl entspricht nicht 3.");
 		}
@@ -209,6 +244,9 @@ public class Vektor implements Cloneable {
 		}
 
 		vektor = new RationaleZahl[n];
+		for (int i = 0; i < n; i++) {
+			vektor[i] = RationaleZahl.NULL;
+		}
 	}
 
 	/**

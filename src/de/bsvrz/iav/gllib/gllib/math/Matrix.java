@@ -148,8 +148,8 @@ public class Matrix {
 			for (int j = 0; j < b.anzahlSpalten(); j++) {
 				Vektor v1, v2;
 
-				v1 = a.zeilenvektor(i);
-				v2 = b.spaltenvektor(j);
+				v1 = a.getZeilenvektor(i);
+				v2 = b.getSpaltenvektor(j);
 				m.set(i, j, Vektor.skalarprodukt(v1, v2));
 			}
 		}
@@ -182,15 +182,15 @@ public class Matrix {
 			for (int j = 0; j < b.anzahlSpalten(); j++) {
 				Vektor v1, v2;
 
-				v1 = a.zeilenvektor(i);
-				v2 = b.spaltenvektor(j);
+				v1 = a.getZeilenvektor(i);
+				v2 = b.getSpaltenvektor(j);
 				m.set(i, j, Vektor.skalarprodukt(v1, v2));
 			}
 		}
 
 		return m;
 	}
-
+	
 	/**
 	 * Konstruiert eine leere Matrix.
 	 * 
@@ -208,6 +208,11 @@ public class Matrix {
 		}
 
 		matrix = new RationaleZahl[n][m];
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < m; j++) {
+				matrix[i][j] = RationaleZahl.NULL;
+			}
+		}
 	}
 
 	/**
@@ -317,8 +322,27 @@ public class Matrix {
 	 *            Zeilenindex
 	 * @return Die Matrixzeile als Vektor
 	 */
-	public Vektor zeilenvektor(int i) {
+	public Vektor getZeilenvektor(int i) {
 		return new Vektor(matrix[i]);
+	}
+
+	/**
+	 * &Uuml;berschreibt eine Zeile der Matrix mit einem gegebenen Vektor.
+	 * 
+	 * @param i
+	 *            Die Matrixzeile, die &uuml;berschrieben werden soll
+	 * @param v
+	 *            Der Vektor, durch den die Matrixzeile ersetzt werden soll
+	 */
+	public void setZeilenvektor(int i, Vektor v) {
+		if (anzahlSpalten() != v.anzahlKomponenten()) {
+			throw new IllegalArgumentException(
+					"Der Anzahl der Vektorelemente stimmt nicht mit der Spaltenanzahl der Matrix überein.");
+		}
+
+		for (int j = 0; j < anzahlSpalten(); j++) {
+			matrix[i][j] = v.get(j);
+		}
 	}
 
 	/**
@@ -328,7 +352,7 @@ public class Matrix {
 	 *            Spalteindex
 	 * @return Die Matrixspalte als Vektor
 	 */
-	public Vektor spaltenvektor(int j) {
+	public Vektor getSpaltenvektor(int j) {
 		Vektor v;
 
 		v = new Vektor(anzahlZeilen());
@@ -337,6 +361,25 @@ public class Matrix {
 		}
 
 		return v;
+	}
+
+	/**
+	 * &Uuml;berschreibt eine Spalte der Matrix mit einem gegebenen Vektor.
+	 * 
+	 * @param j
+	 *            Die Matrixspalte, die &uuml;berschrieben werden soll
+	 * @param v
+	 *            Der Vektor, durch den die Matrixspalte ersetzt werden soll
+	 */
+	public void setSpaltenvektor(int j, Vektor v) {
+		if (anzahlZeilen() != v.anzahlKomponenten()) {
+			throw new IllegalArgumentException(
+					"Der Anzahl der Vektorelemente stimmt nicht mit der Zeilenanzahl der Matrix überein.");
+		}
+
+		for (int i = 0; i < anzahlZeilen(); i++) {
+			matrix[i][j] = v.get(j);
+		}
 	}
 
 	/**
@@ -416,10 +459,12 @@ public class Matrix {
 			for (int j = 0; j < anzahlSpalten(); j++) {
 				s += matrix[i][j];
 				if (j < anzahlSpalten() - 1) {
-					s += ", ";
+					s += "\t";
 				}
 			}
-			s += "\n";
+			if (i < anzahlZeilen() - 1) {
+				s += "\n";
+			}
 		}
 
 		return s;

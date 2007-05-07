@@ -26,7 +26,10 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -147,7 +150,7 @@ public class TestGanglinie {
 	 */
 	@Test
 	public void testToString() {
-		System.out.println(ganglinie);
+		System.out.println("Ausgabe Ganglinie:\n" + ganglinie.toString());
 	}
 
 	/**

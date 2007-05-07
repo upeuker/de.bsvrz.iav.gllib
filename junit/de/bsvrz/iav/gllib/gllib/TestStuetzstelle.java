@@ -26,7 +26,9 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
@@ -115,10 +117,10 @@ public class TestStuetzstelle {
 		Stuetzstelle a;
 
 		a = new Stuetzstelle(23);
-		System.out.println(a);
+		System.out.println("Ausgabe Stützstelle: " + a.toString());
 
 		a = new Stuetzstelle(34, 4123);
-		System.out.println(a);
+		System.out.println("Ausgabe Stützstelle: " + a.toString());
 	}
 
 	/**

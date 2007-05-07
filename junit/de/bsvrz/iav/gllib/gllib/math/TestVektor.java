@@ -26,7 +26,8 @@
 
 package de.bsvrz.iav.gllib.gllib.math;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -117,7 +118,8 @@ public class TestVektor {
 	}
 
 	/**
-	 * Testet die Methode {@link Vektor#multipliziere(Vektor, long)}.
+	 * Testet die Methoden {@link Vektor#multipliziere(Vektor, long)} und
+	 * {@link Vektor#multipliziere(Vektor, RationaleZahl)}.
 	 */
 	@Test
 	public void testMultipliziere() {
@@ -128,6 +130,22 @@ public class TestVektor {
 
 		c = new Vektor(5, 8, 1);
 		assertEquals(c, Vektor.multipliziere(b, 1));
+	}
+
+	/**
+	 * Testet die Methoden {@link Vektor#dividiere(Vektor, long)} und
+	 * {@link Vektor#dividiere(Vektor, RationaleZahl)}.
+	 */
+	@Test
+	public void testDividiere() {
+		Vektor c;
+
+		c = new Vektor(new RationaleZahl(3, 2), RationaleZahl.EINS,
+				new RationaleZahl(7, 2));
+		assertEquals(c, Vektor.dividiere(a, 2));
+
+		c = new Vektor(5, 8, 1);
+		assertEquals(c, Vektor.dividiere(b, 1));
 	}
 
 	/**
@@ -144,24 +162,11 @@ public class TestVektor {
 	 * 
 	 */
 	@Test(expected = IllegalArgumentException.class)
-	public void testSkalarproduktExceptionA() {
+	public void testSkalarproduktException() {
 		Vektor c;
 
 		c = new Vektor(8, 10);
 		Vektor.skalarprodukt(a, c);
-	}
-
-	/**
-	 * Testet auf das Eintreten der zweiten Ausnahme.
-	 * 
-	 */
-	@Test(expected = IllegalArgumentException.class)
-	public void testSkalarproduktExceptionB() {
-		Vektor c, d;
-
-		c = new Vektor(8, 1, 5, 5);
-		d = new Vektor(7, 3, 6, 4);
-		Vektor.skalarprodukt(c, d);
 	}
 
 	/**
@@ -238,8 +243,8 @@ public class TestVektor {
 	 */
 	@Test
 	public void testToString() {
-		System.out.println(a);
-		System.out.println(b);
+		System.out.println("Ausgabe Vektor: " + a.toString());
+		System.out.println("Ausgabe Vektor: " + b.toString());
 	}
 
 }

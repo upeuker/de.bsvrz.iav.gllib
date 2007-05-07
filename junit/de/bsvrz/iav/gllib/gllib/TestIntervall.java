@@ -26,7 +26,7 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 

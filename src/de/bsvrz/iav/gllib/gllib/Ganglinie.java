@@ -26,6 +26,7 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
+import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -163,11 +164,16 @@ public class Ganglinie extends TreeSet<Stuetzstelle> implements Approximation {
 	@Override
 	public String toString() {
 		String result;
+		Iterator<Stuetzstelle> iterator;
 
 		result = Messages.get(GlLibMessages.Ganglinie) + " " + getIntervall()
 				+ ":\n";
-		for (Stuetzstelle s : this) {
-			result += "\t" + s + "\n";
+		iterator = iterator();
+		while (iterator.hasNext()) {
+			result += "\t" + iterator.next();
+			if (iterator.hasNext()) {
+				result += "\n";
+			}
 		}
 
 		return result;
