@@ -73,11 +73,11 @@ public class TestGanglinie {
 		s4 = new Stuetzstelle(60, 40);
 		s5 = new Stuetzstelle(90, 10);
 
-		ganglinie.add(s4);
-		ganglinie.add(s2);
-		ganglinie.add(s5);
-		ganglinie.add(s1);
-		ganglinie.add(s3);
+		ganglinie.set(s4);
+		ganglinie.set(s2);
+		ganglinie.set(s5);
+		ganglinie.set(s1);
+		ganglinie.set(s3);
 	}
 
 	/**
@@ -107,20 +107,20 @@ public class TestGanglinie {
 		Ganglinie g;
 
 		// davor
-		assertFalse(ganglinie.contains(-10));
+		assertFalse(ganglinie.isValid(-10));
 
 		// dazwischen, auf Stützstelle
-		assertTrue(ganglinie.contains(30));
+		assertTrue(ganglinie.isValid(30));
 
 		// dazwischen, nicht auf Stützstelle
-		assertTrue(ganglinie.contains(50));
+		assertTrue(ganglinie.isValid(50));
 
 		// dahinter
-		assertFalse(ganglinie.contains(100));
+		assertFalse(ganglinie.isValid(100));
 
 		// Sonderfall, eine Ganglinie ohne Stützstellen
 		g = new Ganglinie();
-		assertFalse(g.contains(30));
+		assertFalse(g.isValid(30));
 	}
 
 	/**
@@ -131,17 +131,17 @@ public class TestGanglinie {
 		Stuetzstelle s, s0;
 
 		// existierende Stützstelle
-		s = ganglinie.getStuetzstelle(30);
+		s = ganglinie.get(30);
 		assertEquals(s2, s);
 
 		// innerhalb der Ganglinie, aber keine Stützstelle
 		ganglinie.setApproximation(Polyline.class);
-		s = ganglinie.getStuetzstelle(50);
+		s = ganglinie.get(50);
 		s0 = new Stuetzstelle(50, 30);
 		assertEquals(s0, s);
 
 		// außerhalb der Ganglinie
-		s = ganglinie.getStuetzstelle(100);
+		s = ganglinie.get(100);
 		assertNull(s);
 	}
 
@@ -151,23 +151,6 @@ public class TestGanglinie {
 	@Test
 	public void testToString() {
 		System.out.println("Ausgabe Ganglinie:\n" + ganglinie.toString());
-	}
-
-	/**
-	 * Testet die Mengenbedingungen. Zu jedem Zeitstempel, darf nur genau ein
-	 * Wert existieren. Ein Hinzuf&uuml;gen eines Wertes zu einem existierenden
-	 * Zeitstemepel wird ignoriert.
-	 */
-	@Test
-	public void testMengen() {
-		Stuetzstelle s = new Stuetzstelle(30, 666);
-
-		ganglinie.add(s);
-		assertEquals(s2, ganglinie.getStuetzstelle(30));
-
-		ganglinie.remove(s2);
-		ganglinie.add(s);
-		assertEquals(s, ganglinie.getStuetzstelle(30));
 	}
 
 }

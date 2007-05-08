@@ -4,43 +4,43 @@
       <name="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib{Ganglinie.java[Ganglinie"/>
       <height="-1"/>
       <width="-1"/>
-      <x="303"/>
-      <y="36"/>
+      <x="16"/>
+      <y="13"/>
    </type>
    <type>
       <name="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib{Stuetzstelle.java[Stuetzstelle"/>
       <height="-1"/>
       <width="-1"/>
-      <x="490"/>
-      <y="306"/>
+      <x="68"/>
+      <y="355"/>
    </type>
    <type>
       <name="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib{Intervall.java[Intervall"/>
       <height="-1"/>
       <width="-1"/>
-      <x="39"/>
-      <y="43"/>
+      <x="447"/>
+      <y="152"/>
    </type>
    <type>
       <name="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib{Approximation.java[Approximation"/>
       <height="-1"/>
       <width="-1"/>
-      <x="760"/>
-      <y="82"/>
+      <x="480"/>
+      <y="28"/>
    </type>
    <type>
       <name="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib{Polyline.java[Polyline"/>
       <height="-1"/>
       <width="-1"/>
-      <x="201"/>
-      <y="567"/>
+      <x="80"/>
+      <y="641"/>
    </type>
    <type>
       <name="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib{AbstractApproximation.java[AbstractApproximation"/>
       <height="-1"/>
       <width="-1"/>
-      <x="764"/>
-      <y="548"/>
+      <x="476"/>
+      <y="542"/>
    </type>
    <relationship>
       <class="edu.buffalo.cse.green.relationship.dependency.DependencyLPart"/>
@@ -51,29 +51,8 @@
    </relationship>
    <relationship>
       <class="edu.buffalo.cse.green.relationship.realization.RealizationPart"/>
-      <sourceType="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib{Ganglinie.java[Ganglinie"/>
-      <targetType="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib{Approximation.java[Approximation"/>
-      <bendpoints>
-      </bendpoints>
-   </relationship>
-   <relationship>
-      <class="edu.buffalo.cse.green.relationship.realization.RealizationPart"/>
       <sourceType="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib{AbstractApproximation.java[AbstractApproximation"/>
       <targetType="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib{Approximation.java[Approximation"/>
-      <bendpoints>
-      </bendpoints>
-   </relationship>
-   <relationship>
-      <class="edu.buffalo.cse.green.relationship.dependency.DependencyLPart"/>
-      <sourceType="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib{Polyline.java[Polyline"/>
-      <targetType="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib{Stuetzstelle.java[Stuetzstelle"/>
-      <bendpoints>
-      </bendpoints>
-   </relationship>
-   <relationship>
-      <class="edu.buffalo.cse.green.relationship.generalization.GeneralizationPart"/>
-      <sourceType="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib{Polyline.java[Polyline"/>
-      <targetType="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib{AbstractApproximation.java[AbstractApproximation"/>
       <bendpoints>
       </bendpoints>
    </relationship>
@@ -86,8 +65,22 @@
    </relationship>
    <relationship>
       <class="edu.buffalo.cse.green.relationship.dependency.DependencyLPart"/>
+      <sourceType="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib{Polyline.java[Polyline"/>
+      <targetType="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib{Stuetzstelle.java[Stuetzstelle"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.dependency.DependencyLPart"/>
       <sourceType="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib{Ganglinie.java[Ganglinie"/>
       <targetType="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib{Stuetzstelle.java[Stuetzstelle"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.realization.RealizationPart"/>
+      <sourceType="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib{Ganglinie.java[Ganglinie"/>
+      <targetType="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib{Approximation.java[Approximation"/>
       <bendpoints>
       </bendpoints>
    </relationship>
@@ -95,6 +88,13 @@
       <class="edu.buffalo.cse.green.relationship.dependency.DependencyIPart"/>
       <sourceType="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib{Polyline.java[Polyline"/>
       <targetType="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib{Stuetzstelle.java[Stuetzstelle"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.generalization.GeneralizationPart"/>
+      <sourceType="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib{Polyline.java[Polyline"/>
+      <targetType="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib{AbstractApproximation.java[AbstractApproximation"/>
       <bendpoints>
       </bendpoints>
    </relationship>

@@ -39,31 +39,59 @@ package de.bsvrz.iav.gllib.gllib;
 public class Polyline extends AbstractApproximation {
 
 	/**
+	 * Tut nichts. Standardkonstruktor ist f&uuml;r Festlegen der
+	 * Ganglinienapproximation notwendig.
+	 */
+	public Polyline() {
+		// nix
+	}
+
+	/**
+	 * Konstruiert eine Approximation durch Polyline f&uuml;r eine Ganglinie.
+	 * Die in der Ganglinie festgelegte Approximation wird nicht ver&auml;ndert.
+	 * 
+	 * @param ganglinie
+	 *            Eine Ganglinie
+	 */
+	public Polyline(Ganglinie ganglinie) {
+		setGanglinie(ganglinie);
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
-	public Stuetzstelle getStuetzstelle(long zeitstempel) {
+	public Stuetzstelle get(long zeitstempel) {
 		Stuetzstelle s0;
 		Stuetzstelle s1;
-		Stuetzstelle s;
 		Long wert;
 
-		if (!ganglinie.contains(zeitstempel)) {
+		if (!ganglinie.isValid(zeitstempel)) {
 			// Zeitstempel gehört nicht zur Ganglinie
 			return null;
 		}
 
-		s = new Stuetzstelle(zeitstempel);
-		if (ganglinie.contains(s)) {
-			return ganglinie.getStuetzstelle(zeitstempel);
+		if (ganglinie.existsStuetzstelle(zeitstempel)) {
+			return ganglinie.get(zeitstempel);
 		}
 
 		// Stützstelle muss berechnet werden
-		s0 = naechsteStuetzstelleDavor(zeitstempel);
-		s1 = naechsteStuetzstelleDanach(zeitstempel);
+		s0 = ganglinie.naechsteStuetzstelleDavor(zeitstempel);
+		s1 = ganglinie.naechsteStuetzstelleDanach(zeitstempel);
 		wert = s0.wert + (s1.wert - s0.wert)
 				/ (s1.zeitstempel - s0.zeitstempel)
 				* (zeitstempel - s0.zeitstempel);
 		return new Stuetzstelle(zeitstempel, wert.intValue());
 	}
+
+	// /**
+	// * {@inheritDoc}
+	// *
+	// * Die Interpolation einer Polyline wird <em>nicht</em> berechnet. Es
+	// * werden direkt die St&uuml;tzstellen der Ganglinien zur&uuml;ckgegeben.
+	// */
+	// @Override
+	// public SortedSet<Stuetzstelle> interpoliere(int anzahlIntervalle) {
+	// return new TreeSet<Stuetzstelle>(ganglinie.getStuetzstellen());
+	// }
 
 }

@@ -30,7 +30,28 @@
    </type>
    <relationship>
       <class="edu.buffalo.cse.green.relationship.dependency.DependencyIPart"/>
+      <sourceType="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib.math{Vektor.java[Vektor"/>
+      <targetType="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib.math{RationaleZahl.java[RationaleZahl"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.dependency.DependencyIPart"/>
+      <sourceType="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib.math{Matrix.java[Matrix"/>
+      <targetType="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib.math{Vektor.java[Vektor"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.dependency.DependencyIPart"/>
       <sourceType="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib.math{Gauss.java[Gauss"/>
+      <targetType="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib.math{RationaleZahl.java[RationaleZahl"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.dependency.DependencyIPart"/>
+      <sourceType="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib.math{Matrix.java[Matrix"/>
       <targetType="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib.math{RationaleZahl.java[RationaleZahl"/>
       <bendpoints>
       </bendpoints>
@@ -52,27 +73,6 @@
             <x="0"/>
             <y="-40"/>
          </bendpoint>
-      </bendpoints>
-   </relationship>
-   <relationship>
-      <class="edu.buffalo.cse.green.relationship.dependency.DependencyIPart"/>
-      <sourceType="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib.math{Matrix.java[Matrix"/>
-      <targetType="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib.math{Vektor.java[Vektor"/>
-      <bendpoints>
-      </bendpoints>
-   </relationship>
-   <relationship>
-      <class="edu.buffalo.cse.green.relationship.dependency.DependencyIPart"/>
-      <sourceType="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib.math{Vektor.java[Vektor"/>
-      <targetType="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib.math{RationaleZahl.java[RationaleZahl"/>
-      <bendpoints>
-      </bendpoints>
-   </relationship>
-   <relationship>
-      <class="edu.buffalo.cse.green.relationship.dependency.DependencyIPart"/>
-      <sourceType="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib.math{Matrix.java[Matrix"/>
-      <targetType="=de.bsvrz.iav.gllib/src<de.bsvrz.iav.gllib.gllib.math{RationaleZahl.java[RationaleZahl"/>
-      <bendpoints>
       </bendpoints>
    </relationship>
 </uml>

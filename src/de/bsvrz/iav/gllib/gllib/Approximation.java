@@ -53,7 +53,7 @@ public interface Approximation {
 	 *            Zeitstempel
 	 * @return Wert als St&uuml;tzstelle
 	 */
-	Stuetzstelle getStuetzstelle(long zeitstempel);
+	Stuetzstelle get(long zeitstempel);
 
 	/**
 	 * Gibt eine Interpolation der Approximation zur&uuml;ck. N&uuml;tzlich
@@ -67,6 +67,6 @@ public interface Approximation {
 	 *            der tats&auml;chlichen Approximationsfunktion
 	 * @return Nach Zeitstempel sortierte Liste der St&uuml;tzstellen
 	 */
-	SortedSet<Stuetzstelle> getInterpolation(int anzahlIntervalle);
+	SortedSet<Stuetzstelle> interpoliere(long anzahlIntervalle);
 
 }

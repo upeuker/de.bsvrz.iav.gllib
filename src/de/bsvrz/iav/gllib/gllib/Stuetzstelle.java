@@ -26,8 +26,6 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
-import de.bsvrz.sys.funclib.bitctrl.i18n.Messages;
-
 /**
  * Repr&auml;sentiert eine allgemeine St&uuml;tzstelle f&uuml;r Ganglinien
  * bestehend aus Zeitstempel und Wert. Die St&uuml;tzstellen k&ouml;nnen nach
@@ -35,7 +33,7 @@ import de.bsvrz.sys.funclib.bitctrl.i18n.Messages;
  * <em>undefiniert</em> ({@code null}), so ist auch das Intervall bis zur
  * vorherigen und n&auml;chsten St&uuml;tzstelle <em>undefiniert</em>.
  * <p>
- * <strong>Hinweis</strong>: Die nat&uuml;rliche Ordnung der St&uuml;tzstellen
+ * <strong>Hinweis:</strong> Die nat&uuml;rliche Ordnung der St&uuml;tzstellen
  * ist <em>nicht</em> konsistent mit der Gleichheit. Zwei St&uuml;tzstellen
  * sind gleich, wenn sie in Zeitstempel und Wert &uuml;bereinstimmen. Die
  * nat&uuml;rliche Ordung hingegen bassiert ausschlie&szlig;lich auf den
@@ -135,8 +133,6 @@ public class Stuetzstelle implements Comparable<Stuetzstelle> {
 	}
 
 	/**
-	 * Gibt ein Tupel (Zeitstempel, Wert) zur&uuml;ck.
-	 * 
 	 * {@inheritDoc}
 	 * 
 	 * @see java.lang.Object#toString()
@@ -144,8 +140,7 @@ public class Stuetzstelle implements Comparable<Stuetzstelle> {
 	@SuppressWarnings("nls")
 	@Override
 	public String toString() {
-		return Messages.get(GlLibMessages.Node) + "(" + zeitstempel + " => "
-				+ wert + ")";
+		return "(" + zeitstempel + " => " + wert + ")";
 	}
 
 }

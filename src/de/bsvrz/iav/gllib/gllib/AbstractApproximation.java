@@ -52,77 +52,37 @@ public abstract class AbstractApproximation implements Approximation {
 	/**
 	 * {@inheritDoc}
 	 */
-	public SortedSet<Stuetzstelle> getInterpolation(int anzahlIntervalle) {
+	public SortedSet<Stuetzstelle> interpoliere(long anzahlIntervalle) {
 		if (anzahlIntervalle < 0) {
 			Messages.get(GlLibMessages.BadCount, anzahlIntervalle);
 		}
 
 		SortedSet<Stuetzstelle> interpolation = new TreeSet<Stuetzstelle>();
-		long start;
 		long intervall;
-		Stuetzstelle s;
 		long zeitstempel;
 
 		// Sonderfall: keine Stützstellen vorhanden
-		if (ganglinie.size() == 0) {
+		if (ganglinie.getStuetzstellen().size() == 0) {
 			return interpolation;
 		}
 
-		start = ganglinie.first().zeitstempel;
-		intervall = ganglinie.last().zeitstempel - start / anzahlIntervalle;
+		// Intervallbreite bestimmen
+		intervall = (ganglinie.getIntervall().ende - ganglinie.getIntervall().start)
+				/ anzahlIntervalle;
 
-		for (int i = 0; i <= anzahlIntervalle; i++) {
-			zeitstempel = start + i * intervall;
-			s = new Stuetzstelle(zeitstempel, getStuetzstelle(zeitstempel).wert);
-			interpolation.add(s);
+		// Stützstellen an den Intervallgrenzen bestimmen
+		zeitstempel = ganglinie.getIntervall().start;
+		while (zeitstempel < ganglinie.getIntervall().ende) {
+			interpolation.add(get(zeitstempel));
 			zeitstempel += intervall;
 		}
 
+		System.out.println("Anzahl Intervalle: " + anzahlIntervalle
+				+ ", Intervallbreite: " + intervall + ", Anzahl Stützstellen: "
+				+ interpolation.size() + ", Letzte Stützstelle: "
+				+ interpolation.last());
+
 		return interpolation;
-	}
-
-	/**
-	 * Gibt, falls vorhanden, die n&auml;chste St&uuml;tzstelle vor dem
-	 * Zeitstempel zur&uuml;ck.
-	 * 
-	 * @param zeitstempel
-	 *            Ein Zeitstempel
-	 * @return St&uuml;tzstelle oder {@code null}, falls keine existiert
-	 */
-	protected Stuetzstelle naechsteStuetzstelleDavor(long zeitstempel) {
-		Stuetzstelle s;
-		SortedSet<Stuetzstelle> kopf;
-
-		s = new Stuetzstelle(zeitstempel);
-		kopf = ganglinie.headSet(s);
-
-		if (kopf.isEmpty()) {
-			return null;
-		}
-
-		return kopf.last();
-	}
-
-	/**
-	 * Gibt, falls vorhanden, die n&auml;chste St&uuml;tzstelle nach dem
-	 * Zeitstempel zur&uuml;ck.
-	 * 
-	 * @param zeitstempel
-	 *            Ein Zeitstempel
-	 * @return St&uuml;tzstelle oder {@code null}, falls keine existiert
-	 */
-	protected Stuetzstelle naechsteStuetzstelleDanach(long zeitstempel) {
-		Stuetzstelle s;
-		SortedSet<Stuetzstelle> kopf;
-
-		s = new Stuetzstelle(zeitstempel + 1); // +1 wegen >= von tailSet()
-		kopf = ganglinie.tailSet(s);
-
-		if (kopf.isEmpty()) {
-			return null;
-		}
-
-		return kopf.first();
 	}
 
 }

@@ -43,6 +43,9 @@ public class Intervall {
 	/** Endzeitpunkt des Intervall. */
 	public final long ende;
 
+	/** Die Breite des Intervall. */
+	public final long breite;
+
 	/**
 	 * Konstruiert das Intervall mit dem angegebenen Grenzen.
 	 * 
@@ -59,6 +62,7 @@ public class Intervall {
 
 		this.start = start;
 		this.ende = ende;
+		this.breite = ende - start;
 	}
 
 	/**
@@ -77,6 +81,15 @@ public class Intervall {
 	 */
 	public long getEnde() {
 		return ende;
+	}
+
+	/**
+	 * Gibt die Breite des Intervalls zur&uuml;ck.
+	 * 
+	 * @return Intervallbreite
+	 */
+	public long getBreite() {
+		return breite;
 	}
 
 	/**

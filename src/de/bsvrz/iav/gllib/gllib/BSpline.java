@@ -62,7 +62,7 @@ public class BSpline extends AbstractApproximation {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Stuetzstelle getStuetzstelle(long zeitstempel) {
+	public Stuetzstelle get(long zeitstempel) {
 		// TODO Automatisch erstellter Methoden-Stub
 		return null;
 	}

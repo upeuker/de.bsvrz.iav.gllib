@@ -26,28 +26,30 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
+import de.bsvrz.iav.gllib.gllib.events.GanglinienEvent;
+import de.bsvrz.iav.gllib.gllib.events.GanglinienListener;
+
 /**
  * Approximation einer Ganglinie mit Hilfe eines Cubic-Splines.
  * 
  * @author BitCtrl, Schumann
  * @version $Id$
  */
-public class CubicSpline extends AbstractApproximation {
+public class CubicSpline extends AbstractApproximation implements
+		GanglinienListener {
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public Stuetzstelle getStuetzstelle(long zeitstempel) {
-		Stuetzstelle s;
-
-		if (!ganglinie.contains(zeitstempel)) {
+	public Stuetzstelle get(long zeitstempel) {
+		if (!ganglinie.isValid(zeitstempel)) {
 			// Zeitstempel gehört nicht zur Ganglinie
 			return null;
 		}
 
-		s = new Stuetzstelle(zeitstempel);
-		if (ganglinie.contains(s)) {
-			return ganglinie.getStuetzstelle(zeitstempel);
+		if (ganglinie.existsStuetzstelle(zeitstempel)) {
+			// Zum Zeitstempel existiert eine Stützstelle
+			return ganglinie.get(zeitstempel);
 		}
 
 		// Stützstelle muss berechnet werden
@@ -69,18 +71,23 @@ public class CubicSpline extends AbstractApproximation {
 		long h1, a1, b1, c1, d1;
 		long a2, c2;
 
-		s1 = naechsteStuetzstelleDavor(zeitstempel);
-		s2 = naechsteStuetzstelleDanach(zeitstempel);
-		s0 = naechsteStuetzstelleDavor(s1.zeitstempel);
+		s1 = ganglinie.naechsteStuetzstelleDavor(zeitstempel);
+		s2 = ganglinie.naechsteStuetzstelleDanach(zeitstempel);
+		s0 = ganglinie.naechsteStuetzstelleDavor(s1.zeitstempel);
 
 		h0 = s1.zeitstempel - s0.zeitstempel;
 		h1 = s2.zeitstempel - s1.zeitstempel;
 		a1 = s1.wert;
-		a2 = s2.wert;		
+		a2 = s2.wert;
 		b1 = (a2 - a1) / h1;
-		//b1 -= (2 * c1 + c2) / 3 * h1;
-		//d1 = (c2 - c1) / (3 * h1);
+		// b1 -= (2 * c1 + c2) / 3 * h1;
+		// d1 = (c2 - c1) / (3 * h1);
 
 		return 0;
+	}
+
+	public void ganglinieAktualisiert(GanglinienEvent e) {
+		// TODO Auto-generated method stub
+
 	}
 }
