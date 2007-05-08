@@ -216,7 +216,21 @@ public final class Gauss {
 				Vektor v0;
 				RationaleZahl z, n, f;
 
-				// Aktuelle Zeile
+				// Aktuelle Zeile bestimmen, ggf. Zeilen tauschen
+				if (d.get(j, j).equals(RationaleZahl.NULL)) {
+					// Auf der Diaginalen steht eine 0, die im Nenner stünde
+					for (int k = j + 1; k < d.anzahlZeilen(); k++) {
+						if (!d.get(k, j).equals(RationaleZahl.NULL)) {
+							// Zeilen tauschen
+							Vektor v1, v2;
+
+							v1 = d.getZeilenvektor(j);
+							v2 = d.getZeilenvektor(k);
+							d.setZeilenvektor(j, v2);
+							d.setZeilenvektor(k, v1);
+						}
+					}
+				}
 				v0 = d.getZeilenvektor(j);
 
 				// Faktor bestimmen
@@ -251,7 +265,21 @@ public final class Gauss {
 				Vektor v0;
 				RationaleZahl z, n, f;
 
-				// Aktuelle Zeile
+				// Aktuelle Zeile bestimmen, ggf. Zeilen tauschen
+				if (d.get(j, j).equals(RationaleZahl.NULL)) {
+					// Auf der Diaginalen steht eine 0, die im Nenner stünde
+					for (int k = j - 1; k >= 0; k--) {
+						if (!d.get(k, j).equals(RationaleZahl.NULL)) {
+							// Zeilen tauschen
+							Vektor v1, v2;
+
+							v1 = d.getZeilenvektor(j);
+							v2 = d.getZeilenvektor(k);
+							d.setZeilenvektor(j, v2);
+							d.setZeilenvektor(k, v1);
+						}
+					}
+				}
 				v0 = d.getZeilenvektor(j);
 
 				// Faktor bestimmen

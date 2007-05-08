@@ -220,14 +220,14 @@ public class TestRationaleZahl {
 	}
 
 	/**
-	 * Testet die Methode {@link RationaleZahl#kehrwert(RationaleZahl)}.
+	 * Testet die Methode {@link RationaleZahl#kehrwert()}.
 	 */
 	@Test
 	public void testKehrwert() {
 		RationaleZahl r;
 
 		r = new RationaleZahl(4, 1);
-		assertEquals(r, RationaleZahl.kehrwert(a));
+		assertEquals(r, a.kehrwert());
 
 		assertEquals(RationaleZahl.EINS, RationaleZahl.multipliziere(a, r));
 	}

@@ -64,7 +64,7 @@ public class RationaleZahl extends Number implements Comparable<RationaleZahl> {
 		z = a.zaehler * b.nenner + b.zaehler * a.nenner;
 		n = a.nenner * b.nenner;
 
-		return new RationaleZahl(z, n);
+		return kuerze(new RationaleZahl(z, n));
 	}
 
 	/**
@@ -82,7 +82,7 @@ public class RationaleZahl extends Number implements Comparable<RationaleZahl> {
 		z = a.zaehler * b.nenner - b.zaehler * a.nenner;
 		n = a.nenner * b.nenner;
 
-		return new RationaleZahl(z, n);
+		return kuerze(new RationaleZahl(z, n));
 	}
 
 	/**
@@ -139,7 +139,7 @@ public class RationaleZahl extends Number implements Comparable<RationaleZahl> {
 	 * @return Das Ergebnis der Division
 	 */
 	public static RationaleZahl dividiere(RationaleZahl a, RationaleZahl b) {
-		return multipliziere(a, kehrwert(b));
+		return multipliziere(a, b.kehrwert());
 	}
 
 	/**
@@ -170,18 +170,6 @@ public class RationaleZahl extends Number implements Comparable<RationaleZahl> {
 	 */
 	public static long kgV(long a, long b) {
 		return Math.abs(a * b) / ggT(a, b);
-	}
-
-	/**
-	 * Bildet den Kehrwert einer rationalen Zahl. Es werden Z&auml.hler und
-	 * Nenner vertauscht.
-	 * 
-	 * @param a
-	 *            Eine rationale Zahl
-	 * @return Der Kehrwert der rationalen Zahl
-	 */
-	public static RationaleZahl kehrwert(RationaleZahl a) {
-		return new RationaleZahl(a.nenner, a.zaehler);
 	}
 
 	/**
@@ -259,6 +247,16 @@ public class RationaleZahl extends Number implements Comparable<RationaleZahl> {
 		return nenner;
 	}
 
+	/**
+	 * Bildet den Kehrwert der rationalen Zahl. Es werden Z&auml;hler und
+	 * Nenner vertauscht.
+	 * 
+	 * @return Der Kehrwert der rationalen Zahl
+	 */
+	public RationaleZahl kehrwert() {
+		return new RationaleZahl(nenner, zaehler);
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 * 

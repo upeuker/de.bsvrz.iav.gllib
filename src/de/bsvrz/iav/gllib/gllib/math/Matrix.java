@@ -110,6 +110,19 @@ public class Matrix {
 	 * @return Das Vielfache der Matrix
 	 */
 	public static Matrix multipliziere(Matrix a, long s) {
+		return multipliziere(a, new RationaleZahl(s));
+	}
+	
+	/**
+	 * Multipliziert eine Matrix mit einem Skalar.
+	 * 
+	 * @param a
+	 *            Eine matrix
+	 * @param s
+	 *            Ein Skalar
+	 * @return Das Vielfache der Matrix
+	 */
+	public static Matrix multipliziere(Matrix a, RationaleZahl s) {
 		Matrix m;
 
 		m = new Matrix(a.anzahlZeilen(), a.anzahlSpalten());
@@ -189,6 +202,32 @@ public class Matrix {
 		}
 
 		return m;
+	}
+
+	/**
+	 * Dividiert eine Matrix durch ein Skalar.
+	 * 
+	 * @param a
+	 *            Eine matrix
+	 * @param s
+	 *            Ein Skalar
+	 * @return Das Vielfache der Matrix
+	 */
+	public static Matrix dividiere(Matrix a, long s) {
+		return multipliziere(a, new RationaleZahl(s));
+	}
+	
+	/**
+	 * Dividiert eine Matrix durch ein Skalar.
+	 * 
+	 * @param a
+	 *            Eine matrix
+	 * @param s
+	 *            Ein Skalar
+	 * @return Das Vielfache der Matrix
+	 */
+	public static Matrix dividiere(Matrix a, RationaleZahl s) {
+		return multipliziere(a, s.kehrwert());
 	}
 	
 	/**
@@ -380,6 +419,25 @@ public class Matrix {
 		for (int i = 0; i < anzahlZeilen(); i++) {
 			matrix[i][j] = v.get(j);
 		}
+	}
+
+	/**
+	 * Gibt die Matrix als Vektor zur&uuml;ck. Dies ist nur m&ouml;glich, wenn
+	 * die Matrix entweder aus genau einer Zeile oder genau einer Spalte
+	 * besteht. In allen anderen F&auml;llen wird {@code null}
+	 * zur&uuml;ckgegeben.
+	 * 
+	 * @return Die Matrix als Vektor oder {@code null}, wenn dies nicht
+	 *         m&ouml;glich ist
+	 */
+	public Vektor getVektor() {
+		if (anzahlZeilen() == 1) {
+			return getZeilenvektor(0);
+		} else if (anzahlSpalten() == 1) {
+			return getSpaltenvektor(0);
+		}
+
+		return null;
 	}
 
 	/**

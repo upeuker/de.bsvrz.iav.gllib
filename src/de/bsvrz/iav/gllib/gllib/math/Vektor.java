@@ -149,14 +149,7 @@ public class Vektor implements Cloneable {
 	 * @return Das Vielfache des Vektors
 	 */
 	public static Vektor dividiere(Vektor a, RationaleZahl s) {
-		Vektor v;
-
-		v = new Vektor(a.anzahlKomponenten());
-		for (int i = 0; i < a.anzahlKomponenten(); i++) {
-			v.set(i, RationaleZahl.dividiere(a.get(i), s));
-		}
-
-		return v;
+		return multipliziere(a, s.kehrwert());
 	}
 
 	/**

@@ -109,8 +109,8 @@ public class TestGauss {
 
 		b = new Vektor(30, 19);
 
-		x = new Vektor(3, 2);
-		assertEquals(x, Gauss.loeseLGS(a, b));
+		x = Gauss.loeseLGS(a, b);
+		assertEquals(b, Matrix.multipliziere(a, x).getVektor());
 	}
 
 	/**
@@ -141,8 +141,8 @@ public class TestGauss {
 
 		b = new Vektor(33, -6, 13, 11);
 
-		x = new Vektor(5, 1, -2, 4);
-		assertEquals(x, Gauss.loeseLGS(a, b));
+		x = Gauss.loeseLGS(a, b);
+		assertEquals(b, Matrix.multipliziere(a, x).getVektor());
 	}
 
 	/**
@@ -166,11 +166,8 @@ public class TestGauss {
 
 		b = new Vektor(1, 2, 3);
 
-		x = new Vektor(3);
-		x.set(0, new RationaleZahl(17, 8));
-		x.set(1, new RationaleZahl(-3, 2));
-		x.set(2, new RationaleZahl(1, 4));
-		assertEquals(x, Gauss.loeseLGS(a, b));
+		x = Gauss.loeseLGS(a, b);
+		assertEquals(b, Matrix.multipliziere(a, x).getVektor());
 	}
 
 }
