@@ -195,6 +195,17 @@ public class TestRationaleZahl {
 		assertEquals(r, RationaleZahl.dividiere(a, b));
 	}
 
+	@Test
+	public void testPotenz() {
+		RationaleZahl r;
+
+		r = new RationaleZahl(1, 16);
+		assertEquals(r, RationaleZahl.potenz(a, 2));
+
+		r = new RationaleZahl(125, 512);
+		assertEquals(r, RationaleZahl.potenz(b, 3));
+	}
+
 	/**
 	 * Testet die Methode {@link RationaleZahl#kgV(long, long)}.
 	 */

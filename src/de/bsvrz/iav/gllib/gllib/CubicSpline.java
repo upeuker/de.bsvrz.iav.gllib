@@ -26,8 +26,14 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
+import static de.bsvrz.iav.gllib.gllib.math.RationaleZahl.*;
+
 import de.bsvrz.iav.gllib.gllib.events.GanglinienEvent;
 import de.bsvrz.iav.gllib.gllib.events.GanglinienListener;
+import de.bsvrz.iav.gllib.gllib.math.Gauss;
+import de.bsvrz.iav.gllib.gllib.math.Matrix;
+import de.bsvrz.iav.gllib.gllib.math.RationaleZahl;
+import de.bsvrz.iav.gllib.gllib.math.Vektor;
 
 /**
  * Approximation einer Ganglinie mit Hilfe eines Cubic-Splines.
@@ -37,6 +43,36 @@ import de.bsvrz.iav.gllib.gllib.events.GanglinienListener;
  */
 public class CubicSpline extends AbstractApproximation implements
 		GanglinienListener {
+
+	private RationaleZahl[] a;
+
+	private RationaleZahl[] b;
+
+	private RationaleZahl[] c;
+
+	private RationaleZahl[] d;
+
+	private RationaleZahl[] h;
+
+	/**
+	 * Tut nichts. Standardkonstruktor ist f&uuml;r Festlegen der
+	 * Ganglinienapproximation notwendig.
+	 */
+	public CubicSpline() {
+		// nix
+	}
+
+	/**
+	 * Konstruiert eine Approximation durch einen Cubic-Spline f&uuml;r eine
+	 * Ganglinie. Die in der Ganglinie festgelegte Approximation wird nicht
+	 * ver&auml;ndert.
+	 * 
+	 * @param ganglinie
+	 *            Eine Ganglinie
+	 */
+	public CubicSpline(Ganglinie ganglinie) {
+		setGanglinie(ganglinie);
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -56,6 +92,16 @@ public class CubicSpline extends AbstractApproximation implements
 		return new Stuetzstelle(zeitstempel, berechneStuetzstelle(zeitstempel));
 	}
 
+	public void ganglinieAktualisiert(GanglinienEvent e) {
+		if (e.getSource() == ganglinie)
+			bestimmeKoeffizienten();
+	}
+
+	public void setGanglinie(Ganglinie ganglinie) {
+		super.setGanglinie(ganglinie);
+		bestimmeKoeffizienten();
+	}
+
 	/**
 	 * Berechnet die St&uuml;tzstelle.
 	 * 
@@ -63,31 +109,102 @@ public class CubicSpline extends AbstractApproximation implements
 	 *            Zeitstempel der gesuchten St&uuml;tzstelle
 	 * @return Die gesuchte St&uuml;tzstelle
 	 */
-	private int berechneStuetzstelle(long zeitstempel) {
-		Stuetzstelle s0; // vorletzte vor Zeitstempel
-		Stuetzstelle s1; // vor Zeitstempel
-		Stuetzstelle s2; // nach Zeitstempel
-		long h0, c0;
-		long h1, a1, b1, c1, d1;
-		long a2, c2;
+	int berechneStuetzstelle(long zeitstempel) {
+		RationaleZahl r, x, xi;
+		Stuetzstelle davor;
+		int i;
 
-		s1 = ganglinie.naechsteStuetzstelleDavor(zeitstempel);
-		s2 = ganglinie.naechsteStuetzstelleDanach(zeitstempel);
-		s0 = ganglinie.naechsteStuetzstelleDavor(s1.zeitstempel);
+		davor = ganglinie.naechsteStuetzstelleDavor(zeitstempel);
+		i = ganglinie.getStuetzstellen().indexOf(davor);
+		xi = new RationaleZahl(davor.zeitstempel);
+		x = new RationaleZahl(zeitstempel);
 
-		h0 = s1.zeitstempel - s0.zeitstempel;
-		h1 = s2.zeitstempel - s1.zeitstempel;
-		a1 = s1.wert;
-		a2 = s2.wert;
-		b1 = (a2 - a1) / h1;
-		// b1 -= (2 * c1 + c2) / 3 * h1;
-		// d1 = (c2 - c1) / (3 * h1);
+		r = addiere(addiere(addiere(a[i], multipliziere(b[i],
+				subtrahiere(x, xi))), multipliziere(c[i], potenz(subtrahiere(x,
+				xi), 2))), multipliziere(d[i], potenz(subtrahiere(x, xi), 3)));
 
-		return 0;
+		return r.intValue();
 	}
 
-	public void ganglinieAktualisiert(GanglinienEvent e) {
-		// TODO Auto-generated method stub
+	private void bestimmeKoeffizienten() {
+		int n;
+		Stuetzstelle[] stuetzstellen;
+		Matrix m;
+		Vektor v;
 
+		n = ganglinie.anzahlStuetzstellen();
+		stuetzstellen = ganglinie.getStuetzstellen().toArray(
+				new Stuetzstelle[0]);
+
+		a = new RationaleZahl[n];
+		b = new RationaleZahl[n];
+		c = new RationaleZahl[n];
+		d = new RationaleZahl[n];
+		h = new RationaleZahl[n - 1];
+
+		for (int i = 0; i < n; i++) {
+			// Erster Koeffizent
+			a[i] = new RationaleZahl(stuetzstellen[i].wert);
+
+			// Intervallbreite
+			if (i < n - 1) {
+				h[i] = RationaleZahl.subtrahiere(new RationaleZahl(
+						stuetzstellen[i + 1].zeitstempel), new RationaleZahl(
+						stuetzstellen[i].zeitstempel));
+			}
+		}
+
+		// Dritter Koeffizient
+		c[0] = c[n - 1] = RationaleZahl.NULL;
+		m = new Matrix(n - 2, n - 2);
+		v = new Vektor(n - 2);
+		for (int i = 1; i < n - 1; i++) {
+			RationaleZahl ci, m1, m2, m3;
+
+			ci = multipliziere(subtrahiere(dividiere(
+					subtrahiere(a[i + 1], a[i]), h[i]), dividiere(subtrahiere(
+					a[i], a[i - 1]), h[i - 1])), 3);
+			v.set(i - 1, ci);
+
+			m1 = h[i - 1];
+			m2 = multipliziere(addiere(h[i - 1], h[i]), 2);
+			m3 = h[i];
+			if (i > 1) {
+				m.set(i - 1, i - 2, m1);
+			}
+			m.set(i - 1, i - 1, m2);
+			if (i < n - 2) {
+				m.set(i - 1, i, m3);
+			}
+		}
+		System.err.println("Matrix:\n" + m);
+		System.err.println("Vektor: " + v);
+		Vektor c0 = Gauss.loeseLGS(m, v);
+		System.err.println("Lösung:\n" + c0);
+		System.err.println("Probe: "
+				+ v.equals(Matrix.multipliziere(m, c0).getVektor()));
+		for (int i = 1; i < n - 1; i++) {
+			c[i] = c0.get(i - 1);
+		}
+
+		// Zweiter und vierter Koeffizient
+		for (int i = 1; i < n; i++) {
+			d[i - 1] = dividiere(subtrahiere(c[i], c[i - 1]), multipliziere(
+					h[i - 1], 3));
+			b[i - 1] = subtrahiere(dividiere(subtrahiere(a[i], a[i - 1]),
+					(h[i - 1])), multipliziere(dividiere(addiere(multipliziere(
+					c[i - 1], 2), c[i]), 3), h[i - 1]));
+		}
+//		b[n - 2] = subtrahiere(dividiere(subtrahiere(a[n - 1], a[n - 2]),
+//				(h[n - 2])), multipliziere(dividiere(addiere(multipliziere(
+//				c[n - 2], 2), c[n - 1]), 3), h[n - 2]));
+
+		System.err.println("a\t\tb\t\tc\t\td\t\th");
+		for (int i = 0; i < n - 1; i++) {
+			System.err.println(a[i] + "\t\t" + b[i] + "\t\t" + c[i] + "\t\t"
+					+ d[i] + "\t\t" + h[i]);
+		}
+		System.err.println(a[n - 1] + "\t\t" + b[n - 1] + "\t\t" + c[n - 1]
+				+ "\t\t" + d[n - 1]);
 	}
 }

@@ -142,6 +142,17 @@ public class RationaleZahl extends Number implements Comparable<RationaleZahl> {
 		return multipliziere(a, b.kehrwert());
 	}
 
+	public static RationaleZahl potenz(RationaleZahl basis, int exponent) {
+		RationaleZahl potenz;
+
+		potenz = new RationaleZahl(basis);
+		for (int i = 1; i < exponent; i++) {
+			potenz = RationaleZahl.multipliziere(potenz, basis);
+		}
+
+		return potenz;
+	}
+
 	/**
 	 * Bestimmt den gr&ouml;&szlig;ten gemeinsamen Teiler zweier ganzer Zahlen.
 	 * 
@@ -248,15 +259,15 @@ public class RationaleZahl extends Number implements Comparable<RationaleZahl> {
 	}
 
 	/**
-	 * Bildet den Kehrwert der rationalen Zahl. Es werden Z&auml;hler und
-	 * Nenner vertauscht.
+	 * Bildet den Kehrwert der rationalen Zahl. Es werden Z&auml;hler und Nenner
+	 * vertauscht.
 	 * 
 	 * @return Der Kehrwert der rationalen Zahl
 	 */
 	public RationaleZahl kehrwert() {
 		return new RationaleZahl(nenner, zaehler);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * 

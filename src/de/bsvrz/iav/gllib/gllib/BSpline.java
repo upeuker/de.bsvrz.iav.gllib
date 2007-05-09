@@ -44,7 +44,7 @@ public class BSpline extends AbstractApproximation {
 	 * 
 	 * @see AbstractApproximation
 	 */
-	public BSpline() {
+	public BSpline(Ganglinie ganglinie) {
 		setOrdnung(5);
 	}
 

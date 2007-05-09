@@ -39,7 +39,7 @@ public class CopyOfGanglinie extends TreeSet<Stuetzstelle> {
 	}
 
 	/** Verfahren zur Berechnung der Punkte zwischen den St&uuml;tzstellen */
-	private Approximation approximation = new BSpline();
+	private Approximation approximation = new BSpline(null);
 
 	/** Der Typ der Ganglinie */
 	private Typ typ;

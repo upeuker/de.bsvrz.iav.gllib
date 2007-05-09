@@ -10,11 +10,13 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import de.bsvrz.iav.gllib.gllib.BSpline;
+import de.bsvrz.iav.gllib.gllib.CubicSpline;
 import de.bsvrz.iav.gllib.gllib.Ganglinie;
 import de.bsvrz.iav.gllib.gllib.Polyline;
 import de.bsvrz.iav.gllib.gllib.Stuetzstelle;
 
-public class GanglinienPanel extends JPanel implements ChangeListener {
+public class GanglinienPanel extends JPanel {
 
 	private final Ganglinie ganglinie;
 
@@ -22,9 +24,39 @@ public class GanglinienPanel extends JPanel implements ChangeListener {
 
 	private boolean verbinden = false;
 
+	private boolean polyline = true;
+
+	private boolean cubicspline = true;
+
+	private boolean bspline = false;
+
 	public GanglinienPanel(Ganglinie ganglinie) {
 		setBackground(Color.white);
 		this.ganglinie = ganglinie;
+	}
+
+	public boolean isBspline() {
+		return bspline;
+	}
+
+	public void setBspline(boolean bspline) {
+		this.bspline = bspline;
+	}
+
+	public boolean isCubicspline() {
+		return cubicspline;
+	}
+
+	public void setCubicspline(boolean cubicspline) {
+		this.cubicspline = cubicspline;
+	}
+
+	public boolean isPolyline() {
+		return polyline;
+	}
+
+	public void setPolyline(boolean polyline) {
+		this.polyline = polyline;
 	}
 
 	public int getIntervalle() {
@@ -45,27 +77,6 @@ public class GanglinienPanel extends JPanel implements ChangeListener {
 		repaint();
 	}
 
-	public void stateChanged(ChangeEvent e) {
-		if (e.getSource() instanceof JCheckBox) {
-			JCheckBox cb;
-
-			cb = (JCheckBox) e.getSource();
-			verbinden = cb.isSelected();
-		} else if (e.getSource() instanceof JSlider) {
-			JSlider sl;
-
-			sl = (JSlider) e.getSource();
-			intervalle = sl.getValue();
-		} else {
-			return;
-		}
-
-		System.out.println(ganglinie.getIntervall().breite + ", " + intervalle
-				+ ", " + verbinden);
-
-		repaint();
-	}
-
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -76,13 +87,27 @@ public class GanglinienPanel extends JPanel implements ChangeListener {
 			g.fillOval((int) s.zeitstempel - 5, s.wert - 5, 10, 10);
 		}
 
-		// Polyline zeichnen
-		Polyline polyline;
+		// Approximationen zeichnen
+		if (polyline) {
+			zeichne(g, new Polyline(ganglinie).interpoliere(intervalle),
+					Color.blue);
+		}
+		if (cubicspline) {
+			zeichne(g, new CubicSpline(ganglinie).interpoliere(intervalle),
+					Color.green);
+		}
+		if (bspline) {
+			zeichne(g, new BSpline(ganglinie).interpoliere(intervalle),
+					Color.yellow);
+		}
+
+	}
+
+	private void zeichne(Graphics g, SortedSet<Stuetzstelle> stuetzstellen,
+			Color farbe) {
 		Stuetzstelle s0;
-		polyline = new Polyline(ganglinie);
-		g.setColor(Color.blue);
-		SortedSet<Stuetzstelle> stuetzstellen;
-		stuetzstellen = polyline.interpoliere(intervalle);
+
+		g.setColor(farbe);
 		s0 = stuetzstellen.first();
 		for (Stuetzstelle s : stuetzstellen) {
 			if (verbinden) {
@@ -93,9 +118,20 @@ public class GanglinienPanel extends JPanel implements ChangeListener {
 				g.drawLine((int) s0.zeitstempel, s0.wert, (int) s.zeitstempel,
 						s.wert);
 				if (s.equals(stuetzstellen.last())) {
-					g.drawLine((int) s.zeitstempel, s.wert, (int) ganglinie
-							.getStuetzstellen().last().zeitstempel, ganglinie
-							.getStuetzstellen().last().wert);
+					g
+							.drawLine(
+									(int) s.zeitstempel,
+									s.wert,
+									(int) ganglinie.getStuetzstellen()
+											.get(
+													ganglinie
+															.getStuetzstellen()
+															.size() - 1).zeitstempel,
+									ganglinie.getStuetzstellen()
+											.get(
+													ganglinie
+															.getStuetzstellen()
+															.size() - 1).wert);
 				}
 
 				s0 = s;

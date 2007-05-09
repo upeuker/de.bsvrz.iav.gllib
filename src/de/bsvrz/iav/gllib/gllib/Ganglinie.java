@@ -26,7 +26,9 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -54,7 +56,7 @@ public class Ganglinie implements Approximation {
 	private final SortedSet<Stuetzstelle> stuetzstellen;
 
 	/** Verfahren zur Berechnung der Punkte zwischen den St&uuml;tzstellen. */
-	private Approximation approximation = new BSpline();
+	private Approximation approximation = new BSpline(this);
 
 	/**
 	 * Konstruiert eine Ganglinie ohne St&uuml;tzstellen.
@@ -90,8 +92,8 @@ public class Ganglinie implements Approximation {
 	 * 
 	 * @return Nach Zeitstempel sortiere St&uuml;tzstellenliste
 	 */
-	public SortedSet<Stuetzstelle> getStuetzstellen() {
-		return new TreeSet<Stuetzstelle>(stuetzstellen);
+	public List<Stuetzstelle> getStuetzstellen() {
+		return new ArrayList<Stuetzstelle>(stuetzstellen);
 	}
 
 	/**
@@ -175,6 +177,15 @@ public class Ganglinie implements Approximation {
 
 		return stuetzstellen.first().zeitstempel <= zeitstempel
 				&& zeitstempel <= stuetzstellen.last().zeitstempel;
+	}
+
+	/**
+	 * Gibt die Anzahl der St&uuml;tzstellen der Ganglinie zur&uuml;ck.
+	 * 
+	 * @return St&uuml;tzstellenanzahl
+	 */
+	public int anzahlStuetzstellen() {
+		return stuetzstellen.size();
 	}
 
 	/**
