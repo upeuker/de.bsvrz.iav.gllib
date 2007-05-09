@@ -65,14 +65,12 @@ public class GanglinienViewer extends JFrame implements ChangeListener {
 		checkbox.addChangeListener(this);
 
 		// Anzahl Intervalle
-		int maxIntervalle;
 		JSlider slider;
-		maxIntervalle = (int) g.getIntervall().breite;
-		slider = new JSlider(1, maxIntervalle, maxIntervalle / 2);
-		ganglinie.setIntervalle(maxIntervalle / 2);
+		slider = new JSlider(1, 100, 20);
+		ganglinie.setIntervalle(20);
 		slider.setPaintTicks(true);
-		slider.setMajorTickSpacing((maxIntervalle / 4) - 1);
-		slider.setMinorTickSpacing((maxIntervalle / 8));
+		slider.setMajorTickSpacing(20);
+		slider.setMinorTickSpacing(10);
 		slider.addChangeListener(this);
 		intervalle = new JLabel(String.valueOf(slider.getValue()));
 		slider.addChangeListener(this);
@@ -80,6 +78,9 @@ public class GanglinienViewer extends JFrame implements ChangeListener {
 		// Optionen
 		JPanel optionen;
 		optionen = new JPanel(new FlowLayout());
+		optionen.add(polyline);
+		optionen.add(cubicspline);
+		optionen.add(bspline);
 		optionen.add(checkbox);
 		optionen.add(slider);
 		optionen.add(intervalle);
@@ -99,7 +100,18 @@ public class GanglinienViewer extends JFrame implements ChangeListener {
 			JCheckBox cb;
 
 			cb = (JCheckBox) e.getSource();
-			ganglinie.setVerbinden(cb.isSelected());
+			if ("Punkte verbinden".equals(cb.getText())) {
+				ganglinie.setVerbinden(cb.isSelected());
+			}
+			if ("Polyline".equals(cb.getText())) {
+				ganglinie.setPolyline(cb.isSelected());
+			}
+			if ("Cubic Spline".equals(cb.getText())) {
+				ganglinie.setCubicspline(cb.isSelected());
+			}
+			if ("B-Spline".equals(cb.getText())) {
+				ganglinie.setBspline(cb.isSelected());
+			}
 		} else if (e.getSource() instanceof JSlider) {
 			JSlider sl;
 

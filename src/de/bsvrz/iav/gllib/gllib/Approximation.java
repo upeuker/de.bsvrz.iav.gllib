@@ -30,8 +30,7 @@ import java.util.SortedSet;
 
 /**
  * Schnittstelle f&uuml;r alle Approximationsmethoden von Ganglinien.
- * Implementierende Klassen sollten einen parameterlosen Konstruktor
- * besitzen.
+ * Implementierende Klassen sollten einen parameterlosen Konstruktor besitzen.
  * 
  * @author BitCtrl, Schumann
  * @version $Id$
@@ -57,16 +56,14 @@ public interface Approximation {
 
 	/**
 	 * Gibt eine Interpolation der Approximation zur&uuml;ck. N&uuml;tzlich
-	 * f&uuml;r die grafische Darstellung von Ganglinien, indem
-	 * {@code anzahlIntervalle+1} St&uuml;tzstellen berechnet werden, die als
-	 * Polygonzug darstellbar sind.
+	 * f&uuml;r die grafische Darstellung von Ganglinien, indem in einem festen
+	 * Abstand St&uuml;tzstellen berechnet werden, die als Polygonzug
+	 * darstellbar sind.
 	 * 
-	 * @param anzahlIntervalle
-	 *            Anzahl gew&uuml;nschter Intervalle; je h&ouml;her die Anzahl
-	 *            der Intervalle, um so genauer n&auml;hert sich der Polygonzug
-	 *            der tats&auml;chlichen Approximationsfunktion
+	 * @param intervallBreite
+	 *            Die gew&uuml;nschte Breite der Intervalle
 	 * @return Nach Zeitstempel sortierte Liste der St&uuml;tzstellen
 	 */
-	SortedSet<Stuetzstelle> interpoliere(long anzahlIntervalle);
+	SortedSet<Stuetzstelle> interpoliere(long intervallBreite);
 
 }

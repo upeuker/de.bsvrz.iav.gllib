@@ -29,8 +29,6 @@ package de.bsvrz.iav.gllib.gllib;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import de.bsvrz.sys.funclib.bitctrl.i18n.Messages;
-
 /**
  * Implementiert nur die Property <code>Ganglinie</code> der Schnittstelle.
  * 
@@ -52,13 +50,13 @@ public abstract class AbstractApproximation implements Approximation {
 	/**
 	 * {@inheritDoc}
 	 */
-	public SortedSet<Stuetzstelle> interpoliere(long anzahlIntervalle) {
-		if (anzahlIntervalle < 0) {
-			Messages.get(GlLibMessages.BadCount, anzahlIntervalle);
+	public SortedSet<Stuetzstelle> interpoliere(long intervallBreite) {
+		if (intervallBreite <= 0) {
+			throw new IllegalArgumentException(
+					"Intervallbreite muss größer null sein.");
 		}
 
 		SortedSet<Stuetzstelle> interpolation = new TreeSet<Stuetzstelle>();
-		long intervall;
 		long zeitstempel;
 
 		// Sonderfall: keine Stützstellen vorhanden
@@ -66,21 +64,12 @@ public abstract class AbstractApproximation implements Approximation {
 			return interpolation;
 		}
 
-		// Intervallbreite bestimmen
-		intervall = (ganglinie.getIntervall().ende - ganglinie.getIntervall().start)
-				/ anzahlIntervalle;
-
 		// Stützstellen an den Intervallgrenzen bestimmen
 		zeitstempel = ganglinie.getIntervall().start;
 		while (zeitstempel < ganglinie.getIntervall().ende) {
 			interpolation.add(get(zeitstempel));
-			zeitstempel += intervall;
+			zeitstempel += intervallBreite;
 		}
-
-		System.out.println("Anzahl Intervalle: " + anzahlIntervalle
-				+ ", Intervallbreite: " + intervall + ", Anzahl Stützstellen: "
-				+ interpolation.size() + ", Letzte Stützstelle: "
-				+ interpolation.last());
 
 		return interpolation;
 	}

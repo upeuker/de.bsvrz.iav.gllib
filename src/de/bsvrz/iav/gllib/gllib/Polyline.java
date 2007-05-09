@@ -83,15 +83,4 @@ public class Polyline extends AbstractApproximation {
 		return new Stuetzstelle(zeitstempel, wert.intValue());
 	}
 
-	// /**
-	// * {@inheritDoc}
-	// *
-	// * Die Interpolation einer Polyline wird <em>nicht</em> berechnet. Es
-	// * werden direkt die St&uuml;tzstellen der Ganglinien zur&uuml;ckgegeben.
-	// */
-	// @Override
-	// public SortedSet<Stuetzstelle> interpoliere(int anzahlIntervalle) {
-	// return new TreeSet<Stuetzstelle>(ganglinie.getStuetzstellen());
-	// }
-
 }

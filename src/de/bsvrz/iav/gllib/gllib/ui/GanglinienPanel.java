@@ -24,9 +24,9 @@ public class GanglinienPanel extends JPanel {
 
 	private boolean verbinden = false;
 
-	private boolean polyline = true;
+	private boolean polyline = false;
 
-	private boolean cubicspline = true;
+	private boolean cubicspline = false;
 
 	private boolean bspline = false;
 

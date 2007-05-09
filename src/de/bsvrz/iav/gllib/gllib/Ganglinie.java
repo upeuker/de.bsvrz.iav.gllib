@@ -34,6 +34,7 @@ import java.util.TreeSet;
 
 import javax.swing.event.EventListenerList;
 
+import de.bsvrz.iav.gllib.gllib.events.GanglinienEvent;
 import de.bsvrz.iav.gllib.gllib.events.GanglinienListener;
 import de.bsvrz.sys.funclib.bitctrl.i18n.Messages;
 
@@ -111,6 +112,7 @@ public class Ganglinie implements Approximation {
 		}
 
 		stuetzstellen.add(s);
+		fireGanglinienAktualisierung();
 	}
 
 	/**
@@ -133,7 +135,7 @@ public class Ganglinie implements Approximation {
 	 *            Zeitstempel der St&uuml;tzstelle, die entfernt werden soll
 	 */
 	public void remove(long zeitstempel) {
-		stuetzstellen.remove(new Stuetzstelle(zeitstempel));
+		remove(new Stuetzstelle(zeitstempel));
 	}
 
 	/**
@@ -144,6 +146,7 @@ public class Ganglinie implements Approximation {
 	 */
 	public void remove(Stuetzstelle stuetzstelle) {
 		stuetzstellen.remove(stuetzstelle);
+		fireGanglinienAktualisierung();
 	}
 
 	/**
@@ -309,6 +312,7 @@ public class Ganglinie implements Approximation {
 	public void setGanglinie(Ganglinie ganglinie) {
 		stuetzstellen.clear();
 		stuetzstellen.addAll(ganglinie.stuetzstellen);
+		fireGanglinienAktualisierung();
 	}
 
 	/**
@@ -370,6 +374,19 @@ public class Ganglinie implements Approximation {
 		}
 
 		return result;
+	}
+
+	/**
+	 * Informiert die angemeldeten Listener &uuml;ber die &Auml;nderung der
+	 * Ganglinie.
+	 */
+	protected synchronized void fireGanglinienAktualisierung() {
+		GanglinienEvent e = new GanglinienEvent(this);
+
+		for (GanglinienListener l : listeners
+				.getListeners(GanglinienListener.class)) {
+			l.ganglinieAktualisiert(e);
+		}
 	}
 
 }

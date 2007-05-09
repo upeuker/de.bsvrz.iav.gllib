@@ -44,14 +44,19 @@ import de.bsvrz.iav.gllib.gllib.math.Vektor;
 public class CubicSpline extends AbstractApproximation implements
 		GanglinienListener {
 
+	/** Der erste Koeffizient des Polynoms. */
 	private RationaleZahl[] a;
 
+	/** Der zweite Koeffizient des Polynoms. */
 	private RationaleZahl[] b;
 
+	/** Der dritte Koeffizient des Polynoms. */
 	private RationaleZahl[] c;
 
+	/** Der vierte Koeffizient des Polynoms. */
 	private RationaleZahl[] d;
 
+	/** Die Abst&auml;nde der St&uuml;tzstellen. */
 	private RationaleZahl[] h;
 
 	/**
@@ -72,6 +77,7 @@ public class CubicSpline extends AbstractApproximation implements
 	 */
 	public CubicSpline(Ganglinie ganglinie) {
 		setGanglinie(ganglinie);
+		bestimmeKoeffizienten();
 	}
 
 	/**
@@ -92,13 +98,26 @@ public class CubicSpline extends AbstractApproximation implements
 		return new Stuetzstelle(zeitstempel, berechneStuetzstelle(zeitstempel));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void ganglinieAktualisiert(GanglinienEvent e) {
-		if (e.getSource() == ganglinie)
+		if (e.getSource() == ganglinie) {
 			bestimmeKoeffizienten();
+		}
 	}
 
+	/**
+	 * Ruft den Setter der Superklasse auf und aktuallsiert anschlie&szlig;end
+	 * die Koeffizienten. Es wird ebenfalls der Ganglinie diese Approximation
+	 * als GanglinienListener hinzugef&uuml;gt.
+	 * <p>
+	 * {@inheritDoc}
+	 */
+	@Override
 	public void setGanglinie(Ganglinie ganglinie) {
 		super.setGanglinie(ganglinie);
+		ganglinie.addGanglinienListener(this);
 		bestimmeKoeffizienten();
 	}
 
@@ -126,6 +145,9 @@ public class CubicSpline extends AbstractApproximation implements
 		return r.intValue();
 	}
 
+	/**
+	 * Berechnet die Koeffizienten des Polynoms.
+	 */
 	private void bestimmeKoeffizienten() {
 		int n;
 		Stuetzstelle[] stuetzstellen;
@@ -177,12 +199,12 @@ public class CubicSpline extends AbstractApproximation implements
 				m.set(i - 1, i, m3);
 			}
 		}
-		System.err.println("Matrix:\n" + m);
-		System.err.println("Vektor: " + v);
 		Vektor c0 = Gauss.loeseLGS(m, v);
-		System.err.println("Lösung:\n" + c0);
-		System.err.println("Probe: "
-				+ v.equals(Matrix.multipliziere(m, c0).getVektor()));
+		// System.err.println("Matrix:\n" + m);
+		// System.err.println("Vektor: " + v);
+		// System.err.println("Lösung:\n" + c0);
+		// System.err.println("Probe: "
+		// + v.equals(Matrix.multipliziere(m, c0).getVektor()));
 		for (int i = 1; i < n - 1; i++) {
 			c[i] = c0.get(i - 1);
 		}
@@ -195,16 +217,16 @@ public class CubicSpline extends AbstractApproximation implements
 					(h[i - 1])), multipliziere(dividiere(addiere(multipliziere(
 					c[i - 1], 2), c[i]), 3), h[i - 1]));
 		}
-//		b[n - 2] = subtrahiere(dividiere(subtrahiere(a[n - 1], a[n - 2]),
-//				(h[n - 2])), multipliziere(dividiere(addiere(multipliziere(
-//				c[n - 2], 2), c[n - 1]), 3), h[n - 2]));
+		// b[n - 2] = subtrahiere(dividiere(subtrahiere(a[n - 1], a[n - 2]),
+		// (h[n - 2])), multipliziere(dividiere(addiere(multipliziere(
+		// c[n - 2], 2), c[n - 1]), 3), h[n - 2]));
 
-		System.err.println("a\t\tb\t\tc\t\td\t\th");
-		for (int i = 0; i < n - 1; i++) {
-			System.err.println(a[i] + "\t\t" + b[i] + "\t\t" + c[i] + "\t\t"
-					+ d[i] + "\t\t" + h[i]);
-		}
-		System.err.println(a[n - 1] + "\t\t" + b[n - 1] + "\t\t" + c[n - 1]
-				+ "\t\t" + d[n - 1]);
+		// System.err.println("a\t\tb\t\tc\t\td\t\th");
+		// for (int i = 0; i < n - 1; i++) {
+		// System.err.println(a[i] + "\t\t" + b[i] + "\t\t" + c[i] + "\t\t"
+		// + d[i] + "\t\t" + h[i]);
+		// }
+		// System.err.println(a[n - 1] + "\t\t" + b[n - 1] + "\t\t" + c[n - 1]
+		// + "\t\t" + d[n - 1]);
 	}
 }

@@ -142,6 +142,16 @@ public class RationaleZahl extends Number implements Comparable<RationaleZahl> {
 		return multipliziere(a, b.kehrwert());
 	}
 
+	/**
+	 * Berechnet die Potenz einer rationalen Basis mit einem ganzzahligen
+	 * Exponenten.
+	 * 
+	 * @param basis
+	 *            Die Basis
+	 * @param exponent
+	 *            Der Exponent
+	 * @return Die Potenz
+	 */
 	public static RationaleZahl potenz(RationaleZahl basis, int exponent) {
 		RationaleZahl potenz;
 
