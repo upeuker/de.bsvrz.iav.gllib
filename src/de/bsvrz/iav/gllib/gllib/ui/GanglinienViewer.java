@@ -2,17 +2,23 @@ package de.bsvrz.iav.gllib.gllib.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerListModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import sun.jdbc.odbc.OdbcDef;
 
 import de.bsvrz.iav.gllib.gllib.Ganglinie;
 
@@ -52,12 +58,18 @@ public class GanglinienViewer extends JFrame implements ChangeListener {
 		JCheckBox polyline;
 		JCheckBox cubicspline;
 		JCheckBox bspline;
+		JSpinner ordnung;
 		polyline = new JCheckBox("Polyline");
 		polyline.addChangeListener(this);
 		cubicspline = new JCheckBox("Cubic Spline");
 		cubicspline.addChangeListener(this);
 		bspline = new JCheckBox("B-Spline");
 		bspline.addChangeListener(this);
+		SpinnerListModel modell = new SpinnerListModel(new Integer[] { 0, 1, 2,
+				3, 4, 5, 6, 7, 8, 9, 10 });
+		ordnung = new JSpinner(modell);
+		ordnung.setPreferredSize(new Dimension(50, 20));
+		ordnung.addChangeListener(this);
 
 		// Punkte verbinden
 		JCheckBox checkbox;
@@ -81,6 +93,7 @@ public class GanglinienViewer extends JFrame implements ChangeListener {
 		optionen.add(polyline);
 		optionen.add(cubicspline);
 		optionen.add(bspline);
+		optionen.add(ordnung);
 		optionen.add(checkbox);
 		optionen.add(slider);
 		optionen.add(intervalle);
@@ -118,6 +131,11 @@ public class GanglinienViewer extends JFrame implements ChangeListener {
 			sl = (JSlider) e.getSource();
 			ganglinie.setIntervalle(sl.getValue());
 			intervalle.setText(String.valueOf(sl.getValue()));
+		} else if (e.getSource() instanceof JSpinner) {
+			JSpinner s;
+
+			s = (JSpinner) e.getSource();
+			ganglinie.setOrdnung(Integer.valueOf(s.getValue().toString()));
 		} else {
 			return;
 		}

@@ -131,7 +131,7 @@ public class TestGanglinie {
 		Stuetzstelle s, s0;
 
 		// existierende Stützstelle
-		s = ganglinie.get(30);
+		s = ganglinie.getStuetzstelle(30);
 		assertEquals(s2, s);
 
 		// innerhalb der Ganglinie, aber keine Stützstelle

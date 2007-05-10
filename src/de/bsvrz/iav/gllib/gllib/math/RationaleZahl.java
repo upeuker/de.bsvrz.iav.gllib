@@ -68,6 +68,32 @@ public class RationaleZahl extends Number implements Comparable<RationaleZahl> {
 	}
 
 	/**
+	 * Addiert eine rationale mit einer ganzen Zahl.
+	 * 
+	 * @param a
+	 *            Eine rationale Zahl
+	 * @param b
+	 *            Eine ganze Zahl
+	 * @return Das Ergebnis der Addition
+	 */
+	public static RationaleZahl addiere(RationaleZahl a, long b) {
+		return addiere(a, new RationaleZahl(b));
+	}
+
+	/**
+	 * Addiert zwei ganze Zahlen.
+	 * 
+	 * @param a
+	 *            Erste ganze Zahl
+	 * @param b
+	 *            Zweite ganze Zahl
+	 * @return Das Ergebnis der Addition
+	 */
+	public static RationaleZahl addiere(long a, long b) {
+		return addiere(new RationaleZahl(a), new RationaleZahl(b));
+	}
+
+	/**
 	 * Subtrahiert zwei rationale Zahlen.
 	 * 
 	 * @param a
@@ -86,16 +112,42 @@ public class RationaleZahl extends Number implements Comparable<RationaleZahl> {
 	}
 
 	/**
-	 * Multipliziert eine rationale Zahlen mit einer ganzen Zahl.
+	 * Subtrahiert eine ganze von einer rationalen Zahl.
 	 * 
 	 * @param a
 	 *            Eine rationale Zahl
 	 * @param b
 	 *            Eine ganze Zahl
-	 * @return Das Ergebnis der Multiplikation
+	 * @return Das Ergebnis der Subtraktion
 	 */
-	public static RationaleZahl multipliziere(RationaleZahl a, long b) {
-		return multipliziere(a, new RationaleZahl(b));
+	public static RationaleZahl subtrahiere(RationaleZahl a, long b) {
+		return subtrahiere(a, new RationaleZahl(b));
+	}
+
+	/**
+	 * Subtrahiert eine rationale von einer ganzen Zahl.
+	 * 
+	 * @param a
+	 *            Eine ganze Zahl
+	 * @param b
+	 *            Eine rationale Zahl
+	 * @return Das Ergebnis der Subtraktion
+	 */
+	public static RationaleZahl subtrahiere(long a, RationaleZahl b) {
+		return subtrahiere(new RationaleZahl(a), b);
+	}
+
+	/**
+	 * Subtrahiert zwei ganze Zahlen.
+	 * 
+	 * @param a
+	 *            Erste ganze Zahl
+	 * @param b
+	 *            Zweite ganze Zahl
+	 * @return Das Ergebnis der Subtraktion
+	 */
+	public static RationaleZahl subtrahiere(long a, long b) {
+		return subtrahiere(new RationaleZahl(a), new RationaleZahl(b));
 	}
 
 	/**
@@ -117,16 +169,29 @@ public class RationaleZahl extends Number implements Comparable<RationaleZahl> {
 	}
 
 	/**
-	 * Dividiert eine rationale Zahlen durch eine ganze Zahl.
+	 * Multipliziert eine rationale Zahlen mit einer ganzen Zahl.
 	 * 
 	 * @param a
 	 *            Eine rationale Zahl
 	 * @param b
 	 *            Eine ganze Zahl
-	 * @return Das Ergebnis der Division
+	 * @return Das Ergebnis der Multiplikation
 	 */
-	public static RationaleZahl dividiere(RationaleZahl a, long b) {
-		return dividiere(a, new RationaleZahl(b));
+	public static RationaleZahl multipliziere(RationaleZahl a, long b) {
+		return multipliziere(a, new RationaleZahl(b));
+	}
+
+	/**
+	 * Multipliziert zwei ganze Zahlen.
+	 * 
+	 * @param a
+	 *            Erste ganze Zahl
+	 * @param b
+	 *            Zweite ganze Zahl
+	 * @return Das Ergebnis der Multiplikation
+	 */
+	public static RationaleZahl multipliziere(long a, long b) {
+		return multipliziere(new RationaleZahl(a), new RationaleZahl(b));
 	}
 
 	/**
@@ -140,6 +205,45 @@ public class RationaleZahl extends Number implements Comparable<RationaleZahl> {
 	 */
 	public static RationaleZahl dividiere(RationaleZahl a, RationaleZahl b) {
 		return multipliziere(a, b.kehrwert());
+	}
+
+	/**
+	 * Dividiert eine rationale durch eine ganze Zahl.
+	 * 
+	 * @param a
+	 *            Eine rationale Zahl
+	 * @param b
+	 *            Eine ganze Zahl
+	 * @return Das Ergebnis der Division
+	 */
+	public static RationaleZahl dividiere(RationaleZahl a, long b) {
+		return dividiere(a, new RationaleZahl(b));
+	}
+
+	/**
+	 * Dividiert eine ganze durch eine rationale Zahl.
+	 * 
+	 * @param a
+	 *            Eine ganze Zahl
+	 * @param b
+	 *            Eine rationale Zahl
+	 * @return Das Ergebnis der Division
+	 */
+	public static RationaleZahl dividiere(long a, RationaleZahl b) {
+		return dividiere(new RationaleZahl(a), b);
+	}
+
+	/**
+	 * Dividiert zwei ganze Zahlen.
+	 * 
+	 * @param a
+	 *            Erste ganze Zahl
+	 * @param b
+	 *            Zweite ganze Zahl
+	 * @return Das Ergebnis der Division
+	 */
+	public static RationaleZahl dividiere(long a, long b) {
+		return dividiere(new RationaleZahl(a), new RationaleZahl(b));
 	}
 
 	/**

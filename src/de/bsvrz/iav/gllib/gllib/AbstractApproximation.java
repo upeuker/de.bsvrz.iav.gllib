@@ -44,6 +44,10 @@ public abstract class AbstractApproximation implements Approximation {
 	 * {@inheritDoc}
 	 */
 	public void setGanglinie(Ganglinie ganglinie) {
+		if (ganglinie == null) {
+			throw new NullPointerException(
+					"Die Ganglinie darf nicht null sein.");
+		}
 		this.ganglinie = ganglinie;
 	}
 

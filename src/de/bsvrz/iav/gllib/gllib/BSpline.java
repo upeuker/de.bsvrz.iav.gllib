@@ -26,6 +26,9 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
+import static de.bsvrz.iav.gllib.gllib.math.RationaleZahl.*;
+
+import de.bsvrz.iav.gllib.gllib.math.RationaleZahl;
 import de.bsvrz.sys.funclib.bitctrl.i18n.Messages;
 
 /**
@@ -40,12 +43,26 @@ public class BSpline extends AbstractApproximation {
 	private int ordnung;
 
 	/**
+	 * Erstellt einen B-Spline beliebiger Ordung.
+	 * 
+	 * @param ganglinie
+	 *            Die Ganglinie, die approximiert werden soll
+	 * @param ordnung
+	 *            Die Ordung die der B-Spline besitzen soll
+	 */
+	public BSpline(Ganglinie ganglinie, int ordnung) {
+		setGanglinie(ganglinie);
+		setOrdnung(ordnung);
+	}
+
+	/**
 	 * Erstellt einen B-Spline der Ordung 5.
 	 * 
-	 * @see AbstractApproximation
+	 * @param ganglinie
+	 *            Die Ganglinie, die approximiert werden soll
 	 */
 	public BSpline(Ganglinie ganglinie) {
-		setOrdnung(5);
+		this(ganglinie, 5);
 	}
 
 	/**
@@ -57,14 +74,6 @@ public class BSpline extends AbstractApproximation {
 	 */
 	public BSpline(int ordnung) {
 		setOrdnung(ordnung);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public Stuetzstelle get(long zeitstempel) {
-		// TODO Automatisch erstellter Methoden-Stub
-		return null;
 	}
 
 	/**
@@ -83,10 +92,58 @@ public class BSpline extends AbstractApproximation {
 	 *            Ordnung
 	 */
 	public void setOrdnung(int ordnung) {
-		assert ordnung > 0 : Messages.get(GlLibMessages.BadBSplineDegree,
-				ordnung);
+		if (ordnung < 0) {
+			throw new IllegalArgumentException(Messages.get(
+					GlLibMessages.BadBSplineDegree, ordnung));
+		}
 
 		this.ordnung = ordnung;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public Stuetzstelle get(long zeitstempel) {
+		if (!ganglinie.isValid(zeitstempel)) {
+			// Zeitstempel gehört nicht zur Ganglinie
+			return null;
+		}
+
+		RationaleZahl wert;
+
+		wert = RationaleZahl.NULL;
+		for (int i = 0; i < ganglinie.anzahlStuetzstellen() - ordnung - 1; i++) {
+			wert = addiere(wert, multipliziere(b(i, ordnung, zeitstempel),
+					ganglinie.getStuetzstellen().get(i).wert));
+		}
+
+		return new Stuetzstelle(zeitstempel, wert.intValue());
+	}
+
+	RationaleZahl b(int j, int n, long t0) {
+		Stuetzstelle[] t;
+		RationaleZahl b;
+
+		t = ganglinie.getStuetzstellen().toArray(new Stuetzstelle[0]);
+
+		if (n == 0) {
+			// Der Wert ist 1, wenn zeitstempel zwischen der j-ten und (j+1)-ten
+			// Stützstelle oder auf der j-ten Stützstelle liegt und sonst 0.
+			if (t[j].zeitstempel <= t0 && t0 < t[j + 1].zeitstempel) {
+				b = RationaleZahl.EINS;
+			} else {
+				b = RationaleZahl.NULL;
+			}
+		} else {
+			b = addiere(multipliziere(b(j, n - 1, t0),
+					dividiere(t0 - t[j].zeitstempel, t[j + n].zeitstempel
+							- t[j].zeitstempel)), multipliziere(b(j + 1, n - 1,
+					t0), dividiere(t[j + n + 1].zeitstempel - t0,
+					t[j + n + 1].zeitstempel - t[j + 1].zeitstempel)));
+		}
+
+		// System.err.println("b(" + j + ", " + n + ", " + t0 + ") = " + b);
+
+		return b;
+	}
 }

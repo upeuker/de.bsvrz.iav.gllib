@@ -88,6 +88,28 @@ public class Ganglinie implements Approximation {
 	}
 
 	/**
+	 * Gibt die Anzahl der St&uuml;tzstellen der Ganglinie zur&uuml;ck.
+	 * 
+	 * @return St&uuml;tzstellenanzahl
+	 */
+	public int anzahlStuetzstellen() {
+		return stuetzstellen.size();
+	}
+
+	/**
+	 * Pr&uuml;ft ob zu einem Zeitstempel eine reale St&uuml;tzstelle existiert.
+	 * 
+	 * @param zeitstempel
+	 *            Ein Zeitstempel
+	 * @return {@code true}, wenn die Ganglinie eine St&uuml;tzstelle zum
+	 *         Zeitpunkt speichert und {@code false}, wenn zu dem Zeitpunkt die
+	 *         St&uuml;tzstelle berechnet werden muss
+	 */
+	public boolean existsStuetzstelle(long zeitstempel) {
+		return getStuetzstelle(zeitstempel) != null;
+	}
+
+	/**
 	 * Gibt die sortierte Liste der existierenden St&uuml;tzstellen
 	 * zur&uuml;ck;.
 	 * 
@@ -95,6 +117,36 @@ public class Ganglinie implements Approximation {
 	 */
 	public List<Stuetzstelle> getStuetzstellen() {
 		return new ArrayList<Stuetzstelle>(stuetzstellen);
+	}
+
+	/**
+	 * Gibt die real existierende St&uuml;tzstelle zu einem Zeitpunkt
+	 * zur&uuml;ck. Ist zu dem angegebenen Zeitpunkt keine St&uuml;tzstelle
+	 * gesichert, wird {@code null} zur&uuml;ckgegeben.
+	 * 
+	 * @param zeitstempel
+	 *            Der Zeitstempel zu dem eine St&uuml;tzstelle gesucht wird
+	 * @return Die gesuchte St&uuml;tzstelle oder {@code null}, wenn keine
+	 *         existiert
+	 * @throws IllegalArgumentException
+	 *             Wenn der Zeitstempel nicht im G&uuml;ltigkeitsbereich der
+	 *             Ganglinie liegt
+	 */
+	public Stuetzstelle getStuetzstelle(long zeitstempel) {
+		if (!isValid(zeitstempel)) {
+			throw new IllegalArgumentException(
+					"Der Zeitstempel liegt nicht im Gültigkeitsbereich der Ganglinie.");
+		}
+
+		SortedSet<Stuetzstelle> kopf;
+
+		kopf = stuetzstellen.tailSet(new Stuetzstelle(zeitstempel));
+
+		if (!kopf.isEmpty() && kopf.first().zeitstempel == zeitstempel) {
+			return kopf.first();
+		}
+
+		return null;
 	}
 
 	/**
@@ -183,58 +235,6 @@ public class Ganglinie implements Approximation {
 	}
 
 	/**
-	 * Gibt die Anzahl der St&uuml;tzstellen der Ganglinie zur&uuml;ck.
-	 * 
-	 * @return St&uuml;tzstellenanzahl
-	 */
-	public int anzahlStuetzstellen() {
-		return stuetzstellen.size();
-	}
-
-	/**
-	 * Gibt die real existierende St&uuml;tzstelle zu einem Zeitpunkt
-	 * zur&uuml;ck. Ist zu dem angegebenen Zeitpunkt keine St&uuml;tzstelle
-	 * gesichert, wird {@code null} zur&uuml;ckgegeben.
-	 * 
-	 * @param zeitstempel
-	 *            Der Zeitstempel zu dem eine St&uuml;tzstelle gesucht wird
-	 * @return Die gesuchte St&uuml;tzstelle oder {@code null}, wenn keine
-	 *         existiert
-	 * @throws IllegalArgumentException
-	 *             Wenn der Zeitstempel nicht im G&uuml;ltigkeitsbereich der
-	 *             Ganglinie liegt
-	 */
-	public Stuetzstelle getStuetzstelle(long zeitstempel) {
-		if (!isValid(zeitstempel)) {
-			throw new IllegalArgumentException(
-					"Der Zeitstempel liegt nicht im Gültigkeitsbereich der Ganglinie.");
-		}
-
-		SortedSet<Stuetzstelle> kopf;
-
-		kopf = stuetzstellen.tailSet(new Stuetzstelle(zeitstempel));
-
-		if (!kopf.isEmpty() && kopf.first().zeitstempel == zeitstempel) {
-			return kopf.first();
-		}
-
-		return null;
-	}
-
-	/**
-	 * Pr&uuml;ft ob zu einem Zeitstempel eine reale St&uuml;tzstelle existiert.
-	 * 
-	 * @param zeitstempel
-	 *            Ein Zeitstempel
-	 * @return {@code true}, wenn die Ganglinie eine St&uuml;tzstelle zum
-	 *         Zeitpunkt speichert und {@code false}, wenn zu dem Zeitpunkt die
-	 *         St&uuml;tzstelle berechnet werden muss
-	 */
-	public boolean existsStuetzstelle(long zeitstempel) {
-		return getStuetzstelle(zeitstempel) != null;
-	}
-
-	/**
 	 * Gibt, falls vorhanden, die n&auml;chste St&uuml;tzstelle vor dem
 	 * Zeitstempel zur&uuml;ck.
 	 * 
@@ -316,10 +316,9 @@ public class Ganglinie implements Approximation {
 	}
 
 	/**
-	 * Gibt die St&uuml;tzstelle zu einem bestimmten Zeitstempel zur&uuml;ck.
-	 * Existiert die St&uuml;tzstelle wird diese zur&uuml;ckgegeben. Andernfalls
-	 * wird der Wert zum Zeitstempel mit der eingestellten Approximation
-	 * berechnet.
+	 * Gibt die St&uuml;tzstelle zu einem bestimmten Zeitstempel zur&uuml;ck. Es
+	 * wird zur Bestimmung der St&uuml;tzstelle die aktuelle Approximation
+	 * verwendet.
 	 * <p>
 	 * {@inheritDoc}
 	 * 
@@ -328,21 +327,7 @@ public class Ganglinie implements Approximation {
 	 * @return Die St&uuml;tzstelle zum Zeitpunkt
 	 */
 	public Stuetzstelle get(long zeitstempel) {
-		if (isValid(zeitstempel)) {
-			Stuetzstelle s;
-
-			// Wenn echte Stützstelle vorhanden, diese benutzen
-			s = new Stuetzstelle(zeitstempel);
-			s = stuetzstellen.tailSet(s).first();
-			if (s.zeitstempel == zeitstempel) {
-				return s;
-			}
-
-			// Ansonsten genäherte Stützstelle verwenden
-			return approximation.get(zeitstempel);
-		}
-
-		return null;
+		return approximation.get(zeitstempel);
 	}
 
 	/**

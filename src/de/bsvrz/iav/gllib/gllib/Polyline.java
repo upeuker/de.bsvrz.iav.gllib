@@ -61,20 +61,19 @@ public class Polyline extends AbstractApproximation {
 	 * {@inheritDoc}
 	 */
 	public Stuetzstelle get(long zeitstempel) {
-		Stuetzstelle s0;
-		Stuetzstelle s1;
-		Long wert;
-
 		if (!ganglinie.isValid(zeitstempel)) {
 			// Zeitstempel gehört nicht zur Ganglinie
 			return null;
 		}
 
 		if (ganglinie.existsStuetzstelle(zeitstempel)) {
-			return ganglinie.get(zeitstempel);
+			return ganglinie.getStuetzstelle(zeitstempel);
 		}
 
-		// Stützstelle muss berechnet werden
+		Stuetzstelle s0;
+		Stuetzstelle s1;
+		Long wert;
+
 		s0 = ganglinie.naechsteStuetzstelleDavor(zeitstempel);
 		s1 = ganglinie.naechsteStuetzstelleDanach(zeitstempel);
 		wert = s0.wert + (s1.wert - s0.wert)

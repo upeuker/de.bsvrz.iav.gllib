@@ -10,6 +10,8 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.sun.jmx.remote.util.OrderClassLoaders;
+
 import de.bsvrz.iav.gllib.gllib.BSpline;
 import de.bsvrz.iav.gllib.gllib.CubicSpline;
 import de.bsvrz.iav.gllib.gllib.Ganglinie;
@@ -29,6 +31,8 @@ public class GanglinienPanel extends JPanel {
 	private boolean cubicspline = false;
 
 	private boolean bspline = false;
+
+	private int ordnung;
 
 	public GanglinienPanel(Ganglinie ganglinie) {
 		setBackground(Color.white);
@@ -97,8 +101,9 @@ public class GanglinienPanel extends JPanel {
 					Color.green);
 		}
 		if (bspline) {
-			zeichne(g, new BSpline(ganglinie).interpoliere(intervalle),
-					Color.yellow);
+			zeichne(g,
+					new BSpline(ganglinie, ordnung).interpoliere(intervalle),
+					Color.black);
 		}
 
 	}
@@ -140,6 +145,14 @@ public class GanglinienPanel extends JPanel {
 				g.fillOval((int) s.zeitstempel - 1, s.wert - 1, 2, 2);
 			}
 		}
+	}
+
+	public int getOrdnung() {
+		return ordnung;
+	}
+
+	public void setOrdnung(int ordnung) {
+		this.ordnung = ordnung;
 	}
 
 }

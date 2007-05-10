@@ -42,6 +42,8 @@ public interface Approximation {
 	 * 
 	 * @param ganglinie
 	 *            Eine Ganglinie
+	 * @throws NullPointerException
+	 *             Wenn der Parameter gleich {@code null} ist
 	 */
 	void setGanglinie(Ganglinie ganglinie);
 
@@ -63,6 +65,8 @@ public interface Approximation {
 	 * @param intervallBreite
 	 *            Die gew&uuml;nschte Breite der Intervalle
 	 * @return Nach Zeitstempel sortierte Liste der St&uuml;tzstellen
+	 * @throws IllegalArgumentException
+	 *             Wenn die Intervallbreite kleiner oder gleich 0 ist
 	 */
 	SortedSet<Stuetzstelle> interpoliere(long intervallBreite);
 

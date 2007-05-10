@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TestCubicpline {
+public class TestBSpline {
 
 	private Ganglinie ganglinie;
 
@@ -18,15 +18,21 @@ public class TestCubicpline {
 		ganglinie.set(new Stuetzstelle(60, 40));
 		ganglinie.set(new Stuetzstelle(90, 10));
 	}
-
+	
 	@Test
 	public void testGet() {
-		CubicSpline spline;
+		BSpline spline;
 
-		System.out.println("Cubic Spline:");
-		spline = new CubicSpline(ganglinie);
-		for (int i = 10; i < 100; i += 10) {
-			System.out.println(spline.get(i));
+		System.err.println("B-Spline:");
+		spline = new BSpline(ganglinie, 2);
+		for (int i = 0; i < 10; i += 1) {
+			System.err.println(spline.get(i));
 		}
 	}
+
+	@Test
+	public void testB() {
+		fail("Not yet implemented");
+	}
+
 }

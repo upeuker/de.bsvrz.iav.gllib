@@ -89,12 +89,11 @@ public class CubicSpline extends AbstractApproximation implements
 			return null;
 		}
 
-		if (ganglinie.existsStuetzstelle(zeitstempel)) {
-			// Zum Zeitstempel existiert eine Stützstelle
-			return ganglinie.get(zeitstempel);
+		if (ganglinie.getIntervall().start == zeitstempel
+				|| ganglinie.getIntervall().ende == zeitstempel) {
+			return ganglinie.getStuetzstelle(zeitstempel);
 		}
 
-		// Stützstelle muss berechnet werden
 		return new Stuetzstelle(zeitstempel, berechneStuetzstelle(zeitstempel));
 	}
 
