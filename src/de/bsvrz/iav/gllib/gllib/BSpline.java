@@ -42,6 +42,16 @@ public class BSpline extends AbstractApproximation {
 	/** Die Ordnung des B-Splines. */
 	private int ordnung;
 
+	/** Grenzstellen der Interpolationsintervalle, aufsteigend sortiert. */
+	private long[] t;
+
+	/** Konrollpunkte des B-Spline, aufsteigend sortiert. */
+	private Stuetzstelle[] p;
+
+	public BSpline() {
+		// nix
+	}
+
 	/**
 	 * Erstellt einen B-Spline beliebiger Ordung.
 	 * 
@@ -92,12 +102,21 @@ public class BSpline extends AbstractApproximation {
 	 *            Ordnung
 	 */
 	public void setOrdnung(int ordnung) {
-		if (ordnung < 0) {
+		if (ordnung < 1) {
 			throw new IllegalArgumentException(Messages.get(
 					GlLibMessages.BadBSplineDegree, ordnung));
 		}
 
 		this.ordnung = ordnung;
+	}
+
+	public long[] getInterpolationsintervalle() {
+		long[] intervall;
+
+		intervall = new long[t.length];
+		System.arraycopy(t, 0, intervall, 0, t.length);
+
+		return intervall;
 	}
 
 	/**
@@ -109,41 +128,75 @@ public class BSpline extends AbstractApproximation {
 			return null;
 		}
 
-		RationaleZahl wert;
+		RationaleZahl wert = RationaleZahl.NULL;
 
-		wert = RationaleZahl.NULL;
-		for (int i = 0; i < ganglinie.anzahlStuetzstellen() - ordnung - 1; i++) {
-			wert = addiere(wert, multipliziere(b(i, ordnung, zeitstempel),
-					ganglinie.getStuetzstellen().get(i).wert));
+		for (int i = 0; i < ganglinie.anzahlStuetzstellen(); i++) {
+			wert = addiere(wert, multipliziere(
+					gewicht(i, ordnung, zeitstempel), p[i].wert));
 		}
 
 		return new Stuetzstelle(zeitstempel, wert.intValue());
 	}
 
-	RationaleZahl b(int j, int n, long t0) {
-		Stuetzstelle[] t;
-		RationaleZahl b;
+	@Override
+	public void setGanglinie(Ganglinie ganglinie) {
+		super.setGanglinie(ganglinie);
+		bestimmeKontrollpunkte();
+		bestimmeIntervalle();
+	}
 
-		t = ganglinie.getStuetzstellen().toArray(new Stuetzstelle[0]);
+	/**
+	 * Kontrollpunkte sind die St&uuml;tzstellen der Ganglinie.
+	 */
+	private void bestimmeKontrollpunkte() {
+		p = ganglinie.getStuetzstellen().toArray(new Stuetzstelle[0]);
+	}
 
-		if (n == 0) {
-			// Der Wert ist 1, wenn zeitstempel zwischen der j-ten und (j+1)-ten
-			// Stützstelle oder auf der j-ten Stützstelle liegt und sonst 0.
-			if (t[j].zeitstempel <= t0 && t0 < t[j + 1].zeitstempel) {
-				b = RationaleZahl.EINS;
+	/**
+	 * Bestimmt die Intervallgrenzen der Interpolation. Es gibt n+k Intervalle
+	 * mit n&nbsp;=&nbsp;Knotenanzahl und k&nbsp;=&nbsp;Ordnung des B-Spline.
+	 */
+	private void bestimmeIntervalle() {
+		int n, k;
+		long intervall;
+
+		n = ganglinie.anzahlStuetzstellen();
+		k = ordnung;
+		t = new long[n + k + 1];
+		intervall = p[n - 1].zeitstempel - p[0].zeitstempel;
+
+		for (int j = 0; j < t.length; j++) {
+			t[j] = addiere(multipliziere(dividiere(intervall, n + k), j),
+					p[0].zeitstempel).longValue();
+		}
+	}
+
+	/**
+	 * Berechnet rekursiv das Gewicht einer St&uuml;tzstelle.
+	 * 
+	 * @param j
+	 *            Index des betrachteten Interpolationsintervalls
+	 * @param k
+	 *            Ordnung und Invariante der Rekursion
+	 * @param t0
+	 *            St&uuml;tzstelle deren Gewicht gesucht ist
+	 * @return Das Gewicht der St&uuml;tzstelle
+	 */
+	RationaleZahl gewicht(int j, int k, long t0) {
+		RationaleZahl n;
+
+		if (k == 1) {
+			if (t[j] <= t0 && t0 < t[j + 1]) {
+				n = RationaleZahl.EINS;
 			} else {
-				b = RationaleZahl.NULL;
+				n = RationaleZahl.NULL;
 			}
 		} else {
-			b = addiere(multipliziere(b(j, n - 1, t0),
-					dividiere(t0 - t[j].zeitstempel, t[j + n].zeitstempel
-							- t[j].zeitstempel)), multipliziere(b(j + 1, n - 1,
-					t0), dividiere(t[j + n + 1].zeitstempel - t0,
-					t[j + n + 1].zeitstempel - t[j + 1].zeitstempel)));
+			// TODO: Gewicht für Ordnung > 1
+			n = null;
 		}
 
-		// System.err.println("b(" + j + ", " + n + ", " + t0 + ") = " + b);
-
-		return b;
+		return n;
 	}
+
 }

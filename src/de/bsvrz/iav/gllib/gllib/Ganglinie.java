@@ -56,8 +56,12 @@ public class Ganglinie implements Approximation {
 	/** Speicher der St&uuml;tzstellen. */
 	private final SortedSet<Stuetzstelle> stuetzstellen;
 
-	/** Verfahren zur Berechnung der Punkte zwischen den St&uuml;tzstellen. */
-	private Approximation approximation = new BSpline(this);
+	/**
+	 * Verfahren zur Berechnung der Punkte zwischen den St&uuml;tzstellen.
+	 * <p>
+	 * TODO: Auf B-Spline ändern
+	 */
+	private Approximation approximation = new Polyline(this);
 
 	/**
 	 * Konstruiert eine Ganglinie ohne St&uuml;tzstellen.
