@@ -26,8 +26,11 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
-import static de.bsvrz.iav.gllib.gllib.math.RationaleZahl.*;
-
+import static de.bsvrz.iav.gllib.gllib.math.RationaleZahl.EINS;
+import static de.bsvrz.iav.gllib.gllib.math.RationaleZahl.NULL;
+import static de.bsvrz.iav.gllib.gllib.math.RationaleZahl.addiere;
+import static de.bsvrz.iav.gllib.gllib.math.RationaleZahl.dividiere;
+import static de.bsvrz.iav.gllib.gllib.math.RationaleZahl.multipliziere;
 import de.bsvrz.iav.gllib.gllib.math.RationaleZahl;
 import de.bsvrz.sys.funclib.bitctrl.i18n.Messages;
 
@@ -43,7 +46,7 @@ public class BSpline extends AbstractApproximation {
 	private int ordnung;
 
 	/** Grenzstellen der Interpolationsintervalle, aufsteigend sortiert. */
-	private long[] t;
+	private int[] t;
 
 	/** Konrollpunkte des B-Spline, aufsteigend sortiert. */
 	private Stuetzstelle[] p;
@@ -61,8 +64,10 @@ public class BSpline extends AbstractApproximation {
 	 *            Die Ordung die der B-Spline besitzen soll
 	 */
 	public BSpline(Ganglinie ganglinie, int ordnung) {
-		setGanglinie(ganglinie);
-		setOrdnung(ordnung);
+		this.ganglinie = ganglinie;
+		this.ordnung = ordnung;
+		bestimmeKontrollpunkte();
+		bestimmeIntervalle();
 	}
 
 	/**
@@ -108,15 +113,7 @@ public class BSpline extends AbstractApproximation {
 		}
 
 		this.ordnung = ordnung;
-	}
-
-	public long[] getInterpolationsintervalle() {
-		long[] intervall;
-
-		intervall = new long[t.length];
-		System.arraycopy(t, 0, intervall, 0, t.length);
-
-		return intervall;
+		bestimmeIntervalle();
 	}
 
 	/**
@@ -128,14 +125,7 @@ public class BSpline extends AbstractApproximation {
 			return null;
 		}
 
-		RationaleZahl wert = RationaleZahl.NULL;
-
-		for (int i = 0; i < ganglinie.anzahlStuetzstellen(); i++) {
-			wert = addiere(wert, multipliziere(
-					gewicht(i, ordnung, zeitstempel), p[i].wert));
-		}
-
-		return new Stuetzstelle(zeitstempel, wert.intValue());
+		return null;
 	}
 
 	@Override
@@ -157,18 +147,7 @@ public class BSpline extends AbstractApproximation {
 	 * mit n&nbsp;=&nbsp;Knotenanzahl und k&nbsp;=&nbsp;Ordnung des B-Spline.
 	 */
 	private void bestimmeIntervalle() {
-		int n, k;
-		long intervall;
-
-		n = ganglinie.anzahlStuetzstellen();
-		k = ordnung;
-		t = new long[n + k + 1];
-		intervall = p[n - 1].zeitstempel - p[0].zeitstempel;
-
-		for (int j = 0; j < t.length; j++) {
-			t[j] = addiere(multipliziere(dividiere(intervall, n + k), j),
-					p[0].zeitstempel).longValue();
-		}
+		// TODO
 	}
 
 	/**
@@ -182,20 +161,32 @@ public class BSpline extends AbstractApproximation {
 	 *            St&uuml;tzstelle deren Gewicht gesucht ist
 	 * @return Das Gewicht der St&uuml;tzstelle
 	 */
-	RationaleZahl gewicht(int j, int k, long t0) {
-		RationaleZahl n;
-
-		if (k == 1) {
-			if (t[j] <= t0 && t0 < t[j + 1]) {
-				n = RationaleZahl.EINS;
+	RationaleZahl gewicht(int j, int k, int t0) {
+		RationaleZahl a, b, n, ga, gb;
+		try {
+			if (k == 1) {
+				if (t[j] <= t0 && t0 <= t[j + 1]) {
+					n = EINS;
+				} else {
+					n = NULL;
+				}
 			} else {
-				n = RationaleZahl.NULL;
-			}
-		} else {
-			// TODO: Gewicht für Ordnung > 1
-			n = null;
-		}
+				// Die beiden Quotienten
+				a = dividiere(t0 - t[j], t[j + k - 1] - t[j]);
+				b = dividiere(t[j + k] - t0, t[j + k] - t[j + 1]);
 
+				// Gewicht aus vorheriger Rekursion einbeziehen
+				ga = gewicht(j, k - 1, t0);
+				a = multipliziere(a, ga);
+				gb = gewicht(j + 1, k - 1, t0);
+				b = multipliziere(b, gb);
+
+				// Die beiden Quotienten addieren
+				n = addiere(a, b);
+			}
+		} catch (ArithmeticException e) {
+			n = EINS;
+		}
 		return n;
 	}
 

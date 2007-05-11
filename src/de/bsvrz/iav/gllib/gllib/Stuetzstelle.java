@@ -45,10 +45,10 @@ package de.bsvrz.iav.gllib.gllib;
 public class Stuetzstelle implements Comparable<Stuetzstelle> {
 
 	/** Der Messwert. */
-	public final Integer wert;
+	public Integer wert = 100;
 
 	/** Zeitpunkt des Messwerts. */
-	public final long zeitstempel;
+	public long zeitstempel = 99;
 
 	/**
 	 * Initialisierung. F&uuml;r den Wert wird <code>null</code>

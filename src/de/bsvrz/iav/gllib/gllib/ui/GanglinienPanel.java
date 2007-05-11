@@ -32,7 +32,7 @@ public class GanglinienPanel extends JPanel {
 
 	private boolean bspline = false;
 
-	private int ordnung;
+	private int ordnung = 1;
 
 	public GanglinienPanel(Ganglinie ganglinie) {
 		setBackground(Color.white);
@@ -101,11 +101,21 @@ public class GanglinienPanel extends JPanel {
 					Color.green);
 		}
 		if (bspline) {
-			zeichne(g,
-					new BSpline(ganglinie, ordnung).interpoliere(intervalle),
-					Color.black);
+			BSpline spline = new BSpline(ganglinie, ordnung);
+			zeichne(g, spline.interpoliere(intervalle), Color.black);
+			zeichneIntervalle(g, spline, Color.lightGray);
 		}
 
+	}
+
+	private void zeichneIntervalle(Graphics g, BSpline spline, Color farbe) {
+//		long[] intGrenzen;
+//
+//		intGrenzen = spline.getInterpolationsintervalle();
+//		for (int i = 0; i < intGrenzen.length; i++) {
+//			g.setColor(farbe);
+//			g.drawLine((int) intGrenzen[i], 0, (int) intGrenzen[i], 1024);
+//		}
 	}
 
 	private void zeichne(Graphics g, SortedSet<Stuetzstelle> stuetzstellen,

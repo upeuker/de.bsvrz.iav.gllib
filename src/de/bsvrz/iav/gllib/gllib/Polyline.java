@@ -72,13 +72,16 @@ public class Polyline extends AbstractApproximation {
 
 		Stuetzstelle s0;
 		Stuetzstelle s1;
-		Long wert;
+		Double wert;
+		double x0, x1, y0, y1;
 
 		s0 = ganglinie.naechsteStuetzstelleDavor(zeitstempel);
 		s1 = ganglinie.naechsteStuetzstelleDanach(zeitstempel);
-		wert = s0.wert + (s1.wert - s0.wert)
-				/ (s1.zeitstempel - s0.zeitstempel)
-				* (zeitstempel - s0.zeitstempel);
+		x0 = s0.zeitstempel;
+		y0 = s0.wert;
+		x1 = s1.zeitstempel;
+		y1 = s1.wert;
+		wert = y0 + (y1 - y0) / (x1 - x0) * (zeitstempel - x0);
 		return new Stuetzstelle(zeitstempel, wert.intValue());
 	}
 
