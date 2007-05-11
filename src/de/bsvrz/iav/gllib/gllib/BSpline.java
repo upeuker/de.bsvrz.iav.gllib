@@ -26,12 +26,8 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
-import static de.bsvrz.iav.gllib.gllib.math.RationaleZahl.EINS;
-import static de.bsvrz.iav.gllib.gllib.math.RationaleZahl.NULL;
-import static de.bsvrz.iav.gllib.gllib.math.RationaleZahl.addiere;
-import static de.bsvrz.iav.gllib.gllib.math.RationaleZahl.dividiere;
-import static de.bsvrz.iav.gllib.gllib.math.RationaleZahl.multipliziere;
-import de.bsvrz.iav.gllib.gllib.math.RationaleZahl;
+import javax.sound.midi.SysexMessage;
+
 import de.bsvrz.sys.funclib.bitctrl.i18n.Messages;
 
 /**
@@ -66,8 +62,8 @@ public class BSpline extends AbstractApproximation {
 	public BSpline(Ganglinie ganglinie, int ordnung) {
 		this.ganglinie = ganglinie;
 		this.ordnung = ordnung;
-		bestimmeKontrollpunkte();
-		bestimmeIntervalle();
+		bestimmeP();
+		bestimmeT();
 	}
 
 	/**
@@ -78,17 +74,6 @@ public class BSpline extends AbstractApproximation {
 	 */
 	public BSpline(Ganglinie ganglinie) {
 		this(ganglinie, 5);
-	}
-
-	/**
-	 * Erstellt einen B-Spline beliebiger Ordnung.
-	 * 
-	 * @see AbstractApproximation
-	 * @param ordnung
-	 *            Ordnung
-	 */
-	public BSpline(int ordnung) {
-		setOrdnung(ordnung);
 	}
 
 	/**
@@ -113,7 +98,7 @@ public class BSpline extends AbstractApproximation {
 		}
 
 		this.ordnung = ordnung;
-		bestimmeIntervalle();
+		bestimmeT();
 	}
 
 	/**
@@ -125,20 +110,57 @@ public class BSpline extends AbstractApproximation {
 			return null;
 		}
 
-		return null;
+		int i;
+		double t0, b;
+
+		if (zeitstempel == p[0].zeitstempel) {
+			return p[0];
+		} else if (zeitstempel == p[p.length - 1].zeitstempel) {
+			return p[p.length - 1];
+		}
+
+		b = 0.0;
+		t0 = zeitstempel;
+		t0 /= ganglinie.getIntervall().breite;
+		t0 *= t[t.length - 1];
+		// i = (int) t0 + ordnung - 1;
+		// for (int j = i - ordnung + 1; j <= i; j++) {
+		for (int j = 0; j < p.length; j++) {
+			double y, n;
+
+			y = p[j].wert;
+			n = n(j, ordnung, t0);
+			System.err.println("j=" + j + ", px=" + p[j].zeitstempel
+					+ ", Gewicht=" + n);
+			b += y * n;
+		}
+
+		// for (int j = 0; j < p.length; j++) {
+		// double y, n;
+		//
+		// y = p[j].wert;
+		// n = n(j, ordnung, t0);
+		// System.err.println("px=" + p[j].zeitstempel + ", Gewicht=" + n);
+		// b += y * n;
+		// }
+
+		System.err.println("Zeitstempel=" + zeitstempel + ", t0=" + t0
+				+ ", Wert=" + b);
+
+		return new Stuetzstelle(zeitstempel, Double.valueOf(b).intValue());
 	}
 
 	@Override
 	public void setGanglinie(Ganglinie ganglinie) {
 		super.setGanglinie(ganglinie);
-		bestimmeKontrollpunkte();
-		bestimmeIntervalle();
+		bestimmeP();
+		bestimmeT();
 	}
 
 	/**
 	 * Kontrollpunkte sind die St&uuml;tzstellen der Ganglinie.
 	 */
-	private void bestimmeKontrollpunkte() {
+	private void bestimmeP() {
 		p = ganglinie.getStuetzstellen().toArray(new Stuetzstelle[0]);
 	}
 
@@ -146,48 +168,103 @@ public class BSpline extends AbstractApproximation {
 	 * Bestimmt die Intervallgrenzen der Interpolation. Es gibt n+k Intervalle
 	 * mit n&nbsp;=&nbsp;Knotenanzahl und k&nbsp;=&nbsp;Ordnung des B-Spline.
 	 */
-	private void bestimmeIntervalle() {
-		// TODO
+	private void bestimmeT() {
+		t = new int[p.length + ordnung];
+		for (int j = 0; j < t.length; j++) {
+			if (j < ordnung) {
+				t[j] = 0;
+			} else if (ordnung <= j && j <= p.length - 1) {
+				t[j] = j - ordnung + 1;
+			} else if (j > p.length - 1) {
+				t[j] = p.length - 1 - ordnung + 2;
+			} else {
+				throw new IllegalStateException();
+			}
+		}
 	}
 
 	/**
 	 * Berechnet rekursiv das Gewicht einer St&uuml;tzstelle.
 	 * 
-	 * @param j
+	 * @param i
 	 *            Index des betrachteten Interpolationsintervalls
-	 * @param k
+	 * @param m
 	 *            Ordnung und Invariante der Rekursion
 	 * @param t0
-	 *            St&uuml;tzstelle deren Gewicht gesucht ist
-	 * @return Das Gewicht der St&uuml;tzstelle
+	 * 
+	 * @return Das Gewicht der i-ten St&uuml;tzstelle
 	 */
-	RationaleZahl gewicht(int j, int k, int t0) {
-		RationaleZahl a, b, n, ga, gb;
-		try {
-			if (k == 1) {
-				if (t[j] <= t0 && t0 <= t[j + 1]) {
-					n = EINS;
-				} else {
-					n = NULL;
-				}
+	private double n(int i, int m, double t0) {
+		double n; // Gewicht
+		double a, b; // Erster und zweiter Summand
+		int an, bn; // Nenner des ersten und zweiten Summanden
+
+		if (m == 1) {
+			if (t[i] <= t0 && t0 <= t[i + 1]) {
+				n = 1.0;
 			} else {
-				// Die beiden Quotienten
-				a = dividiere(t0 - t[j], t[j + k - 1] - t[j]);
-				b = dividiere(t[j + k] - t0, t[j + k] - t[j + 1]);
-
-				// Gewicht aus vorheriger Rekursion einbeziehen
-				ga = gewicht(j, k - 1, t0);
-				a = multipliziere(a, ga);
-				gb = gewicht(j + 1, k - 1, t0);
-				b = multipliziere(b, gb);
-
-				// Die beiden Quotienten addieren
-				n = addiere(a, b);
+				n = 0.0;
 			}
-		} catch (ArithmeticException e) {
-			n = EINS;
+
+			// Sonderfall
+			// if (t0 == t[t.length - 1] && i == p.length - 1) {
+			// n = 1.0;
+			// }
+		} else {
+			an = t[i + m - 1] - t[i];
+			bn = t[i + m] - t[i + 1];
+
+			// Erster Summand
+			if (an != 0) {
+				a = (t0 - t[i]) / an; // Quotient
+				a *= n(i, m - 1, t0); // Gewicht einbeziehen
+			} else {
+				a = 0;
+			}
+
+			// Zweiter Summand
+			if (bn != 0) {
+				b = (t[i + m] - t0) / bn; // Quotient
+				b *= n(i + 1, m - 1, t0); // Gewicht einbeziehen
+			} else {
+				b = 0;
+			}
+
+			// Die beiden Summanden addieren
+			n = a + b;
 		}
+
+		System.err.println("i=" + i + ", m=" + m + ", t0=" + t0 + " => n=" + n);
 		return n;
 	}
 
+	public static void main(String[] argv) {
+		Ganglinie g;
+		BSpline spline;
+		int k;
+
+		g = new Ganglinie();
+		g.set(new Stuetzstelle(0, 0));
+		g.set(new Stuetzstelle(30, 30));
+		g.set(new Stuetzstelle(40, 20));
+		g.set(new Stuetzstelle(60, 40));
+		g.set(new Stuetzstelle(90, 10));
+
+		k = 2;
+		spline = new BSpline(g, k);
+
+		for (double t = 0; t <= 4; t += 1) {
+			for (int i = 0; i < spline.p.length; i++) {
+				System.out.println("t=" + t + ", P" + i + " mit N="
+						+ spline.n(i, k, t));
+			}
+			System.out.println();
+		}
+
+		for (int i = 0; i < spline.p.length; i++) {
+			System.out.println(spline.get(spline.p[i].zeitstempel));
+		}
+
+		System.exit(0);
+	}
 }
