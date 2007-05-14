@@ -110,44 +110,36 @@ public class BSpline extends AbstractApproximation {
 			return null;
 		}
 
-		int i;
-		double t0, b;
+		double t0;
+		double f;
+		Stuetzstelle s;
 
-		if (zeitstempel == p[0].zeitstempel) {
-			return p[0];
-		} else if (zeitstempel == p[p.length - 1].zeitstempel) {
-			return p[p.length - 1];
-		}
-
-		b = 0.0;
 		t0 = zeitstempel;
 		t0 /= ganglinie.getIntervall().breite;
 		t0 *= t[t.length - 1];
-		// i = (int) t0 + ordnung - 1;
-		// for (int j = i - ordnung + 1; j <= i; j++) {
-		for (int j = 0; j < p.length; j++) {
-			double y, n;
 
-			y = p[j].wert;
-			n = n(j, ordnung, t0);
-			System.err.println("j=" + j + ", px=" + p[j].zeitstempel
-					+ ", Gewicht=" + n);
-			b += y * n;
-		}
+		s = bspline(t0);
 
-		// for (int j = 0; j < p.length; j++) {
-		// double y, n;
-		//
-		// y = p[j].wert;
-		// n = n(j, ordnung, t0);
-		// System.err.println("px=" + p[j].zeitstempel + ", Gewicht=" + n);
-		// b += y * n;
-		// }
+		// Da B-Spline nicht den gesuchten Wert liefert, muss sich ihm genähert
+		// werden
+//		t0 = t[t.length - 1] / 2;
+//		f = 1;
+//		s = bspline(t0);
+//		while (s.zeitstempel != zeitstempel) {
+//			if (s.zeitstempel > zeitstempel) {
+//				if (f > 0)
+//					f /= -2;
+//			} else {
+//				if (f < 0)
+//					f /= -2;
+//			}
+//			t0 += f;
+//
+//			System.err.println(t0 + " / " + f + " / " + s + " / " + zeitstempel);
+//			s = bspline(t0);
+//		}
 
-		System.err.println("Zeitstempel=" + zeitstempel + ", t0=" + t0
-				+ ", Wert=" + b);
-
-		return new Stuetzstelle(zeitstempel, Double.valueOf(b).intValue());
+		return s;
 	}
 
 	@Override
@@ -191,7 +183,7 @@ public class BSpline extends AbstractApproximation {
 	 * @param m
 	 *            Ordnung und Invariante der Rekursion
 	 * @param t0
-	 * 
+	 *            Wert im Intervall des Parameters t
 	 * @return Das Gewicht der i-ten St&uuml;tzstelle
 	 */
 	private double n(int i, int m, double t0) {
@@ -200,7 +192,7 @@ public class BSpline extends AbstractApproximation {
 		int an, bn; // Nenner des ersten und zweiten Summanden
 
 		if (m == 1) {
-			if (t[i] <= t0 && t0 <= t[i + 1]) {
+			if (t[i] <= t0 && t0 < t[i + 1]) {
 				n = 1.0;
 			} else {
 				n = 0.0;
@@ -234,8 +226,33 @@ public class BSpline extends AbstractApproximation {
 			n = a + b;
 		}
 
-		System.err.println("i=" + i + ", m=" + m + ", t0=" + t0 + " => n=" + n);
 		return n;
+	}
+
+	private Stuetzstelle bspline(double t0) {
+		double bx, by;
+		int i;
+
+		// Ränder der Ganglinie werden 1:1 übernommen
+		if (t0 == t[0]) {
+			return p[0];
+		} else if (t0 == t[t.length - 1]) {
+			return p[p.length - 1];
+		}
+
+		bx = by = 0;
+		i = (int) t0 + ordnung - 1;
+		for (int j = i - ordnung + 1; j <= i; j++) {
+			// for (int j = 0; j < p.length; j++) {
+			double n;
+
+			n = n(j, ordnung, t0);
+			bx += p[j].zeitstempel * n;
+			by += p[j].wert * n;
+
+		}
+
+		return new Stuetzstelle(Math.round(bx), (int) Math.round(by));
 	}
 
 	public static void main(String[] argv) {
@@ -253,16 +270,8 @@ public class BSpline extends AbstractApproximation {
 		k = 2;
 		spline = new BSpline(g, k);
 
-		for (double t = 0; t <= 4; t += 1) {
-			for (int i = 0; i < spline.p.length; i++) {
-				System.out.println("t=" + t + ", P" + i + " mit N="
-						+ spline.n(i, k, t));
-			}
-			System.out.println();
-		}
-
-		for (int i = 0; i < spline.p.length; i++) {
-			System.out.println(spline.get(spline.p[i].zeitstempel));
+		for (int i = 0; i <= 90; i += 1) {
+			System.out.println(i + " : " + spline.get(i));
 		}
 
 		System.exit(0);

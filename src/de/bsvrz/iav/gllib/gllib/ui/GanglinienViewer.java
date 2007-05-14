@@ -32,33 +32,12 @@ public class GanglinienViewer extends JFrame implements ChangeListener {
 		Ganglinie g;
 
 		g = new Ganglinie();
-//		g.set(0, 100);
-//		g.set(300, 300);
-//		g.set(400, 200);
-//		g.set(600, 400);
-//		g.set(900, 100);
-//		g.set(900, 90);
-////		g.set(800, 99);
-////		g.set(950, 89);
-////		g.set(850, 110);
-////		g.set(870, 102);
-////		g.set(920, 105);
-
 		g.set(0, 100);
-		g.set(300, 400);
+		g.set(300, 300);
+		g.set(400, 200);
+		g.set(600, 400);
 		g.set(900, 100);
-		g.set(905, 100);
-		g.set(915, 100);
-		g.set(920, 100);
-		g.set(925, 100);
-		g.set(930, 100);
-		g.set(935, 100);
-		g.set(940, 100);
-		g.set(945, 100);
-		g.set(950, 100);
-		g.set(955, 100);
 
-		
 		new GanglinienViewer(g);
 	}
 
@@ -86,8 +65,8 @@ public class GanglinienViewer extends JFrame implements ChangeListener {
 		cubicspline.addChangeListener(this);
 		bspline = new JCheckBox("B-Spline");
 		bspline.addChangeListener(this);
-		SpinnerListModel modell = new SpinnerListModel(new Integer[] { 1, 2,
-				3, 4, 5, 6, 7, 8, 9, 10 });
+		SpinnerListModel modell = new SpinnerListModel(new Integer[] { 1, 2, 3,
+				4, 5, 6, 7, 8, 9, 10 });
 		ordnung = new JSpinner(modell);
 		ordnung.setPreferredSize(new Dimension(50, 20));
 		ordnung.addChangeListener(this);

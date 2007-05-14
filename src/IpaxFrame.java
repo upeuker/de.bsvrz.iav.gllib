@@ -749,9 +749,16 @@ class IpaxFrame extends Frame {
 
 		}
 
+		System.err.print("n = ");
+		for (int j = 0; j < ad.length; j++) {
+			System.err.print(ad[j]);
+			if (j < ad.length - 1) {
+				System.err.print(", ");
+			}
+		}
+		System.out.println();
+
 		for (int j1 = 0; j1 < k; j1++) {
-			System.err.println("x=" + Punkte[((j1 + i) - k) + 1].x
-					+ ", Gewicht=" + ad[j1]);
 			d1 += (double) Punkte[((j1 + i) - k) + 1].x * ad[j1];
 			d2 += (double) Punkte[((j1 + i) - k) + 1].y * ad[j1];
 		}
@@ -839,8 +846,20 @@ class IpaxFrame extends Frame {
 			else if (pax.anzahl - 1 < i)
 				ai[i] = (pax.anzahl - 1 - pax.k) + 2;
 
-		for (int i = 0; i < 4; i++)
-			System.err.println(pax.bspl(ai, i) + "\n");
-		System.err.println(pax.bspl(ai, 3.999));
+		System.err.print("t = ");
+		for (int i = 0; i < ai.length; i++) {
+			System.err.print(ai[i]);
+			if (i < ai.length - 1) {
+				System.err.print(", ");
+			}
+		}
+		System.err.println();
+
+		System.out.println("Soll: " + pax.Punkte[0] + ", Ist=" + pax.bspl(ai, 0));
+		System.out.println("Soll: " + pax.Punkte[1] + ", Ist=" + pax.bspl(ai, 4f/3f));
+		System.out.println("Soll: " + pax.Punkte[2] + ", Ist=" + pax.bspl(ai, 16f/9f));
+		System.out.println("Soll: " + pax.Punkte[3] + ", Ist=" + pax.bspl(ai, 8f/3f));
+		System.out.println("Soll: " + pax.Punkte[4] + ", Ist=" + pax.bspl(ai, 4));
+
 	}
 }
