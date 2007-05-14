@@ -1,7 +1,7 @@
 /*
  * Segment 5 Intelligente Analyseverfahren, SWE 5.5 Funktionen Ganglinie
- * Copyright (C) 2007 BitCtrl Systems GmbH 
- * 
+ * Copyright (C) 2007 BitCtrl Systems GmbH
+ *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option) any later
@@ -32,7 +32,7 @@ import de.bsvrz.sys.funclib.bitctrl.i18n.Messages;
 
 /**
  * Approximation einer Ganglinie mit Hilfe eines B-Splines beliebiger Ordung.
- * 
+ *
  * @author BitCtrl, Schumann
  * @version $Id$
  */
@@ -53,7 +53,7 @@ public class BSpline extends AbstractApproximation {
 
 	/**
 	 * Erstellt einen B-Spline beliebiger Ordung.
-	 * 
+	 *
 	 * @param ganglinie
 	 *            Die Ganglinie, die approximiert werden soll
 	 * @param ordnung
@@ -68,7 +68,7 @@ public class BSpline extends AbstractApproximation {
 
 	/**
 	 * Erstellt einen B-Spline der Ordung 5.
-	 * 
+	 *
 	 * @param ganglinie
 	 *            Die Ganglinie, die approximiert werden soll
 	 */
@@ -78,7 +78,7 @@ public class BSpline extends AbstractApproximation {
 
 	/**
 	 * Gibt die Ordgung des B-Splines zur&uuml;ck.
-	 * 
+	 *
 	 * @return Ordnung
 	 */
 	public int getOrdnung() {
@@ -87,7 +87,7 @@ public class BSpline extends AbstractApproximation {
 
 	/**
 	 * Legt die Ordnung des B-Splines fest.
-	 * 
+	 *
 	 * @param ordnung
 	 *            Ordnung
 	 */
@@ -142,6 +142,85 @@ public class BSpline extends AbstractApproximation {
 		return s;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public Stuetzstelle getAnders(long zeitstempel) {
+		if (!ganglinie.isValid(zeitstempel)) {
+			// Zeitstempel gehört nicht zur Ganglinie
+			return null;
+		}
+
+		long anfangsZeit = ganglinie.getStuetzstellen().get(0).getZeitstempel();
+		long endZeit = ganglinie.getStuetzstellen().get(
+				ganglinie.getStuetzstellen().size() - 1).getZeitstempel();
+		long zeitBreite = endZeit - anfangsZeit;
+		// System.err.println("Zeitbreite: " + zeitBreite );
+		//
+		// System.err.println("IntervallBreite: " +
+		// ganglinie.getIntervall().breite);
+
+		double t0;
+		double f;
+		Stuetzstelle s;
+
+		t0 = zeitstempel;
+		t0 /= ganglinie.getIntervall().breite;
+		t0 *= t[t.length - 1];
+
+		s = bspline(t0);
+
+		boolean offsetBerechnen = true;
+		double offset = 0;
+		boolean added = true;
+
+		while (s.zeitstempel != zeitstempel) {
+			long differenz = s.zeitstempel - zeitstempel;
+			// System.err.println("Differenz: " + differenz);
+
+			if (offsetBerechnen) {
+				offset = (((double) zeitstempel - s.zeitstempel) / zeitBreite)
+						* (ganglinie.anzahlStuetzstellen() - 1);
+				offsetBerechnen = false;
+			} else {
+				if (differenz > 0) {
+					if (!added) {
+						offset /= 2.0;
+					}
+				} else {
+					if (added) {
+						offset /= 2.0;
+					}
+				}
+			}
+			offset = Math.abs(offset);
+			// System.err.println("Offset: " + offset);
+			//
+			// System.err.println("T0= " + t0 + " Gewünscht: " + zeitstempel
+			// + " berechnet: " + s.zeitstempel);
+
+			if (differenz > 0) {
+				t0 -= offset;
+				added = true;
+			} else {
+				t0 += offset;
+				added = false;
+			}
+
+			if (t0 > t[t.length - 1]) {
+				t0 = t[t.length - 1];
+			} else if (t0 < t[0]) {
+				t0 = t[0];
+			}
+			s = bspline(t0);
+			// System.err.println("Anpassen");
+			// Pause.warte(2000L);
+		}
+
+		return s;
+	}
+
+
 	@Override
 	public void setGanglinie(Ganglinie ganglinie) {
 		super.setGanglinie(ganglinie);
@@ -177,7 +256,7 @@ public class BSpline extends AbstractApproximation {
 
 	/**
 	 * Berechnet rekursiv das Gewicht einer St&uuml;tzstelle.
-	 * 
+	 *
 	 * @param i
 	 *            Index des betrachteten Interpolationsintervalls
 	 * @param m
