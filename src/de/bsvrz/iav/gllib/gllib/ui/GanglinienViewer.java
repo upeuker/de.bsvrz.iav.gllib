@@ -32,7 +32,7 @@ public class GanglinienViewer extends JFrame implements ChangeListener {
 		Ganglinie g;
 
 		g = new Ganglinie();
-		g.set(0, 100);
+		g.set(0, 0);
 		g.set(300, 300);
 		g.set(400, 200);
 		g.set(600, 400);

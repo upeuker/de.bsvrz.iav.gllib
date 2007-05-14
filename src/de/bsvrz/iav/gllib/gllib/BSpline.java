@@ -28,6 +28,8 @@ package de.bsvrz.iav.gllib.gllib;
 
 import javax.sound.midi.SysexMessage;
 
+import sun.java2d.loops.Blit;
+
 import de.bsvrz.sys.funclib.bitctrl.i18n.Messages;
 
 /**
@@ -118,26 +120,25 @@ public class BSpline extends AbstractApproximation {
 		t0 /= ganglinie.getIntervall().breite;
 		t0 *= t[t.length - 1];
 
-		s = bspline(t0);
+		s = bspline(zeitstempel);
 
 		// Da B-Spline nicht den gesuchten Wert liefert, muss sich ihm genähert
 		// werden
-//		t0 = t[t.length - 1] / 2;
-//		f = 1;
-//		s = bspline(t0);
-//		while (s.zeitstempel != zeitstempel) {
-//			if (s.zeitstempel > zeitstempel) {
-//				if (f > 0)
-//					f /= -2;
-//			} else {
-//				if (f < 0)
-//					f /= -2;
-//			}
-//			t0 += f;
-//
-//			System.err.println(t0 + " / " + f + " / " + s + " / " + zeitstempel);
-//			s = bspline(t0);
-//		}
+		f = 1;
+		s = bspline(t0);
+		while (s.zeitstempel != zeitstempel) {
+			if (s.zeitstempel > zeitstempel) {
+				if (f > 0)
+					f /= -2;
+			} else {
+				if (f < 0)
+					f /= -2;
+			}
+			t0 += f;
+
+			System.err.println(t0 + " / " + f + " / " + s + " / " + zeitstempel);
+			s = bspline(t0);
+		}
 
 		return s;
 	}
@@ -148,13 +149,15 @@ public class BSpline extends AbstractApproximation {
 	public Stuetzstelle getAnders(long zeitstempel) {
 		if (!ganglinie.isValid(zeitstempel)) {
 			// Zeitstempel gehört nicht zur Ganglinie
-			return null;
+			//return null;
+			throw new IllegalArgumentException();
 		}
 
 		long anfangsZeit = ganglinie.getStuetzstellen().get(0).getZeitstempel();
 		long endZeit = ganglinie.getStuetzstellen().get(
 				ganglinie.getStuetzstellen().size() - 1).getZeitstempel();
 		long zeitBreite = endZeit - anfangsZeit;
+		
 		// System.err.println("Zeitbreite: " + zeitBreite );
 		//
 		// System.err.println("IntervallBreite: " +
@@ -212,6 +215,8 @@ public class BSpline extends AbstractApproximation {
 			} else if (t0 < t[0]) {
 				t0 = t[0];
 			}
+			
+			System.err.println("t0=" + t0 + ", offset=" + offset + ", Soll=" + zeitstempel + ", Ist=" + s.zeitstempel);
 			s = bspline(t0);
 			// System.err.println("Anpassen");
 			// Pause.warte(2000L);
@@ -313,6 +318,36 @@ public class BSpline extends AbstractApproximation {
 		int i;
 
 		// Ränder der Ganglinie werden 1:1 übernommen
+		if (t0 <= t[0]) {
+			return p[0];
+		} else if (t0 >= t[t.length - 1]) {
+			return p[p.length - 1];
+		}
+
+		bx = by = 0;
+		i = (int) t0 + ordnung - 1;
+		for (int j = i - ordnung + 1; j <= i; j++) {
+			// for (int j = 0; j < p.length; j++) {
+			double n;
+
+			n = n(j, ordnung, t0);
+			bx += p[j].zeitstempel * n;
+			by += p[j].wert * n;
+
+		}
+
+		return new Stuetzstelle(Math.round(bx), (int) Math.round(by));
+	}
+
+	private Stuetzstelle bspline(long zeitstempel) {
+		double t0, bx, by;
+		int i;
+
+		t0 = zeitstempel;
+		t0 /= ganglinie.getIntervall().breite;
+		t0 *= t[t.length - 1];
+
+		// Ränder der Ganglinie werden 1:1 übernommen
 		if (t0 == t[0]) {
 			return p[0];
 		} else if (t0 == t[t.length - 1]) {
@@ -349,7 +384,7 @@ public class BSpline extends AbstractApproximation {
 		k = 2;
 		spline = new BSpline(g, k);
 
-		for (int i = 0; i <= 90; i += 1) {
+		for (int i = 0; i <= 90; i += 10) {
 			System.out.println(i + " : " + spline.get(i));
 		}
 
