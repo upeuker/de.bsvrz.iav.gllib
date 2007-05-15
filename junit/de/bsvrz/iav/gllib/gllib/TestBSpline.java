@@ -1,6 +1,6 @@
 package de.bsvrz.iav.gllib.gllib;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,38 +20,9 @@ public class TestBSpline {
 	}
 
 	@Test
-	public void testGet() {
+	public void testGetA() {
 		Ganglinie g;
 		BSpline spline;
-		int k;
-
-		g = new Ganglinie();
-		for (int i = 0; i < 1000; i++) {
-			long x = (long) (Math.random() * 1000);
-			int y = (int) (Math.random() * 1000);
-			g.set(x, y);
-		}
-
-		k = 4;
-		spline = new BSpline(g, k);
-
-		// Infos ausgeben
-		System.err.println("B-Spline mit Ordnung " + k + " mit "
-				+ g.anzahlStuetzstellen() + " Stützstellen:");
-		System.err.println(spline.ganglinie);
-
-		// Rechnen
-		for (long t = g.getIntervall().start; t <= g.getIntervall().ende; t++) {
-			Stuetzstelle s = spline.getAnders(t);
-			assertEquals(t, s.zeitstempel);
-		}
-	}
-
-	@Test
-	public void testGetEndlosschleife() {
-		Ganglinie g;
-		BSpline spline;
-		int k;
 
 		g = new Ganglinie();
 		g.set(0, 0);
@@ -60,17 +31,38 @@ public class TestBSpline {
 		g.set(600, 400);
 		g.set(900, 100);
 
-		k = 1;
-		spline = new BSpline(g, k);
-
-		// Infos ausgeben
-		System.err.println("B-Spline mit " + g.anzahlStuetzstellen()
-				+ " Stützstellen und Ordnung " + k + ":");
-		System.err.println(spline.ganglinie);
+		spline = new BSpline(g);
 
 		// Rechnen
-		for (long t = g.getIntervall().start; t <= g.getIntervall().ende; t += 1) {
-			assertEquals(t, spline.getAnders(t).zeitstempel);
+		// for (long t = 0; t <= 900; t += 1) {
+		for (int k = 1; k <= g.anzahlStuetzstellen(); k++) {
+			spline.setOrdnung(k);
+			for (long t = g.getIntervall().start; t <= g.getIntervall().ende; t += 1) {
+				assertEquals(t, spline.get(t).zeitstempel);
+			}
+		}
+	}
+
+	@Test
+	public void testGetB() {
+		Ganglinie g;
+		BSpline spline;
+
+		g = new Ganglinie();
+		for (int i = 0; i < 100; i++) {
+			long x = (long) (Math.random() * 1000);
+			int y = (int) (Math.random() * 1000);
+			g.set(x, y);
+		}
+
+		spline = new BSpline(g);
+
+		// Rechnen
+		for (int k = 1; k < 10; k++) {
+			spline.setOrdnung(k);
+			for (long t = g.getIntervall().start; t <= g.getIntervall().ende; t += 1) {
+				assertEquals(t, spline.get(t).zeitstempel);
+			}
 		}
 	}
 
