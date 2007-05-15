@@ -64,11 +64,95 @@ public class Ganglinie implements Approximation {
 	private Approximation approximation = new Polyline(this);
 
 	/**
+	 * Vervollst&auml;ndigt die St&uuml;tzstellenmengen zweier Ganglinien. Dabei
+	 * werden fehlende Stu&uuml;tzstellen mittels Approximation durch eine
+	 * Polylinie erg&auml;nzt.
+	 * <p>
+	 * Die beiden Parameter der Methode werden modifiziert!
+	 * 
+	 * @param g1
+	 *            Erste Ganglinie
+	 * @param g2
+	 *            Zweite Ganglinie
+	 */
+	public static void vervollstaendigeStuetzstellen(Ganglinie g1, Ganglinie g2) {
+		Polyline p1, p2;
+
+		p1 = new Polyline(g1);
+		p2 = new Polyline(g2);
+
+		for (Stuetzstelle s : g1.getStuetzstellen()) {
+			if (!g2.existsStuetzstelle(s.zeitstempel)) {
+				try {
+					g2.set(p2.get(s.zeitstempel));
+				} catch (UndefiniertException e) {
+					// TODO Auto-generated catch block
+					System.err.println(e.getLocalizedMessage());
+				}
+			}
+		}
+
+		for (Stuetzstelle s : g2.getStuetzstellen()) {
+			if (!g1.existsStuetzstelle(s.zeitstempel)) {
+				try {
+					g1.set(p1.get(s.zeitstempel));
+				} catch (UndefiniertException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	/**
+	 * Addiert zwei Ganglinien, indem die Werte der vervollst&auml;ndigten
+	 * St&uuml;tzstellenmenge addiert werden. Die beiden Ganglinien werden dabei
+	 * nicht ver&auml;ndert.
+	 * 
+	 * @param g1
+	 *            Erste Ganglinie
+	 * @param g2
+	 *            Zweite Ganglinie
+	 * @return Die "Summe" der beiden Ganglinien
+	 */
+	public static Ganglinie addiere(Ganglinie g1, Ganglinie g2) {
+		Ganglinie g, gx1, gx2;
+
+		gx1 = new Ganglinie(g1);
+		gx2 = new Ganglinie(g2);
+		vervollstaendigeStuetzstellen(gx1, gx2);
+		g = new Ganglinie();
+
+		assert gx1.anzahlStuetzstellen() == gx2.anzahlStuetzstellen();
+		
+		for (int i = 0; i < gx1.anzahlStuetzstellen(); i++) {
+			// TODO
+		}
+		
+		return g;
+	}
+
+	/**
 	 * Konstruiert eine Ganglinie ohne St&uuml;tzstellen.
 	 */
 	public Ganglinie() {
 		stuetzstellen = new TreeSet<Stuetzstelle>();
 		listeners = new EventListenerList();
+	}
+
+	/**
+	 * Kopierkonstruktor. Es werden die St&uuml;tzstellen und die Art der
+	 * Approximation &uuml;bernommen.
+	 * 
+	 * @param ganglinie
+	 *            Die zu kopierende Ganglinie
+	 */
+	public Ganglinie(Ganglinie ganglinie) {
+		this();
+		for (Stuetzstelle s : ganglinie.getStuetzstellen()) {
+			set(s);
+		}
+		setApproximation(ganglinie.approximation.getClass());
 	}
 
 	/**
@@ -110,7 +194,11 @@ public class Ganglinie implements Approximation {
 	 *         St&uuml;tzstelle berechnet werden muss
 	 */
 	public boolean existsStuetzstelle(long zeitstempel) {
-		return getStuetzstelle(zeitstempel) != null;
+		try {
+			return getStuetzstelle(zeitstempel) != null;
+		} catch (UndefiniertException e) {
+			return false;
+		}
 	}
 
 	/**
@@ -132,13 +220,14 @@ public class Ganglinie implements Approximation {
 	 *            Der Zeitstempel zu dem eine St&uuml;tzstelle gesucht wird
 	 * @return Die gesuchte St&uuml;tzstelle oder {@code null}, wenn keine
 	 *         existiert
-	 * @throws IllegalArgumentException
+	 * @throws UndefiniertException
 	 *             Wenn der Zeitstempel nicht im G&uuml;ltigkeitsbereich der
 	 *             Ganglinie liegt
 	 */
-	public Stuetzstelle getStuetzstelle(long zeitstempel) {
+	public Stuetzstelle getStuetzstelle(long zeitstempel)
+			throws UndefiniertException {
 		if (!isValid(zeitstempel)) {
-			throw new IllegalArgumentException(
+			throw new UndefiniertException(
 					"Der Zeitstempel liegt nicht im Gültigkeitsbereich der Ganglinie.");
 		}
 
