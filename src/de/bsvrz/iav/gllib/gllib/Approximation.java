@@ -53,8 +53,11 @@ public interface Approximation {
 	 * @param zeitstempel
 	 *            Zeitstempel
 	 * @return Wert als St&uuml;tzstelle
+	 * @throws UndefiniertException
+	 *             Wird geworfen, wenn der Wert der St&uuml;tzstelle zu dem
+	 *             angefragten Zeitpunkt undefiniert ist.
 	 */
-	Stuetzstelle get(long zeitstempel);
+	Stuetzstelle get(long zeitstempel) throws UndefiniertException;
 
 	/**
 	 * Gibt eine Interpolation der Approximation zur&uuml;ck. N&uuml;tzlich

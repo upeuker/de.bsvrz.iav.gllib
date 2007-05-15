@@ -26,9 +26,11 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
+import java.util.List;
+import java.util.ListIterator;
+
 import de.bsvrz.iav.gllib.gllib.events.GanglinienEvent;
 import de.bsvrz.iav.gllib.gllib.events.GanglinienListener;
-import de.bsvrz.sys.funclib.bitctrl.i18n.Messages;
 
 /**
  * Approximation einer Ganglinie mit Hilfe eines B-Splines beliebiger Ordung.
@@ -39,8 +41,11 @@ import de.bsvrz.sys.funclib.bitctrl.i18n.Messages;
 public class BSpline extends AbstractApproximation implements
 		GanglinienListener {
 
+	/** Enth&auml;lt nur die definierten St&uuml;tzstellen der Ganglinie. */
+	private Stuetzstelle[] stuetzstellen;
+
 	/** Die Ordnung des B-Splines. */
-	private int ordnung = 5;
+	private short ordnung = 5;
 
 	/** Grenzstellen der Interpolationsintervalle, aufsteigend sortiert. */
 	private int[] t;
@@ -61,9 +66,8 @@ public class BSpline extends AbstractApproximation implements
 	 * @param ordnung
 	 *            Die Ordung die der B-Spline besitzen soll
 	 */
-	public BSpline(Ganglinie ganglinie, int ordnung) {
-		setGanglinie(ganglinie);
-		setOrdnung(ordnung);
+	public BSpline(Ganglinie ganglinie, short ordnung) {
+		set(ganglinie, ordnung);
 	}
 
 	/**
@@ -81,7 +85,7 @@ public class BSpline extends AbstractApproximation implements
 	 * 
 	 * @return Ordnung
 	 */
-	public int getOrdnung() {
+	public short getOrdnung() {
 		return ordnung;
 	}
 
@@ -91,14 +95,8 @@ public class BSpline extends AbstractApproximation implements
 	 * @param ordnung
 	 *            Ordnung
 	 */
-	public void setOrdnung(int ordnung) {
-		if (ordnung < 1 || ordnung > ganglinie.anzahlStuetzstellen()) {
-			throw new IllegalArgumentException(Messages.get(
-					GlLibMessages.BadBSplineDegree, ordnung));
-		}
-
-		this.ordnung = ordnung;
-		bestimmeT();
+	public void setOrdnung(short ordnung) {
+		set(ganglinie, ordnung);
 	}
 
 	/**
@@ -106,17 +104,17 @@ public class BSpline extends AbstractApproximation implements
 	 */
 	public void ganglinieAktualisiert(GanglinienEvent e) {
 		if (e.getSource() == ganglinie) {
-			bestimmeT();
+			setGanglinie((Ganglinie) e.getSource());
 		}
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public Stuetzstelle get(long zeitstempel) {
+	public Stuetzstelle get(long zeitstempel) throws UndefiniertException {
 		if (!ganglinie.isValid(zeitstempel)) {
-			// Zeitstempel gehört nicht zur Ganglinie
-			return null;
+			throw new UndefiniertException("Die Ganglinie ist zum Zeitpunkt "
+					+ zeitstempel + " undefiniert.");
 		}
 
 		double t0, f;
@@ -151,16 +149,39 @@ public class BSpline extends AbstractApproximation implements
 	}
 
 	/**
-	 * Ruft den Setter der Superklasse auf und aktuallsiert anschlie&szlig;end
-	 * die B-Spline-Paraemter. Es wird ebenfalls der Ganglinie diese
-	 * Approximation als GanglinienListener hinzugef&uuml;gt.
-	 * <p>
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void setGanglinie(Ganglinie ganglinie) {
+		set(ganglinie, ordnung);
+	}
+
+	/**
+	 * Ruft den Setter {@link Approximation#setGanglinie(Ganglinie)} der
+	 * Superklasse auf und aktuallsiert anschlie&szlig;end die
+	 * B-Spline-Paraemter. Es wird ebenfalls der Ganglinie diese Approximation
+	 * als GanglinienListener hinzugef&uuml;gt.
+	 * 
+	 * @param ganglinie
+	 *            Die Ganglinie, die approximiert werden soll
+	 * @param k
+	 *            Die Ordnung des B-Spline
+	 * @throws IllegalArgumentException
+	 *             Wenn die Ordung kleiner 1 oder gr&ouml;&szlig;er der Anzahl
+	 *             der definierten St&uuml;tzstellen ist.
+	 */
+	public void set(Ganglinie ganglinie, short k) {
 		super.setGanglinie(ganglinie);
 		ganglinie.addGanglinienListener(this);
+
+		bestimmeStuetzstellen();
+
+		if (k < 1 || k > stuetzstellen.length) {
+			throw new IllegalArgumentException(
+					"Die Ordnung muss zwischen 1 und der Anzahl der definierten Stützstellen liegen.");
+		}
+
+		ordnung = k;
 		bestimmeT();
 	}
 
@@ -175,10 +196,33 @@ public class BSpline extends AbstractApproximation implements
 		double t0;
 
 		t0 = zeitstempel;
-		t0 /= ganglinie.getIntervall().breite;
+		t0 /= stuetzstellen[stuetzstellen.length - 1].zeitstempel
+				- stuetzstellen[0].zeitstempel;
 		t0 *= t[t.length - 1];
 
 		return t0;
+	}
+
+	/**
+	 * Bestimmt die Liste der verwendeten St&uuml;tzstellen. Die Liste
+	 * entspricht der Ganglinie, abz&uuml;glich der undefinierten
+	 * St&uuml;tzstellen.
+	 */
+	private void bestimmeStuetzstellen() {
+		List<Stuetzstelle> stuetzstellenListe;
+		ListIterator<Stuetzstelle> iterator;
+
+		stuetzstellenListe = ganglinie.getStuetzstellen();
+		iterator = stuetzstellenListe.listIterator();
+		while (iterator.hasNext()) {
+			Stuetzstelle s;
+
+			s = iterator.next();
+			if (s.wert == null) {
+				iterator.remove();
+			}
+		}
+		stuetzstellen = stuetzstellenListe.toArray(new Stuetzstelle[0]);
 	}
 
 	/**
@@ -186,14 +230,14 @@ public class BSpline extends AbstractApproximation implements
 	 * mit n&nbsp;=&nbsp;Knotenanzahl und k&nbsp;=&nbsp;Ordnung des B-Spline.
 	 */
 	private void bestimmeT() {
-		t = new int[ganglinie.anzahlStuetzstellen() + ordnung];
+		t = new int[stuetzstellen.length + ordnung];
 		for (int j = 0; j < t.length; j++) {
 			if (j < ordnung) {
 				t[j] = 0;
-			} else if (ordnung <= j && j <= ganglinie.anzahlStuetzstellen() - 1) {
+			} else if (ordnung <= j && j <= stuetzstellen.length - 1) {
 				t[j] = j - ordnung + 1;
-			} else if (j > ganglinie.anzahlStuetzstellen() - 1) {
-				t[j] = ganglinie.anzahlStuetzstellen() - 1 - ordnung + 2;
+			} else if (j > stuetzstellen.length - 1) {
+				t[j] = stuetzstellen.length - 1 - ordnung + 2;
 			} else {
 				throw new IllegalStateException();
 			}
@@ -262,10 +306,9 @@ public class BSpline extends AbstractApproximation implements
 
 		// Ränder der Ganglinie werden 1:1 übernommen
 		if (t0 <= t[0]) {
-			return ganglinie.getStuetzstellen().get(0);
+			return stuetzstellen[0];
 		} else if (t0 >= t[t.length - 1]) {
-			return ganglinie.getStuetzstellen().get(
-					ganglinie.anzahlStuetzstellen() - 1);
+			return stuetzstellen[stuetzstellen.length - 1];
 		}
 
 		bx = by = 0;
@@ -276,12 +319,11 @@ public class BSpline extends AbstractApproximation implements
 			double n;
 
 			n = n(j, ordnung, t0);
-			bx += ganglinie.getStuetzstellen().get(j).zeitstempel * n;
-			by += ganglinie.getStuetzstellen().get(j).wert * n;
+			bx += stuetzstellen[j].zeitstempel * n;
+			by += stuetzstellen[j].wert * n;
 
 		}
 
 		return new Stuetzstelle(Math.round(bx), (int) Math.round(by));
 	}
-
 }

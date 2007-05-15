@@ -221,21 +221,74 @@ public class Ganglinie implements Approximation {
 	}
 
 	/**
+	 * Bestimmt die Intervalle in denen die Ganglinie definiert ist.
+	 * 
+	 * @return Liste von Intervallen
+	 */
+	public List<Intervall> getIntervalle() {
+		List<Intervall> intervalle;
+
+		intervalle = new ArrayList<Intervall>();
+
+		if (stuetzstellen.size() > 0) {
+			Stuetzstelle s0, s1; // Intervallbeginn
+
+			s0 = null;
+			s1 = null;
+			for (Stuetzstelle s : stuetzstellen) {
+				if (s0 == null && s.wert != null) {
+					s0 = s;
+				}
+				if (s.wert == null) {
+					if (s0 != null && s1 != null) {
+						long start, ende;
+
+						start = s0.zeitstempel;
+						ende = s1.zeitstempel;
+						intervalle.add(new Intervall(start, ende));
+						s0 = null;
+						s1 = null;
+					}
+				} else if (s.equals(stuetzstellen.last())) {
+					if (s0 != null && s1 != null) {
+						long start, ende;
+
+						start = s0.zeitstempel;
+						ende = s.zeitstempel;
+						intervalle.add(new Intervall(start, ende));
+					}
+				} else {
+					if (s.wert != null) {
+						s1 = s;
+					}
+				}
+			}
+		}
+
+		return intervalle;
+	}
+
+	/**
 	 * Pr&uuml;ft ob ein Zeitstempel im Definitionsbereich der Ganglinie liegt.
 	 * 
 	 * @param zeitstempel
 	 *            zu pr&uuml;fender Zeitstempel
-	 * @return <code>true</code>, wenn <code>zeitstempel</code> zwischen
-	 *         den Zeitstempeln der ersten und letzten St&uuml;tzstelle liegt,
-	 *         sonst <code>false</code>
+	 * @return <code>true</code>, wenn <code>zeitstempel</code> im
+	 *         definierten Bereich der Ganglinie liegt
+	 * @see #getIntervalle()
 	 */
 	public boolean isValid(long zeitstempel) {
-		if (stuetzstellen.size() == 0) {
-			return false;
+		boolean ok;
+
+		ok = false;
+		for (Intervall i : getIntervalle()) {
+			if (i.isEnthalten(zeitstempel)) {
+				ok = true;
+				break;
+			}
 		}
 
-		return stuetzstellen.first().zeitstempel <= zeitstempel
-				&& zeitstempel <= stuetzstellen.last().zeitstempel;
+		return ok;
 	}
 
 	/**
@@ -320,17 +373,12 @@ public class Ganglinie implements Approximation {
 	}
 
 	/**
-	 * Gibt die St&uuml;tzstelle zu einem bestimmten Zeitstempel zur&uuml;ck. Es
-	 * wird zur Bestimmung der St&uuml;tzstelle die aktuelle Approximation
+	 * Es wird zur Bestimmung der St&uuml;tzstelle die aktuelle Approximation
 	 * verwendet.
 	 * <p>
 	 * {@inheritDoc}
-	 * 
-	 * @param zeitstempel
-	 *            Ein Zeitpunkt
-	 * @return Die St&uuml;tzstelle zum Zeitpunkt
 	 */
-	public Stuetzstelle get(long zeitstempel) {
+	public Stuetzstelle get(long zeitstempel) throws UndefiniertException {
 		return approximation.get(zeitstempel);
 	}
 

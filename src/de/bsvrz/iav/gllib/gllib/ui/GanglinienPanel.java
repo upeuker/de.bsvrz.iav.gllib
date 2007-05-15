@@ -32,7 +32,7 @@ public class GanglinienPanel extends JPanel {
 
 	private boolean bspline = false;
 
-	private int ordnung = 1;
+	private short ordnung = 1;
 
 	public GanglinienPanel(Ganglinie ganglinie) {
 		setBackground(Color.white);
@@ -88,7 +88,8 @@ public class GanglinienPanel extends JPanel {
 		// Stützstellen zeichnen
 		g.setColor(Color.red);
 		for (Stuetzstelle s : ganglinie.getStuetzstellen()) {
-			g.fillOval((int) s.zeitstempel - 5, s.wert - 5, 10, 10);
+			if (s.wert != null)
+				g.fillOval((int) s.zeitstempel - 5, s.wert - 5, 10, 10);
 		}
 
 		// Approximationen zeichnen
@@ -109,13 +110,13 @@ public class GanglinienPanel extends JPanel {
 	}
 
 	private void zeichneIntervalle(Graphics g, BSpline spline, Color farbe) {
-//		long[] intGrenzen;
-//
-//		intGrenzen = spline.getInterpolationsintervalle();
-//		for (int i = 0; i < intGrenzen.length; i++) {
-//			g.setColor(farbe);
-//			g.drawLine((int) intGrenzen[i], 0, (int) intGrenzen[i], 1024);
-//		}
+		// long[] intGrenzen;
+		//
+		// intGrenzen = spline.getInterpolationsintervalle();
+		// for (int i = 0; i < intGrenzen.length; i++) {
+		// g.setColor(farbe);
+		// g.drawLine((int) intGrenzen[i], 0, (int) intGrenzen[i], 1024);
+		// }
 	}
 
 	private void zeichne(Graphics g, SortedSet<Stuetzstelle> stuetzstellen,
@@ -162,7 +163,7 @@ public class GanglinienPanel extends JPanel {
 	}
 
 	public void setOrdnung(int ordnung) {
-		this.ordnung = ordnung;
+		this.ordnung = (short) ordnung;
 	}
 
 }

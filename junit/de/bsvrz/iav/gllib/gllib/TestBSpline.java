@@ -20,7 +20,7 @@ public class TestBSpline {
 	}
 
 	@Test
-	public void testGetA() {
+	public void testGetA() throws Exception {
 		Ganglinie g;
 		BSpline spline;
 
@@ -35,7 +35,7 @@ public class TestBSpline {
 
 		// Rechnen
 		// for (long t = 0; t <= 900; t += 1) {
-		for (int k = 1; k <= g.anzahlStuetzstellen(); k++) {
+		for (short k = 1; k <= g.anzahlStuetzstellen(); k++) {
 			spline.setOrdnung(k);
 			for (long t = g.getIntervall().start; t <= g.getIntervall().ende; t += 1) {
 				assertEquals(t, spline.get(t).zeitstempel);
@@ -44,7 +44,7 @@ public class TestBSpline {
 	}
 
 	@Test
-	public void testGetB() {
+	public void testGetB() throws Exception {
 		Ganglinie g;
 		BSpline spline;
 
@@ -58,7 +58,7 @@ public class TestBSpline {
 		spline = new BSpline(g);
 
 		// Rechnen
-		for (int k = 1; k < 10; k++) {
+		for (short k = 1; k < 10; k++) {
 			spline.setOrdnung(k);
 			for (long t = g.getIntervall().start; t <= g.getIntervall().ende; t += 1) {
 				assertEquals(t, spline.get(t).zeitstempel);

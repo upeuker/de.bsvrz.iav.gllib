@@ -60,10 +60,10 @@ public class Polyline extends AbstractApproximation {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Stuetzstelle get(long zeitstempel) {
+	public Stuetzstelle get(long zeitstempel) throws UndefiniertException {
 		if (!ganglinie.isValid(zeitstempel)) {
-			// Zeitstempel gehört nicht zur Ganglinie
-			return null;
+			throw new UndefiniertException("Die Ganglinie ist zum Zeitpunkt "
+					+ zeitstempel + " undefiniert.");
 		}
 
 		if (ganglinie.existsStuetzstelle(zeitstempel)) {

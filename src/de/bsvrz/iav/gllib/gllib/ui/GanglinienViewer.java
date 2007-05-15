@@ -37,6 +37,7 @@ public class GanglinienViewer extends JFrame implements ChangeListener {
 		g.set(400, 200);
 		g.set(600, 400);
 		g.set(900, 100);
+		g.set(500, null);
 
 		new GanglinienViewer(g);
 	}
@@ -68,6 +69,8 @@ public class GanglinienViewer extends JFrame implements ChangeListener {
 		SpinnerListModel modell = new SpinnerListModel(new Integer[] { 1, 2, 3,
 				4, 5, 6, 7, 8, 9, 10 });
 		ordnung = new JSpinner(modell);
+		ordnung.setValue(4);
+		ganglinie.setOrdnung(4);
 		ordnung.setPreferredSize(new Dimension(50, 20));
 		ordnung.addChangeListener(this);
 

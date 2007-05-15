@@ -71,7 +71,11 @@ public abstract class AbstractApproximation implements Approximation {
 		// Stützstellen an den Intervallgrenzen bestimmen
 		zeitstempel = ganglinie.getIntervall().start;
 		while (zeitstempel < ganglinie.getIntervall().ende) {
-			interpolation.add(get(zeitstempel));
+			try {
+				interpolation.add(get(zeitstempel));
+			} catch (UndefiniertException e) {
+				// einfach ignorieren
+			}
 			zeitstempel += intervallBreite;
 		}
 

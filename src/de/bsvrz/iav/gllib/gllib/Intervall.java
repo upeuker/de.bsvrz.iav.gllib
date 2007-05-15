@@ -93,6 +93,48 @@ public class Intervall {
 	}
 
 	/**
+	 * Pr&uuml;ft ob ein Wert im Intervall enhalten ist.
+	 * 
+	 * @param wert
+	 *            Ein Wert
+	 * @return {@code true}, wenn der Wert innerhalb des Intervalls oder auf
+	 *         einer der Intervallgrenzen liegt
+	 */
+	public boolean isEnthalten(long wert) {
+		return start <= wert && wert <= ende;
+	}
+
+	/**
+	 * Pr&uuml;ft ob sich ein Wert innerhalb der Intervallgrenzen befindet.
+	 * 
+	 * @param wert
+	 *            Ein Wert
+	 * @return {@code true}, wenn der Wert innerhalb des Intervalls, aber nicht
+	 *         auf einer der Intervallgrenzen liegt
+	 */
+	public boolean isInnerhalb(long wert) {
+		return start < wert && wert < ende;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see java.lang.Object#equals(Object)
+	 */
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof Intervall) {
+			Intervall intervall = (Intervall) o;
+
+			if (start == intervall.start && ende == intervall.ende) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 * 
 	 * @see java.lang.Object#toString()

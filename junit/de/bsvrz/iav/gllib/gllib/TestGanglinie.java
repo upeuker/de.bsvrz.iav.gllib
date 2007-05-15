@@ -26,10 +26,13 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -99,6 +102,35 @@ public class TestGanglinie {
 		assertNull(intervall);
 	}
 
+	@Test
+	public void testGetIntervalle() {
+		List<Intervall> intervalle;
+
+		intervalle = ganglinie.getIntervalle();
+		assertEquals(1, intervalle.size());
+		assertEquals(ganglinie.getIntervall(), intervalle.get(0));
+
+		ganglinie.set(50, null);
+		intervalle = ganglinie.getIntervalle();
+		assertEquals(2, intervalle.size());
+		assertEquals(new Intervall(0, 40), intervalle.get(0));
+		assertEquals(new Intervall(60, 90), intervalle.get(1));
+
+		ganglinie.set(20, null);
+		intervalle = ganglinie.getIntervalle();
+		assertEquals(3, intervalle.size());
+		assertEquals(new Intervall(0, 0), intervalle.get(0));
+		assertEquals(new Intervall(30, 40), intervalle.get(1));
+		assertEquals(new Intervall(60, 90), intervalle.get(2));
+
+		ganglinie.set(10, null);
+		intervalle = ganglinie.getIntervalle();
+		assertEquals(3, intervalle.size());
+		assertEquals(new Intervall(0, 0), intervalle.get(0));
+		assertEquals(new Intervall(30, 40), intervalle.get(1));
+		assertEquals(new Intervall(60, 90), intervalle.get(2));
+	}
+
 	/**
 	 * Pr&uuml;ft ob konkrete Zeitstempel innerhalb der Ganglinien liegen.
 	 */
@@ -127,7 +159,7 @@ public class TestGanglinie {
 	 * Testet die Suche nach St&uuml;tzstellen.
 	 */
 	@Test
-	public void testGetStuetzstelle() {
+	public void testGetStuetzstelle() throws Exception {
 		Stuetzstelle s, s0;
 
 		// existierende Stützstelle
@@ -141,8 +173,13 @@ public class TestGanglinie {
 		assertEquals(s0, s);
 
 		// außerhalb der Ganglinie
-		s = ganglinie.get(100);
-		assertNull(s);
+		try {
+			s = ganglinie.get(100);
+			fail();
+		} catch (UndefiniertException e) {
+			// Alles O.k.
+		}
+
 	}
 
 	/**

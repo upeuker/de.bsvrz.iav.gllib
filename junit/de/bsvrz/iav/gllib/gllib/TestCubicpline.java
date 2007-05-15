@@ -20,7 +20,7 @@ public class TestCubicpline {
 	}
 
 	@Test
-	public void testGet() {
+	public void testGet() throws Exception {
 		CubicSpline spline;
 
 		System.out.println("Cubic Spline:");
