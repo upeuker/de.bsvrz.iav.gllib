@@ -29,6 +29,8 @@ package de.bsvrz.iav.gllib.gllib;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import de.bsvrz.iav.gllib.gllib.util.UndefiniertException;
+
 /**
  * Implementiert nur die Property <code>Ganglinie</code> der Schnittstelle.
  * 

@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.TreeSet;
 
+import de.bsvrz.iav.gllib.gllib.util.Intervall;
 import de.bsvrz.sys.funclib.bitctrl.i18n.Messages;
 
 /**

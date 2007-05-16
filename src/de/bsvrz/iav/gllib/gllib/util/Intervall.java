@@ -24,8 +24,9 @@
  * mailto: info@bitctrl.de
  */
 
-package de.bsvrz.iav.gllib.gllib;
+package de.bsvrz.iav.gllib.gllib.util;
 
+import de.bsvrz.iav.gllib.gllib.GlLibMessages;
 import de.bsvrz.sys.funclib.bitctrl.i18n.Messages;
 
 /**

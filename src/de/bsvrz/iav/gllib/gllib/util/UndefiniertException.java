@@ -24,7 +24,7 @@
  * mailto: info@bitctrl.de
  */
 
-package de.bsvrz.iav.gllib.gllib;
+package de.bsvrz.iav.gllib.gllib.util;
 
 /**
  * Beschreibt eine Ausnahme, die eintritt, wenn ein Wert angefragt wird, der

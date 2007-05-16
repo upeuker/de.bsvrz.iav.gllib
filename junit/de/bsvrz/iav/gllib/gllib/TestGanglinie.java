@@ -31,11 +31,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static de.bsvrz.iav.gllib.gllib.Ganglinie.*;
 
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import de.bsvrz.iav.gllib.gllib.util.Intervall;
+import de.bsvrz.iav.gllib.gllib.util.UndefiniertException;
 
 /**
  * Testet relevante Funktionen der Klasse.
@@ -180,6 +184,48 @@ public class TestGanglinie {
 			// Alles O.k.
 		}
 
+	}
+
+	@Test
+	public void testVervollstaendigeStuetzstellen() {
+		Ganglinie g1, g2;
+		Stuetzstelle s;
+
+		g1 = new Ganglinie();
+		g1.set(0, 0);
+		g1.set(40, 20);
+		g1.set(90, 10);
+
+		g2 = new Ganglinie();
+		g2.set(30, 30);
+		g2.set(60, 40);
+
+		vervollstaendigeStuetzstellen(g1, g2);
+
+		s = new Stuetzstelle(0);
+		try {
+			// Erste Ganglinie prüfen
+			s = new Stuetzstelle(0, 0);
+			assertEquals(s, g1.getStuetzstelle(0));
+			s = new Stuetzstelle(30, 15);
+			assertEquals(s, g1.getStuetzstelle(30));
+			s = new Stuetzstelle(40, 20);
+			assertEquals(s, g1.getStuetzstelle(40));
+			s = new Stuetzstelle(60, 16);
+			assertEquals(s, g1.getStuetzstelle(60));
+			s = new Stuetzstelle(90, 10);
+			assertEquals(s, g1.getStuetzstelle(90));
+			
+			// Zweite Ganglinie prüfen
+			s = new Stuetzstelle(30, 30);
+			assertEquals(s, g2.getStuetzstelle(30));
+			s = new Stuetzstelle(40, 33);
+			assertEquals(s, g2.getStuetzstelle(40));
+			s = new Stuetzstelle(60, 40);
+			assertEquals(s, g2.getStuetzstelle(60));
+		} catch (UndefiniertException e) {
+			fail(s.toString());
+		}
 	}
 
 	/**

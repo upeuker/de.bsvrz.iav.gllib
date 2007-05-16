@@ -28,6 +28,8 @@ package de.bsvrz.iav.gllib.gllib;
 
 import java.util.SortedSet;
 
+import de.bsvrz.iav.gllib.gllib.util.UndefiniertException;
+
 /**
  * Schnittstelle f&uuml;r alle Approximationsmethoden von Ganglinien.
  * Implementierende Klassen sollten einen parameterlosen Konstruktor besitzen.

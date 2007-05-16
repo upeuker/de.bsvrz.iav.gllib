@@ -31,6 +31,7 @@ import java.util.ListIterator;
 
 import de.bsvrz.iav.gllib.gllib.events.GanglinienEvent;
 import de.bsvrz.iav.gllib.gllib.events.GanglinienListener;
+import de.bsvrz.iav.gllib.gllib.util.UndefiniertException;
 
 /**
  * Approximation einer Ganglinie mit Hilfe eines B-Splines beliebiger Ordung.

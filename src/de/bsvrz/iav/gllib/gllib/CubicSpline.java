@@ -37,6 +37,7 @@ import java.util.ListIterator;
 
 import de.bsvrz.iav.gllib.gllib.events.GanglinienEvent;
 import de.bsvrz.iav.gllib.gllib.events.GanglinienListener;
+import de.bsvrz.iav.gllib.gllib.util.UndefiniertException;
 import de.bsvrz.sys.funclib.bitctrl.math.RationaleZahl;
 import de.bsvrz.sys.funclib.bitctrl.math.algebra.Gauss;
 import de.bsvrz.sys.funclib.bitctrl.math.algebra.Matrix;

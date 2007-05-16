@@ -27,6 +27,7 @@
 package de.bsvrz.iav.gllib.gllib;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
@@ -36,6 +37,8 @@ import javax.swing.event.EventListenerList;
 
 import de.bsvrz.iav.gllib.gllib.events.GanglinienEvent;
 import de.bsvrz.iav.gllib.gllib.events.GanglinienListener;
+import de.bsvrz.iav.gllib.gllib.util.Intervall;
+import de.bsvrz.iav.gllib.gllib.util.UndefiniertException;
 import de.bsvrz.sys.funclib.bitctrl.i18n.Messages;
 
 /**
@@ -47,7 +50,6 @@ import de.bsvrz.sys.funclib.bitctrl.i18n.Messages;
  * @author BitrCtrl, Schumann
  * @version $Id$
  */
-@SuppressWarnings("serial")
 public class Ganglinie implements Approximation {
 
 	/** Liste aller Listener. */
@@ -124,11 +126,11 @@ public class Ganglinie implements Approximation {
 		g = new Ganglinie();
 
 		assert gx1.anzahlStuetzstellen() == gx2.anzahlStuetzstellen();
-		
+
 		for (int i = 0; i < gx1.anzahlStuetzstellen(); i++) {
 			// TODO
 		}
-		
+
 		return g;
 	}
 
@@ -150,9 +152,25 @@ public class Ganglinie implements Approximation {
 	public Ganglinie(Ganglinie ganglinie) {
 		this();
 		for (Stuetzstelle s : ganglinie.getStuetzstellen()) {
-			set(s);
+			stuetzstellen.add(s);
 		}
 		setApproximation(ganglinie.approximation.getClass());
+		fireGanglinienAktualisierung();
+	}
+
+	/**
+	 * Kopierkonstruktor. Es werden die St&uuml;tzstellen aus der
+	 * <em>Collection</em> &uuml;bernommen.
+	 * 
+	 * @param stuetzstellen
+	 *            Die St&uuml;tzstellen der Ganglinie
+	 */
+	public Ganglinie(Collection<Stuetzstelle> stuetzstellen) {
+		this();
+		for (Stuetzstelle s : stuetzstellen) {
+			this.stuetzstellen.add(s);
+		}
+		fireGanglinienAktualisierung();
 	}
 
 	/**
@@ -241,6 +259,10 @@ public class Ganglinie implements Approximation {
 
 		return null;
 	}
+	
+	public Stuetzstelle getStuetzstelle(int index) {
+		return stuetzstellen.toArray(new Stuetzstelle[0])[index];
+	}
 
 	/**
 	 * Nimmt eine St&uuml;tzstelle in die Ganglinie auf. Existiert zu dem
@@ -257,6 +279,21 @@ public class Ganglinie implements Approximation {
 		}
 
 		stuetzstellen.add(s);
+		fireGanglinienAktualisierung();
+	}
+
+	/**
+	 * &Uuml;bernimmt alle St&uuml;tzstellen aus der <em>Collection</em>. Die
+	 * vorhandenen St&uuml;tzstellen werden zuvor gel&ouml;scht.
+	 * 
+	 * @param menge
+	 *            Die neuen St&uuml;tzstellen der Ganglinie
+	 */
+	public void set(Collection<Stuetzstelle> menge) {
+		menge.clear();
+		for (Stuetzstelle s : menge) {
+			stuetzstellen.add(s);
+		}
 		fireGanglinienAktualisierung();
 	}
 
