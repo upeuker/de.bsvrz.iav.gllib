@@ -926,6 +926,15 @@ public class Ganglinie implements Approximation {
 	}
 
 	/**
+	 * Die Ganglinie als Approximation zu&uuml;ck.
+	 * 
+	 * @return Approximation der Ganglinie
+	 */
+	public Approximation getApproximation() {
+		return approximation;
+	}
+
+	/**
 	 * Ersetzt die aktuellen St&uuml;tzstellen mit denen der &uuml;bergebenen
 	 * Ganglinie.
 	 * 
