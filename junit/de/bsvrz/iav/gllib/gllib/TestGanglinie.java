@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weiï¿½enfelser Straï¿½e 67
+ * Weiï¿½enfelser Straße 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -26,12 +26,12 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
-import static org.junit.Assert.*;
+import static de.bsvrz.iav.gllib.gllib.Ganglinie.vervollstaendigeStuetzstellen;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static de.bsvrz.iav.gllib.gllib.Ganglinie.*;
+import static org.junit.Assert.fail;
 
 import java.util.List;
 
@@ -100,7 +100,7 @@ public class TestGanglinie {
 		assertEquals(0L, intervall.start);
 		assertEquals(90L, intervall.ende);
 
-		// Sonderfall, eine Ganglinie ohne Stï¿½tzstellen
+		// Sonderfall, eine Ganglinie ohne Stützstellen
 		g = new Ganglinie();
 		intervall = g.getIntervall();
 		assertNull(intervall);
@@ -145,40 +145,41 @@ public class TestGanglinie {
 		// davor
 		assertFalse(ganglinie.isValid(-10));
 
-		// dazwischen, auf Stï¿½tzstelle
+		// dazwischen, auf Stützstelle
 		assertTrue(ganglinie.isValid(30));
 
-		// dazwischen, nicht auf Stï¿½tzstelle
+		// dazwischen, nicht auf Stützstelle
 		assertTrue(ganglinie.isValid(50));
 
 		// dahinter
 		assertFalse(ganglinie.isValid(100));
 
-		// Sonderfall, eine Ganglinie ohne Stï¿½tzstellen
+		// Sonderfall, eine Ganglinie ohne Stützstellen
 		g = new Ganglinie();
 		assertFalse(g.isValid(30));
 	}
 
 	/**
 	 * Testet die Suche nach St&uuml;tzstellen.
+	 * @throws UndefiniertException 
 	 */
 	@Test
-	public void testGetStuetzstelle() throws Exception {
+	public void testGetStuetzstelle() throws UndefiniertException {
 		Stuetzstelle s, s0;
 
-		// existierende Stï¿½tzstelle
-		s = ganglinie.getStuetzstelle(30);
+		// existierende Stützstelle
+		s = ganglinie.getStuetzstelle(30L);
 		assertEquals(s2, s);
 
-		// innerhalb der Ganglinie, aber keine Stï¿½tzstelle
+		// innerhalb der Ganglinie, aber keine Stützstelle
 		ganglinie.setApproximation(Polyline.class);
-		s = ganglinie.get(50);
+		s = ganglinie.get(50L);
 		s0 = new Stuetzstelle(50, 30);
 		assertEquals(s0, s);
 
-		// auï¿½erhalb der Ganglinie
+		// außerhalb der Ganglinie
 		try {
-			s = ganglinie.get(100);
+			s = ganglinie.get(100L);
 			fail();
 		} catch (UndefiniertException e) {
 			// Alles O.k.
@@ -204,7 +205,7 @@ public class TestGanglinie {
 
 		s = new Stuetzstelle(0);
 		try {
-			// Erste Ganglinie prï¿½fen
+			// Erste Ganglinie prüfen
 			s = new Stuetzstelle(0, 0);
 			assertEquals(s, g1.getStuetzstelle(0L));
 			s = new Stuetzstelle(30, 15);
@@ -215,7 +216,7 @@ public class TestGanglinie {
 			assertEquals(s, g1.getStuetzstelle(60L));
 			s = new Stuetzstelle(90, 10);
 			assertEquals(s, g1.getStuetzstelle(90L));
-			
+
 			// Zweite Ganglinie prï¿½fen
 			s = new Stuetzstelle(30, 30);
 			assertEquals(s, g2.getStuetzstelle(30L));

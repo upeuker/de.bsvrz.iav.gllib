@@ -31,13 +31,13 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
-import java.util.TreeSet;
 
 import javax.swing.event.EventListenerList;
 
 import de.bsvrz.iav.gllib.gllib.events.GanglinienEvent;
 import de.bsvrz.iav.gllib.gllib.events.GanglinienListener;
 import de.bsvrz.iav.gllib.gllib.util.Intervall;
+import de.bsvrz.iav.gllib.gllib.util.SortierteListe;
 import de.bsvrz.iav.gllib.gllib.util.UndefiniertException;
 import de.bsvrz.sys.funclib.bitctrl.i18n.Messages;
 
@@ -56,7 +56,7 @@ public class Ganglinie implements Approximation {
 	private final EventListenerList listeners;
 
 	/** Speicher der St&uuml;tzstellen. */
-	private final SortedSet<Stuetzstelle> stuetzstellen;
+	private final SortierteListe<Stuetzstelle> stuetzstellen;
 
 	/**
 	 * Verfahren zur Berechnung der Punkte zwischen den St&uuml;tzstellen.
@@ -138,7 +138,7 @@ public class Ganglinie implements Approximation {
 	 * Konstruiert eine Ganglinie ohne St&uuml;tzstellen.
 	 */
 	public Ganglinie() {
-		stuetzstellen = new TreeSet<Stuetzstelle>();
+		stuetzstellen = new SortierteListe<Stuetzstelle>();
 		listeners = new EventListenerList();
 	}
 
@@ -151,7 +151,7 @@ public class Ganglinie implements Approximation {
 	 */
 	public Ganglinie(Ganglinie ganglinie) {
 		this();
-		for (Stuetzstelle s : ganglinie.getStuetzstellen()) {
+		for (Stuetzstelle s : ganglinie.stuetzstellen) {
 			stuetzstellen.add(s);
 		}
 		setApproximation(ganglinie.approximation.getClass());
@@ -212,11 +212,7 @@ public class Ganglinie implements Approximation {
 	 *         St&uuml;tzstelle berechnet werden muss
 	 */
 	public boolean existsStuetzstelle(long zeitstempel) {
-		try {
-			return getStuetzstelle(zeitstempel) != null;
-		} catch (UndefiniertException e) {
-			return false;
-		}
+		return stuetzstellen.contains(new Stuetzstelle(zeitstempel));
 	}
 
 	/**
@@ -249,19 +245,23 @@ public class Ganglinie implements Approximation {
 					"Der Zeitstempel liegt nicht im Gültigkeitsbereich der Ganglinie.");
 		}
 
-		SortedSet<Stuetzstelle> kopf;
-
-		kopf = stuetzstellen.tailSet(new Stuetzstelle(zeitstempel));
-
-		if (!kopf.isEmpty() && kopf.first().zeitstempel == zeitstempel) {
-			return kopf.first();
+		if (existsStuetzstelle(zeitstempel)) {
+			return stuetzstellen.get(stuetzstellen.indexOf(new Stuetzstelle(
+					zeitstempel)));
 		}
 
 		return null;
 	}
-	
+
+	/**
+	 * Gibt die St&uuml;tzstelle mit dem angegebenen Index zur&uuml;ck.
+	 * 
+	 * @param index
+	 *            Index der gesuchten St&uuml;tzstelle
+	 * @return Die gesuchte St&uuml;tzstelle
+	 */
 	public Stuetzstelle getStuetzstelle(int index) {
-		return stuetzstellen.toArray(new Stuetzstelle[0])[index];
+		return stuetzstellen.get(index);
 	}
 
 	/**
@@ -272,9 +272,7 @@ public class Ganglinie implements Approximation {
 	 *            Die neue Stu&uuml;tzstelle
 	 */
 	public void set(Stuetzstelle s) {
-		if (!stuetzstellen.tailSet(s).isEmpty()
-				&& stuetzstellen.tailSet(s).first().getZeitstempel() == s
-						.getZeitstempel()) {
+		if (stuetzstellen.contains(s)) {
 			stuetzstellen.remove(s);
 		}
 
@@ -290,7 +288,8 @@ public class Ganglinie implements Approximation {
 	 *            Die neuen St&uuml;tzstellen der Ganglinie
 	 */
 	public void set(Collection<Stuetzstelle> menge) {
-		menge.clear();
+		stuetzstellen.clear();
+
 		for (Stuetzstelle s : menge) {
 			stuetzstellen.add(s);
 		}
@@ -432,11 +431,11 @@ public class Ganglinie implements Approximation {
 		s = new Stuetzstelle(zeitstempel);
 		kopf = stuetzstellen.headSet(s);
 
-		if (kopf.isEmpty()) {
-			return null;
+		if (!kopf.isEmpty()) {
+			return kopf.last();
 		}
 
-		return kopf.last();
+		return null;
 	}
 
 	/**
@@ -454,11 +453,11 @@ public class Ganglinie implements Approximation {
 		s = new Stuetzstelle(zeitstempel + 1); // +1 wegen >= von tailSet()
 		kopf = stuetzstellen.tailSet(s);
 
-		if (kopf.isEmpty()) {
-			return null;
+		if (!kopf.isEmpty()) {
+			return kopf.first();
 		}
 
-		return kopf.first();
+		return null;
 	}
 
 	/**

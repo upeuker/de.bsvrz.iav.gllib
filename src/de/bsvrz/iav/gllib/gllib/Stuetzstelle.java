@@ -114,8 +114,8 @@ public class Stuetzstelle implements Comparable<Stuetzstelle> {
 	}
 
 	/**
-	 * Zwei St&uuml;tzstellen sind identisch, wenn Zeitstempel und Wert
-	 * identisch sind.
+	 * Zwei St&uuml;tzstellen sind identisch, wenn die Zeitstempel identisch
+	 * sind. Die Werte werden <em>nicht</em> verglichen.
 	 * 
 	 * {@inheritDoc}
 	 * 
@@ -126,7 +126,7 @@ public class Stuetzstelle implements Comparable<Stuetzstelle> {
 		if (obj instanceof Stuetzstelle) {
 			Stuetzstelle s;
 			s = (Stuetzstelle) obj;
-			return (zeitstempel == s.zeitstempel && wert == s.wert);
+			return (zeitstempel == s.zeitstempel);
 		}
 
 		return false;

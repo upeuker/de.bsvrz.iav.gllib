@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.SortedSet;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -168,9 +169,20 @@ public class TestSortierteListe {
 		assertEquals(0, liste.first());
 	}
 
+	/**
+	 * Testet das Abschneiden des kopfes der Liste.
+	 */
 	@Test
 	public void testHeadSet() {
-		fail("Not yet implemented");
+		SortedSet<Integer> teilmenge;
+
+		teilmenge = liste.headSet(5);
+		assertEquals(5, teilmenge.size());
+		assertTrue(teilmenge.contains(0));
+		assertTrue(teilmenge.contains(1));
+		assertTrue(teilmenge.contains(2));
+		assertTrue(teilmenge.contains(3));
+		assertTrue(teilmenge.contains(4));
 	}
 
 	/**
@@ -181,19 +193,35 @@ public class TestSortierteListe {
 		assertEquals(9, liste.last());
 	}
 
+	/**
+	 * Testet das Herausschneiden von Teillisten.
+	 */
 	@Test
 	public void testSubSet() {
-		fail("Not yet implemented");
+		SortedSet<Integer> teilmenge;
+
+		teilmenge = liste.subSet(4, 7);
+		assertEquals(3, teilmenge.size());
+		assertTrue(teilmenge.contains(4));
+		assertTrue(teilmenge.contains(5));
+		assertTrue(teilmenge.contains(6));
 	}
 
+	/**
+	 * Testet das Abschneiden des Schwanzes der Liste.
+	 */
 	@Test
 	public void testTailSet() {
-		fail("Not yet implemented");
-	}
+		SortedSet<Integer> teilmenge;
 
-	@Test
-	public void testHashCode() {
-		fail("Not yet implemented");
+		teilmenge = liste.tailSet(5);
+		assertEquals(5, teilmenge.size());
+		assertTrue(teilmenge.contains(5));
+		assertTrue(teilmenge.contains(6));
+		assertTrue(teilmenge.contains(7));
+		assertTrue(teilmenge.contains(8));
+		assertTrue(teilmenge.contains(9));
+
 	}
 
 	@Test

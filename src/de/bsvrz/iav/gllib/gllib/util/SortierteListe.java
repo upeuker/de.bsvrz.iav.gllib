@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.RandomAccess;
 import java.util.SortedSet;
 
@@ -274,6 +275,10 @@ public class SortierteListe<E extends Comparable<? super E>> extends
 	 * {@inheritDoc}
 	 */
 	public E first() {
+		if (isEmpty()) {
+			throw new NoSuchElementException();
+		}
+
 		return elementData[0];
 	}
 
@@ -281,6 +286,10 @@ public class SortierteListe<E extends Comparable<? super E>> extends
 	 * {@inheritDoc}
 	 */
 	public SortedSet<E> headSet(E toElement) {
+		if (isEmpty() || toElement.compareTo(first()) < 0) {
+			return new SortierteListe<E>();
+		}
+
 		return subSet(first(), toElement);
 	}
 
@@ -288,6 +297,10 @@ public class SortierteListe<E extends Comparable<? super E>> extends
 	 * {@inheritDoc}
 	 */
 	public E last() {
+		if (isEmpty()) {
+			throw new NoSuchElementException();
+		}
+
 		return elementData[size - 1];
 	}
 
@@ -295,6 +308,10 @@ public class SortierteListe<E extends Comparable<? super E>> extends
 	 * {@inheritDoc}
 	 */
 	public SortedSet<E> subSet(E fromElement, E toElement) {
+		if (fromElement.compareTo(toElement) > 0) {
+			throw new IllegalArgumentException();
+		}
+
 		SortierteListe<E> liste;
 
 		liste = new SortierteListe<E>();
@@ -312,7 +329,16 @@ public class SortierteListe<E extends Comparable<? super E>> extends
 	 * {@inheritDoc}
 	 */
 	public SortedSet<E> tailSet(E fromElement) {
-		return subSet(fromElement, last());
-	}
+		SortedSet<E> tail;
 
+		if (isEmpty() || fromElement.compareTo(last()) > 0) {
+			return new SortierteListe<E>();
+		}
+
+		tail = subSet(fromElement, last());
+		if (size > 0) {
+			tail.add(elementData[size - 1]);
+		}
+		return tail;
+	}
 }

@@ -102,8 +102,8 @@ public class TestStuetzstelle {
 		assertEquals("transitiv, Zeitstempel und Wert", a, c);
 
 		// ungleich
-		a = new Stuetzstelle(1, 734);
-		b = new Stuetzstelle(1, 113);
+		a = new Stuetzstelle(1, 113);
+		b = new Stuetzstelle(3, 113);
 		assertFalse(a.equals(b));
 		assertFalse(b.equals(a));
 		assertFalse(a.equals("Unsinn"));
