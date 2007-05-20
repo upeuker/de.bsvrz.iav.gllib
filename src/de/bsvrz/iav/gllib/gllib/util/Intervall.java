@@ -118,6 +118,22 @@ public class Intervall {
 	}
 
 	/**
+	 * Pr&uuml;ft ob sich zwei Intervalle schneiden. Zwei Intervalle schneiden
+	 * sich, wenn sie mindestens einen Punkt gemeinsam haben (exklusive den
+	 * Intervallgrenzen).
+	 * 
+	 * @param i
+	 *            Ein anderes Intervall
+	 * @return {@code true}, wenn sich dieses Intervall mit dem anderen
+	 *         schneidet
+	 */
+	public boolean schneidet(Intervall i) {
+		return (start < i.start && i.start < ende)
+				|| (start < i.ende && i.ende < ende)
+				|| (start > i.start && ende < i.ende);
+	}
+
+	/**
 	 * {@inheritDoc}
 	 * 
 	 * @see java.lang.Object#equals(Object)

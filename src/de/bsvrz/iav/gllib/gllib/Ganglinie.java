@@ -31,6 +31,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.swing.event.EventListenerList;
 
@@ -65,45 +66,69 @@ public class Ganglinie implements Approximation {
 	 */
 	private Approximation approximation = new Polyline(this);
 
+	// /**
+	// * Vervollst&auml;ndigt die St&uuml;tzstellenmengen zweier Ganglinien.
+	// Dabei
+	// * werden fehlende Stu&uuml;tzstellen mittels Approximation durch eine
+	// * Polylinie erg&auml;nzt.
+	// * <p>
+	// * <em>Hinweis:</em> Die beiden Parameter der Methode werden modifiziert!
+	// *
+	// * @param g1
+	// * Erste Ganglinie
+	// * @param g2
+	// * Zweite Ganglinie
+	// */
+	// public static void vervollstaendigeStuetzstellen(Ganglinie g1, Ganglinie
+	// g2) {
+	// Polyline p1, p2;
+	//
+	// p1 = new Polyline(g1);
+	// p2 = new Polyline(g2);
+	//
+	// for (Stuetzstelle s : g1.getStuetzstellen()) {
+	// if (!g2.existsStuetzstelle(s.zeitstempel)) {
+	// try {
+	// g2.set(p2.get(s.zeitstempel));
+	// } catch (UndefiniertException e) {
+	// g2.set(s.zeitstempel, null);
+	// }
+	// }
+	// }
+	//
+	// for (Stuetzstelle s : g2.getStuetzstellen()) {
+	// if (!g1.existsStuetzstelle(s.zeitstempel)) {
+	// try {
+	// g1.set(p1.get(s.zeitstempel));
+	// } catch (UndefiniertException e) {
+	// g1.set(s.zeitstempel, null);
+	// }
+	// }
+	// }
+	// }
+
 	/**
-	 * Vervollst&auml;ndigt die St&uuml;tzstellenmengen zweier Ganglinien. Dabei
-	 * werden fehlende Stu&uuml;tzstellen mittels Approximation durch eine
-	 * Polylinie erg&auml;nzt.
-	 * <p>
-	 * Die beiden Parameter der Methode werden modifiziert!
+	 * Bestimmt die vereinigte Menge der St&uuml;tzstellen beider Ganglinien.
 	 * 
 	 * @param g1
 	 *            Erste Ganglinie
 	 * @param g2
 	 *            Zweite Ganglinie
+	 * @return Menge von St&uuml;tzstellenreferenzen in Form von Zeitstempeln
 	 */
-	public static void vervollstaendigeStuetzstellen(Ganglinie g1, Ganglinie g2) {
-		Polyline p1, p2;
+	private static SortedSet<Long> vervollstaendigeStuetzstellen(Ganglinie g1,
+			Ganglinie g2) {
+		SortedSet<Long> zeitstempel;
 
-		p1 = new Polyline(g1);
-		p2 = new Polyline(g2);
-
-		for (Stuetzstelle s : g1.getStuetzstellen()) {
-			if (!g2.existsStuetzstelle(s.zeitstempel)) {
-				try {
-					g2.set(p2.get(s.zeitstempel));
-				} catch (UndefiniertException e) {
-					// TODO Auto-generated catch block
-					System.err.println(e.getLocalizedMessage());
-				}
-			}
+		zeitstempel = new TreeSet<Long>();
+		for (Stuetzstelle s : g1.stuetzstellen) {
+			zeitstempel.add(s.zeitstempel);
+		}
+		for (Stuetzstelle s : g2.stuetzstellen) {
+			zeitstempel.add(s.zeitstempel);
 		}
 
-		for (Stuetzstelle s : g2.getStuetzstellen()) {
-			if (!g1.existsStuetzstelle(s.zeitstempel)) {
-				try {
-					g1.set(p1.get(s.zeitstempel));
-				} catch (UndefiniertException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
+		return zeitstempel;
 	}
 
 	/**
@@ -118,20 +143,245 @@ public class Ganglinie implements Approximation {
 	 * @return Die "Summe" der beiden Ganglinien
 	 */
 	public static Ganglinie addiere(Ganglinie g1, Ganglinie g2) {
-		Ganglinie g, gx1, gx2;
+		Ganglinie g;
+		Polyline p1, p2;
+		SortedSet<Long> zeitstempel;
 
-		gx1 = new Ganglinie(g1);
-		gx2 = new Ganglinie(g2);
-		vervollstaendigeStuetzstellen(gx1, gx2);
+		p1 = new Polyline(g1);
+		p2 = new Polyline(g2);
 		g = new Ganglinie();
+		zeitstempel = vervollstaendigeStuetzstellen(g1, g2);
 
-		assert gx1.anzahlStuetzstellen() == gx2.anzahlStuetzstellen();
+		// Addition der Stützstellenwerte durchführen
+		while (!zeitstempel.isEmpty()) {
+			long z;
 
-		for (int i = 0; i < gx1.anzahlStuetzstellen(); i++) {
-			// TODO
+			z = zeitstempel.first();
+			zeitstempel.remove(z);
+
+			try {
+				g.set(z, p1.get(z).wert + p2.get(z).wert);
+			} catch (UndefiniertException e) {
+				g.set(z, null);
+			}
 		}
 
 		return g;
+	}
+
+	/**
+	 * Subtraktion zweier Ganglinien, indem die Werte der vervollst&auml;ndigten
+	 * St&uuml;tzstellenmenge subtrahiert werden. Die beiden Ganglinien werden
+	 * dabei nicht ver&auml;ndert.
+	 * 
+	 * @param g1
+	 *            Erste Ganglinie
+	 * @param g2
+	 *            Zweite Ganglinie
+	 * @return Die "Differenz" der beiden Ganglinien
+	 */
+	public static Ganglinie subtrahiere(Ganglinie g1, Ganglinie g2) {
+		Ganglinie g;
+		Polyline p1, p2;
+		SortedSet<Long> zeitstempel;
+
+		p1 = new Polyline(g1);
+		p2 = new Polyline(g2);
+		g = new Ganglinie();
+		zeitstempel = vervollstaendigeStuetzstellen(g1, g2);
+
+		// Addition der Stützstellenwerte durchführen
+		while (!zeitstempel.isEmpty()) {
+			long z;
+
+			z = zeitstempel.first();
+			zeitstempel.remove(z);
+
+			try {
+				g.set(z, p1.get(z).wert - p2.get(z).wert);
+			} catch (UndefiniertException e) {
+				g.set(z, null);
+			}
+		}
+
+		return g;
+	}
+
+	/**
+	 * Multiplikation zweier Ganglinien, indem die Werte der
+	 * vervollst&auml;ndigten St&uuml;tzstellenmenge multipliziert werden. Die
+	 * beiden Ganglinien werden dabei nicht ver&auml;ndert.
+	 * 
+	 * @param g1
+	 *            Erste Ganglinie
+	 * @param g2
+	 *            Zweite Ganglinie
+	 * @return Das "Produkt" der beiden Ganglinien
+	 */
+	public static Ganglinie multipliziere(Ganglinie g1, Ganglinie g2) {
+		Ganglinie g;
+		Polyline p1, p2;
+		SortedSet<Long> zeitstempel;
+
+		p1 = new Polyline(g1);
+		p2 = new Polyline(g2);
+		g = new Ganglinie();
+		zeitstempel = vervollstaendigeStuetzstellen(g1, g2);
+
+		// Addition der Stützstellenwerte durchführen
+		while (!zeitstempel.isEmpty()) {
+			long z;
+
+			z = zeitstempel.first();
+			zeitstempel.remove(z);
+
+			try {
+				g.set(z, p1.get(z).wert * p2.get(z).wert);
+			} catch (UndefiniertException e) {
+				g.set(z, null);
+			}
+		}
+
+		return g;
+	}
+
+	/**
+	 * Division zweier Ganglinien, indem die Werte der vervollst&auml;ndigten
+	 * St&uuml;tzstellenmenge dividiert werden. Die beiden Ganglinien werden
+	 * dabei nicht ver&auml;ndert.
+	 * 
+	 * @param g1
+	 *            Erste Ganglinie
+	 * @param g2
+	 *            Zweite Ganglinie
+	 * @return Das "Produkt" der beiden Ganglinien
+	 */
+	public static Ganglinie dividiere(Ganglinie g1, Ganglinie g2) {
+		Ganglinie g;
+		Polyline p1, p2;
+		SortedSet<Long> zeitstempel;
+
+		p1 = new Polyline(g1);
+		p2 = new Polyline(g2);
+		g = new Ganglinie();
+		zeitstempel = vervollstaendigeStuetzstellen(g1, g2);
+
+		// Addition der Stützstellenwerte durchführen
+		while (!zeitstempel.isEmpty()) {
+			long z;
+
+			z = zeitstempel.first();
+			zeitstempel.remove(z);
+
+			try {
+				g.set(z, Math.round((float) p1.get(z).wert / p2.get(z).wert));
+			} catch (UndefiniertException e) {
+				g.set(z, null);
+			}
+		}
+
+		return g;
+	}
+
+	/**
+	 * Verschiebt eine Ganglinie auf der Zeitachse.
+	 * 
+	 * @param g
+	 *            Zu verschiebende Ganglinie
+	 * @param offset
+	 *            Offset um den die Ganglinie verschoben werden soll
+	 * @return Die verschobene Ganglinie
+	 */
+	public static Ganglinie verschiebe(Ganglinie g, long offset) {
+		Ganglinie v;
+
+		v = new Ganglinie();
+		for (Stuetzstelle s : g.stuetzstellen) {
+			v.set(s.zeitstempel + offset, s.wert);
+		}
+
+		return v;
+	}
+
+	/**
+	 * Verbindet zwei Ganglinien durch Konkatenation. Es werden die
+	 * St&uuml;tzstellen beider Ganglinien zu einer neuen Ganglinien
+	 * zusammengefasst. Dies ist nur m&ouml;glich, wenn sich die
+	 * St&uuml;tzstellenmengen nicht &uuml;berschneiden. Ber&uuml;hren sich die
+	 * beiden Ganglinien wird im Ber&uuml;hrungspunkt er Mittelwert der beiden
+	 * St&uuml;tzstellen gebildet.
+	 * 
+	 * @param g1
+	 *            Erste Ganglinie
+	 * @param g2
+	 *            Zweite Ganglinie
+	 * @return Konkatenation der beiden Ganglinien
+	 */
+	public static Ganglinie verbinde(Ganglinie g1, Ganglinie g2) {
+		if (g1.getIntervall().schneidet(g2.getIntervall())) {
+			throw new IllegalArgumentException();
+		}
+
+		Ganglinie g;
+
+		g = new Ganglinie(g1);
+		for (Stuetzstelle s : g2.stuetzstellen) {
+			if (g.existsStuetzstelle(s.zeitstempel)) {
+				try {
+					g.set(s.zeitstempel, Math.round((float) (g
+							.get(s.zeitstempel).wert + s.wert) / 2));
+				} catch (UndefiniertException e) {
+					g.set(s.zeitstempel, null);
+				}
+			} else {
+				g.set(s);
+			}
+		}
+
+		return g;
+	}
+
+	/**
+	 * Schneidet ein Intervall aus einer Ganglinie heraus. Existieren keine
+	 * St&uuml;tzstellen in den Intervallgrenzen, werden an diesen Stellen
+	 * mittels Approximation durch Polyline St&uuml;tzstellen hinzugef&uuml;gt.
+	 * 
+	 * @param g
+	 *            Eine Ganglinie
+	 * @param i
+	 *            Auszuschneidendes Intervall
+	 * @return Der Intervallausschnitt
+	 */
+	public static Ganglinie auschneiden(Ganglinie g, Intervall i) {
+		Ganglinie a;
+		Polyline p;
+		SortedSet<Stuetzstelle> teilintervall;
+
+		teilintervall = g.stuetzstellen.subSet(new Stuetzstelle(i.start),
+				new Stuetzstelle(i.ende + 1));
+		a = new Ganglinie(teilintervall);
+		p = new Polyline(a);
+
+		if (!a.existsStuetzstelle(i.start)) {
+			try {
+				a.set(p.get(i.start));
+			} catch (UndefiniertException e) {
+				// Nichts zu tun, da der Bereich vor der Ganglinie a priori
+				// undefiniert ist
+			}
+		}
+
+		if (!a.existsStuetzstelle(i.ende)) {
+			try {
+				a.set(p.get(i.ende));
+			} catch (UndefiniertException e) {
+				// Nichts zu tun, da der Bereich hinter der Ganglinie a priori
+				// undefiniert ist
+			}
+		}
+
+		return a;
+
 	}
 
 	/**
