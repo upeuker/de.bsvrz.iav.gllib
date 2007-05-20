@@ -28,10 +28,12 @@ package de.bsvrz.iav.gllib.gllib;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.Map.Entry;
 
 import javax.swing.event.EventListenerList;
 
@@ -152,7 +154,6 @@ public class Ganglinie implements Approximation {
 		g = new Ganglinie();
 		zeitstempel = vervollstaendigeStuetzstellen(g1, g2);
 
-		// Addition der Stützstellenwerte durchführen
 		while (!zeitstempel.isEmpty()) {
 			long z;
 
@@ -190,7 +191,6 @@ public class Ganglinie implements Approximation {
 		g = new Ganglinie();
 		zeitstempel = vervollstaendigeStuetzstellen(g1, g2);
 
-		// Addition der Stützstellenwerte durchführen
 		while (!zeitstempel.isEmpty()) {
 			long z;
 
@@ -228,7 +228,6 @@ public class Ganglinie implements Approximation {
 		g = new Ganglinie();
 		zeitstempel = vervollstaendigeStuetzstellen(g1, g2);
 
-		// Addition der Stützstellenwerte durchführen
 		while (!zeitstempel.isEmpty()) {
 			long z;
 
@@ -266,7 +265,6 @@ public class Ganglinie implements Approximation {
 		g = new Ganglinie();
 		zeitstempel = vervollstaendigeStuetzstellen(g1, g2);
 
-		// Addition der Stützstellenwerte durchführen
 		while (!zeitstempel.isEmpty()) {
 			long z;
 
@@ -382,6 +380,198 @@ public class Ganglinie implements Approximation {
 
 		return a;
 
+	}
+
+	/**
+	 * Berechnet den Abstand zweier Ganglinien mit Hilfe des
+	 * Basisabstandsverfahren.
+	 * 
+	 * @param g1
+	 *            Erste Ganglinie
+	 * @param g2
+	 *            Zweite Ganglinie
+	 * @return Abstand nach dem Basisabstandsverfahren
+	 */
+	public static double basisabstand(Ganglinie g1, Ganglinie g2) {
+		Polyline p1, p2;
+		SortedSet<Long> zeitstempel;
+		double fehler, summe, x;
+
+		p1 = new Polyline(g1);
+		p2 = new Polyline(g2);
+		zeitstempel = vervollstaendigeStuetzstellen(g1, g2);
+
+		// Quadratischen Fehler bestimmen
+		summe = 0;
+		while (!zeitstempel.isEmpty()) {
+			long z;
+
+			z = zeitstempel.first();
+			zeitstempel.remove(z);
+
+			try {
+				x = p2.get(z).wert - p1.get(z).wert;
+				summe += x * x;
+			} catch (UndefiniertException e) {
+				// Nicht zu tun, da undefinierte Bereiche nicht bewertet werden
+				// können
+			}
+		}
+		fehler = Math.sqrt(summe / zeitstempel.size());
+
+		// Prozentualen Fehler bestimmen
+		summe = 0;
+		while (!zeitstempel.isEmpty()) {
+			long z;
+
+			z = zeitstempel.first();
+			zeitstempel.remove(z);
+
+			try {
+				x = (p1.get(z).wert + p2.get(z).wert) / 2;
+				summe += x * x;
+			} catch (UndefiniertException e) {
+				// Nicht zu tun, da undefinierte Bereiche nicht bewertet werden
+				// können
+			}
+		}
+		fehler = (fehler * 100) / (Math.sqrt(summe / zeitstempel.size()));
+
+		return fehler;
+	}
+
+	/**
+	 * Berechnet den Abstand zweier Ganglinien mit Hilfe des komplexen
+	 * Abstandsverfahren. Es werden jeweils die Werte an den Intervallgrenzen
+	 * verglichen.
+	 * 
+	 * @param g1
+	 *            Erste Ganglinie
+	 * @param g2
+	 *            Zweite Ganglinie
+	 * @param intervalle
+	 *            Anzahl der zu vergleichenden Intervalle
+	 * @return Abstand nach dem komplexen Abstandsverfahren
+	 */
+	public static double komplexerAbstand(Ganglinie g1, Ganglinie g2,
+			int intervalle) {
+		Polyline p1, p2;
+		SortedSet<Long> zeitstempel;
+		double fehler, summe, x;
+		long start, ende, breite;
+
+		p1 = new Polyline(g1);
+		p2 = new Polyline(g2);
+
+		// Zu betrachtendes Intervall und Intervallbreite bestimmen
+		if (g1.stuetzstellen.first().zeitstempel < g2.stuetzstellen.first().zeitstempel) {
+			start = g2.stuetzstellen.first().zeitstempel;
+		} else {
+			start = g1.stuetzstellen.first().zeitstempel;
+		}
+		if (g1.stuetzstellen.last().zeitstempel < g2.stuetzstellen.last().zeitstempel) {
+			ende = g1.stuetzstellen.last().zeitstempel;
+		} else {
+			ende = g2.stuetzstellen.last().zeitstempel;
+		}
+		breite = Math.round((float) (ende - start) / intervalle);
+
+		// Haltepunkte bestimmen
+		zeitstempel = new TreeSet<Long>();
+		for (int i = 0; i < intervalle; i++) {
+			zeitstempel.add(start + i * breite);
+		}
+		zeitstempel.add(ende);
+
+		// Quadratischen Fehler bestimmen
+		summe = 0;
+		while (!zeitstempel.isEmpty()) {
+			long z;
+
+			z = zeitstempel.first();
+			zeitstempel.remove(z);
+
+			try {
+				x = p2.get(z).wert - p1.get(z).wert;
+				summe += x * x;
+			} catch (UndefiniertException e) {
+				// Nicht zu tun, da undefinierte Bereiche nicht bewertet werden
+				// können
+			}
+		}
+		fehler = Math.sqrt(summe / zeitstempel.size());
+
+		// Prozentualen Fehler bestimmen
+		summe = 0;
+		while (!zeitstempel.isEmpty()) {
+			long z;
+
+			z = zeitstempel.first();
+			zeitstempel.remove(z);
+
+			try {
+				x = (p1.get(z).wert + p2.get(z).wert) / 2;
+				summe += x * x;
+			} catch (UndefiniertException e) {
+				// Nicht zu tun, da undefinierte Bereiche nicht bewertet werden
+				// können
+			}
+		}
+		fehler = (fehler * 100) / (Math.sqrt(summe / zeitstempel.size()));
+
+		return fehler;
+	}
+
+	/**
+	 * Führt das Pattern-Matching einer Menge von Ganglinien mit einer
+	 * Referenzganglinie aus. Ergebnis ist die Ganglinie aus der Menge mit dem
+	 * geringsten Abstand zur Referenzganglinie.
+	 * 
+	 * @param referenz
+	 *            Die Referenzganglinie
+	 * @param menge
+	 *            Eine Menge von zu vergleichenden Ganglinien
+	 * @param offset
+	 *            Offset, in dem die Ganglinien vor un zur&uuml;ck verschoben
+	 *            werden
+	 * @param intervall
+	 *            Intervall, in dem die Ganglinien innerhalb des Offsets
+	 *            verschoben werden
+	 * @return Die Ganglinie mit dem kleinsten Abstand
+	 */
+	public static Ganglinie patternMatching(Ganglinie referenz,
+			Collection<Ganglinie> menge, long offset, long intervall) {
+		HashMap<Ganglinie, Double> fehler;
+		Ganglinie erg;
+
+		fehler = new HashMap<Ganglinie, Double>();
+
+		// Abstände der Ganglinien bestimmen
+		for (Ganglinie g : menge) {
+			double abstand;
+			int tests;
+
+			abstand = 0;
+			tests = 0;
+			for (long i = -offset; i <= offset; i += intervall) {
+				abstand += basisabstand(referenz, g);
+				tests++;
+			}
+			fehler.put(g, abstand / tests);
+		}
+
+		// Ganglinie mit dem kleinsten Abstand bestimmen
+		erg = null;
+		for (Entry<Ganglinie, Double> e : fehler.entrySet()) {
+			if (erg == null) {
+				erg = e.getKey();
+			} else {
+				if (e.getValue() < fehler.get(erg)) {
+					erg = e.getKey();
+				}
+			}
+		}
+		return erg;
 	}
 
 	/**
