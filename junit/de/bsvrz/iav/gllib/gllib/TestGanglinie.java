@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weißenfelser Straße 67
+ * Weiï¿½enfelser Straï¿½e 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -100,7 +100,7 @@ public class TestGanglinie {
 		assertEquals(0L, intervall.start);
 		assertEquals(90L, intervall.ende);
 
-		// Sonderfall, eine Ganglinie ohne Stützstellen
+		// Sonderfall, eine Ganglinie ohne Stï¿½tzstellen
 		g = new Ganglinie();
 		intervall = g.getIntervall();
 		assertNull(intervall);
@@ -145,16 +145,16 @@ public class TestGanglinie {
 		// davor
 		assertFalse(ganglinie.isValid(-10));
 
-		// dazwischen, auf Stützstelle
+		// dazwischen, auf Stï¿½tzstelle
 		assertTrue(ganglinie.isValid(30));
 
-		// dazwischen, nicht auf Stützstelle
+		// dazwischen, nicht auf Stï¿½tzstelle
 		assertTrue(ganglinie.isValid(50));
 
 		// dahinter
 		assertFalse(ganglinie.isValid(100));
 
-		// Sonderfall, eine Ganglinie ohne Stützstellen
+		// Sonderfall, eine Ganglinie ohne Stï¿½tzstellen
 		g = new Ganglinie();
 		assertFalse(g.isValid(30));
 	}
@@ -166,17 +166,17 @@ public class TestGanglinie {
 	public void testGetStuetzstelle() throws Exception {
 		Stuetzstelle s, s0;
 
-		// existierende Stützstelle
+		// existierende Stï¿½tzstelle
 		s = ganglinie.getStuetzstelle(30);
 		assertEquals(s2, s);
 
-		// innerhalb der Ganglinie, aber keine Stützstelle
+		// innerhalb der Ganglinie, aber keine Stï¿½tzstelle
 		ganglinie.setApproximation(Polyline.class);
 		s = ganglinie.get(50);
 		s0 = new Stuetzstelle(50, 30);
 		assertEquals(s0, s);
 
-		// außerhalb der Ganglinie
+		// auï¿½erhalb der Ganglinie
 		try {
 			s = ganglinie.get(100);
 			fail();
@@ -204,25 +204,25 @@ public class TestGanglinie {
 
 		s = new Stuetzstelle(0);
 		try {
-			// Erste Ganglinie prüfen
+			// Erste Ganglinie prï¿½fen
 			s = new Stuetzstelle(0, 0);
-			assertEquals(s, g1.getStuetzstelle(0));
+			assertEquals(s, g1.getStuetzstelle(0L));
 			s = new Stuetzstelle(30, 15);
-			assertEquals(s, g1.getStuetzstelle(30));
+			assertEquals(s, g1.getStuetzstelle(30L));
 			s = new Stuetzstelle(40, 20);
-			assertEquals(s, g1.getStuetzstelle(40));
+			assertEquals(s, g1.getStuetzstelle(40L));
 			s = new Stuetzstelle(60, 16);
-			assertEquals(s, g1.getStuetzstelle(60));
+			assertEquals(s, g1.getStuetzstelle(60L));
 			s = new Stuetzstelle(90, 10);
-			assertEquals(s, g1.getStuetzstelle(90));
+			assertEquals(s, g1.getStuetzstelle(90L));
 			
-			// Zweite Ganglinie prüfen
+			// Zweite Ganglinie prï¿½fen
 			s = new Stuetzstelle(30, 30);
-			assertEquals(s, g2.getStuetzstelle(30));
+			assertEquals(s, g2.getStuetzstelle(30L));
 			s = new Stuetzstelle(40, 33);
-			assertEquals(s, g2.getStuetzstelle(40));
+			assertEquals(s, g2.getStuetzstelle(40L));
 			s = new Stuetzstelle(60, 40);
-			assertEquals(s, g2.getStuetzstelle(60));
+			assertEquals(s, g2.getStuetzstelle(60L));
 		} catch (UndefiniertException e) {
 			fail(s.toString());
 		}

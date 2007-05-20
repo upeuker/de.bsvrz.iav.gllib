@@ -5,10 +5,10 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Queue;
 import java.util.RandomAccess;
+import java.util.SortedSet;
 
 /**
  * Eine sortierte Liste.
@@ -19,9 +19,11 @@ import java.util.RandomAccess;
  * @version $Id$
  * @param <E>
  */
-public class SortierteListe<E> extends AbstractList<E> implements List<E>,
-		Queue<E>, Cloneable, RandomAccess, Serializable {
+public class SortierteListe<E extends Comparable<? super E>> extends
+		AbstractList<E> implements List<E>, SortedSet<E>, Cloneable,
+		RandomAccess, Serializable {
 
+	/** ID zur Serialisierung. */
 	private static final long serialVersionUID = 1L;
 
 	/** Interner Buffer der Listenelemente. */
@@ -29,36 +31,6 @@ public class SortierteListe<E> extends AbstractList<E> implements List<E>,
 
 	/** Aktuelle Gr&ouml;&szlig;e der Liste, <em>nicht</em> des Buffers. */
 	private int size;
-
-	public static void main(String[] argv) {
-		Integer[] list;
-		List<Integer> sorted;
-
-		list = new Integer[] { 3, 9, 6, 8, 0, 1, 4, 7, 5, 2 };
-		sorted = Arrays.asList(list);
-		System.out.println("list: " + sorted);
-		sorted = mergesort(sorted);
-		System.out.println("sorted: " + sorted + "\n");
-
-		list = new Integer[] { 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 };
-		sorted = Arrays.asList(list);
-		System.out.println("list: " + sorted);
-		sorted = mergesort(sorted);
-		System.out.println("sorted: " + sorted + "\n");
-
-		list = new Integer[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-		sorted = Arrays.asList(list);
-		System.out.println("list: " + sorted);
-		sorted = mergesort(sorted);
-		System.out.println("sorted: " + sorted);
-
-		SortierteListe<Integer> liste;
-		list = new Integer[] { 3, 9, 6, 8, 0, 1, 4, 7, 5, 2 };
-		sorted = Arrays.asList(list);
-		List<Integer> l;
-		l = new MeinArrayList<Integer>(sorted);
-		liste = new SortierteListe<Integer>(sorted);
-	}
 
 	/**
 	 * Sortiert eine Liste mit Hilfe von Mergesort. Im Gegensatz zur
@@ -151,7 +123,7 @@ public class SortierteListe<E> extends AbstractList<E> implements List<E>,
 		while (sortiert.remove(null)) {
 			// nix weiter
 		}
-		sortiert = (List<E>) mergesort((List<Comparable>) sortiert);
+		sortiert = mergesort(sortiert);
 
 		assert elementData.length == sortiert.size();
 		for (int i = 0; i < sortiert.size(); i++) {
@@ -190,14 +162,13 @@ public class SortierteListe<E> extends AbstractList<E> implements List<E>,
 	 * 
 	 * @see java.util.ArrayList#ArrayList(int)
 	 */
-	@SuppressWarnings("unchecked")
 	public SortierteListe(int initialCapacity) {
 		if (initialCapacity < 0) {
 			throw new IllegalArgumentException("Illegal Capacity: "
 					+ initialCapacity);
 		}
 
-		elementData = (E[]) new Object[initialCapacity];
+		elementData = (E[]) new Comparable<?>[initialCapacity];
 	}
 
 	/**
@@ -208,9 +179,11 @@ public class SortierteListe<E> extends AbstractList<E> implements List<E>,
 	 *            Initialelemente der Liste
 	 */
 	public SortierteListe(Collection<? extends E> c) {
+		size = c.size();
 		// Allow 10% room for growth
-		this((int) Math.min((c.size() * 110L) / 100, Integer.MAX_VALUE));
-		addAll(c);
+		int capacity = (int) Math.min((size * 110L) / 100, Integer.MAX_VALUE);
+		elementData = (E[]) c.toArray(new Comparable<?>[capacity]);
+		mergesort();
 	}
 
 	/**
@@ -231,35 +204,9 @@ public class SortierteListe<E> extends AbstractList<E> implements List<E>,
 			if (newCapacity < minCapacity) {
 				newCapacity = minCapacity;
 			}
-			elementData = (E[]) new Object[newCapacity];
+			elementData = (E[]) new Comparable<?>[newCapacity];
 			System.arraycopy(oldData, 0, elementData, 0, size);
 		}
-	}
-
-	/**
-	 * Returns the first element in this list.
-	 * 
-	 * @return the first element in this list.
-	 * @throws NoSuchElementException
-	 *             if this list is empty.
-	 */
-	public E getFirst() {
-		return element();
-	}
-
-	/**
-	 * Returns the last element in this list.
-	 * 
-	 * @return the last element in this list.
-	 * @throws NoSuchElementException
-	 *             if this list is empty.
-	 */
-	public E getLast() {
-		if (size == 0) {
-			throw new NoSuchElementException();
-		}
-
-		return elementData[size - 1];
 	}
 
 	/**
@@ -315,51 +262,57 @@ public class SortierteListe<E> extends AbstractList<E> implements List<E>,
 	}
 
 	/**
+	 * Gibt immer {@code null} zur&uuml;ck.
+	 * <p>
 	 * {@inheritDoc}
 	 */
-	public E element() {
-		E x = peek();
-		if (x != null) {
-			return x;
-		}
-
-		throw new NoSuchElementException();
+	public Comparator<? super E> comparator() {
+		return null;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean offer(E o) {
-		return add(o);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public E peek() {
-		if (size == 0) {
-			return null;
-		}
+	public E first() {
 		return elementData[0];
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public E poll() {
-		return remove(0);
+	public SortedSet<E> headSet(E toElement) {
+		return subSet(first(), toElement);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public E remove() {
-		E x = poll();
-		if (x != null) {
-			return x;
+	public E last() {
+		return elementData[size - 1];
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public SortedSet<E> subSet(E fromElement, E toElement) {
+		SortierteListe<E> liste;
+
+		liste = new SortierteListe<E>();
+		for (int i = 0; i < size; i++) {
+			if (elementData[i].compareTo(fromElement) >= 0
+					&& elementData[i].compareTo(toElement) < 0) {
+				liste.add(elementData[i]);
+			}
 		}
 
-		throw new NoSuchElementException();
+		return liste;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public SortedSet<E> tailSet(E fromElement) {
+		return subSet(fromElement, last());
 	}
 
 }

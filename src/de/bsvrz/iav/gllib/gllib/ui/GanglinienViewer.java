@@ -8,7 +8,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -17,8 +16,6 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerListModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
-import sun.jdbc.odbc.OdbcDef;
 
 import de.bsvrz.iav.gllib.gllib.Ganglinie;
 
@@ -52,7 +49,7 @@ public class GanglinienViewer extends JFrame implements ChangeListener {
 		});
 		setSize(1000, 500);
 
-		// Zeichenfläche
+		// Zeichenflï¿½che
 		ganglinie = new GanglinienPanel(g);
 
 		// Approximation
