@@ -18,22 +18,13 @@ Versionsgeschichte
   - Erste Auslieferung
   
 
+Hinweise
+========
 
-
-Offene Punkte
-=============
-
-  - Welche Approximation soll nach dem Verknüpfen zweier Ganglinien oder dem
-    Bearbeiten einer einzelnen Ganglinie für die neu entstandene Ganglinie
-    angewandt werden? Im Augenblick wird das Standardverfahren gesetzt (B-Spline
-    mit Ordnung 4)
-    
-  - Beim Pattern-Matching wird der Abstand zweier Ganglinien mit verschiedenen
-    Offsets der Verschiebung gegeneinander bestimmt. Wie sollen die so
-    erhaltenen Abstände in das Gesamtergebnis des Abstands beider Ganglinien
-    eingehen? Als Minimum, als Maximum oder als arithmetisches Mittel? Aktuell
-    wird das arithmetische Mittel benutzt, da beim Lernen die Ganglinien ohne
-    Offset verschmolzen werden.
+ - Die Kommunikation mit dem Datenverteiler bzw. das Modul zum Senden und
+   Empfangen von Ganglinien ist noch nicht implementiert. Es wird zusammen mit
+   der nächsten SWE Ganglinienprognose implementiert, um es gleich bei der
+   Entwicklung ausgiebig testen zu können.
 
 
 Disclaimer

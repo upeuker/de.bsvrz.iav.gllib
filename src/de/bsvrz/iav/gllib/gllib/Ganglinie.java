@@ -49,6 +49,10 @@ import de.bsvrz.sys.funclib.bitctrl.i18n.Messages;
  * Menge von St&uuml;tzstellen und der Angabe eines Interpolationsverfahren.
  * Wird kein Approximationsverfahren festgelegt, wird ein
  * {@link BSpline B-Spline} mit Standardordnung angenommen.
+ * <p>
+ * Da Ganglinien verschiedene Approximationsverfahren verwenden können, wird für
+ * neue Ganglinien, die bei den Operationen (z. B. Addition) entstehen, das
+ * Standardverfahren festgelegt (B-Spline mit Ordnung 5).
  * 
  * @author BitrCtrl, Schumann
  * @version $Id$
@@ -61,12 +65,8 @@ public class Ganglinie implements Approximation {
 	/** Speicher der St&uuml;tzstellen. */
 	private final SortierteListe<Stuetzstelle> stuetzstellen;
 
-	/**
-	 * Verfahren zur Berechnung der Punkte zwischen den St&uuml;tzstellen.
-	 * <p>
-	 * TODO: Auf B-Spline ändern
-	 */
-	private Approximation approximation = new Polyline(this);
+	/** Verfahren zur Berechnung der Punkte zwischen den St&uuml;tzstellen. */
+	private Approximation approximation = new BSpline(this, (short) 5);
 
 	// /**
 	// * Vervollst&auml;ndigt die St&uuml;tzstellenmengen zweier Ganglinien.
