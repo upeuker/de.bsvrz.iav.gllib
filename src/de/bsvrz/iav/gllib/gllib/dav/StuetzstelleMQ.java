@@ -1,7 +1,32 @@
-/**
+/*
+ * Segment 5 Intelligente Analyseverfahren, SWE 5.5 Funktionen Ganglinie
+ * Copyright (C) 2007 BitCtrl Systems GmbH 
  * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * Contact Information:
+ * BitCtrl Systems GmbH
+ * Weiﬂenfelser Straﬂe 67
+ * 04229 Leipzig
+ * Phone: +49 341-490670
+ * mailto: info@bitctrl.de
  */
+
 package de.bsvrz.iav.gllib.gllib.dav;
+
+import de.bsvrz.sys.funclib.bitctrl.util.dav.Umrechung;
 
 /**
  * F&uuml;r Messquerschnitte angepasste St&uuml;tzstelle, die die Werte QKfz,
@@ -42,7 +67,7 @@ public class StuetzstelleMQ {
 	private final float k2;
 
 	/**
-	 * Zuweisungskonstruktor
+	 * Zuweisungskonstruktor.
 	 * 
 	 * @param zeitstempel
 	 *            Zeitstempel
@@ -71,7 +96,7 @@ public class StuetzstelleMQ {
 	}
 
 	/**
-	 * Gibt den Wert f&uuml;r QLkw zur&uuml;ck
+	 * Gibt den Wert f&uuml;r QLkw zur&uuml;ck.
 	 * 
 	 * @return Wert f&uuml;r QLkw
 	 */
@@ -80,7 +105,7 @@ public class StuetzstelleMQ {
 	}
 
 	/**
-	 * Gibt den Wert f&uuml;r QKfz zur&uuml;ck
+	 * Gibt den Wert f&uuml;r QKfz zur&uuml;ck.
 	 * 
 	 * @return Wert f&uuml;r QKfz
 	 */
@@ -89,7 +114,7 @@ public class StuetzstelleMQ {
 	}
 
 	/**
-	 * Gibt den Wert f&uuml;r VPkw zur&uuml;ck
+	 * Gibt den Wert f&uuml;r VPkw zur&uuml;ck.
 	 * 
 	 * @return Wert f&uuml;r VPkw
 	 */
@@ -98,7 +123,7 @@ public class StuetzstelleMQ {
 	}
 
 	/**
-	 * Gibt den Wert f&uuml;r VLkw zur&uuml;ck
+	 * Gibt den Wert f&uuml;r VLkw zur&uuml;ck.
 	 * 
 	 * @return Wert f&uuml;r VLkw
 	 */
@@ -113,7 +138,7 @@ public class StuetzstelleMQ {
 	 * @return Wert f&uuml;r QPkw
 	 */
 	public Integer getQPkw() {
-		return QPkw(qKfz, qLkw);
+		return Umrechung.getQPkw(qKfz, qLkw);
 	}
 
 	/**
@@ -123,7 +148,7 @@ public class StuetzstelleMQ {
 	 * @return Wert f&uuml;r VKfz
 	 */
 	public Integer getVKfz() {
-		return VKfz(qLkw, qKfz, vPkw, vLkw);
+		return Umrechung.getVKfz(qLkw, qKfz, vPkw, vLkw);
 	}
 
 	/**
@@ -133,11 +158,13 @@ public class StuetzstelleMQ {
 	 * @return Wert f&uuml;r QB
 	 */
 	public Integer getQB() {
-		return QB(qLkw, qKfz, vPkw, vLkw, k1, k2);
+		return Umrechung.getQB(qLkw, qKfz, vPkw, vLkw, k1, k2);
 	}
 
 	/**
-	 * Gibt ein Tupel (Zeitstempel, QKfz, QLkw, VPkw, VLkw) zur&uuml;ck
+	 * Gibt ein Tupel (Zeitstempel, QKfz, QLkw, VPkw, VLkw) zur&uuml;ck.
+	 * <p>
+	 * {@inheritDoc}
 	 * 
 	 * @see java.lang.Object#toString()
 	 */
@@ -147,84 +174,6 @@ public class StuetzstelleMQ {
 				+ ", " + qLkw //$NON-NLS-1$
 				+ ", " + vPkw //$NON-NLS-1$
 				+ ", " + vLkw + ")"; //$NON-NLS-1$ //$NON-NLS-2$
-	}
-
-	/**
-	 * Hilfsfunktion zum Bestimmen von QPkw
-	 * 
-	 * @param qKfz
-	 *            QKfz
-	 * @param qLkw
-	 *            QLkw
-	 * @return QPkw
-	 */
-	static Integer QPkw(Integer qKfz, Integer qLkw) {
-		if (qKfz != null && qLkw != null) {
-			return qKfz - qLkw;
-		}
-
-		return null;
-	}
-
-	/**
-	 * Hilfsfunktion zum Bestimmen von VKfz
-	 * 
-	 * @param qLkw
-	 *            QLkw
-	 * @param qKfz
-	 *            QKfz
-	 * @param vPkw
-	 *            VPkw
-	 * @param vLkw
-	 *            VLkw
-	 * @return VKfz
-	 */
-	static Integer VKfz(Integer qLkw, Integer qKfz, Integer vPkw, Integer vLkw) {
-		if (vPkw != null && qLkw != null && vLkw != null && qKfz != null
-				&& qKfz > 0) {
-			Integer qPkw;
-
-			qPkw = QPkw(qKfz, qLkw);
-			return Math.round((float) (qPkw * vPkw + qLkw * vLkw) / qKfz);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Hilfsfunktion zum Bestimmen von QB
-	 * 
-	 * @param qLkw
-	 *            QLkw
-	 * @param qKfz
-	 *            QKfz
-	 * @param vPkw
-	 *            VPkw
-	 * @param vLkw
-	 *            VLkw
-	 * @param k1
-	 *            k1
-	 * @param k2
-	 *            k2
-	 * @return QB
-	 */
-	static Integer QB(Integer qLkw, Integer qKfz, Integer vPkw, Integer vLkw,
-			float k1, float k2) {
-		if (vPkw != null && qLkw != null && vLkw != null && qKfz != null) {
-			float fLGL;
-			Integer qPkw;
-
-			qPkw = QPkw(qKfz, qLkw);
-			if (vPkw > vLkw) {
-				fLGL = k1 + k2 * (vPkw - vLkw);
-			} else {
-				fLGL = k1;
-			}
-
-			return Math.round(qPkw + fLGL * qLkw);
-		}
-
-		return null;
 	}
 
 }

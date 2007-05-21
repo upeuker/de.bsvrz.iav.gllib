@@ -38,8 +38,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.bsvrz.iav.gllib.gllib.util.Intervall;
-import de.bsvrz.iav.gllib.gllib.util.UndefiniertException;
+import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
+import de.bsvrz.sys.funclib.bitctrl.util.UndefiniertException;
 
 /**
  * Testet relevante Funktionen der Klasse.

@@ -26,7 +26,7 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
-import de.bsvrz.iav.gllib.gllib.util.UndefiniertException;
+import de.bsvrz.sys.funclib.bitctrl.util.UndefiniertException;
 
 /**
  * Approximation einer Ganglinie mit Hilfe von Polylines. Der Wert der

@@ -12,6 +12,8 @@ import java.util.SortedSet;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.bsvrz.sys.funclib.bitctrl.util.SortierteListe;
+
 public class TestSortierteListe {
 
 	SortierteListe<Integer> liste;

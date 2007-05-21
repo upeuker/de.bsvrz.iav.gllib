@@ -39,10 +39,10 @@ import javax.swing.event.EventListenerList;
 
 import de.bsvrz.iav.gllib.gllib.events.GanglinienEvent;
 import de.bsvrz.iav.gllib.gllib.events.GanglinienListener;
-import de.bsvrz.iav.gllib.gllib.util.Intervall;
-import de.bsvrz.iav.gllib.gllib.util.SortierteListe;
-import de.bsvrz.iav.gllib.gllib.util.UndefiniertException;
 import de.bsvrz.sys.funclib.bitctrl.i18n.Messages;
+import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
+import de.bsvrz.sys.funclib.bitctrl.util.SortierteListe;
+import de.bsvrz.sys.funclib.bitctrl.util.UndefiniertException;
 
 /**
  * Repr&auml;sentiert eine allgemeine Ganglinie, bestehend aus einer sortierten

@@ -30,7 +30,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import de.bsvrz.iav.gllib.gllib.util.Intervall;
+import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
 
 /**
  * Testet relevante Funktionen der Klasse.

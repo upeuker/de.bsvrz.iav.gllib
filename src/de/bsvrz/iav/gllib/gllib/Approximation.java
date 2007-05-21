@@ -28,7 +28,7 @@ package de.bsvrz.iav.gllib.gllib;
 
 import java.util.SortedSet;
 
-import de.bsvrz.iav.gllib.gllib.util.UndefiniertException;
+import de.bsvrz.sys.funclib.bitctrl.util.UndefiniertException;
 
 /**
  * Schnittstelle f&uuml;r alle Approximationsmethoden von Ganglinien.

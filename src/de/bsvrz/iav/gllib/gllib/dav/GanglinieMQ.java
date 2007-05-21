@@ -1,10 +1,34 @@
+/*
+ * Segment 5 Intelligente Analyseverfahren, SWE 5.5 Funktionen Ganglinie
+ * Copyright (C) 2007 BitCtrl Systems GmbH 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * Contact Information:
+ * BitCtrl Systems GmbH
+ * Weiﬂenfelser Straﬂe 67
+ * 04229 Leipzig
+ * Phone: +49 341-490670
+ * mailto: info@bitctrl.de
+ */
+
 package de.bsvrz.iav.gllib.gllib.dav;
 
-import static de.bsvrz.iav.gllib.gllib.dav.StuetzstelleMQ.QB;
-import static de.bsvrz.iav.gllib.gllib.dav.StuetzstelleMQ.QPkw;
-import static de.bsvrz.iav.gllib.gllib.dav.StuetzstelleMQ.VKfz;
 import de.bsvrz.iav.gllib.gllib.Approximation;
 import de.bsvrz.iav.gllib.gllib.Ganglinie;
+import de.bsvrz.sys.funclib.bitctrl.util.dav.Umrechung;
 
 /**
  * F&uuml;r Messquerschnitte angepasste Ganglinie. Die vier Verkehrswerte QKfz,
@@ -66,7 +90,7 @@ public class GanglinieMQ extends Ganglinie {
 	private boolean referenz;
 
 	/**
-	 * Gibt eine Approximation f&uuml;r QKfz zur&uuml;ck
+	 * Gibt eine Approximation f&uuml;r QKfz zur&uuml;ck.
 	 * 
 	 * @return Approximation
 	 */
@@ -75,7 +99,7 @@ public class GanglinieMQ extends Ganglinie {
 	}
 
 	/**
-	 * Gibt eine Approximation f&uuml;r QPkw zur&uuml;ck
+	 * Gibt eine Approximation f&uuml;r QPkw zur&uuml;ck.
 	 * 
 	 * @return Approximation
 	 */
@@ -87,7 +111,7 @@ public class GanglinieMQ extends Ganglinie {
 			long z;
 
 			z = qKfz.getStuetzstelle(i).zeitstempel;
-			qPkw.set(z, QPkw(qKfz.getStuetzstelle(i).wert, qLkw
+			qPkw.set(z, Umrechung.getQPkw(qKfz.getStuetzstelle(i).wert, qLkw
 					.getStuetzstelle(i).wert));
 		}
 
@@ -95,7 +119,7 @@ public class GanglinieMQ extends Ganglinie {
 	}
 
 	/**
-	 * Gibt eine Approximation f&uuml;r QLkw zur&uuml;ck
+	 * Gibt eine Approximation f&uuml;r QLkw zur&uuml;ck.
 	 * 
 	 * @return Approximation
 	 */
@@ -104,7 +128,7 @@ public class GanglinieMQ extends Ganglinie {
 	}
 
 	/**
-	 * Gibt eine Approximation f&uuml;r VKfz zur&uuml;ck
+	 * Gibt eine Approximation f&uuml;r VKfz zur&uuml;ck.
 	 * 
 	 * @return Approximation
 	 */
@@ -116,7 +140,7 @@ public class GanglinieMQ extends Ganglinie {
 			long z;
 
 			z = qKfz.getStuetzstelle(i).zeitstempel;
-			vKfz.set(z, VKfz(qLkw.getStuetzstelle(i).wert, qKfz
+			vKfz.set(z, Umrechung.getVKfz(qLkw.getStuetzstelle(i).wert, qKfz
 					.getStuetzstelle(i).wert, vPkw.getStuetzstelle(i).wert,
 					vLkw.getStuetzstelle(i).wert));
 		}
@@ -125,7 +149,7 @@ public class GanglinieMQ extends Ganglinie {
 	}
 
 	/**
-	 * Gibt eine Approximation f&uuml;r VPkw zur&uuml;ck
+	 * Gibt eine Approximation f&uuml;r VPkw zur&uuml;ck.
 	 * 
 	 * @return Approximation
 	 */
@@ -134,7 +158,7 @@ public class GanglinieMQ extends Ganglinie {
 	}
 
 	/**
-	 * Gibt eine Approximation f&uuml;r VLkw zur&uuml;ck
+	 * Gibt eine Approximation f&uuml;r VLkw zur&uuml;ck.
 	 * 
 	 * @return Approximation
 	 */
@@ -143,7 +167,7 @@ public class GanglinieMQ extends Ganglinie {
 	}
 
 	/**
-	 * Gibt eine Approximation f&uuml;r QB zur&uuml;ck
+	 * Gibt eine Approximation f&uuml;r QB zur&uuml;ck.
 	 * 
 	 * @return Approximation
 	 */
@@ -155,7 +179,7 @@ public class GanglinieMQ extends Ganglinie {
 			long z;
 
 			z = qKfz.getStuetzstelle(i).zeitstempel;
-			qb.set(z, QB(qLkw.getStuetzstelle(i).wert,
+			qb.set(z, Umrechung.getQB(qLkw.getStuetzstelle(i).wert,
 					qKfz.getStuetzstelle(i).wert, vPkw.getStuetzstelle(i).wert,
 					vLkw.getStuetzstelle(i).wert, k1, k2));
 		}
@@ -174,7 +198,7 @@ public class GanglinieMQ extends Ganglinie {
 	}
 
 	/**
-	 * Kennzeichnet die Ganglinie als Referenzganglinie
+	 * Kennzeichnet die Ganglinie als Referenzganglinie.
 	 * 
 	 * @param referenz
 	 *            <code>true</code>, wenn diese Ganglinie eine
@@ -186,7 +210,7 @@ public class GanglinieMQ extends Ganglinie {
 
 	/**
 	 * Gibt die Anzahl der bisherigen Verschmelzungen beim automatischen Lernen
-	 * zur&uuml;ck
+	 * zur&uuml;ck.
 	 * 
 	 * @return Anzahl bisheriger Verschmelzungen
 	 */
@@ -205,7 +229,7 @@ public class GanglinieMQ extends Ganglinie {
 	}
 
 	/**
-	 * Gibt den Zeitpunkt der letzten Verschmelzung als Zeitstempel zur&uuml;ck
+	 * Gibt den Zeitpunkt der letzten Verschmelzung als Zeitstempel zur&uuml;ck.
 	 * 
 	 * @return Zeitstempel
 	 */
@@ -214,7 +238,7 @@ public class GanglinieMQ extends Ganglinie {
 	}
 
 	/**
-	 * Gibt den Ereignistyp der Ganglinie zur&uuml;ck
+	 * Gibt den Ereignistyp der Ganglinie zur&uuml;ck.
 	 * 
 	 * @return PID des Ereignistyp
 	 */
@@ -223,7 +247,7 @@ public class GanglinieMQ extends Ganglinie {
 	}
 
 	/**
-	 * Legt den Ereignistyp der Ganglinie fest
+	 * Legt den Ereignistyp der Ganglinie fest.
 	 * 
 	 * @param ereignisTyp
 	 *            PID des Ereignistyp
