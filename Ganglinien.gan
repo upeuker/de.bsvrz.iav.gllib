@@ -27,25 +27,29 @@
 <taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
 <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
 </taskproperties>
-<task id="0" name="SWE 5.5 Funktionen Ganglinien" color="#8cb6ce" shape="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0" meeting="false" start="2007-05-02" duration="10" complete="12" priority="1" expand="true">
-<task id="1" name="Ganglinie" color="#8cb6ce" meeting="false" start="2007-05-02" duration="6" complete="21" priority="1" expand="true">
+<task id="0" name="SWE 5.5 Funktionen Ganglinien" color="#8cb6ce" shape="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0" meeting="false" start="2007-05-02" duration="9" complete="64" priority="1" expand="true">
+<task id="1" name="Ganglinie" color="#8cb6ce" meeting="false" start="2007-05-02" duration="6" complete="100" priority="1" expand="true">
 <task id="3" name="Definition" color="#8cb6ce" meeting="false" start="2007-05-02" duration="1" complete="100" priority="1" expand="true">
 <depend id="4" type="2" difference="0" hardness="Strong"/>
 <depend id="5" type="2" difference="0" hardness="Strong"/>
 </task>
-<task id="4" name="Approximation" color="#8cb6ce" meeting="false" start="2007-05-03" duration="2" complete="15" priority="1" expand="true">
+<task id="4" name="Approximation" color="#8cb6ce" meeting="false" start="2007-05-03" duration="2" complete="100" priority="1" expand="true">
 <depend id="5" type="2" difference="0" hardness="Strong"/>
 </task>
-<task id="5" name="Math. Operationen" color="#8cb6ce" meeting="false" start="2007-05-07" duration="1" complete="0" priority="1" expand="true">
+<task id="5" name="Math. Operationen" color="#8cb6ce" meeting="false" start="2007-05-07" duration="1" complete="100" priority="1" expand="true">
 <depend id="6" type="2" difference="0" hardness="Strong"/>
 </task>
-<task id="6" name="Pattern Matching" color="#8cb6ce" meeting="false" start="2007-05-08" duration="2" complete="0" priority="1" expand="true"/>
+<task id="6" name="Pattern Matching" color="#8cb6ce" meeting="false" start="2007-05-08" duration="2" complete="100" priority="1" expand="true"/>
 </task>
-<task id="2" name="Verwaltung" color="#8cb6ce" meeting="false" start="2007-05-10" duration="4" complete="0" priority="1" expand="true">
-<task id="7" name="Erweiterung MQ" color="#8cb6ce" meeting="false" start="2007-05-10" duration="1" complete="0" priority="1" expand="true">
+<task id="2" name="Verwaltung" color="#8cb6ce" meeting="false" start="2007-05-10" duration="3" complete="12" priority="1" expand="true">
+<task id="7" name="Erweiterung MQ" color="#8cb6ce" meeting="false" start="2007-05-10" duration="1" complete="50" priority="1" expand="true">
 <depend id="8" type="2" difference="0" hardness="Strong"/>
 </task>
-<task id="8" name="Kommunikation mit DaV" color="#8cb6ce" meeting="false" start="2007-05-11" duration="3" complete="0" priority="1" expand="true"/>
+<task id="8" name="Kommunikation mit DaV" color="#8cb6ce" meeting="false" start="2007-05-11" duration="2" complete="0" priority="1" expand="true">
+<notes><![CDATA[1) Speicherattributgruppe am MQ fehlt im DaK
+2) Wertebereich und Werttyp der Stützstellen muss im DaK angepasst werden von Ganzzahl > 0 auf positive und negative Gleitkommazahlen
+]]></notes>
+</task>
 </task>
 </task>
 </tasks>
