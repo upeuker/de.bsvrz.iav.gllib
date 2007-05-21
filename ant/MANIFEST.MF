@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Created-By: 1.5.0_11 (Sun Microsystems Inc.)
+Main-Class: de.bsvrz.iav.subsegana.subsegana.Strassensubsegmentanalyse
+Implementation-Title: @Title@
+Implementation-Vendor: BitCtrl Systems GmbH
+Implementation-Vendor-Id: de.bitctrl
+Implementation-URL: http://www.bitctrl.de
+Implementation-Version: @Version@

@@ -1,0 +1,10 @@
+21.05.2007 11:48:21 de.bsvrz.iav.gllib.gllib.PrSpezIAV testfall6
+KONFIG: Tesfall 6: Cut-Operation
+21.05.2007 11:48:21 de.bsvrz.iav.gllib.gllib.PrSpezIAV testfall6
+INFO: Verwende Ganglinie: Ganglinie [5, 80]: {5 => 35}, {15 => 20}, {20 => 30}, {35 => 10}, {50 => 25}, {65 => 20}, {75 => 30}, {80 => 20}
+21.05.2007 11:48:21 de.bsvrz.iav.gllib.gllib.PrSpezIAV testfall6
+INFO: Schneide Bereich aus: [20, 70]
+21.05.2007 11:48:21 de.bsvrz.iav.gllib.gllib.PrSpezIAV testfall6
+INFO: Neue Ganglinie: Ganglinie [20, 70]: {20 => 30}, {35 => 10}, {50 => 25}, {65 => 20}, {70 => 25}
+21.05.2007 11:48:21 de.bsvrz.iav.gllib.gllib.PrSpezIAV testfall6
+INFO: Testfall bestanden.
