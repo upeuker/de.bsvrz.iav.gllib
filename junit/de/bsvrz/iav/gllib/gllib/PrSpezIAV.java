@@ -61,12 +61,12 @@ public class PrSpezIAV {
 
 		logger = Logger.getLogger(getClass().getCanonicalName());
 		try {
-			handler = new StreamHandler(new FileOutputStream("Protokoll.txt"),
+			handler = new StreamHandler(new FileOutputStream("Testprotokoll.txt"),
 					new SimpleFormatter());
 			handler.setLevel(Level.ALL);
 			logger.addHandler(handler);
 
-			handler = new StreamHandler(new FileOutputStream("Protokoll.xml"),
+			handler = new StreamHandler(new FileOutputStream("Testprotokoll.xml"),
 					new XMLFormatter());
 			handler.setLevel(Level.ALL);
 			logger.addHandler(handler);

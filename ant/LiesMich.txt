@@ -8,7 +8,23 @@ Version: @Version@
 Übersicht
 =========
 
-TODO
+Die SWE Funktionen Ganglinie ist als Softwarebibliothek ausgelegt, die von
+beliebigen anderen SWE eingebunden und genutzt werden kann. Sie selbst hat keine
+externe Schnittstelle und keine Benutzerschnittstelle. Sie kapselt für die
+Verwaltung von Ganglinien die Kommunikation mit dem Datenverteiler.
+
+Es werden allgemeine Funktionen zur Verfügung gestellt, die bei der Analyse und
+Bearbeitung von Ganglinien verwendet werden. Die einzelnen Funktionen lassen
+sich in folgende Funktionsbereiche einteilen:
+
+ - allgemeine Verwaltungsfunktionen
+ 
+ - Auswerte und Berechnungsfunktionen
+ 
+ - mathematische Operationen auf Ganglinien
+ 
+ - Pattern Matching
+
 
 Versionsgeschichte
 ==================
@@ -17,14 +33,23 @@ Versionsgeschichte
 
   - Erste Auslieferung
   
+  
+Offene Punkte
+=============
+
+ - Der Attributtyp zum sichern der Stützstellenwerte kann nicht einfach der
+   selbe Attributtyp sein wie vom Messwert. Für eine additive Ganglinie kann die
+   Differenz, also der Wert, auch negativ sein. Negative Werte sind jedoch für
+   Messwerte nicht erlaubt. Für eine multiplikative Ganglinie wird plus oder
+   minus 10% durch 1,10 bzw. 0,90 dargestellt. Gleit- oder Festkommazahlen sind
+   jedoch ebenfalls nicht erlaubt.
+
 
 Hinweise
 ========
 
  - Die Kommunikation mit dem Datenverteiler bzw. das Modul zum Senden und
-   Empfangen von Ganglinien ist noch nicht implementiert. Es wird zusammen mit
-   der nächsten SWE Ganglinienprognose implementiert, um es gleich bei der
-   Entwicklung ausgiebig testen zu können.
+   Empfangen von Ganglinien ist noch nicht implementiert. Siehe offene Punkte.
 
 
 Disclaimer

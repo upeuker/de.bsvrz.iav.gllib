@@ -24,7 +24,7 @@
 	<target name="all" depends="entfernen, vorbereitung" description="Alles erstellen: Release und JUnit">
 		<antcall target="release" />
 		<antcall target="junit" />
-		<antcall target="lib" />
+		<antcall target="res" />
 		<zip basedir="${out.dir}" includes="${swe.id}/**" compress="yes" destfile="${out.dir}/${swe.id}_V${swe.version}.zip" />
 	</target>
 
@@ -162,7 +162,7 @@
 		<javadoc overview="${src.dir.junit}/overview.html"
 		         access="protected"
 		         author="true"
-		         classpath="${classpath}"
+		         classpath="${classpath}:${junit.jar}"
 		         destdir="${tmp.dir}/api"
 		         doctitle="API-Dokumentation für die ${swe.name}"
 		         nodeprecated="false"
@@ -184,7 +184,7 @@
 		<javadoc overview="${src.dir.junit}/overview.html"
 		         access="private"
 		         author="true"
-		         classpath="${classpath}"
+		         classpath="${classpath}:${junit.jar}"
 		         destdir="${tmp.dir}/design"
 		         doctitle="Design-Dokumentation für die ${swe.name}"
 		         nodeprecated="false"
@@ -202,7 +202,7 @@
 		/>
 	</target>
 
-	<target name="lib" description="Kopiert notwendige Bibliotheken und Dateien">
+	<target name="res" description="Kopiert notwendige Bibliotheken und Dateien">
 		<copy todir="${out.dir}/${swe.id}">
 			<fileset dir="${res.dir}">
 				<include name="**/*" />
