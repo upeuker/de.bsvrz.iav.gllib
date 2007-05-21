@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weiï¿½enfelser Straße 67
+ * Weißenfelser Straße 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -26,7 +26,6 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
-import static de.bsvrz.iav.gllib.gllib.Ganglinie.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
@@ -106,6 +105,9 @@ public class TestGanglinie {
 		assertNull(intervall);
 	}
 
+	/**
+	 * Testet das Auslesen der definierten Bereiche der Ganglinie.
+	 */
 	@Test
 	public void testGetIntervalle() {
 		List<Intervall> intervalle;
@@ -161,7 +163,10 @@ public class TestGanglinie {
 
 	/**
 	 * Testet die Suche nach St&uuml;tzstellen.
-	 * @throws UndefiniertException 
+	 * 
+	 * @throws UndefiniertException
+	 *             Wenn auf einen undefinuierten Bereich der Ganglinie
+	 *             zugegriffen wird
 	 */
 	@Test
 	public void testGetStuetzstelle() throws UndefiniertException {
@@ -187,47 +192,47 @@ public class TestGanglinie {
 
 	}
 
-//	@Test
-//	public void testVervollstaendigeStuetzstellen() {
-//		Ganglinie g1, g2;
-//		Stuetzstelle s;
-//
-//		g1 = new Ganglinie();
-//		g1.set(0, 0);
-//		g1.set(40, 20);
-//		g1.set(90, 10);
-//
-//		g2 = new Ganglinie();
-//		g2.set(30, 30);
-//		g2.set(60, 40);
-//
-//		vervollstaendigeStuetzstellen(g1, g2);
-//
-//		s = new Stuetzstelle(0);
-//		try {
-//			// Erste Ganglinie prüfen
-//			s = new Stuetzstelle(0, 0);
-//			assertEquals(s, g1.getStuetzstelle(0L));
-//			s = new Stuetzstelle(30, 15);
-//			assertEquals(s, g1.getStuetzstelle(30L));
-//			s = new Stuetzstelle(40, 20);
-//			assertEquals(s, g1.getStuetzstelle(40L));
-//			s = new Stuetzstelle(60, 16);
-//			assertEquals(s, g1.getStuetzstelle(60L));
-//			s = new Stuetzstelle(90, 10);
-//			assertEquals(s, g1.getStuetzstelle(90L));
-//
-//			// Zweite Ganglinie prï¿½fen
-//			s = new Stuetzstelle(30, 30);
-//			assertEquals(s, g2.getStuetzstelle(30L));
-//			s = new Stuetzstelle(40, 33);
-//			assertEquals(s, g2.getStuetzstelle(40L));
-//			s = new Stuetzstelle(60, 40);
-//			assertEquals(s, g2.getStuetzstelle(60L));
-//		} catch (UndefiniertException e) {
-//			fail(s.toString());
-//		}
-//	}
+	// @Test
+	// public void testVervollstaendigeStuetzstellen() {
+	// Ganglinie g1, g2;
+	// Stuetzstelle s;
+	//
+	// g1 = new Ganglinie();
+	// g1.set(0, 0);
+	// g1.set(40, 20);
+	// g1.set(90, 10);
+	//
+	// g2 = new Ganglinie();
+	// g2.set(30, 30);
+	// g2.set(60, 40);
+	//
+	// vervollstaendigeStuetzstellen(g1, g2);
+	//
+	// s = new Stuetzstelle(0);
+	// try {
+	// // Erste Ganglinie prüfen
+	// s = new Stuetzstelle(0, 0);
+	// assertEquals(s, g1.getStuetzstelle(0L));
+	// s = new Stuetzstelle(30, 15);
+	// assertEquals(s, g1.getStuetzstelle(30L));
+	// s = new Stuetzstelle(40, 20);
+	// assertEquals(s, g1.getStuetzstelle(40L));
+	// s = new Stuetzstelle(60, 16);
+	// assertEquals(s, g1.getStuetzstelle(60L));
+	// s = new Stuetzstelle(90, 10);
+	// assertEquals(s, g1.getStuetzstelle(90L));
+	//
+	// // Zweite Ganglinie prï¿½fen
+	// s = new Stuetzstelle(30, 30);
+	// assertEquals(s, g2.getStuetzstelle(30L));
+	// s = new Stuetzstelle(40, 33);
+	// assertEquals(s, g2.getStuetzstelle(40L));
+	// s = new Stuetzstelle(60, 40);
+	// assertEquals(s, g2.getStuetzstelle(60L));
+	// } catch (UndefiniertException e) {
+	// fail(s.toString());
+	// }
+	// }
 
 	/**
 	 * Testet pro forma die toString()-Methode.

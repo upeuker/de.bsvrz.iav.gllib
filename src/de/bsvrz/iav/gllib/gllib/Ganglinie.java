@@ -66,7 +66,7 @@ public class Ganglinie implements Approximation {
 	private final SortierteListe<Stuetzstelle> stuetzstellen;
 
 	/** Verfahren zur Berechnung der Punkte zwischen den St&uuml;tzstellen. */
-	private Approximation approximation = new BSpline(this, (short) 5);
+	private Approximation approximation;
 
 	// /**
 	// * Vervollst&auml;ndigt die St&uuml;tzstellenmengen zweier Ganglinien.
@@ -358,7 +358,7 @@ public class Ganglinie implements Approximation {
 		teilintervall = g.stuetzstellen.subSet(new Stuetzstelle(i.start),
 				new Stuetzstelle(i.ende + 1));
 		a = new Ganglinie(teilintervall);
-		p = new Polyline(a);
+		p = new Polyline(g);
 
 		if (!a.existsStuetzstelle(i.start)) {
 			try {
@@ -931,6 +931,10 @@ public class Ganglinie implements Approximation {
 	 * @return Approximation der Ganglinie
 	 */
 	public Approximation getApproximation() {
+		if (approximation == null) {
+			setStandardApproximation();
+		}
+
 		return approximation;
 	}
 
@@ -953,6 +957,10 @@ public class Ganglinie implements Approximation {
 	 * {@inheritDoc}
 	 */
 	public Stuetzstelle get(long zeitstempel) throws UndefiniertException {
+		if (approximation == null) {
+			setStandardApproximation();
+		}
+
 		return approximation.get(zeitstempel);
 	}
 
@@ -961,6 +969,37 @@ public class Ganglinie implements Approximation {
 	 */
 	public SortedSet<Stuetzstelle> interpoliere(long anzahlIntervalle) {
 		return approximation.interpoliere(anzahlIntervalle);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see java.lang.Object#equals(Object)
+	 */
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof Ganglinie) {
+			Ganglinie g;
+
+			g = (Ganglinie) o;
+
+			// Anzahl der Stützstellen muss übereinstimmen
+			if (anzahlStuetzstellen() != g.anzahlStuetzstellen()) {
+				return false;
+			}
+
+			// Stützstellen müssen in Zeitstempel und Wert übereinstimmen
+			for (int i = 0; i < stuetzstellen.size(); i++) {
+				if ((getStuetzstelle(i).zeitstempel != g.getStuetzstelle(i).zeitstempel)
+						|| (getStuetzstelle(i).wert != g.getStuetzstelle(i).wert)) {
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -998,6 +1037,15 @@ public class Ganglinie implements Approximation {
 				.getListeners(GanglinienListener.class)) {
 			l.ganglinieAktualisiert(e);
 		}
+	}
+
+	/**
+	 * Legt die Standardapproximation fest. Standard ist derzeit ein B-Spline
+	 * mit der Ordnung 5.
+	 * 
+	 */
+	private void setStandardApproximation() {
+		approximation = new BSpline(this, (short) 5);
 	}
 
 }
