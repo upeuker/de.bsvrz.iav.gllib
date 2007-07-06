@@ -7,3 +7,7 @@ Bundle-Vendor: BitCtrl Systems GmbH
 Bundle-Localization: plugin
 Require-Bundle: de.bitctrl.sys.funclib,
  de.bitctrl.dav.daf
+Export-Package: de.bsvrz.iav.gllib.gllib,
+ de.bsvrz.iav.gllib.gllib.dav,
+ de.bsvrz.iav.gllib.gllib.events,
+ de.bsvrz.iav.gllib.gllib.ui
