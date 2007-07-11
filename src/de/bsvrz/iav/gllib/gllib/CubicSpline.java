@@ -32,16 +32,14 @@ import static de.bsvrz.sys.funclib.bitctrl.math.RationaleZahl.multipliziere;
 import static de.bsvrz.sys.funclib.bitctrl.math.RationaleZahl.potenz;
 import static de.bsvrz.sys.funclib.bitctrl.math.RationaleZahl.subtrahiere;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 
 import de.bsvrz.iav.gllib.gllib.events.GanglinienEvent;
-import de.bsvrz.iav.gllib.gllib.events.GanglinienListener;
 import de.bsvrz.sys.funclib.bitctrl.math.RationaleZahl;
 import de.bsvrz.sys.funclib.bitctrl.math.algebra.Gauss;
 import de.bsvrz.sys.funclib.bitctrl.math.algebra.Matrix;
 import de.bsvrz.sys.funclib.bitctrl.math.algebra.Vektor;
-import de.bsvrz.sys.funclib.bitctrl.util.UndefiniertException;
 
 /**
  * Approximation einer Ganglinie mit Hilfe eines Cubic-Splines.
@@ -49,8 +47,7 @@ import de.bsvrz.sys.funclib.bitctrl.util.UndefiniertException;
  * @author BitCtrl, Schumann
  * @version $Id$
  */
-public class CubicSpline extends AbstractApproximation implements
-		GanglinienListener {
+public class CubicSpline extends AbstractApproximation {
 
 	/** Enth&auml;lt nur die definierten St&uuml;tzstellen der Ganglinie. */
 	private Stuetzstelle[] stuetzstellen;
@@ -71,14 +68,6 @@ public class CubicSpline extends AbstractApproximation implements
 	private RationaleZahl[] h;
 
 	/**
-	 * Tut nichts. Standardkonstruktor ist f&uuml;r Festlegen der
-	 * Ganglinienapproximation notwendig.
-	 */
-	public CubicSpline() {
-		// nix
-	}
-
-	/**
 	 * Konstruiert eine Approximation durch einen Cubic-Spline f&uuml;r eine
 	 * Ganglinie. Die in der Ganglinie festgelegte Approximation wird nicht
 	 * ver&auml;ndert.
@@ -86,18 +75,17 @@ public class CubicSpline extends AbstractApproximation implements
 	 * @param ganglinie
 	 *            Eine Ganglinie
 	 */
-	public CubicSpline(Ganglinie ganglinie) {
-		setGanglinie(ganglinie);
+	CubicSpline(Ganglinie ganglinie) {
+		super(ganglinie);
 		bestimmeKoeffizienten();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public Stuetzstelle get(long zeitstempel) throws UndefiniertException {
+	public Stuetzstelle get(long zeitstempel) {
 		if (!ganglinie.isValid(zeitstempel)) {
-			throw new UndefiniertException("Die Ganglinie ist zum Zeitpunkt "
-					+ zeitstempel + " undefiniert.");
+			return new Stuetzstelle(zeitstempel, null);
 		}
 
 		if (ganglinie.getIntervall().start == zeitstempel
@@ -118,20 +106,6 @@ public class CubicSpline extends AbstractApproximation implements
 	}
 
 	/**
-	 * Ruft den Setter der Superklasse auf und aktuallsiert anschlie&szlig;end
-	 * die Koeffizienten. Es wird ebenfalls der Ganglinie diese Approximation
-	 * als GanglinienListener hinzugef&uuml;gt.
-	 * <p>
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setGanglinie(Ganglinie ganglinie) {
-		super.setGanglinie(ganglinie);
-		ganglinie.addGanglinienListener(this);
-		bestimmeKoeffizienten();
-	}
-
-	/**
 	 * Berechnet die St&uuml;tzstelle.
 	 * 
 	 * @param zeitstempel
@@ -144,15 +118,12 @@ public class CubicSpline extends AbstractApproximation implements
 
 		index = -1;
 		for (int i = 0; i < stuetzstellen.length; i++) {
-			if (stuetzstellen[i].zeitstempel > zeitstempel) {
+			if (stuetzstellen[i].getZeitstempel() > zeitstempel) {
 				index = i - 1;
 				break;
 			}
 		}
-		if (index < 0) {
-			throw new IllegalStateException();
-		}
-		xi = new RationaleZahl(stuetzstellen[index].zeitstempel);
+		xi = new RationaleZahl(stuetzstellen[index].getZeitstempel());
 		x = new RationaleZahl(zeitstempel);
 
 		r = addiere(addiere(addiere(a[index], multipliziere(b[index],
@@ -168,24 +139,18 @@ public class CubicSpline extends AbstractApproximation implements
 	 */
 	private void bestimmeKoeffizienten() {
 		int n;
-		List<Stuetzstelle> stuetzstellenListe;
-		ListIterator<Stuetzstelle> iterator;
+		List<Stuetzstelle> liste;
 		Matrix m;
 		Vektor v;
 
-		stuetzstellenListe = ganglinie.getStuetzstellen();
-		iterator = stuetzstellenListe.listIterator();
-		while (iterator.hasNext()) {
-			Stuetzstelle s;
-
-			s = iterator.next();
-			if (s.wert == null) {
-				iterator.remove();
+		liste = new ArrayList<Stuetzstelle>();
+		for (Stuetzstelle s : ganglinie.getStuetzstellen()) {
+			if (s.getWert() != null) {
+				liste.add(s);
 			}
 		}
-		n = stuetzstellenListe.size();
-		stuetzstellen = new Stuetzstelle[n];
-		stuetzstellen = stuetzstellenListe.toArray(new Stuetzstelle[0]);
+		n = liste.size();
+		stuetzstellen = liste.toArray(new Stuetzstelle[0]);
 
 		a = new RationaleZahl[n];
 		b = new RationaleZahl[n];
@@ -195,13 +160,13 @@ public class CubicSpline extends AbstractApproximation implements
 
 		for (int i = 0; i < n; i++) {
 			// Erster Koeffizent
-			a[i] = new RationaleZahl(stuetzstellen[i].wert);
+			a[i] = new RationaleZahl(stuetzstellen[i].getWert());
 
 			// Intervallbreite
 			if (i < n - 1) {
 				h[i] = RationaleZahl.subtrahiere(new RationaleZahl(
-						stuetzstellen[i + 1].zeitstempel), new RationaleZahl(
-						stuetzstellen[i].zeitstempel));
+						stuetzstellen[i + 1].getZeitstempel()),
+						new RationaleZahl(stuetzstellen[i].getZeitstempel()));
 			}
 		}
 
@@ -242,4 +207,13 @@ public class CubicSpline extends AbstractApproximation implements
 					c[i - 1], 2), c[i]), 3), h[i - 1]));
 		}
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return "Cubic-Spline";
+	}
+
 }

@@ -99,14 +99,14 @@ public class PrSpezIAV {
 		logger.config("Tesfall 6: Cut-Operation");
 
 		g = new Ganglinie();
-		g.set(5, 35);
-		g.set(15, 20);
-		g.set(20, 30);
-		g.set(35, 10);
-		g.set(50, 25);
-		g.set(65, 20);
-		g.set(75, 30);
-		g.set(80, 20);
+		g.setStuetzstelle(5, 35);
+		g.setStuetzstelle(15, 20);
+		g.setStuetzstelle(20, 30);
+		g.setStuetzstelle(35, 10);
+		g.setStuetzstelle(50, 25);
+		g.setStuetzstelle(65, 20);
+		g.setStuetzstelle(75, 30);
+		g.setStuetzstelle(80, 20);
 		logger.info("Verwende Ganglinie: " + g);
 
 		i = new Intervall(20, 70);
@@ -115,11 +115,11 @@ public class PrSpezIAV {
 		logger.info("Neue Ganglinie: " + g);
 		
 		erg = new Ganglinie();
-		erg.set(20, 30);
-		erg.set(35, 10);
-		erg.set(50, 25);
-		erg.set(65, 20);
-		erg.set(70, 25);
+		erg.setStuetzstelle(20, 30);
+		erg.setStuetzstelle(35, 10);
+		erg.setStuetzstelle(50, 25);
+		erg.setStuetzstelle(65, 20);
+		erg.setStuetzstelle(70, 25);
 		
 		assertEquals(erg, g);
 		logger.info("Testfall bestanden.");

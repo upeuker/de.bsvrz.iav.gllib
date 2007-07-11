@@ -31,8 +31,6 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.bsvrz.sys.funclib.bitctrl.util.UndefiniertException;
-
 /**
  * Testet die Approximation einer Ganglinie mit Hilfe eines B-Spline.
  * 
@@ -48,33 +46,29 @@ public class TestBSpline {
 	@Before
 	public void setUp() {
 		ganglinie = new Ganglinie();
-		ganglinie.set(new Stuetzstelle(0, 0));
-		ganglinie.set(new Stuetzstelle(30, 30));
-		ganglinie.set(new Stuetzstelle(40, 20));
-		ganglinie.set(new Stuetzstelle(60, 40));
-		ganglinie.set(new Stuetzstelle(90, 10));
+		ganglinie.setStuetzstelle(0, 0);
+		ganglinie.setStuetzstelle(30, 30);
+		ganglinie.setStuetzstelle(40, 20);
+		ganglinie.setStuetzstelle(60, 40);
+		ganglinie.setStuetzstelle(90, 10);
 	}
 
 	/**
 	 * Pr&uuml;ft ob bei Anfrage einer St&uuml;tzstelle auch der richtige
 	 * Zeitstempel kommt. Beim B-Spline ist dies nicht trivial. Dieser Test
 	 * arbeitet mit einer vorgegebenen Ganglinie.
-	 * 
-	 * @throws UndefiniertException
-	 *             Wenn auf einen undefinierten Bereich der Ganglinie
-	 *             zugegriffen wird
 	 */
 	@Test
-	public void testGetA() throws UndefiniertException {
+	public void testGetA() {
 		Ganglinie g;
 		BSpline spline;
 
 		g = new Ganglinie();
-		g.set(0, 0);
-		g.set(300, 300);
-		g.set(400, 200);
-		g.set(600, 400);
-		g.set(900, 100);
+		g.setStuetzstelle(0, 0);
+		g.setStuetzstelle(300, 300);
+		g.setStuetzstelle(400, 200);
+		g.setStuetzstelle(600, 400);
+		g.setStuetzstelle(900, 100);
 
 		spline = new BSpline(g);
 
@@ -83,7 +77,7 @@ public class TestBSpline {
 		for (short k = 1; k <= g.anzahlStuetzstellen(); k++) {
 			spline.setOrdnung(k);
 			for (long t = g.getIntervall().start; t <= g.getIntervall().ende; t += 1) {
-				assertEquals(t, spline.get(t).zeitstempel);
+				assertEquals(t, spline.get(t).getZeitstempel());
 			}
 		}
 	}
@@ -92,13 +86,9 @@ public class TestBSpline {
 	 * Pr&uuml;ft ob bei Anfrage einer St&uuml;tzstelle auch der richtige
 	 * Zeitstempel kommt. Beim B-Spline ist dies nicht trivial. Dieser Test
 	 * arbeitet mit einer zuf&auml;lligen Ganglinie.
-	 * 
-	 * @throws UndefiniertException
-	 *             Wenn auf einen undefinierten Bereich der Ganglinie
-	 *             zugegriffen wird
 	 */
 	@Test
-	public void testGetB() throws UndefiniertException {
+	public void testGetB() {
 		Ganglinie g;
 		BSpline spline;
 
@@ -106,7 +96,7 @@ public class TestBSpline {
 		for (int i = 0; i < 100; i++) {
 			long x = (long) (Math.random() * 1000);
 			int y = (int) (Math.random() * 1000);
-			g.set(x, y);
+			g.setStuetzstelle(x, y);
 		}
 
 		spline = new BSpline(g);
@@ -115,7 +105,7 @@ public class TestBSpline {
 		for (short k = 1; k < 10; k++) {
 			spline.setOrdnung(k);
 			for (long t = g.getIntervall().start; t <= g.getIntervall().ende; t += 1) {
-				assertEquals(t, spline.get(t).zeitstempel);
+				assertEquals(t, spline.get(t).getZeitstempel());
 			}
 		}
 	}

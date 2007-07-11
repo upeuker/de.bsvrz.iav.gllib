@@ -29,7 +29,7 @@ package de.bsvrz.iav.gllib.gllib;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import de.bsvrz.sys.funclib.bitctrl.util.UndefiniertException;
+import de.bsvrz.iav.gllib.gllib.events.GanglinienListener;
 
 /**
  * Implementiert nur die Property <code>Ganglinie</code> der Schnittstelle.
@@ -37,20 +37,26 @@ import de.bsvrz.sys.funclib.bitctrl.util.UndefiniertException;
  * @author BitCtrl, Schumann
  * @version $Id$
  */
-public abstract class AbstractApproximation implements Approximation {
+public abstract class AbstractApproximation implements Approximation,
+		GanglinienListener {
 
 	/** Die der Approximation zugrunde liegende Ganglinie. */
-	protected Ganglinie ganglinie;
+	protected final Ganglinie ganglinie;
 
 	/**
-	 * {@inheritDoc}
+	 * Konstruiert eine Approximation, indem der Verweis auf die zu
+	 * approximierende Ganglinie gesichert wird.
+	 * 
+	 * @param ganglinie
+	 *            Die zu approximierende Ganglinie
 	 */
-	public void setGanglinie(Ganglinie ganglinie) {
+	protected AbstractApproximation(Ganglinie ganglinie) {
 		if (ganglinie == null) {
 			throw new NullPointerException(
 					"Die Ganglinie darf nicht null sein.");
 		}
 		this.ganglinie = ganglinie;
+		ganglinie.addGanglinienListener(this);
 	}
 
 	/**
@@ -73,11 +79,7 @@ public abstract class AbstractApproximation implements Approximation {
 		// Stützstellen an den Intervallgrenzen bestimmen
 		zeitstempel = ganglinie.getIntervall().start;
 		while (zeitstempel < ganglinie.getIntervall().ende) {
-			try {
-				interpolation.add(get(zeitstempel));
-			} catch (UndefiniertException e) {
-				// einfach ignorieren
-			}
+			interpolation.add(get(zeitstempel));
 			zeitstempel += intervallBreite;
 		}
 

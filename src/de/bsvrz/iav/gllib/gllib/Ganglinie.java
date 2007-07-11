@@ -26,12 +26,16 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
 import java.util.SortedSet;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Map.Entry;
 
@@ -39,16 +43,14 @@ import javax.swing.event.EventListenerList;
 
 import de.bsvrz.iav.gllib.gllib.events.GanglinienEvent;
 import de.bsvrz.iav.gllib.gllib.events.GanglinienListener;
-import de.bsvrz.sys.funclib.bitctrl.i18n.Messages;
 import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
-import de.bsvrz.sys.funclib.bitctrl.util.SortierteListe;
-import de.bsvrz.sys.funclib.bitctrl.util.UndefiniertException;
 
 /**
  * Repr&auml;sentiert eine allgemeine Ganglinie, bestehend aus einer sortierten
  * Menge von St&uuml;tzstellen und der Angabe eines Interpolationsverfahren.
  * Wird kein Approximationsverfahren festgelegt, wird ein
- * {@link BSpline B-Spline} mit Standardordnung angenommen.
+ * {@link de.bsvrz.iav.gllib.gllib.BSpline B-Spline} mit Standardordnung
+ * angenommen.
  * <p>
  * Da Ganglinien verschiedene Approximationsverfahren verwenden können, wird für
  * neue Ganglinien, die bei den Operationen (z. B. Addition) entstehen, das
@@ -57,81 +59,7 @@ import de.bsvrz.sys.funclib.bitctrl.util.UndefiniertException;
  * @author BitrCtrl, Schumann
  * @version $Id$
  */
-public class Ganglinie implements Approximation {
-
-	/** Liste aller Listener. */
-	private final EventListenerList listeners;
-
-	/** Speicher der St&uuml;tzstellen. */
-	private final SortierteListe<Stuetzstelle> stuetzstellen;
-
-	/** Verfahren zur Berechnung der Punkte zwischen den St&uuml;tzstellen. */
-	private Approximation approximation;
-
-	// /**
-	// * Vervollst&auml;ndigt die St&uuml;tzstellenmengen zweier Ganglinien.
-	// Dabei
-	// * werden fehlende Stu&uuml;tzstellen mittels Approximation durch eine
-	// * Polylinie erg&auml;nzt.
-	// * <p>
-	// * <em>Hinweis:</em> Die beiden Parameter der Methode werden modifiziert!
-	// *
-	// * @param g1
-	// * Erste Ganglinie
-	// * @param g2
-	// * Zweite Ganglinie
-	// */
-	// public static void vervollstaendigeStuetzstellen(Ganglinie g1, Ganglinie
-	// g2) {
-	// Polyline p1, p2;
-	//
-	// p1 = new Polyline(g1);
-	// p2 = new Polyline(g2);
-	//
-	// for (Stuetzstelle s : g1.getStuetzstellen()) {
-	// if (!g2.existsStuetzstelle(s.zeitstempel)) {
-	// try {
-	// g2.set(p2.get(s.zeitstempel));
-	// } catch (UndefiniertException e) {
-	// g2.set(s.zeitstempel, null);
-	// }
-	// }
-	// }
-	//
-	// for (Stuetzstelle s : g2.getStuetzstellen()) {
-	// if (!g1.existsStuetzstelle(s.zeitstempel)) {
-	// try {
-	// g1.set(p1.get(s.zeitstempel));
-	// } catch (UndefiniertException e) {
-	// g1.set(s.zeitstempel, null);
-	// }
-	// }
-	// }
-	// }
-
-	/**
-	 * Bestimmt die vereinigte Menge der St&uuml;tzstellen beider Ganglinien.
-	 * 
-	 * @param g1
-	 *            Erste Ganglinie
-	 * @param g2
-	 *            Zweite Ganglinie
-	 * @return Menge von St&uuml;tzstellenreferenzen in Form von Zeitstempeln
-	 */
-	private static SortedSet<Long> vervollstaendigeStuetzstellen(Ganglinie g1,
-			Ganglinie g2) {
-		SortedSet<Long> zeitstempel;
-
-		zeitstempel = new TreeSet<Long>();
-		for (Stuetzstelle s : g1.stuetzstellen) {
-			zeitstempel.add(s.zeitstempel);
-		}
-		for (Stuetzstelle s : g2.stuetzstellen) {
-			zeitstempel.add(s.zeitstempel);
-		}
-
-		return zeitstempel;
-	}
+public class Ganglinie {
 
 	/**
 	 * Addiert zwei Ganglinien, indem die Werte der vervollst&auml;ndigten
@@ -160,10 +88,10 @@ public class Ganglinie implements Approximation {
 			z = zeitstempel.first();
 			zeitstempel.remove(z);
 
-			try {
-				g.set(z, p1.get(z).wert + p2.get(z).wert);
-			} catch (UndefiniertException e) {
-				g.set(z, null);
+			if (p1.get(z).getWert() == null || p2.get(z).getWert() == null) {
+				g.setStuetzstelle(z, null);
+			} else {
+				g.setStuetzstelle(z, p1.get(z).getWert() + p2.get(z).getWert());
 			}
 		}
 
@@ -197,10 +125,10 @@ public class Ganglinie implements Approximation {
 			z = zeitstempel.first();
 			zeitstempel.remove(z);
 
-			try {
-				g.set(z, p1.get(z).wert - p2.get(z).wert);
-			} catch (UndefiniertException e) {
-				g.set(z, null);
+			if (p1.get(z).getWert() == null || p2.get(z).getWert() == null) {
+				g.setStuetzstelle(z, null);
+			} else {
+				g.setStuetzstelle(z, p1.get(z).getWert() - p2.get(z).getWert());
 			}
 		}
 
@@ -234,10 +162,10 @@ public class Ganglinie implements Approximation {
 			z = zeitstempel.first();
 			zeitstempel.remove(z);
 
-			try {
-				g.set(z, p1.get(z).wert * p2.get(z).wert);
-			} catch (UndefiniertException e) {
-				g.set(z, null);
+			if (p1.get(z).getWert() == null || p2.get(z).getWert() == null) {
+				g.setStuetzstelle(z, null);
+			} else {
+				g.setStuetzstelle(z, p1.get(z).getWert() * p2.get(z).getWert());
 			}
 		}
 
@@ -271,10 +199,13 @@ public class Ganglinie implements Approximation {
 			z = zeitstempel.first();
 			zeitstempel.remove(z);
 
-			try {
-				g.set(z, Math.round((float) p1.get(z).wert / p2.get(z).wert));
-			} catch (UndefiniertException e) {
-				g.set(z, null);
+			if (p1.get(z).getWert() == null || p2.get(z).getWert() == null
+					|| p2.get(z).getWert() == 0) {
+				// Einer der Werte ist undefiniert oder der Divisor ist 0
+				g.setStuetzstelle(z, null);
+			} else {
+				g.setStuetzstelle(z, Math.round((float) p1.get(z).getWert()
+						/ p2.get(z).getWert()));
 			}
 		}
 
@@ -294,11 +225,43 @@ public class Ganglinie implements Approximation {
 		Ganglinie v;
 
 		v = new Ganglinie();
-		for (Stuetzstelle s : g.stuetzstellen) {
-			v.set(s.zeitstempel + offset, s.wert);
+		for (long t : g.stuetzstellen.keySet()) {
+			v.setStuetzstelle(t + offset, g.getStuetzstelle(t).getWert());
 		}
 
 		return v;
+	}
+
+	/**
+	 * Schneidet ein Intervall aus einer Ganglinie heraus. Existieren keine
+	 * St&uuml;tzstellen in den Intervallgrenzen, werden an diesen Stellen
+	 * mittels Approximation durch Polyline St&uuml;tzstellen hinzugef&uuml;gt.
+	 * 
+	 * @param g
+	 *            Eine Ganglinie
+	 * @param i
+	 *            Auszuschneidendes Intervall
+	 * @return Der Intervallausschnitt
+	 */
+	public static Ganglinie auschneiden(Ganglinie g, Intervall i) {
+		Ganglinie a;
+		Polyline p;
+		SortedMap<Long, Integer> teilintervall;
+
+		teilintervall = g.stuetzstellen.subMap(i.start, i.ende + 1);
+		a = new Ganglinie(teilintervall);
+		p = new Polyline(g);
+
+		if (!a.existsStuetzstelle(i.start)) {
+			a.setStuetzstelle(p.get(i.start));
+		}
+
+		if (!a.existsStuetzstelle(i.ende)) {
+			a.setStuetzstelle(p.get(i.ende));
+		}
+
+		return a;
+
 	}
 
 	/**
@@ -322,64 +285,18 @@ public class Ganglinie implements Approximation {
 
 		Ganglinie g;
 
-		g = new Ganglinie(g1);
-		for (Stuetzstelle s : g2.stuetzstellen) {
-			if (g.existsStuetzstelle(s.zeitstempel)) {
-				try {
-					g.set(s.zeitstempel, Math.round((float) (g
-							.get(s.zeitstempel).wert + s.wert) / 2));
-				} catch (UndefiniertException e) {
-					g.set(s.zeitstempel, null);
-				}
+		g = new Ganglinie(g1.stuetzstellen);
+		for (long t : g2.stuetzstellen.keySet()) {
+			if (g.existsStuetzstelle(t)) {
+
+				g.setStuetzstelle(t, Math.round((float) (g.getStuetzstelle(t)
+						.getWert() + g2.getStuetzstelle(t).getWert()) / 2));
 			} else {
-				g.set(s);
+				g.setStuetzstelle(g2.getStuetzstelle(t));
 			}
 		}
 
 		return g;
-	}
-
-	/**
-	 * Schneidet ein Intervall aus einer Ganglinie heraus. Existieren keine
-	 * St&uuml;tzstellen in den Intervallgrenzen, werden an diesen Stellen
-	 * mittels Approximation durch Polyline St&uuml;tzstellen hinzugef&uuml;gt.
-	 * 
-	 * @param g
-	 *            Eine Ganglinie
-	 * @param i
-	 *            Auszuschneidendes Intervall
-	 * @return Der Intervallausschnitt
-	 */
-	public static Ganglinie auschneiden(Ganglinie g, Intervall i) {
-		Ganglinie a;
-		Polyline p;
-		SortedSet<Stuetzstelle> teilintervall;
-
-		teilintervall = g.stuetzstellen.subSet(new Stuetzstelle(i.start),
-				new Stuetzstelle(i.ende + 1));
-		a = new Ganglinie(teilintervall);
-		p = new Polyline(g);
-
-		if (!a.existsStuetzstelle(i.start)) {
-			try {
-				a.set(p.get(i.start));
-			} catch (UndefiniertException e) {
-				// Nichts zu tun, da der Bereich vor der Ganglinie a priori
-				// undefiniert ist
-			}
-		}
-
-		if (!a.existsStuetzstelle(i.ende)) {
-			try {
-				a.set(p.get(i.ende));
-			} catch (UndefiniertException e) {
-				// Nichts zu tun, da der Bereich hinter der Ganglinie a priori
-				// undefiniert ist
-			}
-		}
-
-		return a;
-
 	}
 
 	/**
@@ -409,13 +326,8 @@ public class Ganglinie implements Approximation {
 			z = zeitstempel.first();
 			zeitstempel.remove(z);
 
-			try {
-				x = p2.get(z).wert - p1.get(z).wert;
-				summe += x * x;
-			} catch (UndefiniertException e) {
-				// Nicht zu tun, da undefinierte Bereiche nicht bewertet werden
-				// können
-			}
+			x = p2.get(z).getWert() - p1.get(z).getWert();
+			summe += x * x;
 		}
 		fehler = Math.sqrt(summe / zeitstempel.size());
 
@@ -427,13 +339,8 @@ public class Ganglinie implements Approximation {
 			z = zeitstempel.first();
 			zeitstempel.remove(z);
 
-			try {
-				x = (p1.get(z).wert + p2.get(z).wert) / 2;
-				summe += x * x;
-			} catch (UndefiniertException e) {
-				// Nicht zu tun, da undefinierte Bereiche nicht bewertet werden
-				// können
-			}
+			x = (p1.get(z).getWert() + p2.get(z).getWert()) / 2;
+			summe += x * x;
 		}
 		fehler = (fehler * 100) / (Math.sqrt(summe / zeitstempel.size()));
 
@@ -464,15 +371,15 @@ public class Ganglinie implements Approximation {
 		p2 = new Polyline(g2);
 
 		// Zu betrachtendes Intervall und Intervallbreite bestimmen
-		if (g1.stuetzstellen.first().zeitstempel < g2.stuetzstellen.first().zeitstempel) {
-			start = g2.stuetzstellen.first().zeitstempel;
+		if (g1.stuetzstellen.firstKey() < g2.stuetzstellen.firstKey()) {
+			start = g2.stuetzstellen.firstKey();
 		} else {
-			start = g1.stuetzstellen.first().zeitstempel;
+			start = g1.stuetzstellen.firstKey();
 		}
-		if (g1.stuetzstellen.last().zeitstempel < g2.stuetzstellen.last().zeitstempel) {
-			ende = g1.stuetzstellen.last().zeitstempel;
+		if (g1.stuetzstellen.lastKey() < g2.stuetzstellen.lastKey()) {
+			ende = g1.stuetzstellen.lastKey();
 		} else {
-			ende = g2.stuetzstellen.last().zeitstempel;
+			ende = g2.stuetzstellen.lastKey();
 		}
 		breite = Math.round((float) (ende - start) / intervalle);
 
@@ -491,13 +398,8 @@ public class Ganglinie implements Approximation {
 			z = zeitstempel.first();
 			zeitstempel.remove(z);
 
-			try {
-				x = p2.get(z).wert - p1.get(z).wert;
-				summe += x * x;
-			} catch (UndefiniertException e) {
-				// Nicht zu tun, da undefinierte Bereiche nicht bewertet werden
-				// können
-			}
+			x = p2.get(z).getWert() - p1.get(z).getWert();
+			summe += x * x;
 		}
 		fehler = Math.sqrt(summe / zeitstempel.size());
 
@@ -509,13 +411,8 @@ public class Ganglinie implements Approximation {
 			z = zeitstempel.first();
 			zeitstempel.remove(z);
 
-			try {
-				x = (p1.get(z).wert + p2.get(z).wert) / 2;
-				summe += x * x;
-			} catch (UndefiniertException e) {
-				// Nicht zu tun, da undefinierte Bereiche nicht bewertet werden
-				// können
-			}
+			x = (p1.get(z).getWert() + p2.get(z).getWert()) / 2;
+			summe += x * x;
 		}
 		fehler = (fehler * 100) / (Math.sqrt(summe / zeitstempel.size()));
 
@@ -575,27 +472,41 @@ public class Ganglinie implements Approximation {
 	}
 
 	/**
+	 * Bestimmt die vereinigte Menge der St&uuml;tzstellen beider Ganglinien.
+	 * 
+	 * @param g1
+	 *            Erste Ganglinie
+	 * @param g2
+	 *            Zweite Ganglinie
+	 * @return Menge von St&uuml;tzstellenreferenzen in Form von Zeitstempeln
+	 */
+	private static SortedSet<Long> vervollstaendigeStuetzstellen(Ganglinie g1,
+			Ganglinie g2) {
+		SortedSet<Long> zeitstempel;
+
+		zeitstempel = new TreeSet<Long>();
+		zeitstempel.addAll(g1.stuetzstellen.keySet());
+		zeitstempel.addAll(g2.stuetzstellen.keySet());
+
+		return zeitstempel;
+	}
+
+	/** Speicher der St&uuml;tzstellen. */
+	private SortedMap<Long, Integer> stuetzstellen;
+
+	/** Verfahren zur Berechnung der Punkte zwischen den St&uuml;tzstellen. */
+	private Approximation approximation;
+
+	/** Liste aller Listener. */
+	private final EventListenerList listeners;
+
+	/**
 	 * Konstruiert eine Ganglinie ohne St&uuml;tzstellen.
 	 */
 	public Ganglinie() {
-		stuetzstellen = new SortierteListe<Stuetzstelle>();
+		stuetzstellen = new TreeMap<Long, Integer>();
 		listeners = new EventListenerList();
-	}
-
-	/**
-	 * Kopierkonstruktor. Es werden die St&uuml;tzstellen und die Art der
-	 * Approximation &uuml;bernommen.
-	 * 
-	 * @param ganglinie
-	 *            Die zu kopierende Ganglinie
-	 */
-	public Ganglinie(Ganglinie ganglinie) {
-		this();
-		for (Stuetzstelle s : ganglinie.stuetzstellen) {
-			stuetzstellen.add(s);
-		}
-		setApproximation(ganglinie.approximation.getClass());
-		fireGanglinienAktualisierung();
+		setStandardApproximation();
 	}
 
 	/**
@@ -603,34 +514,30 @@ public class Ganglinie implements Approximation {
 	 * <em>Collection</em> &uuml;bernommen.
 	 * 
 	 * @param stuetzstellen
-	 *            Die St&uuml;tzstellen der Ganglinie
+	 *            Die St&uuml;tzstellen der Ganglinie.
 	 */
 	public Ganglinie(Collection<Stuetzstelle> stuetzstellen) {
 		this();
 		for (Stuetzstelle s : stuetzstellen) {
-			this.stuetzstellen.add(s);
+			this.stuetzstellen.put(s.getZeitstempel(), s.getWert());
 		}
 		fireGanglinienAktualisierung();
 	}
 
 	/**
-	 * Registriert einen Listener.
+	 * Kopierkonstruktor. Es werden die St&uuml;tzstellen aus der <em>Map</em>
+	 * &uuml;bernommen, wobei die Schl&uuml;ssel als Zeitstempel interpretiert
+	 * werden (Zeitstempel -> Wert).
 	 * 
-	 * @param listener
-	 *            Der neue Listener
+	 * @param stuetzstellen
+	 *            Die St&uuml;tzstellen der Ganglinie.
 	 */
-	public void addGanglinienListener(GanglinienListener listener) {
-		listeners.add(GanglinienListener.class, listener);
-	}
-
-	/**
-	 * Entfernt einen Listener wieder aus der Liste registrierter Listener.
-	 * 
-	 * @param listener
-	 *            Listener der abgemeldet werden soll
-	 */
-	public void removeGanglinienListener(GanglinienListener listener) {
-		listeners.remove(GanglinienListener.class, listener);
+	public Ganglinie(Map<Long, Integer> stuetzstellen) {
+		this();
+		for (long t : stuetzstellen.keySet()) {
+			this.stuetzstellen.put(t, stuetzstellen.get(t));
+		}
+		fireGanglinienAktualisierung();
 	}
 
 	/**
@@ -652,185 +559,7 @@ public class Ganglinie implements Approximation {
 	 *         St&uuml;tzstelle berechnet werden muss
 	 */
 	public boolean existsStuetzstelle(long zeitstempel) {
-		return stuetzstellen.contains(new Stuetzstelle(zeitstempel));
-	}
-
-	/**
-	 * Gibt die sortierte Liste der existierenden St&uuml;tzstellen
-	 * zur&uuml;ck;.
-	 * 
-	 * @return Nach Zeitstempel sortiere St&uuml;tzstellenliste
-	 */
-	public List<Stuetzstelle> getStuetzstellen() {
-		return new ArrayList<Stuetzstelle>(stuetzstellen);
-	}
-
-	/**
-	 * Gibt die real existierende St&uuml;tzstelle zu einem Zeitpunkt
-	 * zur&uuml;ck. Ist zu dem angegebenen Zeitpunkt keine St&uuml;tzstelle
-	 * gesichert, wird {@code null} zur&uuml;ckgegeben.
-	 * 
-	 * @param zeitstempel
-	 *            Der Zeitstempel zu dem eine St&uuml;tzstelle gesucht wird
-	 * @return Die gesuchte St&uuml;tzstelle oder {@code null}, wenn keine
-	 *         existiert
-	 * @throws UndefiniertException
-	 *             Wenn der Zeitstempel nicht im G&uuml;ltigkeitsbereich der
-	 *             Ganglinie liegt
-	 */
-	public Stuetzstelle getStuetzstelle(long zeitstempel)
-			throws UndefiniertException {
-		if (!isValid(zeitstempel)) {
-			throw new UndefiniertException(
-					"Der Zeitstempel liegt nicht im Gültigkeitsbereich der Ganglinie.");
-		}
-
-		if (existsStuetzstelle(zeitstempel)) {
-			return stuetzstellen.get(stuetzstellen.indexOf(new Stuetzstelle(
-					zeitstempel)));
-		}
-
-		return null;
-	}
-
-	/**
-	 * Gibt die St&uuml;tzstelle mit dem angegebenen Index zur&uuml;ck.
-	 * 
-	 * @param index
-	 *            Index der gesuchten St&uuml;tzstelle
-	 * @return Die gesuchte St&uuml;tzstelle
-	 */
-	public Stuetzstelle getStuetzstelle(int index) {
-		return stuetzstellen.get(index);
-	}
-
-	/**
-	 * Nimmt eine St&uuml;tzstelle in die Ganglinie auf. Existiert zu dem
-	 * Zeitpunkt bereits eine, wird diese &uuml;berschrieben.
-	 * 
-	 * @param s
-	 *            Die neue Stu&uuml;tzstelle
-	 */
-	public void set(Stuetzstelle s) {
-		if (stuetzstellen.contains(s)) {
-			stuetzstellen.remove(s);
-		}
-
-		stuetzstellen.add(s);
-		fireGanglinienAktualisierung();
-	}
-
-	/**
-	 * &Uuml;bernimmt alle St&uuml;tzstellen aus der <em>Collection</em>. Die
-	 * vorhandenen St&uuml;tzstellen werden zuvor gel&ouml;scht.
-	 * 
-	 * @param menge
-	 *            Die neuen St&uuml;tzstellen der Ganglinie
-	 */
-	public void set(Collection<Stuetzstelle> menge) {
-		stuetzstellen.clear();
-
-		for (Stuetzstelle s : menge) {
-			stuetzstellen.add(s);
-		}
-		fireGanglinienAktualisierung();
-	}
-
-	/**
-	 * Nimmt eine St&uuml;tzstelle in die Ganglinie auf. Existiert zu dem
-	 * Zeitpunkt bereits eine, wird diese &uuml;berschrieben.
-	 * 
-	 * @param zeitstempel
-	 *            Zeitstempel der St&uuml;tzstelle
-	 * @param wert
-	 *            Wert der St&uuml;tzstelle
-	 */
-	public void set(long zeitstempel, Integer wert) {
-		set(new Stuetzstelle(zeitstempel, wert));
-	}
-
-	/**
-	 * Entfernt eine St&uuml;tzstelle.
-	 * 
-	 * @param zeitstempel
-	 *            Zeitstempel der St&uuml;tzstelle, die entfernt werden soll
-	 */
-	public void remove(long zeitstempel) {
-		remove(new Stuetzstelle(zeitstempel));
-	}
-
-	/**
-	 * Entfernt eine St&uuml;tzstelle.
-	 * 
-	 * @param stuetzstelle
-	 *            Die St&uuml;tzstelle, die entfernt werden soll
-	 */
-	public void remove(Stuetzstelle stuetzstelle) {
-		stuetzstellen.remove(stuetzstelle);
-		fireGanglinienAktualisierung();
-	}
-
-	/**
-	 * Gibt das Zeitintervall der Ganglinie zur&uuml;ck.
-	 * 
-	 * @return Ein {@link Intervall} oder {@code null}, wenn keine
-	 *         Stz&uuml;tzstellen vorhanden sind
-	 */
-	public Intervall getIntervall() {
-		if (stuetzstellen.size() == 0) {
-			return null;
-		}
-
-		return new Intervall(stuetzstellen.first().zeitstempel, stuetzstellen
-				.last().zeitstempel);
-	}
-
-	/**
-	 * Bestimmt die Intervalle in denen die Ganglinie definiert ist.
-	 * 
-	 * @return Liste von Intervallen
-	 */
-	public List<Intervall> getIntervalle() {
-		List<Intervall> intervalle;
-
-		intervalle = new ArrayList<Intervall>();
-
-		if (stuetzstellen.size() > 0) {
-			Stuetzstelle s0, s1; // Intervallbeginn
-
-			s0 = null;
-			s1 = null;
-			for (Stuetzstelle s : stuetzstellen) {
-				if (s0 == null && s.wert != null) {
-					s0 = s;
-				}
-				if (s.wert == null) {
-					if (s0 != null && s1 != null) {
-						long start, ende;
-
-						start = s0.zeitstempel;
-						ende = s1.zeitstempel;
-						intervalle.add(new Intervall(start, ende));
-						s0 = null;
-						s1 = null;
-					}
-				} else if (s.equals(stuetzstellen.last())) {
-					if (s0 != null && s1 != null) {
-						long start, ende;
-
-						start = s0.zeitstempel;
-						ende = s.zeitstempel;
-						intervalle.add(new Intervall(start, ende));
-					}
-				} else {
-					if (s.wert != null) {
-						s1 = s;
-					}
-				}
-			}
-		}
-
-		return intervalle;
+		return stuetzstellen.containsKey(zeitstempel);
 	}
 
 	/**
@@ -857,47 +586,150 @@ public class Ganglinie implements Approximation {
 	}
 
 	/**
-	 * Gibt, falls vorhanden, die n&auml;chste St&uuml;tzstelle vor dem
-	 * Zeitstempel zur&uuml;ck.
+	 * Gibt die real existierende St&uuml;tzstelle zu einem Zeitpunkt
+	 * zur&uuml;ck. Ist zu dem angegebenen Zeitpunkt keine St&uuml;tzstelle
+	 * vorhanden, wird {@code null} zur&uuml;ckgegeben.
 	 * 
 	 * @param zeitstempel
-	 *            Ein Zeitstempel
-	 * @return St&uuml;tzstelle oder {@code null}, falls keine existiert
+	 *            Der Zeitstempel zu dem eine St&uuml;tzstelle gesucht wird
+	 * @return Die gesuchte St&uuml;tzstelle oder {@code null}, wenn keine
+	 *         existiert
 	 */
-	public Stuetzstelle naechsteStuetzstelleDavor(long zeitstempel) {
-		Stuetzstelle s;
-		SortedSet<Stuetzstelle> kopf;
-
-		s = new Stuetzstelle(zeitstempel);
-		kopf = stuetzstellen.headSet(s);
-
-		if (!kopf.isEmpty()) {
-			return kopf.last();
+	public Stuetzstelle getStuetzstelle(long zeitstempel) {
+		if (stuetzstellen.containsKey(zeitstempel)) {
+			return new Stuetzstelle(zeitstempel, stuetzstellen.get(zeitstempel));
 		}
 
 		return null;
 	}
 
 	/**
-	 * Gibt, falls vorhanden, die n&auml;chste St&uuml;tzstelle nach dem
-	 * Zeitstempel zur&uuml;ck.
+	 * Gibt ein sortiertes Feld der existierenden St&uuml;tzstellen
+	 * zur&uuml;ck;.
 	 * 
-	 * @param zeitstempel
-	 *            Ein Zeitstempel
-	 * @return St&uuml;tzstelle oder {@code null}, falls keine existiert
+	 * @return Nach Zeitstempel sortiere St&uuml;tzstellen
 	 */
-	public Stuetzstelle naechsteStuetzstelleDanach(long zeitstempel) {
-		Stuetzstelle s;
-		SortedSet<Stuetzstelle> kopf;
+	public List<Stuetzstelle> getStuetzstellen() {
+		List<Stuetzstelle> liste;
 
-		s = new Stuetzstelle(zeitstempel + 1); // +1 wegen >= von tailSet()
-		kopf = stuetzstellen.tailSet(s);
-
-		if (!kopf.isEmpty()) {
-			return kopf.first();
+		liste = new ArrayList<Stuetzstelle>();
+		for (long t : stuetzstellen.keySet()) {
+			liste.add(new Stuetzstelle(t, stuetzstellen.get(t)));
 		}
 
-		return null;
+		return liste;
+	}
+
+	/**
+	 * Nimmt eine St&uuml;tzstelle in die Ganglinie auf. Existiert zu dem
+	 * Zeitpunkt bereits eine, wird diese &uuml;berschrieben.
+	 * 
+	 * @param zeitstempel
+	 *            Zeitstempel der St&uuml;tzstelle
+	 * @param wert
+	 *            Wert der St&uuml;tzstelle
+	 * @return {@code true}, wenn die St&uuml;tzstelle neu angelegt wurde und
+	 *         {@code false}, wenn eine vorhandene St&uuml;tzstelle ersetzt
+	 *         wurde.
+	 */
+	public boolean setStuetzstelle(long zeitstempel, Integer wert) {
+		boolean neu;
+
+		neu = stuetzstellen.put(zeitstempel, wert) == null;
+		fireGanglinienAktualisierung();
+
+		return neu;
+	}
+
+	/**
+	 * Nimmt eine St&uuml;tzstelle in die Ganglinie auf. Existiert zu dem
+	 * Zeitpunkt bereits eine, wird diese &uuml;berschrieben. Ruft intern
+	 * {@link #setStuetzstelle(long, Integer)} auf.
+	 * 
+	 * @param s
+	 *            Die neue Stu&uuml;tzstelle
+	 * @return {@code true}, wenn die St&uuml;tzstelle neu angelegt wurde und
+	 *         {@code false}, wenn eine vorhandene St&uuml;tzstelle ersetzt
+	 *         wurde.
+	 */
+	public boolean setStuetzstelle(Stuetzstelle s) {
+		return setStuetzstelle(s.getZeitstempel(), s.getWert());
+	}
+
+	/**
+	 * Entfernt eine St&uuml;tzstelle.
+	 * 
+	 * @param zeitstempel
+	 *            Zeitstempel der St&uuml;tzstelle, die entfernt werden soll
+	 */
+	public void remove(long zeitstempel) {
+		stuetzstellen.remove(zeitstempel);
+		fireGanglinienAktualisierung();
+	}
+
+	/**
+	 * Gibt das Zeitintervall der Ganglinie zur&uuml;ck.
+	 * 
+	 * @return Ein {@link Intervall} oder {@code null}, wenn keine
+	 *         St&uuml;tzstellen vorhanden sind
+	 */
+	public Intervall getIntervall() {
+		if (stuetzstellen.size() == 0) {
+			return null;
+		}
+
+		return new Intervall(stuetzstellen.firstKey(), stuetzstellen.lastKey());
+	}
+
+	/**
+	 * Bestimmt die Intervalle in denen die Ganglinie definiert ist.
+	 * 
+	 * @return Liste von Intervallen
+	 */
+	public List<Intervall> getIntervalle() {
+		List<Intervall> intervalle;
+		Long start, ende;
+
+		intervalle = new ArrayList<Intervall>();
+		start = null;
+		ende = null;
+
+		for (long t : stuetzstellen.keySet()) {
+			if (start == null && stuetzstellen.get(t) != null) {
+				start = t;
+			}
+
+			if (stuetzstellen.get(t) == null) {
+				// Definitionslücke gefunden
+				if (start != null && ende != null) {
+					intervalle.add(new Intervall(start, ende));
+					start = null;
+					ende = null;
+				}
+			} else {
+				// Intervall verlängern
+				if (stuetzstellen.get(t) != null) {
+					ende = t;
+				}
+			}
+
+			if (t == stuetzstellen.lastKey()) {
+				intervalle.add(new Intervall(start, ende));
+			}
+		}
+
+		return intervalle;
+	}
+
+	/**
+	 * Die Ganglinie als Approximation zu&uuml;ck.
+	 * 
+	 * @return Approximation der Ganglinie
+	 */
+	public Approximation getApproximation() {
+		assert approximation != null;
+
+		return approximation;
 	}
 
 	/**
@@ -912,118 +744,61 @@ public class Ganglinie implements Approximation {
 	 *             Konstruktor besitzt
 	 */
 	public void setApproximation(Class<? extends Approximation> approximation) {
+		Constructor<? extends Approximation> konstruktor;
+
 		try {
-			this.approximation = approximation.newInstance();
+			konstruktor = approximation
+					.getConstructor(new Class[] { Ganglinie.class });
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new IllegalStateException();
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new IllegalStateException();
+		}
+
+		try {
+			this.approximation = konstruktor.newInstance(new Object[] { this });
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new IllegalStateException();
 		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-			throw new IllegalArgumentException(e.getLocalizedMessage());
+			throw new IllegalStateException();
 		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-			throw new IllegalArgumentException(e.getLocalizedMessage());
+			throw new IllegalStateException();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new IllegalStateException();
 		}
 
-		this.approximation.setGanglinie(this);
 	}
 
 	/**
-	 * Die Ganglinie als Approximation zu&uuml;ck.
+	 * Registriert einen Listener.
 	 * 
-	 * @return Approximation der Ganglinie
+	 * @param listener
+	 *            Der neue Listener
 	 */
-	public Approximation getApproximation() {
-		if (approximation == null) {
-			setStandardApproximation();
-		}
-
-		return approximation;
+	public void addGanglinienListener(GanglinienListener listener) {
+		listeners.add(GanglinienListener.class, listener);
 	}
 
 	/**
-	 * Ersetzt die aktuellen St&uuml;tzstellen mit denen der &uuml;bergebenen
-	 * Ganglinie.
+	 * Entfernt einen Listener wieder aus der Liste registrierter Listener.
 	 * 
-	 * {@inheritDoc}
+	 * @param listener
+	 *            Listener der abgemeldet werden soll
 	 */
-	public void setGanglinie(Ganglinie ganglinie) {
-		stuetzstellen.clear();
-		stuetzstellen.addAll(ganglinie.stuetzstellen);
-		fireGanglinienAktualisierung();
-	}
-
-	/**
-	 * Es wird zur Bestimmung der St&uuml;tzstelle die aktuelle Approximation
-	 * verwendet.
-	 * <p>
-	 * {@inheritDoc}
-	 */
-	public Stuetzstelle get(long zeitstempel) throws UndefiniertException {
-		if (approximation == null) {
-			setStandardApproximation();
-		}
-
-		return approximation.get(zeitstempel);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public SortedSet<Stuetzstelle> interpoliere(long anzahlIntervalle) {
-		return approximation.interpoliere(anzahlIntervalle);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see java.lang.Object#equals(Object)
-	 */
-	@Override
-	public boolean equals(Object o) {
-		if (o instanceof Ganglinie) {
-			Ganglinie g;
-
-			g = (Ganglinie) o;
-
-			// Anzahl der Stützstellen muss übereinstimmen
-			if (anzahlStuetzstellen() != g.anzahlStuetzstellen()) {
-				return false;
-			}
-
-			// Stützstellen müssen in Zeitstempel und Wert übereinstimmen
-			for (int i = 0; i < stuetzstellen.size(); i++) {
-				if ((getStuetzstelle(i).zeitstempel != g.getStuetzstelle(i).zeitstempel)
-						|| (getStuetzstelle(i).wert != g.getStuetzstelle(i).wert)) {
-					return false;
-				}
-			}
-
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
-	@SuppressWarnings("nls")
-	@Override
-	public String toString() {
-		String result;
-		Iterator<Stuetzstelle> iterator;
-
-		result = Messages.get(GlLibMessages.Ganglinie) + " " + getIntervall()
-				+ ": ";
-		iterator = stuetzstellen.iterator();
-		while (iterator.hasNext()) {
-			result += iterator.next();
-			if (iterator.hasNext()) {
-				result += ", ";
-			}
-		}
-
-		return result;
+	public void removeGanglinienListener(GanglinienListener listener) {
+		listeners.remove(GanglinienListener.class, listener);
 	}
 
 	/**
@@ -1040,12 +815,37 @@ public class Ganglinie implements Approximation {
 	}
 
 	/**
-	 * Legt die Standardapproximation fest. Standard ist derzeit ein B-Spline
-	 * mit der Ordnung 5.
-	 * 
+	 * Legt die Standardapproximation fest.
 	 */
 	private void setStandardApproximation() {
-		approximation = new BSpline(this, (short) 5);
+		approximation = new BSpline(this);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see java.lang.Object#equals(Object)
+	 */
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof Ganglinie) {
+			Ganglinie g;
+
+			g = (Ganglinie) o;
+			return stuetzstellen.equals(g.stuetzstellen);
+		}
+
+		return false;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return stuetzstellen.toString();
 	}
 
 }

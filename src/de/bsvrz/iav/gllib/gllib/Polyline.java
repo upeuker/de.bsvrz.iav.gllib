@@ -26,7 +26,9 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
-import de.bsvrz.sys.funclib.bitctrl.util.UndefiniertException;
+import java.util.List;
+
+import de.bsvrz.iav.gllib.gllib.events.GanglinienEvent;
 
 /**
  * Approximation einer Ganglinie mit Hilfe von Polylines. Der Wert der
@@ -40,13 +42,8 @@ import de.bsvrz.sys.funclib.bitctrl.util.UndefiniertException;
  */
 public class Polyline extends AbstractApproximation {
 
-	/**
-	 * Tut nichts. Standardkonstruktor ist f&uuml;r Festlegen der
-	 * Ganglinienapproximation notwendig.
-	 */
-	public Polyline() {
-		// nix
-	}
+	/** Liste der verwendeten Stützstellen. */
+	private List<Stuetzstelle> stuetzstellen;
 
 	/**
 	 * Konstruiert eine Approximation durch Polyline f&uuml;r eine Ganglinie.
@@ -55,36 +52,60 @@ public class Polyline extends AbstractApproximation {
 	 * @param ganglinie
 	 *            Eine Ganglinie
 	 */
-	public Polyline(Ganglinie ganglinie) {
-		setGanglinie(ganglinie);
+	Polyline(Ganglinie ganglinie) {
+		super(ganglinie);
+		stuetzstellen = ganglinie.getStuetzstellen();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public Stuetzstelle get(long zeitstempel) throws UndefiniertException {
+	public Stuetzstelle get(long zeitstempel) {
 		if (!ganglinie.isValid(zeitstempel)) {
-			throw new UndefiniertException("Die Ganglinie ist zum Zeitpunkt "
-					+ zeitstempel + " undefiniert.");
+			return new Stuetzstelle(zeitstempel, null);
 		}
 
 		if (ganglinie.existsStuetzstelle(zeitstempel)) {
 			return ganglinie.getStuetzstelle(zeitstempel);
 		}
 
-		Stuetzstelle s0;
-		Stuetzstelle s1;
+		Stuetzstelle s0, s1;
 		Double wert;
 		double x0, x1, y0, y1;
+		int index;
 
-		s0 = ganglinie.naechsteStuetzstelleDavor(zeitstempel);
-		s1 = ganglinie.naechsteStuetzstelleDanach(zeitstempel);
-		x0 = s0.zeitstempel;
-		y0 = s0.wert;
-		x1 = s1.zeitstempel;
-		y1 = s1.wert;
+		index = -1;
+		for (int i = 0; i < stuetzstellen.size(); i++) {
+			if (stuetzstellen.get(i).getZeitstempel() > zeitstempel) {
+				index = i - 1;
+				break;
+			}
+		}
+		s0 = stuetzstellen.get(index);
+		s1 = stuetzstellen.get(index + 1);
+		x0 = s0.getZeitstempel();
+		y0 = s0.getWert();
+		x1 = s1.getZeitstempel();
+		y1 = s1.getWert();
 		wert = y0 + (y1 - y0) / (x1 - x0) * (zeitstempel - x0);
 		return new Stuetzstelle(zeitstempel, wert.intValue());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void ganglinieAktualisiert(GanglinienEvent e) {
+		if (e.getSource() == ganglinie) {
+			stuetzstellen = ganglinie.getStuetzstellen();
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return "Polylinie";
 	}
 
 }

@@ -26,10 +26,10 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Before;
 import org.junit.Test;
-
-import de.bsvrz.sys.funclib.bitctrl.util.UndefiniertException;
 
 /**
  * Testet die Approximation einer Ganglinie mit Hilfe eines Cubic-Splines.
@@ -48,28 +48,28 @@ public class TestCubicSpline {
 	@Before
 	public void setUp() {
 		ganglinie = new Ganglinie();
-		ganglinie.set(new Stuetzstelle(0, 0));
-		ganglinie.set(new Stuetzstelle(30, 30));
-		ganglinie.set(new Stuetzstelle(40, 20));
-		ganglinie.set(new Stuetzstelle(60, 40));
-		ganglinie.set(new Stuetzstelle(90, 10));
+		ganglinie.setStuetzstelle(0, 0);
+		ganglinie.setStuetzstelle(30, 30);
+		ganglinie.setStuetzstelle(40, 20);
+		ganglinie.setStuetzstelle(60, 40);
+		ganglinie.setStuetzstelle(90, 10);
 	}
 
 	/**
 	 * Testet ob der Spline durch alle St&uuml;tzstellen durchgeht.
-	 * 
-	 * @throws UndefiniertException
-	 *             Wenn auf einen undefinierten Bereich der Ganglinie
-	 *             zugegriffen wird
 	 */
 	@Test
-	public void testGet() throws UndefiniertException {
+	public void testGet() {
 		CubicSpline spline;
 
 		System.out.println("Cubic Spline:");
 		spline = new CubicSpline(ganglinie);
 		for (int i = 10; i < 100; i += 10) {
+			if (ganglinie.existsStuetzstelle(i)) {
+				assertEquals(ganglinie.getStuetzstelle(i), spline.get(i));
+			}
 			System.out.println(spline.get(i));
 		}
 	}
+	
 }

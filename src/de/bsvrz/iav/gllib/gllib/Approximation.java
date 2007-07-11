@@ -28,8 +28,6 @@ package de.bsvrz.iav.gllib.gllib;
 
 import java.util.SortedSet;
 
-import de.bsvrz.sys.funclib.bitctrl.util.UndefiniertException;
-
 /**
  * Schnittstelle f&uuml;r alle Approximationsmethoden von Ganglinien.
  * Implementierende Klassen sollten einen parameterlosen Konstruktor besitzen.
@@ -40,26 +38,13 @@ import de.bsvrz.sys.funclib.bitctrl.util.UndefiniertException;
 public interface Approximation {
 
 	/**
-	 * Legt die zu approximierende Ganglinie fest.
-	 * 
-	 * @param ganglinie
-	 *            Eine Ganglinie
-	 * @throws NullPointerException
-	 *             Wenn der Parameter gleich {@code null} ist
-	 */
-	void setGanglinie(Ganglinie ganglinie);
-
-	/**
 	 * Gibt die St&uuml;tzstelle zum angegebenen Zeitstempel zur&uuml;ck.
 	 * 
 	 * @param zeitstempel
 	 *            Zeitstempel
 	 * @return Wert als St&uuml;tzstelle
-	 * @throws UndefiniertException
-	 *             Wird geworfen, wenn der Wert der St&uuml;tzstelle zu dem
-	 *             angefragten Zeitpunkt undefiniert ist.
 	 */
-	Stuetzstelle get(long zeitstempel) throws UndefiniertException;
+	Stuetzstelle get(long zeitstempel);
 
 	/**
 	 * Gibt eine Interpolation der Approximation zur&uuml;ck. N&uuml;tzlich

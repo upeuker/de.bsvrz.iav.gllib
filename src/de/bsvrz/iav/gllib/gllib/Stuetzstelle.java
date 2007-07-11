@@ -45,10 +45,10 @@ package de.bsvrz.iav.gllib.gllib;
 public class Stuetzstelle implements Comparable<Stuetzstelle> {
 
 	/** Der Messwert. */
-	public final Integer wert;
+	private final Integer wert;
 
 	/** Zeitpunkt des Messwerts. */
-	public final long zeitstempel;
+	private final long zeitstempel;
 
 	/**
 	 * Initialisierung. F&uuml;r den Wert wird <code>null</code>
@@ -57,7 +57,7 @@ public class Stuetzstelle implements Comparable<Stuetzstelle> {
 	 * @param zeitstempel
 	 *            Zeitstempel
 	 */
-	public Stuetzstelle(long zeitstempel) {
+	protected Stuetzstelle(long zeitstempel) {
 		this(zeitstempel, null);
 	}
 
@@ -69,7 +69,7 @@ public class Stuetzstelle implements Comparable<Stuetzstelle> {
 	 * @param wert
 	 *            Wert oder {@code null} f&uuml;r "undefiniert"
 	 */
-	public Stuetzstelle(long zeitstempel, Integer wert) {
+	Stuetzstelle(long zeitstempel, Integer wert) {
 		this.zeitstempel = zeitstempel;
 		this.wert = wert;
 	}
@@ -114,8 +114,8 @@ public class Stuetzstelle implements Comparable<Stuetzstelle> {
 	}
 
 	/**
-	 * Zwei St&uuml;tzstellen sind identisch, wenn die Zeitstempel identisch
-	 * sind. Die Werte werden <em>nicht</em> verglichen.
+	 * Zwei St&uuml;tzstellen sind identisch, wenn beide den selben Zeitstempel
+	 * und Wert haben.
 	 * 
 	 * {@inheritDoc}
 	 * 
@@ -125,8 +125,12 @@ public class Stuetzstelle implements Comparable<Stuetzstelle> {
 	public boolean equals(Object obj) {
 		if (obj instanceof Stuetzstelle) {
 			Stuetzstelle s;
+			
 			s = (Stuetzstelle) obj;
-			return (zeitstempel == s.zeitstempel);
+			if (wert != null) {
+				return zeitstempel == s.zeitstempel && wert.equals(s.wert);
+			}
+			return zeitstempel == s.zeitstempel && wert == s.wert;
 		}
 
 		return false;
@@ -137,10 +141,9 @@ public class Stuetzstelle implements Comparable<Stuetzstelle> {
 	 * 
 	 * @see java.lang.Object#toString()
 	 */
-	@SuppressWarnings("nls")
 	@Override
 	public String toString() {
-		return "{" + zeitstempel + " => " + wert + "}";
+		return zeitstempel + " => " + wert;
 	}
 
 }
