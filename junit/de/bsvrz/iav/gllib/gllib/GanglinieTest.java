@@ -30,6 +30,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -60,9 +61,9 @@ public class GanglinieTest {
 	public void testGanglinieOhneStuetzstellen() {
 		System.out.println("Ganglinie ohne Stützstellen ...");
 
-		Ganglinie g;
+		Ganglinie<Integer> g;
 
-		g = new Ganglinie();
+		g = new Ganglinie<Integer>();
 
 		assertNull(g.getStuetzstelle(1));
 
@@ -84,9 +85,9 @@ public class GanglinieTest {
 	public void testGanglinieAnlegen() {
 		System.out.println("Stützstellen anlegen und bearbeiten ...");
 
-		Ganglinie g;
+		Ganglinie<Integer> g;
 
-		g = new Ganglinie();
+		g = new Ganglinie<Integer>();
 		g.setStuetzstelle(10, 25);
 		g.setStuetzstelle(30, 40);
 		g.setStuetzstelle(40, 35);
@@ -112,9 +113,9 @@ public class GanglinieTest {
 		assertFalse(g.isValid(9));
 		assertFalse(g.isValid(45));
 
-		assertEquals(new Stuetzstelle(10, 25), g.getStuetzstelle(10));
-		assertEquals(new Stuetzstelle(30, 40), g.getStuetzstelle(30));
-		assertEquals(new Stuetzstelle(40, 35), g.getStuetzstelle(40));
+		assertEquals(new Stuetzstelle<Integer>(10, 25), g.getStuetzstelle(10));
+		assertEquals(new Stuetzstelle<Integer>(30, 40), g.getStuetzstelle(30));
+		assertEquals(new Stuetzstelle<Integer>(40, 35), g.getStuetzstelle(40));
 
 		assertEquals("{10=25, 30=40, 40=35}", g.toString());
 	}
@@ -125,34 +126,34 @@ public class GanglinieTest {
 	@Test
 	public void testAddiere() {
 		System.out.println("Addiere zwei Ganglinien ...");
-
-		Ganglinie g1, g2, ist, soll;
-
-		g1 = new Ganglinie();
-		g1.setStuetzstelle(0, 0);
-		g1.setStuetzstelle(30, 30);
-		g1.setStuetzstelle(40, 20);
-		g1.setStuetzstelle(60, 40);
-		g1.setStuetzstelle(90, 10);
-
-		g2 = new Ganglinie();
-		g2.setStuetzstelle(10, 20);
-		g2.setStuetzstelle(30, 40);
-		g2.setStuetzstelle(70, 0);
-		g2.setStuetzstelle(90, 20);
-
-		ist = Ganglinie.addiere(g1, g2);
-
-		soll = new Ganglinie();
-		soll.setStuetzstelle(0, null);
-		soll.setStuetzstelle(10, 30);
-		soll.setStuetzstelle(30, 70);
-		soll.setStuetzstelle(40, 50);
-		soll.setStuetzstelle(60, 50);
-		soll.setStuetzstelle(70, 30);
-		soll.setStuetzstelle(90, 30);
-
-		assertEquals(soll, ist);
+		fail("Muss noch gemacht werden.");
+//		Ganglinie g1, g2, ist, soll;
+//
+//		g1 = new Ganglinie();
+//		g1.setStuetzstelle(0, 0);
+//		g1.setStuetzstelle(30, 30);
+//		g1.setStuetzstelle(40, 20);
+//		g1.setStuetzstelle(60, 40);
+//		g1.setStuetzstelle(90, 10);
+//
+//		g2 = new Ganglinie();
+//		g2.setStuetzstelle(10, 20);
+//		g2.setStuetzstelle(30, 40);
+//		g2.setStuetzstelle(70, 0);
+//		g2.setStuetzstelle(90, 20);
+//
+//		ist = GanglinieMath.addiere(g1, g2);
+//
+//		soll = new Ganglinie();
+//		soll.setStuetzstelle(0, null);
+//		soll.setStuetzstelle(10, 30);
+//		soll.setStuetzstelle(30, 70);
+//		soll.setStuetzstelle(40, 50);
+//		soll.setStuetzstelle(60, 50);
+//		soll.setStuetzstelle(70, 30);
+//		soll.setStuetzstelle(90, 30);
+//
+//		assertEquals(soll, ist);
 	}
 
 	/**
@@ -161,34 +162,34 @@ public class GanglinieTest {
 	@Test
 	public void testSubtrahiere() {
 		System.out.println("Subtrahiere zwei Ganglinien ...");
-
-		Ganglinie g1, g2, ist, soll;
-
-		g1 = new Ganglinie();
-		g1.setStuetzstelle(0, 0);
-		g1.setStuetzstelle(30, 30);
-		g1.setStuetzstelle(40, 20);
-		g1.setStuetzstelle(60, 40);
-		g1.setStuetzstelle(90, 10);
-
-		g2 = new Ganglinie();
-		g2.setStuetzstelle(10, 20);
-		g2.setStuetzstelle(30, 40);
-		g2.setStuetzstelle(70, 0);
-		g2.setStuetzstelle(90, 20);
-
-		ist = Ganglinie.subtrahiere(g1, g2);
-
-		soll = new Ganglinie();
-		soll.setStuetzstelle(0, null);
-		soll.setStuetzstelle(10, -10);
-		soll.setStuetzstelle(30, -10);
-		soll.setStuetzstelle(40, -10);
-		soll.setStuetzstelle(60, 30);
-		soll.setStuetzstelle(70, 30);
-		soll.setStuetzstelle(90, -10);
-
-		assertEquals(soll, ist);
+		fail("Muss noch gemacht werden.");
+//		Ganglinie g1, g2, ist, soll;
+//
+//		g1 = new Ganglinie();
+//		g1.setStuetzstelle(0, 0);
+//		g1.setStuetzstelle(30, 30);
+//		g1.setStuetzstelle(40, 20);
+//		g1.setStuetzstelle(60, 40);
+//		g1.setStuetzstelle(90, 10);
+//
+//		g2 = new Ganglinie();
+//		g2.setStuetzstelle(10, 20);
+//		g2.setStuetzstelle(30, 40);
+//		g2.setStuetzstelle(70, 0);
+//		g2.setStuetzstelle(90, 20);
+//
+//		ist = GanglinieMath.subtrahiere(g1, g2);
+//
+//		soll = new Ganglinie();
+//		soll.setStuetzstelle(0, null);
+//		soll.setStuetzstelle(10, -10);
+//		soll.setStuetzstelle(30, -10);
+//		soll.setStuetzstelle(40, -10);
+//		soll.setStuetzstelle(60, 30);
+//		soll.setStuetzstelle(70, 30);
+//		soll.setStuetzstelle(90, -10);
+//
+//		assertEquals(soll, ist);
 	}
 
 	/**
@@ -197,34 +198,34 @@ public class GanglinieTest {
 	@Test
 	public void testMultipliziere() {
 		System.out.println("Multipliziere zwei Ganglinien ...");
-
-		Ganglinie g1, g2, ist, soll;
-
-		g1 = new Ganglinie();
-		g1.setStuetzstelle(0, 0);
-		g1.setStuetzstelle(30, 30);
-		g1.setStuetzstelle(40, 20);
-		g1.setStuetzstelle(60, 40);
-		g1.setStuetzstelle(90, 10);
-
-		g2 = new Ganglinie();
-		g2.setStuetzstelle(10, 20);
-		g2.setStuetzstelle(30, 40);
-		g2.setStuetzstelle(70, 0);
-		g2.setStuetzstelle(90, 20);
-
-		ist = Ganglinie.multipliziere(g1, g2);
-
-		soll = new Ganglinie();
-		soll.setStuetzstelle(0, null);
-		soll.setStuetzstelle(10, 200);
-		soll.setStuetzstelle(30, 1200);
-		soll.setStuetzstelle(40, 600);
-		soll.setStuetzstelle(60, 400);
-		soll.setStuetzstelle(70, 0);
-		soll.setStuetzstelle(90, 200);
-
-		assertEquals(soll, ist);
+		fail("Muss noch gemacht werden.");
+//		Ganglinie g1, g2, ist, soll;
+//
+//		g1 = new Ganglinie();
+//		g1.setStuetzstelle(0, 0);
+//		g1.setStuetzstelle(30, 30);
+//		g1.setStuetzstelle(40, 20);
+//		g1.setStuetzstelle(60, 40);
+//		g1.setStuetzstelle(90, 10);
+//
+//		g2 = new Ganglinie();
+//		g2.setStuetzstelle(10, 20);
+//		g2.setStuetzstelle(30, 40);
+//		g2.setStuetzstelle(70, 0);
+//		g2.setStuetzstelle(90, 20);
+//
+//		ist = GanglinieMath.multipliziere(g1, g2);
+//
+//		soll = new Ganglinie();
+//		soll.setStuetzstelle(0, null);
+//		soll.setStuetzstelle(10, 200);
+//		soll.setStuetzstelle(30, 1200);
+//		soll.setStuetzstelle(40, 600);
+//		soll.setStuetzstelle(60, 400);
+//		soll.setStuetzstelle(70, 0);
+//		soll.setStuetzstelle(90, 200);
+//
+//		assertEquals(soll, ist);
 	}
 
 	/**
@@ -233,34 +234,34 @@ public class GanglinieTest {
 	@Test
 	public void testDividiere() {
 		System.out.println("Dividiere zwei Ganglinien ...");
-
-		Ganglinie g1, g2, ist, soll;
-
-		g1 = new Ganglinie();
-		g1.setStuetzstelle(0, 0);
-		g1.setStuetzstelle(30, 30);
-		g1.setStuetzstelle(40, 20);
-		g1.setStuetzstelle(60, 40);
-		g1.setStuetzstelle(90, 10);
-
-		g2 = new Ganglinie();
-		g2.setStuetzstelle(10, 20);
-		g2.setStuetzstelle(30, 40);
-		g2.setStuetzstelle(70, 0);
-		g2.setStuetzstelle(90, 20);
-
-		ist = Ganglinie.dividiere(g1, g2);
-
-		soll = new Ganglinie();
-		soll.setStuetzstelle(0, null);
-		soll.setStuetzstelle(10, 1);
-		soll.setStuetzstelle(30, 1);
-		soll.setStuetzstelle(40, 1);
-		soll.setStuetzstelle(60, 4);
-		soll.setStuetzstelle(70, null);
-		soll.setStuetzstelle(90, 1);
-
-		assertEquals(soll, ist);
+		fail("Muss noch gemacht werden.");
+//		Ganglinie g1, g2, ist, soll;
+//
+//		g1 = new Ganglinie();
+//		g1.setStuetzstelle(0, 0);
+//		g1.setStuetzstelle(30, 30);
+//		g1.setStuetzstelle(40, 20);
+//		g1.setStuetzstelle(60, 40);
+//		g1.setStuetzstelle(90, 10);
+//
+//		g2 = new Ganglinie();
+//		g2.setStuetzstelle(10, 20);
+//		g2.setStuetzstelle(30, 40);
+//		g2.setStuetzstelle(70, 0);
+//		g2.setStuetzstelle(90, 20);
+//
+//		ist = GanglinieMath.dividiere(g1, g2);
+//
+//		soll = new Ganglinie();
+//		soll.setStuetzstelle(0, null);
+//		soll.setStuetzstelle(10, 1);
+//		soll.setStuetzstelle(30, 1);
+//		soll.setStuetzstelle(40, 1);
+//		soll.setStuetzstelle(60, 4);
+//		soll.setStuetzstelle(70, null);
+//		soll.setStuetzstelle(90, 1);
+//
+//		assertEquals(soll, ist);
 	}
 
 }

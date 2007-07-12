@@ -26,34 +26,19 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
-import de.bsvrz.iav.gllib.gllib.events.GanglinienEvent;
-
 /**
  * Approximation einer Ganglinie mit Hilfe eines B-Splines beliebiger Ordung.
  * 
  * @author BitCtrl, Schumann
  * @version $Id$
  */
-public class BSpline extends AbstractApproximation {
+public class BSpline extends AbstractApproximation<Double> {
 
 	/** Die Ordnung des B-Splines. */
-	private short ordnung;
+	private short ordnung = 5;
 
 	/** Grenzstellen der Interpolationsintervalle, aufsteigend sortiert. */
 	private int[] t;
-
-	/**
-	 * Erstellt einen B-Spline der Ordung 5.
-	 * 
-	 * @param ganglinie
-	 *            Die Ganglinie, die approximiert werden soll
-	 */
-	BSpline(Ganglinie ganglinie) {
-		super(ganglinie);
-
-		ordnung = 5;
-		bestimmeT();
-	}
 
 	/**
 	 * Gibt die Ordgung des B-Splines zur&uuml;ck.
@@ -71,7 +56,7 @@ public class BSpline extends AbstractApproximation {
 	 *            Ordnung
 	 */
 	public void setOrdnung(short ordnung) {
-		if (ordnung < 1 || ordnung > stuetzstellen.length) {
+		if (ordnung < 1 || ordnung > stuetzstellen.size()) {
 			throw new IllegalArgumentException(
 					"Die Ordnung muss zwischen 1 und der Anzahl der definierten Stützstellen liegen.");
 		}
@@ -83,27 +68,21 @@ public class BSpline extends AbstractApproximation {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void ganglinieAktualisiert(GanglinienEvent e) {
-		if (e.getSource() == ganglinie) {
-			bestimmeT();
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public Stuetzstelle get(long zeitstempel) {
-		if (!ganglinie.isValid(zeitstempel)) {
-			return new Stuetzstelle(zeitstempel, null);
-		}
-
+	public Stuetzstelle<Double> get(long zeitstempel) {
 		double t0, f;
-		Stuetzstelle s;
+		Stuetzstelle<Double> s;
 
+		if (stuetzstellen.get(0).getZeitstempel() < zeitstempel
+				|| zeitstempel > stuetzstellen.get(stuetzstellen.size() - 1)
+						.getZeitstempel()) {
+			// Zeitstempel liegt außerhalb der Ganglinie
+			return new Stuetzstelle<Double>(zeitstempel, null);
+		}
+		
 		// Sonderfall
 		if (ordnung == 1) {
 			s = bspline(zeitstempelNachT(zeitstempel));
-			return new Stuetzstelle(zeitstempel, s.getWert());
+			return new Stuetzstelle<Double>(zeitstempel, s.getWert());
 		}
 
 		// Da B-Spline nicht den gesuchten Wert liefert, muss sich ihm genähert
@@ -140,8 +119,8 @@ public class BSpline extends AbstractApproximation {
 		double t0;
 
 		t0 = zeitstempel;
-		t0 /= stuetzstellen[stuetzstellen.length - 1].getZeitstempel()
-				- stuetzstellen[0].getZeitstempel();
+		t0 /= stuetzstellen.get(stuetzstellen.size() - 1).getZeitstempel()
+				- stuetzstellen.get(0).getZeitstempel();
 		t0 *= t[t.length - 1];
 
 		return t0;
@@ -152,16 +131,14 @@ public class BSpline extends AbstractApproximation {
 	 * mit n&nbsp;=&nbsp;Knotenanzahl und k&nbsp;=&nbsp;Ordnung des B-Spline.
 	 */
 	private void bestimmeT() {
-		bestimmeStuetzstellen();
-		
-		t = new int[stuetzstellen.length + ordnung];
+		t = new int[stuetzstellen.size() + ordnung];
 		for (int j = 0; j < t.length; j++) {
 			if (j < ordnung) {
 				t[j] = 0;
-			} else if (ordnung <= j && j <= stuetzstellen.length - 1) {
+			} else if (ordnung <= j && j <= stuetzstellen.size() - 1) {
 				t[j] = j - ordnung + 1;
-			} else if (j > stuetzstellen.length - 1) {
-				t[j] = stuetzstellen.length - 1 - ordnung + 2;
+			} else if (j > stuetzstellen.size() - 1) {
+				t[j] = stuetzstellen.size() - 1 - ordnung + 2;
 			} else {
 				throw new IllegalStateException();
 			}
@@ -224,15 +201,15 @@ public class BSpline extends AbstractApproximation {
 	 *            Eine Stelle im Intervall des Parameters t
 	 * @return Die berechnete Stützstelle
 	 */
-	private Stuetzstelle bspline(double t0) {
+	private Stuetzstelle<Double> bspline(double t0) {
 		double bx, by;
 		int i;
 
 		// Ränder der Ganglinie werden 1:1 übernommen
 		if (t0 <= t[0]) {
-			return stuetzstellen[0];
+			return stuetzstellen.get(0);
 		} else if (t0 >= t[t.length - 1]) {
-			return stuetzstellen[stuetzstellen.length - 1];
+			return stuetzstellen.get(stuetzstellen.size() - 1);
 		}
 
 		bx = by = 0;
@@ -243,12 +220,21 @@ public class BSpline extends AbstractApproximation {
 			double n;
 
 			n = n(j, ordnung, t0);
-			bx += stuetzstellen[j].getZeitstempel() * n;
-			by += stuetzstellen[j].getWert() * n;
+			bx += stuetzstellen.get(j).getZeitstempel() * n;
+			by += stuetzstellen.get(j).getWert().doubleValue() * n;
 
 		}
 
-		return new Stuetzstelle(Math.round(bx), (int) Math.round(by));
+		return new Stuetzstelle<Double>(Math.round(bx), by);
+	}
+
+	/**
+	 * Bestimmt das Parameterfeld t des B-Spline.
+	 * <p>
+	 * {@inheritDoc}
+	 */
+	public void initialisiere() {
+		bestimmeT();
 	}
 
 	/**

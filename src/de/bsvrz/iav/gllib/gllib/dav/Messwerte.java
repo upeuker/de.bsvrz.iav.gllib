@@ -43,22 +43,19 @@ import de.bsvrz.sys.funclib.bitctrl.util.dav.Umrechung;
  * @author BitCtrl, Schumann
  * @version $Id$
  */
-public class StuetzstelleMQ {
-
-	/** Zeitstempel der St&uuml;tzstelle. */
-	private final long zeitstempel;
+public class Messwerte {
 
 	/** Wert f&uuml;r die Verkehrsst&auml;rke der Lkw. */
-	private final Integer qLkw;
+	private final Float qLkw;
 
 	/** Wert f&uuml;r die Verkehrsst&auml;rke der Kfz. */
-	private final Integer qKfz;
+	private final Float qKfz;
 
 	/** Wert f&uuml;r die Geschwindigkeit der Pkw. */
-	private final Integer vPkw;
+	private final Float vPkw;
 
 	/** Wert f&uuml;r die Geschwindigkeit der Lkw. */
-	private final Integer vLkw;
+	private final Float vLkw;
 
 	/** Parameter f&uuml;r die Berechnung von QB. */
 	private final float k1;
@@ -69,8 +66,27 @@ public class StuetzstelleMQ {
 	/**
 	 * Zuweisungskonstruktor.
 	 * 
-	 * @param zeitstempel
-	 *            Zeitstempel
+	 * @param qKfz
+	 *            Kfz/h
+	 * @param qLkw
+	 *            Lkw/h
+	 * @param vPkw
+	 *            Geschwindigkeit Pkw
+	 * @param vLkw
+	 *            Geschwindigkeit Lkw
+	 */
+	public Messwerte(Float qKfz, Float qLkw, Float vPkw, Float vLkw) {
+		this.qKfz = qKfz;
+		this.qLkw = qLkw;
+		this.vPkw = vPkw;
+		this.vLkw = vLkw;
+		k1 = -1;
+		k2 = -1;
+	}
+	
+	/**
+	 * Zuweisungskonstruktor.
+	 * 
 	 * @param qKfz
 	 *            Kfz/h
 	 * @param qLkw
@@ -84,9 +100,7 @@ public class StuetzstelleMQ {
 	 * @param k2
 	 *            Parameter f&uuml;r die Berechnung von QB
 	 */
-	public StuetzstelleMQ(long zeitstempel, Integer qKfz, Integer qLkw,
-			Integer vPkw, Integer vLkw, float k1, float k2) {
-		this.zeitstempel = zeitstempel;
+	Messwerte(Float qKfz, Float qLkw, Float vPkw, Float vLkw, float k1, float k2) {
 		this.qKfz = qKfz;
 		this.qLkw = qLkw;
 		this.vPkw = vPkw;
@@ -100,7 +114,7 @@ public class StuetzstelleMQ {
 	 * 
 	 * @return Wert f&uuml;r QLkw
 	 */
-	public Integer getQLkw() {
+	public Float getQLkw() {
 		return qLkw;
 	}
 
@@ -109,7 +123,7 @@ public class StuetzstelleMQ {
 	 * 
 	 * @return Wert f&uuml;r QKfz
 	 */
-	public Integer getQKfz() {
+	public Float getQKfz() {
 		return qKfz;
 	}
 
@@ -118,7 +132,7 @@ public class StuetzstelleMQ {
 	 * 
 	 * @return Wert f&uuml;r VPkw
 	 */
-	public Integer getVPkw() {
+	public Float getVPkw() {
 		return vPkw;
 	}
 
@@ -127,7 +141,7 @@ public class StuetzstelleMQ {
 	 * 
 	 * @return Wert f&uuml;r VLkw
 	 */
-	public Integer getVLkw() {
+	public Float getVLkw() {
 		return vLkw;
 	}
 
@@ -137,7 +151,7 @@ public class StuetzstelleMQ {
 	 * 
 	 * @return Wert f&uuml;r QPkw
 	 */
-	public Integer getQPkw() {
+	public Float getQPkw() {
 		return Umrechung.getQPkw(qKfz, qLkw);
 	}
 
@@ -147,7 +161,7 @@ public class StuetzstelleMQ {
 	 * 
 	 * @return Wert f&uuml;r VKfz
 	 */
-	public Integer getVKfz() {
+	public Float getVKfz() {
 		return Umrechung.getVKfz(qLkw, qKfz, vPkw, vLkw);
 	}
 
@@ -157,8 +171,54 @@ public class StuetzstelleMQ {
 	 * 
 	 * @return Wert f&uuml;r QB
 	 */
-	public Integer getQB() {
+	public Float getQB() {
 		return Umrechung.getQB(qLkw, qKfz, vPkw, vLkw, k1, k2);
+	}
+
+	/**
+	 * Zwei St&uuml;tzstellen sind identisch, wenn beide den selben Zeitstempel
+	 * und die selben Werte haben.
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Messwerte) {
+			Messwerte s;
+			boolean gleich;
+
+			s = (Messwerte) obj;
+
+			if (qKfz != null) {
+				gleich = qKfz.equals(s.qKfz);
+			} else {
+				gleich = qKfz == s.qKfz;
+			}
+
+			if (qLkw != null) {
+				gleich &= qLkw.equals(s.qLkw);
+			} else {
+				gleich &= qLkw == s.qLkw;
+			}
+
+			if (vLkw != null) {
+				gleich &= vLkw.equals(s.vLkw);
+			} else {
+				gleich &= vLkw == s.vLkw;
+			}
+
+			if (vPkw != null) {
+				gleich &= vPkw.equals(s.vPkw);
+			} else {
+				gleich &= vPkw == s.vPkw;
+			}
+
+			return gleich;
+		}
+
+		return false;
 	}
 
 	/**
@@ -170,10 +230,9 @@ public class StuetzstelleMQ {
 	 */
 	@Override
 	public String toString() {
-		return "(" + zeitstempel + ", " + qKfz //$NON-NLS-1$ //$NON-NLS-2$
-				+ ", " + qLkw //$NON-NLS-1$
-				+ ", " + vPkw //$NON-NLS-1$
-				+ ", " + vLkw + ")"; //$NON-NLS-1$ //$NON-NLS-2$
+		return "QKfz=" + qKfz + ", QPkw=" + getQPkw() + ", QLkw=" + qLkw
+				+ ", VKfz=" + getVKfz() + ", VPkw=" + vPkw + ", VLkw" + vLkw
+				+ ", QB=" + getQB();
 	}
 
 }

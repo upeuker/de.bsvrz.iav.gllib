@@ -28,7 +28,6 @@ package de.bsvrz.iav.gllib.gllib;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -39,20 +38,6 @@ import org.junit.Test;
  */
 public class TestBSpline {
 
-	/** Die Testganglinie. */
-	private Ganglinie ganglinie;
-
-	/** Initialisierung der Testganglinie. */
-	@Before
-	public void setUp() {
-		ganglinie = new Ganglinie();
-		ganglinie.setStuetzstelle(0, 0);
-		ganglinie.setStuetzstelle(30, 30);
-		ganglinie.setStuetzstelle(40, 20);
-		ganglinie.setStuetzstelle(60, 40);
-		ganglinie.setStuetzstelle(90, 10);
-	}
-
 	/**
 	 * Pr&uuml;ft ob bei Anfrage einer St&uuml;tzstelle auch der richtige
 	 * Zeitstempel kommt. Beim B-Spline ist dies nicht trivial. Dieser Test
@@ -60,17 +45,19 @@ public class TestBSpline {
 	 */
 	@Test
 	public void testGetA() {
-		Ganglinie g;
+		Ganglinie<Double> g;
 		BSpline spline;
 
-		g = new Ganglinie();
-		g.setStuetzstelle(0, 0);
-		g.setStuetzstelle(300, 300);
-		g.setStuetzstelle(400, 200);
-		g.setStuetzstelle(600, 400);
-		g.setStuetzstelle(900, 100);
+		g = new Ganglinie<Double>();
+		g.setStuetzstelle(0, 0.0);
+		g.setStuetzstelle(300, 300.0);
+		g.setStuetzstelle(400, 200.0);
+		g.setStuetzstelle(600, 400.0);
+		g.setStuetzstelle(900, 100.0);
 
-		spline = new BSpline(g);
+		spline = new BSpline();
+		spline.setStuetzstellen(g.getStuetzstellen());
+		spline.initialisiere();
 
 		// Rechnen
 		// for (long t = 0; t <= 900; t += 1) {
@@ -89,17 +76,19 @@ public class TestBSpline {
 	 */
 	@Test
 	public void testGetB() {
-		Ganglinie g;
+		Ganglinie<Double> g;
 		BSpline spline;
 
-		g = new Ganglinie();
+		g = new Ganglinie<Double>();
 		for (int i = 0; i < 100; i++) {
 			long x = (long) (Math.random() * 1000);
-			int y = (int) (Math.random() * 1000);
+			double y = (int) (Math.random() * 1000);
 			g.setStuetzstelle(x, y);
 		}
 
-		spline = new BSpline(g);
+		spline = new BSpline();
+		spline.setStuetzstellen(g.getStuetzstellen());
+		spline.initialisiere();
 
 		// Rechnen
 		for (short k = 1; k < 10; k++) {

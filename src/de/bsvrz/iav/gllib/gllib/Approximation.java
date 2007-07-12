@@ -26,16 +26,34 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
+import java.util.Collection;
 import java.util.SortedSet;
 
 /**
  * Schnittstelle f&uuml;r alle Approximationsmethoden von Ganglinien.
  * Implementierende Klassen sollten einen parameterlosen Konstruktor besitzen.
+ * <p>
+ * TODO: Undefinierte Intervalle innerhalb der Ganglinie berücksichtigen 
  * 
  * @author BitCtrl, Schumann
  * @version $Id$
+ * @param <T>
+ *            der Typ der approximierten Werte.
  */
-public interface Approximation {
+public interface Approximation<T> {
+
+	/**
+	 * F&uuml;hrt notwendige Initialisierungsarbeiten der Approximation aus.
+	 */
+	void initialisiere();
+
+	/**
+	 * Legt die St&uuml;tzstellen der Approximation fest.
+	 * 
+	 * @param menge
+	 *            die Menge der bekannten St&uuml;tzstellen.
+	 */
+	void setStuetzstellen(Collection<Stuetzstelle<T>> menge);
 
 	/**
 	 * Gibt die St&uuml;tzstelle zum angegebenen Zeitstempel zur&uuml;ck.
@@ -44,7 +62,7 @@ public interface Approximation {
 	 *            Zeitstempel
 	 * @return Wert als St&uuml;tzstelle
 	 */
-	Stuetzstelle get(long zeitstempel);
+	Stuetzstelle<T> get(long zeitstempel);
 
 	/**
 	 * Gibt eine Interpolation der Approximation zur&uuml;ck. N&uuml;tzlich
@@ -58,6 +76,6 @@ public interface Approximation {
 	 * @throws IllegalArgumentException
 	 *             Wenn die Intervallbreite kleiner oder gleich 0 ist
 	 */
-	SortedSet<Stuetzstelle> interpoliere(long intervallBreite);
+	SortedSet<Stuetzstelle<T>> interpoliere(long intervallBreite);
 
 }

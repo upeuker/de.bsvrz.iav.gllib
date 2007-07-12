@@ -56,9 +56,9 @@ public class StuetzstelleTest {
 	public void testUndefinierteStuetzstelle() {
 		System.out.println("Undefinierte Stützstelle ...");
 
-		Stuetzstelle s;
+		Stuetzstelle<Integer> s;
 
-		s = new Stuetzstelle(10);
+		s = new Stuetzstelle<Integer>(10);
 		assertEquals(10L, s.getZeitstempel());
 		assertEquals(null, s.getWert());
 		assertEquals("10 => null", s.toString());
@@ -70,9 +70,9 @@ public class StuetzstelleTest {
 	@Test
 	public void testDefinierteStuetzstelle() {
 		System.out.println("Definierte Stützstelle ...");
-		Stuetzstelle s;
+		Stuetzstelle<Integer> s;
 
-		s = new Stuetzstelle(10, 50);
+		s = new Stuetzstelle<Integer>(10, 50);
 		assertEquals(10L, s.getZeitstempel());
 		assertEquals(50, s.getWert());
 		assertEquals("10 => 50", s.toString());
@@ -84,25 +84,25 @@ public class StuetzstelleTest {
 	@Test
 	public void testGleichheit() {
 		System.out.println("Gleicheit von Stützstellen ...");
-		Stuetzstelle s1, s2;
+		Stuetzstelle<Integer> s1, s2;
 
-		s1 = new Stuetzstelle(15, 30);
-		s2 = new Stuetzstelle(15, 30);
+		s1 = new Stuetzstelle<Integer>(15, 30);
+		s2 = new Stuetzstelle<Integer>(15, 30);
 		assertTrue(s1.equals(s2));
-		s1 = new Stuetzstelle(10, 10);
-		s2 = new Stuetzstelle(10, 10);
+		s1 = new Stuetzstelle<Integer>(10, 10);
+		s2 = new Stuetzstelle<Integer>(10, 10);
 		assertTrue(s1.equals(s2));
-		s1 = new Stuetzstelle(40, null);
-		s2 = new Stuetzstelle(40, null);
+		s1 = new Stuetzstelle<Integer>(40, null);
+		s2 = new Stuetzstelle<Integer>(40, null);
 		assertTrue(s1.equals(s2));
-		s1 = new Stuetzstelle(10, 10);
-		s2 = new Stuetzstelle(20, 50);
+		s1 = new Stuetzstelle<Integer>(10, 10);
+		s2 = new Stuetzstelle<Integer>(20, 50);
 		assertFalse(s1.equals(s2));
-		s1 = new Stuetzstelle(10, 10);
-		s2 = new Stuetzstelle(40, 10);
+		s1 = new Stuetzstelle<Integer>(10, 10);
+		s2 = new Stuetzstelle<Integer>(40, 10);
 		assertFalse(s1.equals(s2));
-		s1 = new Stuetzstelle(50, 10);
-		s2 = new Stuetzstelle(30, null);
+		s1 = new Stuetzstelle<Integer>(50, 10);
+		s2 = new Stuetzstelle<Integer>(30, null);
 		assertFalse(s1.equals(s2));
 
 		assertFalse(s1.equals("Keine Stützstelle"));
@@ -114,25 +114,25 @@ public class StuetzstelleTest {
 	@Test
 	public void testOrdnung() {
 		System.out.println("Ordnung auf Stützstellen ...");
-		Stuetzstelle s1, s2;
+		Stuetzstelle<Integer> s1, s2;
 
-		s1 = new Stuetzstelle(10, 10);
-		s2 = new Stuetzstelle(10, 50);
+		s1 = new Stuetzstelle<Integer>(10, 10);
+		s2 = new Stuetzstelle<Integer>(10, 50);
 		assertEquals(0, s1.compareTo(s2));
-		s1 = new Stuetzstelle(10, 10);
-		s2 = new Stuetzstelle(10, 10);
+		s1 = new Stuetzstelle<Integer>(10, 10);
+		s2 = new Stuetzstelle<Integer>(10, 10);
 		assertEquals(0, s1.compareTo(s2));
-		s1 = new Stuetzstelle(10, null);
-		s2 = new Stuetzstelle(10, 50);
+		s1 = new Stuetzstelle<Integer>(10, null);
+		s2 = new Stuetzstelle<Integer>(10, 50);
 		assertEquals(0, s1.compareTo(s2));
-		s1 = new Stuetzstelle(10, 10);
-		s2 = new Stuetzstelle(20, 50);
+		s1 = new Stuetzstelle<Integer>(10, 10);
+		s2 = new Stuetzstelle<Integer>(20, 50);
 		assertEquals(-1, s1.compareTo(s2));
-		s1 = new Stuetzstelle(10, 10);
-		s2 = new Stuetzstelle(40, 10);
+		s1 = new Stuetzstelle<Integer>(10, 10);
+		s2 = new Stuetzstelle<Integer>(40, 10);
 		assertEquals(-1, s1.compareTo(s2));
-		s1 = new Stuetzstelle(50, 10);
-		s2 = new Stuetzstelle(30, null);
+		s1 = new Stuetzstelle<Integer>(50, 10);
+		s2 = new Stuetzstelle<Integer>(30, null);
 		assertEquals(1, s1.compareTo(s2));
 	}
 

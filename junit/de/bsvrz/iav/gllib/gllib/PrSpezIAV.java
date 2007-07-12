@@ -97,32 +97,32 @@ public class PrSpezIAV {
 		Intervall i;
 
 		logger.config("Tesfall 6: Cut-Operation");
-
-		g = new Ganglinie();
-		g.setStuetzstelle(5, 35);
-		g.setStuetzstelle(15, 20);
-		g.setStuetzstelle(20, 30);
-		g.setStuetzstelle(35, 10);
-		g.setStuetzstelle(50, 25);
-		g.setStuetzstelle(65, 20);
-		g.setStuetzstelle(75, 30);
-		g.setStuetzstelle(80, 20);
-		logger.info("Verwende Ganglinie: " + g);
-
-		i = new Intervall(20, 70);
-		logger.info("Schneide Bereich aus: " + i);
-		g = Ganglinie.auschneiden(g, i);
-		logger.info("Neue Ganglinie: " + g);
-		
-		erg = new Ganglinie();
-		erg.setStuetzstelle(20, 30);
-		erg.setStuetzstelle(35, 10);
-		erg.setStuetzstelle(50, 25);
-		erg.setStuetzstelle(65, 20);
-		erg.setStuetzstelle(70, 25);
-		
-		assertEquals(erg, g);
-		logger.info("Testfall bestanden.");
+		fail("Muss noch gemacht werden.");
+//		g = new Ganglinie();
+//		g.setStuetzstelle(5, 35);
+//		g.setStuetzstelle(15, 20);
+//		g.setStuetzstelle(20, 30);
+//		g.setStuetzstelle(35, 10);
+//		g.setStuetzstelle(50, 25);
+//		g.setStuetzstelle(65, 20);
+//		g.setStuetzstelle(75, 30);
+//		g.setStuetzstelle(80, 20);
+//		logger.info("Verwende Ganglinie: " + g);
+//
+//		i = new Intervall(20, 70);
+//		logger.info("Schneide Bereich aus: " + i);
+//		g = GanglinieMath.auschneiden(g, i);
+//		logger.info("Neue Ganglinie: " + g);
+//		
+//		erg = new Ganglinie();
+//		erg.setStuetzstelle(20, 30);
+//		erg.setStuetzstelle(35, 10);
+//		erg.setStuetzstelle(50, 25);
+//		erg.setStuetzstelle(65, 20);
+//		erg.setStuetzstelle(70, 25);
+//		
+//		assertEquals(erg, g);
+//		logger.info("Testfall bestanden.");
 	}
 
 }

@@ -31,7 +31,6 @@ import static de.bsvrz.sys.funclib.bitctrl.math.RationaleZahl.dividiere;
 import static de.bsvrz.sys.funclib.bitctrl.math.RationaleZahl.multipliziere;
 import static de.bsvrz.sys.funclib.bitctrl.math.RationaleZahl.potenz;
 import static de.bsvrz.sys.funclib.bitctrl.math.RationaleZahl.subtrahiere;
-import de.bsvrz.iav.gllib.gllib.events.GanglinienEvent;
 import de.bsvrz.sys.funclib.bitctrl.math.RationaleZahl;
 import de.bsvrz.sys.funclib.bitctrl.math.algebra.Gauss;
 import de.bsvrz.sys.funclib.bitctrl.math.algebra.Matrix;
@@ -43,7 +42,7 @@ import de.bsvrz.sys.funclib.bitctrl.math.algebra.Vektor;
  * @author BitCtrl, Schumann
  * @version $Id$
  */
-public class CubicSpline extends AbstractApproximation {
+public class CubicSpline extends AbstractApproximation<Integer> {
 
 	/** Der erste Koeffizient des Polynoms. */
 	private RationaleZahl[] a;
@@ -61,41 +60,24 @@ public class CubicSpline extends AbstractApproximation {
 	private RationaleZahl[] h;
 
 	/**
-	 * Konstruiert eine Approximation durch einen Cubic-Spline f&uuml;r eine
-	 * Ganglinie. Die in der Ganglinie festgelegte Approximation wird nicht
-	 * ver&auml;ndert.
-	 * 
-	 * @param ganglinie
-	 *            Eine Ganglinie
-	 */
-	CubicSpline(Ganglinie ganglinie) {
-		super(ganglinie);
-		bestimmeKoeffizienten();
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
-	public Stuetzstelle get(long zeitstempel) {
-		if (!ganglinie.isValid(zeitstempel)) {
-			return new Stuetzstelle(zeitstempel, null);
+	public Stuetzstelle<Integer> get(long zeitstempel) {
+		if (zeitstempel < stuetzstellen.get(0).getZeitstempel()
+				|| zeitstempel > stuetzstellen.get(stuetzstellen.size() - 1)
+						.getZeitstempel()) {
+			// Zeitstempel liegt auﬂerhalb der Ganglinie
+			return new Stuetzstelle<Integer>(zeitstempel, null);
 		}
 
-		if (ganglinie.getIntervall().start == zeitstempel
-				|| ganglinie.getIntervall().ende == zeitstempel) {
-			return ganglinie.getStuetzstelle(zeitstempel);
+		// R‰nder der Ganglinie unver‰ndert ausliefern
+		if (stuetzstellen.get(0).getZeitstempel() == zeitstempel) {
+			return stuetzstellen.get(0);
+		} else if (stuetzstellen.get(stuetzstellen.size() - 1).getZeitstempel() == zeitstempel) {
+			return stuetzstellen.get(stuetzstellen.size() - 1);
 		}
 
 		return berechneStuetzstelle(zeitstempel);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public void ganglinieAktualisiert(GanglinienEvent e) {
-		if (e.getSource() == ganglinie) {
-			bestimmeKoeffizienten();
-		}
 	}
 
 	/**
@@ -105,18 +87,18 @@ public class CubicSpline extends AbstractApproximation {
 	 *            Zeitstempel der gesuchten St&uuml;tzstelle
 	 * @return Die gesuchte St&uuml;tzstelle
 	 */
-	private Stuetzstelle berechneStuetzstelle(long zeitstempel) {
+	private Stuetzstelle<Integer> berechneStuetzstelle(long zeitstempel) {
 		RationaleZahl r, x, xi;
 		int index;
 
 		index = -1;
-		for (int i = 0; i < stuetzstellen.length; i++) {
-			if (stuetzstellen[i].getZeitstempel() > zeitstempel) {
+		for (int i = 0; i < stuetzstellen.size(); i++) {
+			if (stuetzstellen.get(i).getZeitstempel() > zeitstempel) {
 				index = i - 1;
 				break;
 			}
 		}
-		xi = new RationaleZahl(stuetzstellen[index].getZeitstempel());
+		xi = new RationaleZahl(stuetzstellen.get(index).getZeitstempel());
 		x = new RationaleZahl(zeitstempel);
 
 		r = addiere(addiere(addiere(a[index], multipliziere(b[index],
@@ -124,19 +106,18 @@ public class CubicSpline extends AbstractApproximation {
 				subtrahiere(x, xi), 2))), multipliziere(d[index], potenz(
 				subtrahiere(x, xi), 3)));
 
-		return new Stuetzstelle(zeitstempel, r.intValue());
+		return new Stuetzstelle<Integer>(zeitstempel, r.intValue());
 	}
 
 	/**
 	 * Berechnet die Koeffizienten des Polynoms.
 	 */
-	private void bestimmeKoeffizienten() {
+	public void initialisiere() {
 		int n;
 		Matrix m;
 		Vektor v;
 
-		bestimmeStuetzstellen();
-		n = stuetzstellen.length;
+		n = stuetzstellen.size();
 
 		a = new RationaleZahl[n];
 		b = new RationaleZahl[n];
@@ -146,13 +127,14 @@ public class CubicSpline extends AbstractApproximation {
 
 		for (int i = 0; i < n; i++) {
 			// Erster Koeffizent
-			a[i] = new RationaleZahl(stuetzstellen[i].getWert());
+			a[i] = new RationaleZahl(stuetzstellen.get(i).getWert());
 
 			// Intervallbreite
 			if (i < n - 1) {
-				h[i] = RationaleZahl.subtrahiere(new RationaleZahl(
-						stuetzstellen[i + 1].getZeitstempel()),
-						new RationaleZahl(stuetzstellen[i].getZeitstempel()));
+				h[i] = RationaleZahl
+						.subtrahiere(new RationaleZahl(stuetzstellen.get(i + 1)
+								.getZeitstempel()), new RationaleZahl(
+								stuetzstellen.get(i).getZeitstempel()));
 			}
 		}
 

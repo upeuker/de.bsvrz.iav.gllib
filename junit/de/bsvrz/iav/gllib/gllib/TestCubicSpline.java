@@ -40,14 +40,14 @@ import org.junit.Test;
 public class TestCubicSpline {
 
 	/** Die Testganglinie. */
-	private Ganglinie ganglinie;
+	private Ganglinie<Integer> ganglinie;
 
 	/**
 	 * Testganglinie initialisieren.
 	 */
 	@Before
 	public void setUp() {
-		ganglinie = new Ganglinie();
+		ganglinie = new Ganglinie<Integer>();
 		ganglinie.setStuetzstelle(0, 0);
 		ganglinie.setStuetzstelle(30, 30);
 		ganglinie.setStuetzstelle(40, 20);
@@ -63,7 +63,9 @@ public class TestCubicSpline {
 		CubicSpline spline;
 
 		System.out.println("Cubic Spline:");
-		spline = new CubicSpline(ganglinie);
+		spline = new CubicSpline();
+		spline.setStuetzstellen(ganglinie.getStuetzstellen());
+		spline.initialisiere();
 		for (int i = 10; i < 100; i += 10) {
 			if (ganglinie.existsStuetzstelle(i)) {
 				assertEquals(ganglinie.getStuetzstelle(i), spline.get(i));
@@ -71,5 +73,5 @@ public class TestCubicSpline {
 			System.out.println(spline.get(i));
 		}
 	}
-	
+
 }

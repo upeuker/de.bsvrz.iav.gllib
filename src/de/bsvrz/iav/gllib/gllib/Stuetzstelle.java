@@ -41,13 +41,14 @@ package de.bsvrz.iav.gllib.gllib;
  * 
  * @author BitCtrl, Schumann
  * @version $Id$
+ * @param <T> der Typ des Wertes der St&uuml;tzstelle.
  */
-public class Stuetzstelle implements Comparable<Stuetzstelle> {
+public class Stuetzstelle<T> implements Comparable<Stuetzstelle<T>> {
 
-	/** Der Messwert. */
-	private final Integer wert;
+	/** Der Wert an der St&uuml;tzstelle. */
+	private final T wert;
 
-	/** Zeitpunkt des Messwerts. */
+	/** Zeitpunkt der St&uuml;tzstelle. */
 	private final long zeitstempel;
 
 	/**
@@ -57,7 +58,7 @@ public class Stuetzstelle implements Comparable<Stuetzstelle> {
 	 * @param zeitstempel
 	 *            Zeitstempel
 	 */
-	protected Stuetzstelle(long zeitstempel) {
+	public Stuetzstelle(long zeitstempel) {
 		this(zeitstempel, null);
 	}
 
@@ -69,7 +70,7 @@ public class Stuetzstelle implements Comparable<Stuetzstelle> {
 	 * @param wert
 	 *            Wert oder {@code null} f&uuml;r "undefiniert"
 	 */
-	Stuetzstelle(long zeitstempel, Integer wert) {
+	public Stuetzstelle(long zeitstempel, T wert) {
 		this.zeitstempel = zeitstempel;
 		this.wert = wert;
 	}
@@ -88,7 +89,7 @@ public class Stuetzstelle implements Comparable<Stuetzstelle> {
 	 * 
 	 * @return Wert oder {@code null} f&uuml;r "undefiniert"
 	 */
-	public Integer getWert() {
+	public T getWert() {
 		return wert;
 	}
 
@@ -103,7 +104,7 @@ public class Stuetzstelle implements Comparable<Stuetzstelle> {
 	 *         im Parameter ist
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
-	public int compareTo(Stuetzstelle stuetzstelle) {
+	public int compareTo(Stuetzstelle<T> stuetzstelle) {
 		if (zeitstempel < stuetzstelle.zeitstempel) {
 			return -1;
 		} else if (zeitstempel > stuetzstelle.zeitstempel) {
@@ -121,6 +122,7 @@ public class Stuetzstelle implements Comparable<Stuetzstelle> {
 	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Stuetzstelle) {

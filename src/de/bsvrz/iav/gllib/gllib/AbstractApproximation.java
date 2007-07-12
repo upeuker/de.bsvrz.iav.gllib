@@ -27,80 +27,65 @@
 package de.bsvrz.iav.gllib.gllib;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
-
-import de.bsvrz.iav.gllib.gllib.events.GanglinienListener;
 
 /**
  * Implementiert nur die Property <code>Ganglinie</code> der Schnittstelle.
  * 
  * @author BitCtrl, Schumann
  * @version $Id$
+ * @param <T>
+ *            der Typ der approximierten Werte.
  */
-public abstract class AbstractApproximation implements Approximation,
-		GanglinienListener {
-
-	/** Die der Approximation zugrunde liegende Ganglinie. */
-	protected final Ganglinie ganglinie;
+public abstract class AbstractApproximation<T> implements Approximation<T> {
 
 	/** Liste der verwendeten Stützstellen. */
-	protected Stuetzstelle[] stuetzstellen;
-	
-	/**
-	 * Konstruiert eine Approximation, indem der Verweis auf die zu
-	 * approximierende Ganglinie gesichert wird.
-	 * 
-	 * @param ganglinie
-	 *            Die zu approximierende Ganglinie
-	 */
-	protected AbstractApproximation(Ganglinie ganglinie) {
-		if (ganglinie == null) {
-			throw new NullPointerException(
-					"Die Ganglinie darf nicht null sein.");
-		}
-		this.ganglinie = ganglinie;
-		ganglinie.addGanglinienListener(this);
-	}
+	protected List<Stuetzstelle<T>> stuetzstellen;
 
 	/**
 	 * Bestimmt die Liste der verwendeten St&uuml;tzstellen. Die Liste
 	 * entspricht der Ganglinie, abz&uuml;glich der undefinierten
 	 * St&uuml;tzstellen.
+	 * <p>
+	 * {@inheritDoc}
 	 */
-	protected void bestimmeStuetzstellen() {
-		List<Stuetzstelle> liste;
-
-		liste = new ArrayList<Stuetzstelle>();
-		for (Stuetzstelle s : ganglinie.getStuetzstellen()) {
+	public void setStuetzstellen(Collection<Stuetzstelle<T>> menge) {
+		stuetzstellen = new ArrayList<Stuetzstelle<T>>();
+		for (Stuetzstelle<T> s : menge) {
 			if (s.getWert() != null) {
-				liste.add(s);
+				stuetzstellen.add(s);
 			}
 		}
-		stuetzstellen = liste.toArray(new Stuetzstelle[0]);
+		Collections.sort(stuetzstellen);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
-	public SortedSet<Stuetzstelle> interpoliere(long intervallBreite) {
+	public SortedSet<Stuetzstelle<T>> interpoliere(long intervallBreite) {
 		if (intervallBreite <= 0) {
 			throw new IllegalArgumentException(
 					"Intervallbreite muss größer null sein.");
 		}
 
-		SortedSet<Stuetzstelle> interpolation = new TreeSet<Stuetzstelle>();
+		SortedSet<Stuetzstelle<T>> interpolation;
 		long zeitstempel;
 
+		interpolation = new TreeSet<Stuetzstelle<T>>();
+
 		// Sonderfall: keine Stützstellen vorhanden
-		if (ganglinie.getStuetzstellen().size() == 0) {
+		if (stuetzstellen.size() == 0) {
 			return interpolation;
 		}
 
 		// Stützstellen an den Intervallgrenzen bestimmen
-		zeitstempel = ganglinie.getIntervall().start;
-		while (zeitstempel < ganglinie.getIntervall().ende) {
+		zeitstempel = stuetzstellen.get(0).getZeitstempel();
+		while (zeitstempel < stuetzstellen.get(stuetzstellen.size() - 1)
+				.getZeitstempel()) {
 			interpolation.add(get(zeitstempel));
 			zeitstempel += intervallBreite;
 		}

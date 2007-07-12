@@ -26,9 +26,12 @@
 
 package de.bsvrz.iav.gllib.gllib.dav;
 
-import de.bsvrz.iav.gllib.gllib.Approximation;
+import java.util.ArrayList;
+import java.util.List;
+
 import de.bsvrz.iav.gllib.gllib.Ganglinie;
-import de.bsvrz.sys.funclib.bitctrl.util.dav.Umrechung;
+import de.bsvrz.iav.gllib.gllib.Stuetzstelle;
+import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnitt;
 
 /**
  * F&uuml;r Messquerschnitte angepasste Ganglinie. Die vier Verkehrswerte QKfz,
@@ -39,7 +42,10 @@ import de.bsvrz.sys.funclib.bitctrl.util.dav.Umrechung;
  * @author BitCtrl, Schumann
  * @version $Id$
  */
-public class GanglinieMQ extends Ganglinie {
+public class GanglinieMQ extends Ganglinie<Messwerte> {
+
+	/** Faktor mit dem intern die St&uuml;tzstellenwerte multipliziert werden. */
+	private static final int FAKTOR = 100;
 
 	/**
 	 * Typ der Ganglinie.
@@ -59,132 +65,55 @@ public class GanglinieMQ extends Ganglinie {
 		MULTIPLIKATIV;
 	}
 
-	/** Ganglinie der Kfz-Verkehrsst&auml;rke. */
-	private Ganglinie qKfz;
-
-	/** Ganglinie der Lkw-Verkehrsst&auml;rke. */
-	private Ganglinie qLkw;
-
-	/** Ganglinie der Pkw-Geschwindigkeit. */
-	private Ganglinie vPkw;
-
-	/** Ganglinie der Lkw-Geschwindigkeit. */
-	private Ganglinie vLkw;
+	/** Der Messquerschnitt, zu dem die Ganglinie geh&ouml;rt. */
+	private final MessQuerschnitt mq;
 
 	/** Parameter f&uuml;r die Berechnung von QB. */
-	private float k1;
+	private final float k1;
 
 	/** Parameter f&uuml;r die Berechnung von QB. */
-	private float k2;
+	private final float k2;
 
 	/** Zeitpunkt der letzten Verschmelzung. */
-	private long letzteVerschmelzung;
+	private long letzteVerschmelzung = -1;
 
 	/** Anzahl der Verschmelzung mit anderen Ganglinienb. */
 	private long anzahlVerschmelzungen = 0;
 
 	/** Identifier f&uuml;r das mit der Ganglinie verkn&uuml;pfte Ereignis. */
-	private String ereignisTyp;
+	private String ereignisTyp = null;
 
 	/** Flag, ob die Ganglinie eine Referenzganglinie darstellt. */
-	private boolean referenz;
+	private boolean referenz = false;
+
+	/** Typ der Ganglinie. */
+	private Typ typ = Typ.ABSOLUT;
 
 	/**
-	 * Gibt eine Approximation f&uuml;r QKfz zur&uuml;ck.
+	 * Initialisert die Ganglinie.
 	 * 
-	 * @return Approximation
+	 * @param mq
+	 *            der Messquerschnitt f&uuml;r den die Ganglinie gilt
+	 * @param k1
+	 *            Parameter f&uuml;r die Berechnung von QB.
+	 * @param k2
+	 *            Parameter f&uuml;r die Berechnung von QB.
 	 */
-	public Approximation getApproximationQKfz() {
-		return qKfz.getApproximation();
+	public GanglinieMQ(MessQuerschnitt mq, float k1, float k2) {
+		super();
+
+		this.mq = mq;
+		this.k1 = k1;
+		this.k2 = k2;
 	}
 
 	/**
-	 * Gibt eine Approximation f&uuml;r QPkw zur&uuml;ck.
+	 * Gibt den Messquerschnitt der Ganglinie zur&uuml;ck.
 	 * 
-	 * @return Approximation
+	 * @return ein Messquerschnitt.
 	 */
-	public Approximation getApproximationQPkw() {
-		Ganglinie qPkw;
-
-		qPkw = new Ganglinie();
-		for (int i = 0; i < qKfz.anzahlStuetzstellen(); i++) {
-			long z;
-
-			z = qKfz.getStuetzstelle(i).zeitstempel;
-			qPkw.set(z, Umrechung.getQPkw(qKfz.getStuetzstelle(i).wert, qLkw
-					.getStuetzstelle(i).wert));
-		}
-
-		return qPkw;
-	}
-
-	/**
-	 * Gibt eine Approximation f&uuml;r QLkw zur&uuml;ck.
-	 * 
-	 * @return Approximation
-	 */
-	public Approximation getApproximationQLkw() {
-		return qLkw.getApproximation();
-	}
-
-	/**
-	 * Gibt eine Approximation f&uuml;r VKfz zur&uuml;ck.
-	 * 
-	 * @return Approximation
-	 */
-	public Approximation getApproximationVKfz() {
-		Ganglinie vKfz;
-
-		vKfz = new Ganglinie();
-		for (int i = 0; i < qKfz.anzahlStuetzstellen(); i++) {
-			long z;
-
-			z = qKfz.getStuetzstelle(i).zeitstempel;
-			vKfz.set(z, Umrechung.getVKfz(qLkw.getStuetzstelle(i).wert, qKfz
-					.getStuetzstelle(i).wert, vPkw.getStuetzstelle(i).wert,
-					vLkw.getStuetzstelle(i).wert));
-		}
-
-		return vKfz;
-	}
-
-	/**
-	 * Gibt eine Approximation f&uuml;r VPkw zur&uuml;ck.
-	 * 
-	 * @return Approximation
-	 */
-	public Approximation getApproximationVPkw() {
-		return vPkw.getApproximation();
-	}
-
-	/**
-	 * Gibt eine Approximation f&uuml;r VLkw zur&uuml;ck.
-	 * 
-	 * @return Approximation
-	 */
-	public Approximation getApproximationVLkw() {
-		return vLkw.getApproximation();
-	}
-
-	/**
-	 * Gibt eine Approximation f&uuml;r QB zur&uuml;ck.
-	 * 
-	 * @return Approximation
-	 */
-	public Approximation getApproximationQB() {
-		Ganglinie qb;
-
-		qb = new Ganglinie();
-		for (int i = 0; i < qKfz.anzahlStuetzstellen(); i++) {
-			long z;
-
-			z = qKfz.getStuetzstelle(i).zeitstempel;
-			qb.set(z, Umrechung.getQB(qLkw.getStuetzstelle(i).wert,
-					qKfz.getStuetzstelle(i).wert, vPkw.getStuetzstelle(i).wert,
-					vLkw.getStuetzstelle(i).wert, k1, k2));
-		}
-
-		return qb;
+	public MessQuerschnitt getMessQuerschnitt() {
+		return mq;
 	}
 
 	/**
@@ -257,79 +186,109 @@ public class GanglinieMQ extends Ganglinie {
 	}
 
 	/**
-	 * Gibt die entsprechende Ganglinie zur&uuml;ck.
+	 * Gibt den Ganglinientyp zur&uuml;ck.
 	 * 
-	 * @return Die Ganglinie
+	 * @return der Typ der Ganglinie.
 	 */
-	public Ganglinie getQKfz() {
-		return qKfz;
+	public Typ getTyp() {
+		return typ;
 	}
 
 	/**
-	 * Legt die entsprechende Ganglinie fest.
+	 * Legt den Ganglinientyp fest.
 	 * 
-	 * @param qKfz
-	 *            Die neue Ganglinie
+	 * @param typ
+	 *            der Typ der Ganglinie.
 	 */
-	public void setQKfz(Ganglinie qKfz) {
-		this.qKfz = qKfz;
+	public void setTyp(Typ typ) {
+		this.typ = typ;
 	}
 
 	/**
-	 * Gibt die entsprechende Ganglinie zur&uuml;ck.
+	 * Gibt einen Parameter f&uuml;r die Berechnung von QB zur&uuml;ck.
 	 * 
-	 * @return Die Ganglinie
+	 * @return der Parameter.
 	 */
-	public Ganglinie getQLkw() {
-		return qLkw;
+	public float getK1() {
+		return k1;
 	}
 
 	/**
-	 * Legt die entsprechende Ganglinie fest.
+	 * Gibt einen Parameter f&uuml;r die Berechnung von QB zur&uuml;ck.
 	 * 
-	 * @param qLkw
-	 *            Die neue Ganglinie
+	 * @return der Parameter
 	 */
-	public void setQLkw(Ganglinie qLkw) {
-		this.qLkw = qLkw;
+	public float getK2() {
+		return k2;
 	}
 
 	/**
-	 * Gibt die entsprechende Ganglinie zur&uuml;ck.
+	 * Legt die Anzahl der bisherigen Verschmelzungen fest.
 	 * 
-	 * @return Die Ganglinie
+	 * @param letzteVerschmelzung
+	 *            die neue Anzahl der Verschmelzungen.
 	 */
-	public Ganglinie getVLkw() {
-		return vLkw;
+	public void setLetzteVerschmelzung(long letzteVerschmelzung) {
+		this.letzteVerschmelzung = letzteVerschmelzung;
 	}
 
 	/**
-	 * Legt die entsprechende Ganglinie fest.
-	 * 
-	 * @param vLkw
-	 *            Die neue Ganglinie
+	 * {@inheritDoc}
 	 */
-	public void setVLkw(Ganglinie vLkw) {
-		this.vLkw = vLkw;
+	@Override
+	public Stuetzstelle<Messwerte> getStuetzstelle(long zeitstempel) {
+		Messwerte w;
+
+		w = super.getStuetzstelle(zeitstempel).getWert();
+		w = new Messwerte(w.getQKfz() / FAKTOR, w.getQLkw() / FAKTOR, w
+				.getVPkw()
+				/ FAKTOR, w.getVLkw() / FAKTOR, k1, k2);
+
+		return new Stuetzstelle<Messwerte>(zeitstempel, w);
 	}
 
 	/**
-	 * Gibt die entsprechende Ganglinie zur&uuml;ck.
-	 * 
-	 * @return Die Ganglinie
+	 * {@inheritDoc}
 	 */
-	public Ganglinie getVPkw() {
-		return vPkw;
+	@Override
+	public List<Stuetzstelle<Messwerte>> getStuetzstellen() {
+		List<Stuetzstelle<Messwerte>> liste;
+
+		liste = new ArrayList<Stuetzstelle<Messwerte>>();
+		for (long t : stuetzstellen.keySet()) {
+			liste.add(getStuetzstelle(t));
+		}
+
+		return liste;
 	}
 
 	/**
-	 * Legt die entsprechende Ganglinie fest.
-	 * 
-	 * @param vPkw
-	 *            Die neue Ganglinie
+	 * {@inheritDoc}
 	 */
-	public void setVPkw(Ganglinie vPkw) {
-		this.vPkw = vPkw;
+	@Override
+	public boolean setStuetzstelle(long zeitstempel, Messwerte wert) {
+		Messwerte w;
+
+		w = new Messwerte(wert.getQKfz() * FAKTOR, wert.getQLkw() * FAKTOR,
+				wert.getVPkw() * FAKTOR, wert.getVLkw() * FAKTOR, k1, k2);
+
+		return super.setStuetzstelle(zeitstempel, w);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean setStuetzstelle(Stuetzstelle<Messwerte> s) {
+		return setStuetzstelle(s.getZeitstempel(), s.getWert());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return mq + ": " + getStuetzstellen();
 	}
 
 }

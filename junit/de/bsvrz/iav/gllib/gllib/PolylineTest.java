@@ -40,19 +40,19 @@ import org.junit.Test;
 public class PolylineTest {
 
 	/** Die Testganglinie. */
-	private Ganglinie ganglinie;
+	private Ganglinie<Double> ganglinie;
 
 	/**
 	 * Testganglinie initialisieren.
 	 */
 	@Before
 	public void setUp() {
-		ganglinie = new Ganglinie();
-		ganglinie.setStuetzstelle(0, 0);
-		ganglinie.setStuetzstelle(30, 30);
-		ganglinie.setStuetzstelle(40, 20);
-		ganglinie.setStuetzstelle(60, 40);
-		ganglinie.setStuetzstelle(90, 10);
+		ganglinie = new Ganglinie<Double>();
+		ganglinie.setStuetzstelle(0, 0.0);
+		ganglinie.setStuetzstelle(30, 30.0);
+		ganglinie.setStuetzstelle(40, 20.0);
+		ganglinie.setStuetzstelle(60, 40.0);
+		ganglinie.setStuetzstelle(90, 10.0);
 	}
 
 	/**
@@ -64,7 +64,8 @@ public class PolylineTest {
 		long t;
 
 		System.out.println("Polyline:");
-		polyline = new Polyline(ganglinie);
+		polyline = new Polyline();
+		polyline.setStuetzstellen(ganglinie.getStuetzstellen());
 
 		// Die existierenden Stützstellen
 		t = 0;
@@ -85,19 +86,19 @@ public class PolylineTest {
 
 		// Punkte zwischen den Stützstellen
 		t = 10;
-		assertEquals(new Stuetzstelle(t, 10), polyline.get(t));
+		assertEquals(new Stuetzstelle<Double>(t, 10.0), polyline.get(t));
 		System.out.println(polyline.get(t));
 		t = 20;
-		assertEquals(new Stuetzstelle(t, 20), polyline.get(t));
+		assertEquals(new Stuetzstelle<Double>(t, 20.0), polyline.get(t));
 		System.out.println(polyline.get(t));
 		t = 50;
-		assertEquals(new Stuetzstelle(t, 30), polyline.get(t));
+		assertEquals(new Stuetzstelle<Double>(t, 30.0), polyline.get(t));
 		System.out.println(polyline.get(t));
 		t = 70;
-		assertEquals(new Stuetzstelle(t, 30), polyline.get(t));
+		assertEquals(new Stuetzstelle<Double>(t, 30.0), polyline.get(t));
 		System.out.println(polyline.get(t));
 		t = 80;
-		assertEquals(new Stuetzstelle(t, 20), polyline.get(t));
+		assertEquals(new Stuetzstelle<Double>(t, 20.0), polyline.get(t));
 		System.out.println(polyline.get(t));
 	}
 

@@ -26,7 +26,6 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
-import de.bsvrz.iav.gllib.gllib.events.GanglinienEvent;
 
 /**
  * Approximation einer Ganglinie mit Hilfe von Polylines. Der Wert der
@@ -38,61 +37,49 @@ import de.bsvrz.iav.gllib.gllib.events.GanglinienEvent;
  * @author BitCtrl, Schumann
  * @version $Id$
  */
-public class Polyline extends AbstractApproximation {
+public class Polyline extends AbstractApproximation<Double> {
 
-	/**
-	 * Konstruiert eine Approximation durch Polyline f&uuml;r eine Ganglinie.
-	 * Die in der Ganglinie festgelegte Approximation wird nicht ver&auml;ndert.
-	 * 
-	 * @param ganglinie
-	 *            Eine Ganglinie
-	 */
-	Polyline(Ganglinie ganglinie) {
-		super(ganglinie);
-		bestimmeStuetzstellen();
-	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
-	public Stuetzstelle get(long zeitstempel) {
-		if (!ganglinie.isValid(zeitstempel)) {
-			return new Stuetzstelle(zeitstempel, null);
-		}
-
-		if (ganglinie.existsStuetzstelle(zeitstempel)) {
-			return ganglinie.getStuetzstelle(zeitstempel);
-		}
-
-		Stuetzstelle s0, s1;
+	public Stuetzstelle<Double> get(long zeitstempel) {
+		Stuetzstelle<Double> s0, s1;
 		Double wert;
 		double x0, x1, y0, y1;
 		int index;
 
 		index = -1;
-		for (int i = 0; i < stuetzstellen.length; i++) {
-			if (stuetzstellen[i].getZeitstempel() > zeitstempel) {
+		for (int i = 0; i < stuetzstellen.size(); i++) {
+			if (stuetzstellen.get(i).getZeitstempel() == zeitstempel) {
+				return stuetzstellen.get(i);
+			} else if (stuetzstellen.get(i).getZeitstempel() > zeitstempel) {
 				index = i - 1;
 				break;
 			}
 		}
-		s0 = stuetzstellen[index];
-		s1 = stuetzstellen[index + 1];
+		
+		if (index == -1) {
+			// Zeitstempel liegt auﬂerhalb der Ganglinie
+			return new Stuetzstelle<Double>(zeitstempel, null);
+		}
+		
+		s0 = stuetzstellen.get(index);
+		s1 = stuetzstellen.get(index + 1);
 		x0 = s0.getZeitstempel();
-		y0 = s0.getWert();
+		y0 = s0.getWert().doubleValue();
 		x1 = s1.getZeitstempel();
-		y1 = s1.getWert();
+		y1 = s1.getWert().doubleValue();
 		wert = y0 + (y1 - y0) / (x1 - x0) * (zeitstempel - x0);
-		return new Stuetzstelle(zeitstempel, wert.intValue());
+		return new Stuetzstelle<Double>(zeitstempel, wert);
 	}
 
 	/**
+	 * Hier gibt es nichts zu tun.
+	 * <p>
 	 * {@inheritDoc}
 	 */
-	public void ganglinieAktualisiert(GanglinienEvent e) {
-		if (e.getSource() == ganglinie) {
-			bestimmeStuetzstellen();
-		}
+	public void initialisiere() {
+		// nichts
 	}
 
 	/**
