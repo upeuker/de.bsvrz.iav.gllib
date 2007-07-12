@@ -26,8 +26,6 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
-import java.util.List;
-
 import de.bsvrz.iav.gllib.gllib.events.GanglinienEvent;
 
 /**
@@ -42,9 +40,6 @@ import de.bsvrz.iav.gllib.gllib.events.GanglinienEvent;
  */
 public class Polyline extends AbstractApproximation {
 
-	/** Liste der verwendeten Stützstellen. */
-	private List<Stuetzstelle> stuetzstellen;
-
 	/**
 	 * Konstruiert eine Approximation durch Polyline f&uuml;r eine Ganglinie.
 	 * Die in der Ganglinie festgelegte Approximation wird nicht ver&auml;ndert.
@@ -54,9 +49,9 @@ public class Polyline extends AbstractApproximation {
 	 */
 	Polyline(Ganglinie ganglinie) {
 		super(ganglinie);
-		stuetzstellen = ganglinie.getStuetzstellen();
+		bestimmeStuetzstellen();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -75,14 +70,14 @@ public class Polyline extends AbstractApproximation {
 		int index;
 
 		index = -1;
-		for (int i = 0; i < stuetzstellen.size(); i++) {
-			if (stuetzstellen.get(i).getZeitstempel() > zeitstempel) {
+		for (int i = 0; i < stuetzstellen.length; i++) {
+			if (stuetzstellen[i].getZeitstempel() > zeitstempel) {
 				index = i - 1;
 				break;
 			}
 		}
-		s0 = stuetzstellen.get(index);
-		s1 = stuetzstellen.get(index + 1);
+		s0 = stuetzstellen[index];
+		s1 = stuetzstellen[index + 1];
 		x0 = s0.getZeitstempel();
 		y0 = s0.getWert();
 		x1 = s1.getZeitstempel();
@@ -96,7 +91,7 @@ public class Polyline extends AbstractApproximation {
 	 */
 	public void ganglinieAktualisiert(GanglinienEvent e) {
 		if (e.getSource() == ganglinie) {
-			stuetzstellen = ganglinie.getStuetzstellen();
+			bestimmeStuetzstellen();
 		}
 	}
 

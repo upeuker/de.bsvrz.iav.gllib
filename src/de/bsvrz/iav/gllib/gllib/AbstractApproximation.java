@@ -26,6 +26,8 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -43,6 +45,9 @@ public abstract class AbstractApproximation implements Approximation,
 	/** Die der Approximation zugrunde liegende Ganglinie. */
 	protected final Ganglinie ganglinie;
 
+	/** Liste der verwendeten Stützstellen. */
+	protected Stuetzstelle[] stuetzstellen;
+	
 	/**
 	 * Konstruiert eine Approximation, indem der Verweis auf die zu
 	 * approximierende Ganglinie gesichert wird.
@@ -59,6 +64,23 @@ public abstract class AbstractApproximation implements Approximation,
 		ganglinie.addGanglinienListener(this);
 	}
 
+	/**
+	 * Bestimmt die Liste der verwendeten St&uuml;tzstellen. Die Liste
+	 * entspricht der Ganglinie, abz&uuml;glich der undefinierten
+	 * St&uuml;tzstellen.
+	 */
+	protected void bestimmeStuetzstellen() {
+		List<Stuetzstelle> liste;
+
+		liste = new ArrayList<Stuetzstelle>();
+		for (Stuetzstelle s : ganglinie.getStuetzstellen()) {
+			if (s.getWert() != null) {
+				liste.add(s);
+			}
+		}
+		stuetzstellen = liste.toArray(new Stuetzstelle[0]);
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */

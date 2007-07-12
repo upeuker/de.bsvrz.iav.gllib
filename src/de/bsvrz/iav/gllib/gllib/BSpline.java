@@ -26,9 +26,6 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import de.bsvrz.iav.gllib.gllib.events.GanglinienEvent;
 
 /**
@@ -38,9 +35,6 @@ import de.bsvrz.iav.gllib.gllib.events.GanglinienEvent;
  * @version $Id$
  */
 public class BSpline extends AbstractApproximation {
-
-	/** Enth&auml;lt nur die definierten St&uuml;tzstellen der Ganglinie. */
-	private Stuetzstelle[] stuetzstellen;
 
 	/** Die Ordnung des B-Splines. */
 	private short ordnung;
@@ -57,7 +51,6 @@ public class BSpline extends AbstractApproximation {
 	BSpline(Ganglinie ganglinie) {
 		super(ganglinie);
 
-		bestimmeStuetzstellen();
 		ordnung = 5;
 		bestimmeT();
 	}
@@ -92,7 +85,6 @@ public class BSpline extends AbstractApproximation {
 	 */
 	public void ganglinieAktualisiert(GanglinienEvent e) {
 		if (e.getSource() == ganglinie) {
-			bestimmeStuetzstellen();
 			bestimmeT();
 		}
 	}
@@ -156,27 +148,12 @@ public class BSpline extends AbstractApproximation {
 	}
 
 	/**
-	 * Bestimmt die Liste der verwendeten St&uuml;tzstellen. Die Liste
-	 * entspricht der Ganglinie, abz&uuml;glich der undefinierten
-	 * St&uuml;tzstellen.
-	 */
-	private void bestimmeStuetzstellen() {
-		List<Stuetzstelle> liste;
-
-		liste = new ArrayList<Stuetzstelle>();
-		for (Stuetzstelle s : ganglinie.getStuetzstellen()) {
-			if (s.getWert() != null) {
-				liste.add(s);
-			}
-		}
-		stuetzstellen = liste.toArray(new Stuetzstelle[0]);
-	}
-
-	/**
 	 * Bestimmt die Intervallgrenzen der Interpolation. Es gibt n+k-1 Intervalle
 	 * mit n&nbsp;=&nbsp;Knotenanzahl und k&nbsp;=&nbsp;Ordnung des B-Spline.
 	 */
 	private void bestimmeT() {
+		bestimmeStuetzstellen();
+		
 		t = new int[stuetzstellen.length + ordnung];
 		for (int j = 0; j < t.length; j++) {
 			if (j < ordnung) {

@@ -492,7 +492,7 @@ public class Ganglinie {
 	}
 
 	/** Speicher der St&uuml;tzstellen. */
-	private SortedMap<Long, Integer> stuetzstellen;
+	protected SortedMap<Long, Integer> stuetzstellen;
 
 	/** Verfahren zur Berechnung der Punkte zwischen den St&uuml;tzstellen. */
 	private Approximation approximation;
@@ -609,12 +609,12 @@ public class Ganglinie {
 	 * 
 	 * @return Nach Zeitstempel sortiere St&uuml;tzstellen
 	 */
-	public List<Stuetzstelle> getStuetzstellen() {
+	public List<? extends Stuetzstelle> getStuetzstellen() {
 		List<Stuetzstelle> liste;
 
 		liste = new ArrayList<Stuetzstelle>();
 		for (long t : stuetzstellen.keySet()) {
-			liste.add(new Stuetzstelle(t, stuetzstellen.get(t)));
+			liste.add(getStuetzstelle(t));
 		}
 
 		return liste;

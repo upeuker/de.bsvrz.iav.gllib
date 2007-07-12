@@ -31,10 +31,6 @@ import static de.bsvrz.sys.funclib.bitctrl.math.RationaleZahl.dividiere;
 import static de.bsvrz.sys.funclib.bitctrl.math.RationaleZahl.multipliziere;
 import static de.bsvrz.sys.funclib.bitctrl.math.RationaleZahl.potenz;
 import static de.bsvrz.sys.funclib.bitctrl.math.RationaleZahl.subtrahiere;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import de.bsvrz.iav.gllib.gllib.events.GanglinienEvent;
 import de.bsvrz.sys.funclib.bitctrl.math.RationaleZahl;
 import de.bsvrz.sys.funclib.bitctrl.math.algebra.Gauss;
@@ -48,9 +44,6 @@ import de.bsvrz.sys.funclib.bitctrl.math.algebra.Vektor;
  * @version $Id$
  */
 public class CubicSpline extends AbstractApproximation {
-
-	/** Enth&auml;lt nur die definierten St&uuml;tzstellen der Ganglinie. */
-	private Stuetzstelle[] stuetzstellen;
 
 	/** Der erste Koeffizient des Polynoms. */
 	private RationaleZahl[] a;
@@ -139,18 +132,11 @@ public class CubicSpline extends AbstractApproximation {
 	 */
 	private void bestimmeKoeffizienten() {
 		int n;
-		List<Stuetzstelle> liste;
 		Matrix m;
 		Vektor v;
 
-		liste = new ArrayList<Stuetzstelle>();
-		for (Stuetzstelle s : ganglinie.getStuetzstellen()) {
-			if (s.getWert() != null) {
-				liste.add(s);
-			}
-		}
-		n = liste.size();
-		stuetzstellen = liste.toArray(new Stuetzstelle[0]);
+		bestimmeStuetzstellen();
+		n = stuetzstellen.length;
 
 		a = new RationaleZahl[n];
 		b = new RationaleZahl[n];
