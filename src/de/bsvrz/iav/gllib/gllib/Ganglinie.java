@@ -156,7 +156,7 @@ public class Ganglinie<T> {
 		if (approximation != null) {
 			return approximation.get(zeitstempel);
 		}
-		
+
 		// Rückfallebene, wenn keine Approximation festgelegt, wird falls
 		// vorhanden eine existierende Stützstelle zurückgegeben.
 		if (stuetzstellen.containsKey(zeitstempel)) {
@@ -289,14 +289,11 @@ public class Ganglinie<T> {
 	/**
 	 * Die Ganglinie als Approximation zu&uuml;ck.
 	 * 
-	 * @return die Klasse der Approximation der Ganglinie oder {@code null},
-	 *         wenn keine Approximation festgelegt wurde.
+	 * @return die Approximation der Ganglinie oder {@code null}, wenn keine
+	 *         Approximation festgelegt wurde.
 	 */
-	public Class<? extends Approximation> getApproximation() {
-		if (approximation != null) {
-			return approximation.getClass();
-		}
-		return null;
+	public Approximation getApproximation() {
+		return approximation;
 	}
 
 	/**
