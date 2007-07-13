@@ -29,7 +29,12 @@ package de.bsvrz.iav.gllib.gllib.dav;
 import java.util.ArrayList;
 import java.util.List;
 
+import stauma.dav.clientside.Data;
+import stauma.dav.clientside.Data.Array;
+import de.bsvrz.iav.gllib.gllib.BSpline;
+import de.bsvrz.iav.gllib.gllib.CubicSpline;
 import de.bsvrz.iav.gllib.gllib.Ganglinie;
+import de.bsvrz.iav.gllib.gllib.Polyline;
 import de.bsvrz.iav.gllib.gllib.Stuetzstelle;
 import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnitt;
 
@@ -43,6 +48,15 @@ import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnitt;
  * @version $Id$
  */
 public class GanglinieMQ extends Ganglinie<Messwerte> {
+
+	/** Datenkatalogkonstante f&uuml;r einen B-Spline. */
+	public static final int BSPLINE = 1;
+
+	/** Datenkatalogkonstante f&uuml;r einen Cubic-Spline. */
+	public static final int CUBICSPLINE = 2;
+
+	/** Datenkatalogkonstante f&uuml;r eine Polylinie. */
+	public static final int POLYLINE = 3;
 
 	/** Faktor mit dem intern die St&uuml;tzstellenwerte multipliziert werden. */
 	private static final int FAKTOR = 100;
@@ -66,13 +80,13 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/** Der Messquerschnitt, zu dem die Ganglinie geh&ouml;rt. */
-	private final MessQuerschnitt mq;
+	private MessQuerschnitt mq;
 
 	/** Parameter f&uuml;r die Berechnung von QB. */
-	private final float k1;
+	private float k1 = 2.0f;
 
 	/** Parameter f&uuml;r die Berechnung von QB. */
-	private final float k2;
+	private float k2 = 0.01f;
 
 	/** Zeitpunkt der letzten Verschmelzung. */
 	private long letzteVerschmelzung = -1;
@@ -90,21 +104,10 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	private Typ typ = Typ.ABSOLUT;
 
 	/**
-	 * Initialisert die Ganglinie.
-	 * 
-	 * @param mq
-	 *            der Messquerschnitt f&uuml;r den die Ganglinie gilt
-	 * @param k1
-	 *            Parameter f&uuml;r die Berechnung von QB.
-	 * @param k2
-	 *            Parameter f&uuml;r die Berechnung von QB.
+	 * Konstruktor verstecken.
 	 */
-	public GanglinieMQ(MessQuerschnitt mq, float k1, float k2) {
-		super();
-
-		this.mq = mq;
-		this.k1 = k1;
-		this.k2 = k2;
+	GanglinieMQ() {
+		// nichts
 	}
 
 	/**
@@ -223,6 +226,35 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
+	 * Gibt den Messquerschnitt der Ganglinie zur&uuml;ck.
+	 * 
+	 * @return ein Messquerschnitt
+	 */
+	public MessQuerschnitt getMq() {
+		return mq;
+	}
+
+	/**
+	 * Legt den Parameter k1 f&uuml;r die Berechnung von QB fest.
+	 * 
+	 * @param k1
+	 *            der parameter k1
+	 */
+	public void setK1(float k1) {
+		this.k1 = k1;
+	}
+
+	/**
+	 * Legt den Parameter k2 f&uuml;r die Berechnung von QB fest.
+	 * 
+	 * @param k2
+	 *            der parameter k2
+	 */
+	public void setK2(float k2) {
+		this.k2 = k2;
+	}
+
+	/**
 	 * Legt die Anzahl der bisherigen Verschmelzungen fest.
 	 * 
 	 * @param letzteVerschmelzung
@@ -230,6 +262,55 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 */
 	public void setLetzteVerschmelzung(long letzteVerschmelzung) {
 		this.letzteVerschmelzung = letzteVerschmelzung;
+	}
+
+	/**
+	 * Extrahiert aus den abstrakten Daten die Prognose.
+	 * 
+	 * @param daten
+	 *            die Daten der Prognose.
+	 */
+	void setDaten(Data daten) {
+		Array feld;
+
+		mq = new MessQuerschnitt(daten.getReferenceValue("Messquerschnitt")
+				.getSystemObject());
+
+		stuetzstellen.clear();
+		setStuetzstelle(daten.getTimeValue("ZeitpunktPrognoseBeginn")
+				.getMillis(), null);
+		setStuetzstelle(
+				daten.getTimeValue("ZeitpunktPrognoseEnde").getMillis(), null);
+
+		// Verfahren
+		switch (daten.getUnscaledValue("GanglinienVerfahren").intValue()) {
+		case BSPLINE:
+			setApproximation(new BSpline(daten.getUnscaledValue("Ordnung")
+					.byteValue()));
+			break;
+		case CUBICSPLINE:
+			setApproximation(new CubicSpline());
+			break;
+		case POLYLINE:
+			setApproximation(new Polyline());
+			break;
+		default:
+			break;
+		}
+
+		// Stützstellen
+		feld = daten.getArray("Stützstelle");
+		for (int i = 0; i < feld.getLength(); i++) {
+			Messwerte mw;
+
+			mw = new Messwerte(feld.getItem(i).getScaledValue("QKfz")
+					.floatValue(), feld.getItem(i).getScaledValue("QLkw")
+					.floatValue(), feld.getItem(i).getScaledValue("VPkw")
+					.floatValue(), feld.getItem(i).getScaledValue("VLkw")
+					.floatValue(), k1, k2);
+			setStuetzstelle(feld.getItem(i).getTimeValue("Zeit").getMillis(),
+					mw);
+		}
 	}
 
 	/**

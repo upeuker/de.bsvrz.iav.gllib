@@ -60,8 +60,7 @@ public class TestBSpline {
 		spline.initialisiere();
 
 		// Rechnen
-		// for (long t = 0; t <= 900; t += 1) {
-		for (short k = 1; k <= g.anzahlStuetzstellen(); k++) {
+		for (byte k = 1; k <= g.anzahlStuetzstellen() && k <= 10; k++) {
 			spline.setOrdnung(k);
 			for (long t = g.getIntervall().start; t <= g.getIntervall().ende; t += 1) {
 				assertEquals(t, spline.get(t).getZeitstempel());
@@ -91,7 +90,7 @@ public class TestBSpline {
 		spline.initialisiere();
 
 		// Rechnen
-		for (short k = 1; k < 10; k++) {
+		for (byte k = 1; k < 10; k++) {
 			spline.setOrdnung(k);
 			for (long t = g.getIntervall().start; t <= g.getIntervall().ende; t += 1) {
 				assertEquals(t, spline.get(t).getZeitstempel());

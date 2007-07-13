@@ -35,17 +35,34 @@ package de.bsvrz.iav.gllib.gllib;
 public class BSpline extends AbstractApproximation<Double> {
 
 	/** Die Ordnung des B-Splines. */
-	private short ordnung = 5;
+	private byte ordnung;
 
 	/** Grenzstellen der Interpolationsintervalle, aufsteigend sortiert. */
 	private int[] t;
+
+	/**
+	 * Erzeugt einen B-Spline mit der Ordnung 5.
+	 */
+	public BSpline() {
+		this((byte) 5);
+	}
+
+	/**
+	 * Erzeugt einen B-Spline mit beliebiger Ordnung.
+	 * 
+	 * @param ordnung
+	 *            die Ordnung des Bspline.
+	 */
+	public BSpline(byte ordnung) {
+		this.ordnung = ordnung;
+	}
 
 	/**
 	 * Gibt die Ordgung des B-Splines zur&uuml;ck.
 	 * 
 	 * @return Ordnung
 	 */
-	public short getOrdnung() {
+	public byte getOrdnung() {
 		return ordnung;
 	}
 
@@ -55,14 +72,14 @@ public class BSpline extends AbstractApproximation<Double> {
 	 * @param ordnung
 	 *            Ordnung
 	 */
-	public void setOrdnung(short ordnung) {
+	public void setOrdnung(byte ordnung) {
 		if (ordnung < 1 || ordnung > stuetzstellen.size()) {
 			throw new IllegalArgumentException(
 					"Die Ordnung muss zwischen 1 und der Anzahl der definierten Stützstellen liegen.");
 		}
 
 		this.ordnung = ordnung;
-		bestimmeT();
+		initialisiere();
 	}
 
 	/**
@@ -78,7 +95,7 @@ public class BSpline extends AbstractApproximation<Double> {
 			// Zeitstempel liegt außerhalb der Ganglinie
 			return new Stuetzstelle<Double>(zeitstempel, null);
 		}
-		
+
 		// Sonderfall
 		if (ordnung == 1) {
 			s = bspline(zeitstempelNachT(zeitstempel));
@@ -124,25 +141,6 @@ public class BSpline extends AbstractApproximation<Double> {
 		t0 *= t[t.length - 1];
 
 		return t0;
-	}
-
-	/**
-	 * Bestimmt die Intervallgrenzen der Interpolation. Es gibt n+k-1 Intervalle
-	 * mit n&nbsp;=&nbsp;Knotenanzahl und k&nbsp;=&nbsp;Ordnung des B-Spline.
-	 */
-	private void bestimmeT() {
-		t = new int[stuetzstellen.size() + ordnung];
-		for (int j = 0; j < t.length; j++) {
-			if (j < ordnung) {
-				t[j] = 0;
-			} else if (ordnung <= j && j <= stuetzstellen.size() - 1) {
-				t[j] = j - ordnung + 1;
-			} else if (j > stuetzstellen.size() - 1) {
-				t[j] = stuetzstellen.size() - 1 - ordnung + 2;
-			} else {
-				throw new IllegalStateException();
-			}
-		}
 	}
 
 	/**
@@ -229,12 +227,24 @@ public class BSpline extends AbstractApproximation<Double> {
 	}
 
 	/**
-	 * Bestimmt das Parameterfeld t des B-Spline.
-	 * <p>
+	 * Bestimmt die Intervallgrenzen der Interpolation. Es gibt n+k-1 Intervalle
+	 * mit n&nbsp;=&nbsp;Knotenanzahl und k&nbsp;=&nbsp;Ordnung des B-Spline.
+	 * 
 	 * {@inheritDoc}
 	 */
 	public void initialisiere() {
-		bestimmeT();
+		t = new int[stuetzstellen.size() + ordnung];
+		for (int j = 0; j < t.length; j++) {
+			if (j < ordnung) {
+				t[j] = 0;
+			} else if (ordnung <= j && j <= stuetzstellen.size() - 1) {
+				t[j] = j - ordnung + 1;
+			} else if (j > stuetzstellen.size() - 1) {
+				t[j] = stuetzstellen.size() - 1 - ordnung + 2;
+			} else {
+				throw new IllegalStateException();
+			}
+		}
 	}
 
 	/**
@@ -242,7 +252,7 @@ public class BSpline extends AbstractApproximation<Double> {
 	 */
 	@Override
 	public String toString() {
-		return "B-Spline mit Ordnung " + getOrdnung();
+		return "B-Spline mit Ordnung " + ordnung;
 	}
 
 }
