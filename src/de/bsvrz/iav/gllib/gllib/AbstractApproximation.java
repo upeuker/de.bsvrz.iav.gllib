@@ -92,5 +92,16 @@ public abstract class AbstractApproximation<T> implements Approximation<T> {
 
 		return interpolation;
 	}
+	
+	/**
+	 * Wirft immer eine {@link java.lang.CloneNotSupportedException}.
+	 * <p>
+	 * {@inheritDoc}
+	 * @throws CloneNotSupportedException 
+	 */
+	@Override
+	public Approximation<T> clone() throws CloneNotSupportedException {
+		throw new CloneNotSupportedException();
+	}
 
 }

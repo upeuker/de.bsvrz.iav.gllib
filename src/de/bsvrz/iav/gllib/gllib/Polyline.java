@@ -26,6 +26,7 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
+import java.util.ArrayList;
 
 /**
  * Approximation einer Ganglinie mit Hilfe von Polylines. Der Wert der
@@ -57,12 +58,12 @@ public class Polyline extends AbstractApproximation<Double> {
 				break;
 			}
 		}
-		
+
 		if (index == -1) {
 			// Zeitstempel liegt auﬂerhalb der Ganglinie
 			return new Stuetzstelle<Double>(zeitstempel, null);
 		}
-		
+
 		s0 = stuetzstellen.get(index);
 		s1 = stuetzstellen.get(index + 1);
 		x0 = s0.getZeitstempel();
@@ -80,6 +81,22 @@ public class Polyline extends AbstractApproximation<Double> {
 	 */
 	public void initialisiere() {
 		// nichts
+	}
+
+	/**
+	 * Erzeugt eine flache Kopie der Polylinie.
+	 * <p>
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Approximation<Double> clone() {
+		Polyline klon;
+
+		klon = new Polyline();
+		klon.stuetzstellen = new ArrayList<Stuetzstelle<Double>>(stuetzstellen);
+		klon.initialisiere();
+
+		return klon;
 	}
 
 	/**

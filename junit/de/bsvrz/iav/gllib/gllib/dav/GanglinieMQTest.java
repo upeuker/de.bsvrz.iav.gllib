@@ -24,7 +24,7 @@
  * mailto: info@bitctrl.de
  */
 
-package de.bsvrz.iav.gllib.gllib;
+package de.bsvrz.iav.gllib.gllib.dav;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -34,6 +34,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.bsvrz.iav.gllib.gllib.Stuetzstelle;
 import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
 
 /**
@@ -43,7 +44,7 @@ import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
  * @version $Id$
  */
 
-public class GanglinieTest {
+public class GanglinieMQTest {
 
 	/**
 	 * Ausgabe, welche Klasse gerade getestet wird.
@@ -60,9 +61,9 @@ public class GanglinieTest {
 	public void testGanglinieOhneStuetzstellen() {
 		System.out.println("Ganglinie ohne Stützstellen ...");
 
-		Ganglinie<Integer> g;
+		GanglinieMQ g;
 
-		g = new Ganglinie<Integer>();
+		g = new GanglinieMQ();
 
 		assertNull(g.getStuetzstelle(1));
 
@@ -74,7 +75,7 @@ public class GanglinieTest {
 		assertFalse(g.existsStuetzstelle(2));
 		assertFalse(g.isValid(2));
 
-		assertEquals("[]", g.toString());
+		assertEquals("null: []", g.toString());
 	}
 
 	/**
@@ -84,12 +85,12 @@ public class GanglinieTest {
 	public void testGanglinieAnlegen() {
 		System.out.println("Stützstellen anlegen und bearbeiten ...");
 
-		Ganglinie<Integer> g;
+		GanglinieMQ g;
 
-		g = new Ganglinie<Integer>();
-		g.setStuetzstelle(10, 25);
-		g.setStuetzstelle(30, 40);
-		g.setStuetzstelle(40, 35);
+		g = new GanglinieMQ();
+		g.setStuetzstelle(10, new Messwerte(90F, 10F, 130F, 80F));
+		g.setStuetzstelle(30, new Messwerte(50F, 5F, 180F, 90F));
+		g.setStuetzstelle(40, new Messwerte(70F, 20F, 100F, 70F));
 
 		assertEquals(3, g.anzahlStuetzstellen());
 		assertEquals(3, g.getStuetzstellen().size());
@@ -112,11 +113,12 @@ public class GanglinieTest {
 		assertFalse(g.isValid(9));
 		assertFalse(g.isValid(45));
 
-		assertEquals(new Stuetzstelle<Integer>(10, 25), g.getStuetzstelle(10));
-		assertEquals(new Stuetzstelle<Integer>(30, 40), g.getStuetzstelle(30));
-		assertEquals(new Stuetzstelle<Integer>(40, 35), g.getStuetzstelle(40));
-
-		assertEquals("[10=>25, 30=>40, 40=>35]", g.toString());
+		assertEquals(new Stuetzstelle<Messwerte>(10, new Messwerte(90F, 10F,
+				130F, 80F)), g.getStuetzstelle(10));
+		assertEquals(new Stuetzstelle<Messwerte>(30, new Messwerte(50F, 5F,
+				180F, 90F)), g.getStuetzstelle(30));
+		assertEquals(new Stuetzstelle<Messwerte>(40, new Messwerte(70F, 20F,
+				100F, 70F)), g.getStuetzstelle(40));
 	}
 
 }

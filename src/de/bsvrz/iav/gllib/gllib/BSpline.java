@@ -26,6 +26,8 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
+import java.util.ArrayList;
+
 /**
  * Approximation einer Ganglinie mit Hilfe eines B-Splines beliebiger Ordung.
  * 
@@ -245,6 +247,23 @@ public class BSpline extends AbstractApproximation<Double> {
 				throw new IllegalStateException();
 			}
 		}
+	}
+
+	/**
+	 * Erzeugt eine flache Kopie des B-Splines.
+	 * <p>
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Approximation<Double> clone() {
+		BSpline klon;
+
+		klon = new BSpline();
+		klon.stuetzstellen = new ArrayList<Stuetzstelle<Double>>(stuetzstellen);
+		klon.setOrdnung(getOrdnung());
+		klon.initialisiere();
+
+		return klon;
 	}
 
 	/**

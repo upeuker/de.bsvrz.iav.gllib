@@ -143,14 +143,17 @@ public class Ganglinie<T> {
 	}
 
 	/**
-	 * Gibt die real existierende St&uuml;tzstelle zu einem Zeitpunkt
-	 * zur&uuml;ck. Ist zu dem angegebenen Zeitpunkt keine St&uuml;tzstelle
-	 * vorhanden, wird {@code null} zur&uuml;ckgegeben.
+	 * Gibt die St&uuml;tzstelle zu einem bestimmten Zeitpunkt zur&uuml;ck. Es
+	 * wird die mit der Approximation berechnete St&uuml;tzstelle ausgeliefert.
+	 * Wurde keine Approximation festgelegt ({@code getApproximation() == null}),
+	 * dann wird die real existierende St&uuml;tzstelle ausgeliefert. Existiert
+	 * zum angefragten Zeitpunkt keine St&uuml;tzstelle, wird {@code null}
+	 * zur&uuml;ckgegegeben.
 	 * 
 	 * @param zeitstempel
 	 *            Der Zeitstempel zu dem eine St&uuml;tzstelle gesucht wird
 	 * @return Die gesuchte St&uuml;tzstelle oder {@code null}, wenn keine
-	 *         existiert
+	 *         berechnet werden konnte und keine existiert
 	 */
 	public Stuetzstelle<T> getStuetzstelle(long zeitstempel) {
 		if (approximation != null) {
@@ -309,13 +312,14 @@ public class Ganglinie<T> {
 	 */
 	public void setApproximation(Approximation approximation) {
 		this.approximation = approximation;
+		aktualisiereApproximation();
 	}
 
 	/**
 	 * Aktualisiert die Approximation. Muss bei &Auml;nderung an den
 	 * St&uuml;tzstellen der Ganglinie aufgerufen werden.
 	 */
-	private void aktualisiereApproximation() {
+	protected void aktualisiereApproximation() {
 		if (approximation != null) {
 			approximation.initialisiere();
 		}
@@ -346,7 +350,7 @@ public class Ganglinie<T> {
 	 */
 	@Override
 	public String toString() {
-		return stuetzstellen.toString();
+		return getStuetzstellen().toString();
 	}
 
 }

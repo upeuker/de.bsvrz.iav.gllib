@@ -31,6 +31,7 @@ import java.util.List;
 
 import stauma.dav.clientside.Data;
 import stauma.dav.clientside.Data.Array;
+import de.bsvrz.iav.gllib.gllib.Approximation;
 import de.bsvrz.iav.gllib.gllib.BSpline;
 import de.bsvrz.iav.gllib.gllib.CubicSpline;
 import de.bsvrz.iav.gllib.gllib.Ganglinie;
@@ -102,6 +103,18 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 
 	/** Typ der Ganglinie. */
 	private Typ typ = Typ.ABSOLUT;
+
+	/** Cached die Approximation f&uuml;r QKfz. */
+	private Approximation<Number> qKfz;
+
+	/** Cached die Approximation f&uuml;r QLkw. */
+	private Approximation<Number> qLkw;
+
+	/** Cached die Approximation f&uuml;r VPkw. */
+	private Approximation<Number> vPkw;
+
+	/** Cached die Approximation f&uuml;r VLkw. */
+	private Approximation<Number> vLkw;
 
 	/**
 	 * Konstruktor verstecken.
@@ -317,13 +330,87 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 * {@inheritDoc}
 	 */
 	@Override
+	protected void aktualisiereApproximation() {
+		List<Stuetzstelle<Number>> stellenQKfz;
+		List<Stuetzstelle<Number>> stellenQLkw;
+		List<Stuetzstelle<Number>> stellenVPkw;
+		List<Stuetzstelle<Number>> stellenVLkw;
+
+		if (getApproximation() == null) {
+			// Wenn keine Approximation festgelegt wurde, gibt es nichts zu tun
+			return;
+		}
+
+		stellenQKfz = new ArrayList<Stuetzstelle<Number>>();
+		stellenQLkw = new ArrayList<Stuetzstelle<Number>>();
+		stellenVPkw = new ArrayList<Stuetzstelle<Number>>();
+		stellenVLkw = new ArrayList<Stuetzstelle<Number>>();
+
+		for (Stuetzstelle<Messwerte> s : getStuetzstellen()) {
+			stellenQKfz.add(new Stuetzstelle<Number>(s.getZeitstempel(), s
+					.getWert().getQKfz()));
+			stellenQLkw.add(new Stuetzstelle<Number>(s.getZeitstempel(), s
+					.getWert().getQLkw()));
+			stellenVPkw.add(new Stuetzstelle<Number>(s.getZeitstempel(), s
+					.getWert().getVPkw()));
+			stellenVLkw.add(new Stuetzstelle<Number>(s.getZeitstempel(), s
+					.getWert().getVLkw()));
+		}
+
+		try {
+			qKfz = getApproximation().clone();
+			qLkw = getApproximation().clone();
+			vPkw = getApproximation().clone();
+			vLkw = getApproximation().clone();
+		} catch (CloneNotSupportedException e) {
+			throw new IllegalStateException(
+					"Die verwendete Approximation muss clone() unterstützen.");
+		}
+		qKfz.setStuetzstellen(stellenQKfz);
+		qKfz.initialisiere();
+
+		qLkw.setStuetzstellen(stellenQLkw);
+		qLkw.initialisiere();
+
+		vPkw.setStuetzstellen(stellenVPkw);
+		vPkw.initialisiere();
+
+		vLkw.setStuetzstellen(stellenVLkw);
+		vLkw.initialisiere();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Stuetzstelle<Messwerte> getStuetzstelle(long zeitstempel) {
 		Messwerte w;
 
-		w = super.getStuetzstelle(zeitstempel).getWert();
-		w = new Messwerte(w.getQKfz() / FAKTOR, w.getQLkw() / FAKTOR, w
-				.getVPkw()
-				/ FAKTOR, w.getVLkw() / FAKTOR, k1, k2);
+		if (getApproximation() != null) {
+			// Approximation vorhanden und benutzen
+			w = new Messwerte(qKfz.get(zeitstempel).getWert().floatValue()
+					/ FAKTOR, qLkw.get(zeitstempel).getWert().floatValue()
+					/ FAKTOR, vPkw.get(zeitstempel).getWert().floatValue()
+					/ FAKTOR, vLkw.get(zeitstempel).getWert().floatValue()
+					/ FAKTOR, k1, k2);
+		} else {
+			// Keine Approximation festgelegt, evtl. Stützstelle vorhanden?
+			Stuetzstelle<Messwerte> s;
+
+			s = super.getStuetzstelle(zeitstempel);
+
+			if (s != null) {
+				// Es gibt eine Stützstelle
+				w = new Messwerte(s.getWert().getQKfz() / FAKTOR, s.getWert()
+						.getQLkw()
+						/ FAKTOR, s.getWert().getVPkw() / FAKTOR, s.getWert()
+						.getVLkw()
+						/ FAKTOR, k1, k2);
+			} else {
+				// Es gibt auch keine Stützstelle
+				return null;
+			}
+		}
 
 		return new Stuetzstelle<Messwerte>(zeitstempel, w);
 	}
@@ -353,6 +440,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 		w = new Messwerte(wert.getQKfz() * FAKTOR, wert.getQLkw() * FAKTOR,
 				wert.getVPkw() * FAKTOR, wert.getVLkw() * FAKTOR, k1, k2);
 
+		aktualisiereApproximation();
 		return super.setStuetzstelle(zeitstempel, w);
 	}
 

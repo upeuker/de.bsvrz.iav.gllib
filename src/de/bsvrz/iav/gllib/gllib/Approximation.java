@@ -33,7 +33,7 @@ import java.util.SortedSet;
  * Schnittstelle f&uuml;r alle Approximationsmethoden von Ganglinien.
  * Implementierende Klassen sollten einen parameterlosen Konstruktor besitzen.
  * <p>
- * TODO: Undefinierte Intervalle innerhalb der Ganglinie berücksichtigen 
+ * TODO: Undefinierte Intervalle innerhalb der Ganglinie berücksichtigen
  * 
  * @author BitCtrl, Schumann
  * @version $Id$
@@ -77,5 +77,14 @@ public interface Approximation<T> {
 	 *             Wenn die Intervallbreite kleiner oder gleich 0 ist
 	 */
 	SortedSet<Stuetzstelle<T>> interpoliere(long intervallBreite);
+
+	/**
+	 * Erzeugt eine Kopie der Approximation.
+	 * 
+	 * @return die kopierte Approximation.
+	 * @throws CloneNotSupportedException
+	 *             wenn das Klonen nicht unterst&uuml;tzt wird.
+	 */
+	Approximation<T> clone() throws CloneNotSupportedException;
 
 }

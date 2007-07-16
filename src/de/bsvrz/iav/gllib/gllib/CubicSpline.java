@@ -31,6 +31,9 @@ import static de.bsvrz.sys.funclib.bitctrl.math.RationaleZahl.dividiere;
 import static de.bsvrz.sys.funclib.bitctrl.math.RationaleZahl.multipliziere;
 import static de.bsvrz.sys.funclib.bitctrl.math.RationaleZahl.potenz;
 import static de.bsvrz.sys.funclib.bitctrl.math.RationaleZahl.subtrahiere;
+
+import java.util.ArrayList;
+
 import de.bsvrz.sys.funclib.bitctrl.math.RationaleZahl;
 import de.bsvrz.sys.funclib.bitctrl.math.algebra.Gauss;
 import de.bsvrz.sys.funclib.bitctrl.math.algebra.Matrix;
@@ -176,6 +179,22 @@ public class CubicSpline extends AbstractApproximation<Integer> {
 		}
 	}
 
+	/**
+	 * Erzeugt eine flache Kopie des Cubic-Splines.
+	 * <p>
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Approximation<Integer> clone() {
+		CubicSpline klon;
+
+		klon = new CubicSpline();
+		klon.stuetzstellen = new ArrayList<Stuetzstelle<Integer>>(stuetzstellen);
+		klon.initialisiere();
+
+		return klon;
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
