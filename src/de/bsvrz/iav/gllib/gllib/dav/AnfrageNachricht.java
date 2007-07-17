@@ -184,7 +184,7 @@ public class AnfrageNachricht {
 	 */
 	@Override
 	public String toString() {
-		return absender + ", " + absenderZeichen;
+		return "Anfrage von " + absender + " mit Absenderzeichen: \"" + absenderZeichen + "\"";
 	}
 
 }

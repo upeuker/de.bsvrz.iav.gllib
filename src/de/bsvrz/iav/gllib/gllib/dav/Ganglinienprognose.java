@@ -73,7 +73,7 @@ public class Ganglinienprognose {
 
 		/** Der Logger. */
 		private final Debug logger;
-		
+
 		/** Die zu verwendende Datenverteilerverbindung. */
 		private final ClientDavInterface verbindung;
 
@@ -125,7 +125,8 @@ public class Ganglinienprognose {
 			} catch (OneSubscriptionPerSendData ex) {
 				throw new IllegalStateException(ex.getLocalizedMessage());
 			}
-			logger.info("Ganglinienprognose bereit.");
+
+			logger.config("Kommunikationschnittstelle bereit.");
 		}
 
 		/**
@@ -155,6 +156,15 @@ public class Ganglinienprognose {
 
 				anfrage = iterator.next();
 
+				// Als Empfänger der Antwort anmelden
+				so = anfrage.getAbsender();
+				verbindung.subscribeReceiver(this, so, dbsAntwort,
+						ReceiveOptions.normal(), ReceiverRole.receiver());
+				logger
+						.finer(
+								"Als Empfänger der Antwort angemeldet für die Anfrage von",
+								so);
+
 				// Anfrage senden
 				daten = verbindung.createData(dbsAnfrage.getAttributeGroup());
 				anfrage.getDaten(daten);
@@ -171,13 +181,7 @@ public class Ganglinienprognose {
 					continue;
 				}
 
-				logger.fine("Anfrage gesendet: " + anfrage);
-
-				// Als Empfänger der Antwort anmelden
-				so = anfrage.getAbsender();
-				verbindung.subscribeReceiver(this, so, dbsAntwort,
-						ReceiveOptions.normal(), ReceiverRole.receiver());
-				logger.fine("Als Empfänger der Antwort angemeldet für " + so);
+				logger.finer("Anfrage wurde gesendet", anfrage);
 			}
 		}
 
@@ -215,6 +219,8 @@ public class Ganglinienprognose {
 			for (ResultData datensatz : results) {
 				if (datensatz.getDataDescription().equals(dbsAntwort)
 						&& datensatz.hasData()) {
+					logger.finer("Prognoseantwort erhalten für die Anfrage von",
+							datensatz.getObject());
 					fireAntwort((ClientApplication) datensatz.getObject(),
 							datensatz.getData());
 				}
@@ -242,6 +248,8 @@ public class Ganglinienprognose {
 		kommunikation = new Kommunikation(verbindung);
 		listeners = new EventListenerList();
 		logger = Debug.getLogger();
+
+		logger.info("Schnittstelle zur Ganglinienprognose bereit.");
 	}
 
 	/**
@@ -252,6 +260,9 @@ public class Ganglinienprognose {
 	 */
 	public void addAntwortListener(GlProgAntwortListener listener) {
 		listeners.add(GlProgAntwortListener.class, listener);
+		logger
+				.fine("Neuer Listener für Prognoseantworten angemeldet",
+						listener);
 	}
 
 	/**
@@ -262,6 +273,7 @@ public class Ganglinienprognose {
 	 */
 	public void removeAntwortListener(GlProgAntwortListener listener) {
 		listeners.remove(GlProgAntwortListener.class, listener);
+		logger.fine("Listener für Prognoseantworten abgemeldet", listener);
 	}
 
 	/**
@@ -273,6 +285,7 @@ public class Ganglinienprognose {
 	 */
 	public void sendeAnfrage(AnfrageNachricht anfrage) {
 		kommunikation.sendeAnfrage(anfrage);
+		logger.fine("Neue Anfrage entgegengenommen", anfrage);
 	}
 
 	/**
@@ -288,11 +301,12 @@ public class Ganglinienprognose {
 		AntwortEvent e = new AntwortEvent(this, anfrager);
 		e.setDaten(daten);
 
-		logger.fine("Antwort erhalten: " + e);
-
-		for (GlProgAntwortListener l : listeners.getListeners(GlProgAntwortListener.class)) {
+		for (GlProgAntwortListener l : listeners
+				.getListeners(GlProgAntwortListener.class)) {
 			l.antwortEingetroffen(e);
 		}
+
+		logger.fine("Prognoseantwort wurde verteilt: " + e);
 	}
 
 }

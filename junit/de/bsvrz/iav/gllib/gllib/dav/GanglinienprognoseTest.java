@@ -90,6 +90,7 @@ public class GanglinienprognoseTest implements StandardApplication,
 		for (SystemObject mq : e.getMessquerschnitte()) {
 			System.out.println(e.getPrognose(mq));
 		}
+		System.exit(0);
 	}
 
 }
