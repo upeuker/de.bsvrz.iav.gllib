@@ -26,7 +26,6 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
-import java.util.ArrayList;
 
 /**
  * Approximation einer Ganglinie mit Hilfe von Polylines. Der Wert der
@@ -93,7 +92,7 @@ public class Polyline extends AbstractApproximation<Double> {
 		Polyline klon;
 
 		klon = new Polyline();
-		klon.stuetzstellen = new ArrayList<Stuetzstelle<Double>>(stuetzstellen);
+		klon.stuetzstellen.addAll(stuetzstellen);
 		klon.initialisiere();
 
 		return klon;

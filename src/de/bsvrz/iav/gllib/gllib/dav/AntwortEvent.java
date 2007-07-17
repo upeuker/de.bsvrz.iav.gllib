@@ -34,7 +34,8 @@ import java.util.NoSuchElementException;
 
 import stauma.dav.clientside.Data;
 import stauma.dav.clientside.Data.Array;
-import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnitt;
+import stauma.dav.configuration.interfaces.ClientApplication;
+import stauma.dav.configuration.interfaces.SystemObject;
 
 /**
  * Repr&auml;sentiert eine Antwortnachricht der Ganglinienprognose. Enthalten
@@ -47,23 +48,39 @@ import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnitt;
  * @author BitCtrl Systems GmbH, Schumann
  * @version $Id$
  */
+@SuppressWarnings("serial")
 public class AntwortEvent extends EventObject {
 
+	/** Die anfragende Applikation. */
+	protected final ClientApplication anfrager;
+
 	/** Eine beliebige Zeichenkette die der Absender frei eingetragen kann. */
-	private String absenderZeichen;
+	protected String absenderZeichen;
 
 	/** Hash zum einfachen auffinden der passenden Ganglinie. */
-	private final Map<MessQuerschnitt, GanglinieMQ> prognosen;
+	protected final Map<SystemObject, GanglinieMQ> prognosen;
 
 	/**
 	 * Initialisiert interne Felder.
 	 * 
 	 * @param quelle
 	 *            die Quelle des Events.
+	 * @param anfrager
+	 *            die anfragende Applikation.
 	 */
-	public AntwortEvent(Object quelle) {
+	public AntwortEvent(Object quelle, ClientApplication anfrager) {
 		super(quelle);
-		prognosen = new HashMap<MessQuerschnitt, GanglinieMQ>();
+		this.anfrager = anfrager;
+		prognosen = new HashMap<SystemObject, GanglinieMQ>();
+	}
+
+	/**
+	 * Gibt die anfragende Applikation zur&uuml;ck.
+	 * 
+	 * @return Referenz auf die anfragende Applikation.
+	 */
+	public ClientApplication getAnfrager() {
+		return anfrager;
 	}
 
 	/**
@@ -84,7 +101,7 @@ public class AntwortEvent extends EventObject {
 	 * 
 	 * @return eine Menge von Messquerschnitten.
 	 */
-	public Collection<MessQuerschnitt> getMessquerschnitte() {
+	public Collection<SystemObject> getMessquerschnitte() {
 		return prognosen.keySet();
 	}
 
@@ -95,15 +112,15 @@ public class AntwortEvent extends EventObject {
 	 *            ein Messquerschnitt.
 	 * @return die Prognoseganglinie des Messquerschnitts.
 	 */
-	public GanglinieMQ getPrognose(MessQuerschnitt mq) {
-		GanglinieMQ g;
+	public GanglinieMQ getPrognose(SystemObject mq) {
+		GanglinieMQ ganglinie;
 
-		g = prognosen.get(mq);
-		if (g == null) {
+		ganglinie = prognosen.get(mq);
+		if (ganglinie == null) {
 			throw new NoSuchElementException(
 					"Für den Messquerschnitt wurde keine Prognoseganglinie angefragt.");
 		}
-		return g;
+		return ganglinie;
 	}
 
 	/**
@@ -112,7 +129,7 @@ public class AntwortEvent extends EventObject {
 	 * @param daten
 	 *            die auszulesenden Daten.
 	 */
-	void setDaten(Data daten) {
+	protected void setDaten(Data daten) {
 		Array feld;
 
 		absenderZeichen = daten.getTextValue("AbsenderZeichen").getText();
@@ -122,7 +139,7 @@ public class AntwortEvent extends EventObject {
 			GanglinieMQ g;
 
 			g = new GanglinieMQ();
-			g.setDaten(feld.getItem(i));
+			g.setDatenVonPrognoseGanglinie(feld.getItem(i));
 			prognosen.put(g.getMessQuerschnitt(), g);
 		}
 	}

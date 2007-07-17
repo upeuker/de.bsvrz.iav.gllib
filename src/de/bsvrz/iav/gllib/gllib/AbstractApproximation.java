@@ -44,7 +44,14 @@ import java.util.TreeSet;
 public abstract class AbstractApproximation<T> implements Approximation<T> {
 
 	/** Liste der verwendeten Stützstellen. */
-	protected List<Stuetzstelle<T>> stuetzstellen;
+	protected final List<Stuetzstelle<T>> stuetzstellen;
+
+	/**
+	 * Initialisiert die St&uuml;tzstellenliste.
+	 */
+	protected AbstractApproximation() {
+		stuetzstellen = new ArrayList<Stuetzstelle<T>>();
+	}
 
 	/**
 	 * Bestimmt die Liste der verwendeten St&uuml;tzstellen. Die Liste
@@ -54,7 +61,7 @@ public abstract class AbstractApproximation<T> implements Approximation<T> {
 	 * {@inheritDoc}
 	 */
 	public void setStuetzstellen(Collection<Stuetzstelle<T>> menge) {
-		stuetzstellen = new ArrayList<Stuetzstelle<T>>();
+		stuetzstellen.clear();
 		for (Stuetzstelle<T> s : menge) {
 			if (s.getWert() != null) {
 				stuetzstellen.add(s);
@@ -92,12 +99,13 @@ public abstract class AbstractApproximation<T> implements Approximation<T> {
 
 		return interpolation;
 	}
-	
+
 	/**
 	 * Wirft immer eine {@link java.lang.CloneNotSupportedException}.
 	 * <p>
 	 * {@inheritDoc}
-	 * @throws CloneNotSupportedException 
+	 * 
+	 * @throws CloneNotSupportedException
 	 */
 	@Override
 	public Approximation<T> clone() throws CloneNotSupportedException {

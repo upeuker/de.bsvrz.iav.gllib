@@ -32,8 +32,8 @@ import java.util.List;
 
 import stauma.dav.clientside.Data;
 import stauma.dav.clientside.Data.Array;
+import stauma.dav.configuration.interfaces.SystemObject;
 import de.bsvrz.sys.funclib.bitctrl.modell.kalender.EreignisTyp;
-import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnitt;
 
 /**
  * Repr&auml;sentiert eine einzelne Anfrage einer Anfragenachricht an die
@@ -45,31 +45,38 @@ import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnitt;
 public class Anfrage {
 
 	/** Messquerschnitt f&uuml;r den eine Ganglinie angefragt wird. */
-	private final MessQuerschnitt mq;
+	protected SystemObject mq;
 
 	/** Zeitpunkt des Beginns des Prognoseintervalls. */
-	private final long prognoseBeginn;
+	protected long prognoseBeginn;
 
 	/** Zeitpunkt des Endes des Prognoseintervalls. */
-	private final long prognoseEnde;
+	protected long prognoseEnde;
 
 	/** Nur Auswahlverfahren der langfristigen Prognose benutzen? */
-	private final boolean nurLangfristigeAuswahl;
+	protected boolean nurLangfristigeAuswahl;
 
 	/** Diese Ereignistypen werden bei der Ganglinienauswahl ignoriert. */
-	private final List<EreignisTyp> ereignisTypen;
+	protected final List<EreignisTyp> ereignisTypen;
 
 	/** Soll eine zyklische Prognose erstellt werden? */
-	private final boolean zyklischePrognose;
+	protected boolean zyklischePrognose;
 
 	/** Sp&auml;testens nach dieser Zeit in Sekunden Prognose pr&uuml;fen. */
-	private final long pruefIntervall;
+	protected long pruefIntervall;
 
 	/** Maximale &Auml;nderung in Prozent zwischen zwei zyklischen Prognosen. */
-	private final float schwelle;
+	protected float schwelle;
 
 	/** Sp&auml;testens nach dieser Zeit in Sekunden Prognose publizieren. */
-	private final long sendeIntervall;
+	protected long sendeIntervall;
+
+	/**
+	 * Konstruktor f&uuml;r Vererbung.
+	 */
+	protected Anfrage() {
+		ereignisTypen = new ArrayList<EreignisTyp>();
+	}
 
 	/**
 	 * Generiert eine Anfrage.
@@ -95,9 +102,32 @@ public class Anfrage {
 	 *            Sp&auml;testens nach dieser Zeit in Sekunden Prognose
 	 *            publizieren.
 	 */
-	public Anfrage(MessQuerschnitt mq, long prognoseBeginn, long prognoseEnde,
+	public Anfrage(SystemObject mq, long prognoseBeginn, long prognoseEnde,
 			boolean nurLangfristigeAuswahl, boolean zyklischePrognose,
 			long pruefIntervall, float schwelle, long sendeIntervall) {
+		this();
+
+		if (mq == null) {
+			throw new NullPointerException(
+					"Der Messquerschnitt darf nicht null sein.");
+		}
+		if (prognoseBeginn > prognoseEnde) {
+			throw new IllegalArgumentException(
+					"Der Prognosebeginn darf nicht vor dem Prognoseende liegen.");
+		}
+		if (prognoseBeginn <= 0 || prognoseEnde <= 0) {
+			throw new IllegalArgumentException("Prognosebeginn und -ende müssen größer 0 sein.");
+		}
+		if (pruefIntervall <= 0) {
+			throw new IllegalArgumentException("Das Überprüfungsintervall muss größer 0 sein.");
+		}
+		if (schwelle < 0) {
+			throw new IllegalArgumentException("Die Aktualisierungsschwelle muss positiv und kleiner 100 sein.");
+		}
+		if (sendeIntervall <= 0) {
+			throw new IllegalArgumentException("Das Aktualisierungsintervall muss größer 0 sein.");
+		}
+
 		this.mq = mq;
 		this.prognoseBeginn = prognoseBeginn;
 		this.prognoseEnde = prognoseEnde;
@@ -106,8 +136,6 @@ public class Anfrage {
 		this.pruefIntervall = pruefIntervall;
 		this.schwelle = schwelle;
 		this.sendeIntervall = sendeIntervall;
-
-		ereignisTypen = new ArrayList<EreignisTyp>();
 	}
 
 	/**
@@ -136,7 +164,7 @@ public class Anfrage {
 	 * 
 	 * @return Ein Messquerschnitt
 	 */
-	public MessQuerschnitt getMq() {
+	public SystemObject getMq() {
 		return mq;
 	}
 
@@ -220,20 +248,21 @@ public class Anfrage {
 	}
 
 	/**
-	 * Baut aus den Informationen der Anfrage einen Datensatz. Das Ergebnis wird
-	 * im Parameter abgelegt!
+	 * Baut aus den Informationen der Anfrage ein Datum.
+	 * <p>
+	 * Hinweis: Das Ergebnis wird auch im Parameter abgelegt!
 	 * 
 	 * @param daten
-	 *            ein Datum, welches eine Anfrage darstellt.
+	 *            ein Datum, welches eine (leere) Anfrage darstellt.
+	 * @return das ausgef&uuml;llte Datum.
 	 */
-	void getDaten(Data daten) {
+	protected Data getDaten(Data daten) {
 		Array feld;
 
-		daten.getReferenceValue("Messquerschnitt").setSystemObject(
-				mq.getSystemObject());
+		daten.getReferenceValue("Messquerschnitt").setSystemObject(mq);
 		daten.getTimeValue("ZeitpunktPrognoseBeginn").setMillis(prognoseBeginn);
 		daten.getTimeValue("ZeitpunktPrognoseEnde").setMillis(prognoseEnde);
-		daten.getScaledValue("Überprüfungsintervall").set(sendeIntervall);
+		daten.getScaledValue("Überprüfungsintervall").set(pruefIntervall);
 		daten.getScaledValue("Aktualisierungsschwelle").set(schwelle);
 		daten.getScaledValue("Aktualisierungsintervall").set(sendeIntervall);
 
@@ -255,6 +284,8 @@ public class Anfrage {
 			feld.getItem(i).asReferenceValue().setSystemObject(
 					ereignisTypen.get(i).getSystemObject());
 		}
+
+		return daten;
 	}
 
 	/**

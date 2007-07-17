@@ -26,13 +26,15 @@
 
 package de.bsvrz.iav.gllib.gllib.dav;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
 import stauma.dav.clientside.Data;
 import stauma.dav.clientside.Data.Array;
 import stauma.dav.configuration.interfaces.ClientApplication;
+import stauma.dav.configuration.interfaces.SystemObject;
 
 /**
  * Repr&auml;sentuiert eine Anfrage an die Ganglinienprognose.
@@ -43,13 +45,20 @@ import stauma.dav.configuration.interfaces.ClientApplication;
 public class AnfrageNachricht {
 
 	/** Die anfragende Applikation. */
-	private final ClientApplication absender;
+	protected ClientApplication absender;
 
 	/** Eine beliebige Zeichenkette die der Absender frei eingetragen kann. */
-	private final String absenderZeichen;
+	protected String absenderZeichen;
 
 	/** Liste der Anfragen in dieser Nachricht. */
-	private final List<Anfrage> anfragen;
+	protected final Map<SystemObject, Anfrage> anfragen;
+
+	/**
+	 * Konstruktor f&uuml;r Vererbung.
+	 */
+	protected AnfrageNachricht() {
+		anfragen = new HashMap<SystemObject, Anfrage>();
+	}
 
 	/**
 	 * Konstruiert aus dem Datensatz ein Anfragenachrichtobjekt.
@@ -62,9 +71,9 @@ public class AnfrageNachricht {
 	 * 
 	 */
 	public AnfrageNachricht(ClientApplication absender, String absenderZeichen) {
+		this();
 		this.absender = absender;
 		this.absenderZeichen = absenderZeichen;
-		anfragen = new ArrayList<Anfrage>();
 	}
 
 	/**
@@ -74,7 +83,7 @@ public class AnfrageNachricht {
 	 *            eine Anfrage.
 	 */
 	public void add(Anfrage anfrage) {
-		anfragen.add(anfrage);
+		anfragen.put(anfrage.getMq(), anfrage);
 	}
 
 	/**
@@ -117,33 +126,57 @@ public class AnfrageNachricht {
 	}
 
 	/**
-	 * Gibt einen Iterator &uuml;ber die Anfragen zur&uuml;ck.
+	 * Gibt die Menge der Messquerschnitte zur&uuml;ck, f&uuml;r die Ganglinien
+	 * prognostiziert wurden.
 	 * 
-	 * @return Anfrageniterator
+	 * @return eine Menge von Messquerschnitten.
 	 */
-	public Iterator<Anfrage> getAnfragenIterator() {
-		return anfragen.listIterator();
+	public Collection<SystemObject> getMessquerschnitte() {
+		return anfragen.keySet();
 	}
 
 	/**
-	 * Baut aus den Informationen der Anfragen einen Datensatz. Das Ergebnis
-	 * wird im Parameter abgelegt!
+	 * Gibt die prognostizierte Ganglinie zu einem Messquerschnitt zur&uuml;ck.
+	 * 
+	 * @param mq
+	 *            ein Messquerschnitt.
+	 * @return die Prognoseganglinie des Messquerschnitts.
+	 */
+	public Anfrage getAnfrage(SystemObject mq) {
+		Anfrage anfrage;
+
+		anfrage = anfragen.get(mq);
+		if (anfrage == null) {
+			throw new NoSuchElementException(
+					"Für den Messquerschnitt wurde keine Prognoseganglinie angefragt.");
+		}
+		return anfrage;
+	}
+
+	/**
+	 * Baut aus den Informationen der Anfragen einen Datensatz.
+	 * <p>
+	 * Hinweis: Das Ergebnis wird auch im Parameter abgelegt!
 	 * 
 	 * @param daten
-	 *            ein Datum, welches eine Anfragenachricht darstellt.
+	 *            ein Datum, welches eine (leere) Anfragenachricht darstellt.
+	 * @return das ausgef&uuml;llte Datum.
 	 */
-	void setDaten(Data daten) {
+	protected Data getDaten(Data daten) {
 		Array feld;
+		int i;
 
 		daten.getReferenceValue("absenderId").setSystemObject(absender);
 		daten.getTextValue("AbsenderZeichen").setText(absenderZeichen);
 
 		feld = daten.getArray("PrognoseGanglinienAnfrage");
 		feld.setLength(anfragen.size());
-		for (int i = 0; i < anfragen.size(); i++) {
-			anfragen.get(i).getDaten(feld.getItem(i));
+		i = 0;
+		for (Anfrage anfrage : anfragen.values()) {
+			anfrage.getDaten(feld.getItem(i));
 		}
 
+		return daten;
 	}
 
 	/**

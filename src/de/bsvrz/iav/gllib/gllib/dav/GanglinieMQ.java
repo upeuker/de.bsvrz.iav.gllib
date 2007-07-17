@@ -31,13 +31,14 @@ import java.util.List;
 
 import stauma.dav.clientside.Data;
 import stauma.dav.clientside.Data.Array;
+import stauma.dav.configuration.interfaces.SystemObject;
 import de.bsvrz.iav.gllib.gllib.Approximation;
 import de.bsvrz.iav.gllib.gllib.BSpline;
 import de.bsvrz.iav.gllib.gllib.CubicSpline;
 import de.bsvrz.iav.gllib.gllib.Ganglinie;
 import de.bsvrz.iav.gllib.gllib.Polyline;
 import de.bsvrz.iav.gllib.gllib.Stuetzstelle;
-import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnitt;
+import de.bsvrz.sys.funclib.bitctrl.modell.kalender.EreignisTyp;
 
 /**
  * F&uuml;r Messquerschnitte angepasste Ganglinie. Die vier Verkehrswerte QKfz,
@@ -51,58 +52,49 @@ import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnitt;
 public class GanglinieMQ extends Ganglinie<Messwerte> {
 
 	/** Datenkatalogkonstante f&uuml;r einen B-Spline. */
-	public static final int BSPLINE = 1;
+	public static final int APPROX_BSPLINE = 1;
 
 	/** Datenkatalogkonstante f&uuml;r einen Cubic-Spline. */
-	public static final int CUBICSPLINE = 2;
+	public static final int APPROX_CUBICSPLINE = 2;
 
 	/** Datenkatalogkonstante f&uuml;r eine Polylinie. */
-	public static final int POLYLINE = 3;
+	public static final int APPROX_POLYLINE = 3;
+
+	/** Datenkatalogkonstante f&uuml;r eine absolute Ganglinie. */
+	public static final int TYP_ABSOLUT = 0;
+
+	/** Datenkatalogkonstante f&uuml;r eine relative additive Ganglinie. */
+	public static final int TYP_ADDITIV = 1;
+
+	/** Datenkatalogkonstante f&uuml;r eine relative multiplikative Ganglinie. */
+	public static final int TYP_MULTIPLIKATIV = 2;
 
 	/** Faktor mit dem intern die St&uuml;tzstellenwerte multipliziert werden. */
-	private static final int FAKTOR = 100;
-
-	/**
-	 * Typ der Ganglinie.
-	 * 
-	 * @author BitCtrl, Schumann
-	 * @version $Id$
-	 */
-	public enum Typ {
-
-		/** Eine absolute Ganglinie. */
-		ABSOLUT,
-
-		/** Eine relative additive Ganglinie. */
-		ADDITIV,
-
-		/** Eine relative multiplikative Ganglinie. */
-		MULTIPLIKATIV;
-	}
+	private static final int FAKTOR = 1000;
 
 	/** Der Messquerschnitt, zu dem die Ganglinie geh&ouml;rt. */
-	private MessQuerschnitt mq;
+	protected SystemObject mq;
 
 	/** Parameter f&uuml;r die Berechnung von QB. */
-	private float k1 = 2.0f;
+	private float k1;
 
 	/** Parameter f&uuml;r die Berechnung von QB. */
-	private float k2 = 0.01f;
+	private float k2;
 
 	/** Zeitpunkt der letzten Verschmelzung. */
-	private long letzteVerschmelzung = -1;
+	protected long letzteVerschmelzung;
 
 	/** Anzahl der Verschmelzung mit anderen Ganglinienb. */
-	private long anzahlVerschmelzungen = 0;
+	protected long anzahlVerschmelzungen;
 
 	/** Identifier f&uuml;r das mit der Ganglinie verkn&uuml;pfte Ereignis. */
-	private String ereignisTyp = null;
+	protected EreignisTyp ereignisTyp;
 
 	/** Flag, ob die Ganglinie eine Referenzganglinie darstellt. */
-	private boolean referenz = false;
+	protected boolean referenz;
 
 	/** Typ der Ganglinie. */
-	private Typ typ = Typ.ABSOLUT;
+	protected int typ;
 
 	/** Cached die Approximation f&uuml;r QKfz. */
 	private Approximation<Number> qKfz;
@@ -117,10 +109,16 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	private Approximation<Number> vLkw;
 
 	/**
-	 * Konstruktor verstecken.
+	 * F&uuml;hrt die Initialisierung der Member durch.
 	 */
-	GanglinieMQ() {
-		// nichts
+	protected GanglinieMQ() {
+		k1 = 2.0f;
+		k2 = 0.01f;
+		letzteVerschmelzung = 1;
+		anzahlVerschmelzungen = 0;
+		ereignisTyp = null;
+		referenz = false;
+		typ = TYP_ABSOLUT;
 	}
 
 	/**
@@ -128,7 +126,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 * 
 	 * @return ein Messquerschnitt.
 	 */
-	public MessQuerschnitt getMessQuerschnitt() {
+	public SystemObject getMessQuerschnitt() {
 		return mq;
 	}
 
@@ -143,17 +141,6 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
-	 * Kennzeichnet die Ganglinie als Referenzganglinie.
-	 * 
-	 * @param referenz
-	 *            <code>true</code>, wenn diese Ganglinie eine
-	 *            Referenzganglinie sein soll, sonst <code>false</code>
-	 */
-	public void setReferenz(boolean referenz) {
-		this.referenz = referenz;
-	}
-
-	/**
 	 * Gibt die Anzahl der bisherigen Verschmelzungen beim automatischen Lernen
 	 * zur&uuml;ck.
 	 * 
@@ -161,16 +148,6 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 */
 	public long getAnzahlVerschmelzungen() {
 		return anzahlVerschmelzungen;
-	}
-
-	/**
-	 * Legt die Anzahl der bisherigen Verschmelzungen fest.
-	 * 
-	 * @param anzahlVerschmelzungen
-	 *            Anzahl der Verschmelzungen
-	 */
-	public void setAnzahlVerschmelzungen(long anzahlVerschmelzungen) {
-		this.anzahlVerschmelzungen = anzahlVerschmelzungen;
 	}
 
 	/**
@@ -185,20 +162,10 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	/**
 	 * Gibt den Ereignistyp der Ganglinie zur&uuml;ck.
 	 * 
-	 * @return PID des Ereignistyp
+	 * @return der Ereignistyp.
 	 */
-	public String getEreignisTyp() {
+	public EreignisTyp getEreignisTyp() {
 		return ereignisTyp;
-	}
-
-	/**
-	 * Legt den Ereignistyp der Ganglinie fest.
-	 * 
-	 * @param ereignisTyp
-	 *            PID des Ereignistyp
-	 */
-	public void setEreignisTyp(String ereignisTyp) {
-		this.ereignisTyp = ereignisTyp;
 	}
 
 	/**
@@ -206,18 +173,8 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 * 
 	 * @return der Typ der Ganglinie.
 	 */
-	public Typ getTyp() {
+	public int getTyp() {
 		return typ;
-	}
-
-	/**
-	 * Legt den Ganglinientyp fest.
-	 * 
-	 * @param typ
-	 *            der Typ der Ganglinie.
-	 */
-	public void setTyp(Typ typ) {
-		this.typ = typ;
 	}
 
 	/**
@@ -236,15 +193,6 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 */
 	public float getK2() {
 		return k2;
-	}
-
-	/**
-	 * Gibt den Messquerschnitt der Ganglinie zur&uuml;ck.
-	 * 
-	 * @return ein Messquerschnitt
-	 */
-	public MessQuerschnitt getMq() {
-		return mq;
 	}
 
 	/**
@@ -268,43 +216,28 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
-	 * Legt die Anzahl der bisherigen Verschmelzungen fest.
-	 * 
-	 * @param letzteVerschmelzung
-	 *            die neue Anzahl der Verschmelzungen.
-	 */
-	public void setLetzteVerschmelzung(long letzteVerschmelzung) {
-		this.letzteVerschmelzung = letzteVerschmelzung;
-	}
-
-	/**
 	 * Extrahiert aus den abstrakten Daten die Prognose.
 	 * 
 	 * @param daten
 	 *            die Daten der Prognose.
 	 */
-	void setDaten(Data daten) {
+	protected void setDatenVonPrognoseGanglinie(Data daten) {
 		Array feld;
 
-		mq = new MessQuerschnitt(daten.getReferenceValue("Messquerschnitt")
-				.getSystemObject());
+		mq = daten.getReferenceValue("Messquerschnitt").getSystemObject();
 
 		stuetzstellen.clear();
-		setStuetzstelle(daten.getTimeValue("ZeitpunktPrognoseBeginn")
-				.getMillis(), null);
-		setStuetzstelle(
-				daten.getTimeValue("ZeitpunktPrognoseEnde").getMillis(), null);
 
 		// Verfahren
 		switch (daten.getUnscaledValue("GanglinienVerfahren").intValue()) {
-		case BSPLINE:
+		case APPROX_BSPLINE:
 			setApproximation(new BSpline(daten.getUnscaledValue("Ordnung")
 					.byteValue()));
 			break;
-		case CUBICSPLINE:
+		case APPROX_CUBICSPLINE:
 			setApproximation(new CubicSpline());
 			break;
-		case POLYLINE:
+		case APPROX_POLYLINE:
 			setApproximation(new Polyline());
 			break;
 		default:
@@ -346,15 +279,14 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 		stellenVPkw = new ArrayList<Stuetzstelle<Number>>();
 		stellenVLkw = new ArrayList<Stuetzstelle<Number>>();
 
-		for (Stuetzstelle<Messwerte> s : getStuetzstellen()) {
-			stellenQKfz.add(new Stuetzstelle<Number>(s.getZeitstempel(), s
-					.getWert().getQKfz()));
-			stellenQLkw.add(new Stuetzstelle<Number>(s.getZeitstempel(), s
-					.getWert().getQLkw()));
-			stellenVPkw.add(new Stuetzstelle<Number>(s.getZeitstempel(), s
-					.getWert().getVPkw()));
-			stellenVLkw.add(new Stuetzstelle<Number>(s.getZeitstempel(), s
-					.getWert().getVLkw()));
+		for (long t : stuetzstellen.keySet()) {
+			Messwerte werte;
+
+			werte = stuetzstellen.get(t);
+			stellenQKfz.add(new Stuetzstelle<Number>(t, werte.getQKfz()));
+			stellenQLkw.add(new Stuetzstelle<Number>(t, werte.getQLkw()));
+			stellenVPkw.add(new Stuetzstelle<Number>(t, werte.getVPkw()));
+			stellenVLkw.add(new Stuetzstelle<Number>(t, werte.getVLkw()));
 		}
 
 		try {
@@ -436,12 +368,15 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	@Override
 	public boolean setStuetzstelle(long zeitstempel, Messwerte wert) {
 		Messwerte w;
+		boolean neu;
 
 		w = new Messwerte(wert.getQKfz() * FAKTOR, wert.getQLkw() * FAKTOR,
 				wert.getVPkw() * FAKTOR, wert.getVLkw() * FAKTOR, k1, k2);
 
+		neu = stuetzstellen.put(zeitstempel, w) == null;
 		aktualisiereApproximation();
-		return super.setStuetzstelle(zeitstempel, w);
+		return neu;
+		// return super.setStuetzstelle(zeitstempel, w);
 	}
 
 	/**

@@ -35,7 +35,7 @@ import java.util.EventListener;
  * @author BitCtrl Systems GmbH, Schumann
  * @version $Id$
  */
-public interface AntwortListener extends EventListener {
+public interface GlProgAntwortListener extends EventListener {
 
 	/**
 	 * Wird ausgel&ouml;&szlig;t, wenn die Antwort auf eine Prognoseanfrage

@@ -46,6 +46,7 @@ import stauma.dav.common.OneSubscriptionPerSendData;
 import stauma.dav.common.SendSubscriptionNotConfirmed;
 import stauma.dav.configuration.interfaces.Aspect;
 import stauma.dav.configuration.interfaces.AttributeGroup;
+import stauma.dav.configuration.interfaces.ClientApplication;
 import stauma.dav.configuration.interfaces.DataModel;
 import stauma.dav.configuration.interfaces.SystemObject;
 import sys.funclib.debug.Debug;
@@ -72,7 +73,7 @@ public class Ganglinienprognose {
 
 		/** Der Logger. */
 		private final Debug logger;
-
+		
 		/** Die zu verwendende Datenverteilerverbindung. */
 		private final ClientDavInterface verbindung;
 
@@ -156,7 +157,7 @@ public class Ganglinienprognose {
 
 				// Anfrage senden
 				daten = verbindung.createData(dbsAnfrage.getAttributeGroup());
-				anfrage.setDaten(daten);
+				anfrage.getDaten(daten);
 				datensatz = new ResultData(soPrognose, dbsAnfrage, System
 						.currentTimeMillis(), daten);
 				try {
@@ -214,13 +215,16 @@ public class Ganglinienprognose {
 			for (ResultData datensatz : results) {
 				if (datensatz.getDataDescription().equals(dbsAntwort)
 						&& datensatz.hasData()) {
-					logger.fine("Antwort erhalten: "
-							+ fireAntwort(datensatz.getData()));
+					fireAntwort((ClientApplication) datensatz.getObject(),
+							datensatz.getData());
 				}
 			}
 		}
 
 	}
+
+	/** Der Logger. */
+	private final Debug logger;
 
 	/** Angemeldete Listener. */
 	private final EventListenerList listeners;
@@ -237,6 +241,7 @@ public class Ganglinienprognose {
 	public Ganglinienprognose(ClientDavInterface verbindung) {
 		kommunikation = new Kommunikation(verbindung);
 		listeners = new EventListenerList();
+		logger = Debug.getLogger();
 	}
 
 	/**
@@ -245,8 +250,8 @@ public class Ganglinienprognose {
 	 * @param listener
 	 *            Der neue Listener
 	 */
-	public void addAntwortListener(AntwortListener listener) {
-		listeners.add(AntwortListener.class, listener);
+	public void addAntwortListener(GlProgAntwortListener listener) {
+		listeners.add(GlProgAntwortListener.class, listener);
 	}
 
 	/**
@@ -255,8 +260,8 @@ public class Ganglinienprognose {
 	 * @param listener
 	 *            Listener der abgemeldet werden soll
 	 */
-	public void removeAntwortListener(AntwortListener listener) {
-		listeners.remove(AntwortListener.class, listener);
+	public void removeAntwortListener(GlProgAntwortListener listener) {
+		listeners.remove(GlProgAntwortListener.class, listener);
 	}
 
 	/**
@@ -273,18 +278,21 @@ public class Ganglinienprognose {
 	/**
 	 * Informiert alle registrierten Listener &uuml;ber eine Antwort.
 	 * 
+	 * @param anfrager
+	 *            die anfragende Applikation.
 	 * @param daten
 	 *            ein Datum mit der Antwort auf eine Prognoseanfrage.
-	 * @return das verschickte Event.
 	 */
-	protected synchronized AntwortEvent fireAntwort(Data daten) {
-		AntwortEvent e = new AntwortEvent(this);
+	protected synchronized void fireAntwort(ClientApplication anfrager,
+			Data daten) {
+		AntwortEvent e = new AntwortEvent(this, anfrager);
 		e.setDaten(daten);
 
-		for (AntwortListener l : listeners.getListeners(AntwortListener.class)) {
+		logger.fine("Antwort erhalten: " + e);
+
+		for (GlProgAntwortListener l : listeners.getListeners(GlProgAntwortListener.class)) {
 			l.antwortEingetroffen(e);
 		}
-		return e;
 	}
 
 }

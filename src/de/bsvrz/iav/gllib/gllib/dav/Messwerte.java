@@ -100,7 +100,7 @@ public class Messwerte {
 	 * @param k2
 	 *            Parameter f&uuml;r die Berechnung von QB
 	 */
-	Messwerte(Float qKfz, Float qLkw, Float vPkw, Float vLkw, float k1, float k2) {
+	protected Messwerte(Float qKfz, Float qLkw, Float vPkw, Float vLkw, float k1, float k2) {
 		this.qKfz = qKfz;
 		this.qLkw = qLkw;
 		this.vPkw = vPkw;
