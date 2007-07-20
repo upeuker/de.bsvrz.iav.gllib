@@ -29,6 +29,7 @@ package de.bsvrz.iav.gllib.gllib.dav;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.SortedMap;
 
 import com.sun.org.apache.bcel.internal.generic.CPInstruction;
 
@@ -138,6 +139,17 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 		typ = TYP_ABSOLUT;
 	}
 	
+	public GanglinieMQ(SortedMap<Long, Messwerte> stuetzstellen) {
+		super(stuetzstellen);
+		k1 = 2.0f;
+		k2 = 0.01f;
+		letzteVerschmelzung = 1;
+		anzahlVerschmelzungen = 0;
+		ereignisTyp = null;
+		referenz = false;
+		typ = TYP_ABSOLUT;
+	}
+
 	/**
 	 * Gibt den Messquerschnitt der Ganglinie zur&uuml;ck.
 	 * 
@@ -264,24 +276,30 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 		// Stützstellen
 		feld = daten.getArray("Stützstelle");
 		for (int i = 0; i < feld.getLength(); i++) {
-			Messwerte mw;
-
 			long zeitstempel;
 			Double qKfz, qLkw, vPkw, vLkw;
 
 			zeitstempel = feld.getItem(i).getTimeValue("Zeit").getMillis();
-			qKfz = feld.getItem(i).getScaledValue("QKfz").doubleValue();
-			if (qKfz == UNDEFINIERT)
+			if (feld.getItem(i).getUnscaledValue("QKfz").intValue() == UNDEFINIERT) {
 				qKfz = null;
-			qLkw = feld.getItem(i).getScaledValue("QLkw").doubleValue();
-			if (qLkw == UNDEFINIERT)
+			} else {
+				qKfz = feld.getItem(i).getScaledValue("QKfz").doubleValue();
+			}
+			if (feld.getItem(i).getUnscaledValue("QLkw").intValue() == UNDEFINIERT) {
 				qLkw = null;
-			vPkw = feld.getItem(i).getScaledValue("VPkw").doubleValue();
-			if (vPkw == UNDEFINIERT)
+			} else {
+				qLkw = feld.getItem(i).getScaledValue("QLkw").doubleValue();
+			}
+			if (feld.getItem(i).getUnscaledValue("VPkw").intValue() == UNDEFINIERT) {
 				vPkw = null;
-			vLkw = feld.getItem(i).getScaledValue("VLkw").doubleValue();
-			if (vLkw == UNDEFINIERT)
+			} else {
+				vPkw = feld.getItem(i).getScaledValue("VPkw").doubleValue();
+			}
+			if (feld.getItem(i).getUnscaledValue("VLkw").intValue() == UNDEFINIERT) {
 				vLkw = null;
+			} else {
+				vLkw = feld.getItem(i).getScaledValue("VLkw").doubleValue();
+			}
 			setStuetzstelle(zeitstempel, new Messwerte(qKfz, qLkw, vPkw, vLkw));
 		}
 	}

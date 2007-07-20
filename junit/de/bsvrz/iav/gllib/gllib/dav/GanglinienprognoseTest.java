@@ -66,7 +66,7 @@ public class GanglinienprognoseTest implements StandardApplication,
 		prognose.addAntwortListener(this);
 		anfrage = new AnfrageNachricht(connection.getLocalApplicationObject(),
 				"Mein Test");
-		anfrage.add(new Anfrage(mq, 1, 1, false));
+		anfrage.add(new Anfrage(mq, 1, 2 * 24 * 60 * 60 * 1000, false));
 		prognose.sendeAnfrage(anfrage);
 	}
 
