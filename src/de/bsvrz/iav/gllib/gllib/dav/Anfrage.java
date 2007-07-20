@@ -26,9 +26,8 @@
 
 package de.bsvrz.iav.gllib.gllib.dav;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import stauma.dav.clientside.Data;
 import stauma.dav.clientside.Data.Array;
@@ -57,7 +56,7 @@ public class Anfrage {
 	protected boolean nurLangfristigeAuswahl;
 
 	/** Diese Ereignistypen werden bei der Ganglinienauswahl ignoriert. */
-	protected final List<EreignisTyp> ereignisTypen;
+	protected final Set<EreignisTyp> ereignisTypen;
 
 	/** Soll eine zyklische Prognose erstellt werden? */
 	protected boolean zyklischePrognose;
@@ -66,7 +65,7 @@ public class Anfrage {
 	protected long pruefIntervall;
 
 	/** Maximale &Auml;nderung in Prozent zwischen zwei zyklischen Prognosen. */
-	protected float schwelle;
+	protected double schwelle;
 
 	/** Sp&auml;testens nach dieser Zeit in Sekunden Prognose publizieren. */
 	protected long sendeIntervall;
@@ -75,7 +74,7 @@ public class Anfrage {
 	 * Konstruktor f&uuml;r Vererbung.
 	 */
 	protected Anfrage() {
-		ereignisTypen = new ArrayList<EreignisTyp>();
+		ereignisTypen = new HashSet<EreignisTyp>();
 	}
 
 	/**
@@ -104,7 +103,7 @@ public class Anfrage {
 	 */
 	public Anfrage(SystemObject mq, long prognoseBeginn, long prognoseEnde,
 			boolean nurLangfristigeAuswahl, boolean zyklischePrognose,
-			long pruefIntervall, float schwelle, long sendeIntervall) {
+			long pruefIntervall, double schwelle, long sendeIntervall) {
 		this();
 
 		if (mq == null) {
@@ -116,16 +115,20 @@ public class Anfrage {
 					"Der Prognosebeginn darf nicht vor dem Prognoseende liegen.");
 		}
 		if (prognoseBeginn <= 0 || prognoseEnde <= 0) {
-			throw new IllegalArgumentException("Prognosebeginn und -ende müssen größer 0 sein.");
+			throw new IllegalArgumentException(
+					"Prognosebeginn und -ende müssen größer 0 sein.");
 		}
 		if (pruefIntervall <= 0) {
-			throw new IllegalArgumentException("Das Überprüfungsintervall muss größer 0 sein.");
+			throw new IllegalArgumentException(
+					"Das Überprüfungsintervall muss größer 0 sein.");
 		}
 		if (schwelle < 0) {
-			throw new IllegalArgumentException("Die Aktualisierungsschwelle muss positiv und kleiner 100 sein.");
+			throw new IllegalArgumentException(
+					"Die Aktualisierungsschwelle muss positiv und kleiner 100 sein.");
 		}
 		if (sendeIntervall <= 0) {
-			throw new IllegalArgumentException("Das Aktualisierungsintervall muss größer 0 sein.");
+			throw new IllegalArgumentException(
+					"Das Aktualisierungsintervall muss größer 0 sein.");
 		}
 
 		this.mq = mq;
@@ -139,6 +142,27 @@ public class Anfrage {
 	}
 
 	/**
+	 * Generiert eine einmalige Anfrage. Die Option "zyklische Anfrage" wird auf
+	 * {@code false} gesetzt und die davon abh&auml;ngigen Parameter mit
+	 * Defaultwerten belegt.
+	 * 
+	 * @param mq
+	 *            der Messquerschnitt f&uuml;r den eine Ganglinie angefragt
+	 *            wird.
+	 * @param prognoseBeginn
+	 *            der Zeitpunkt des Beginns des Prognoseintervalls.
+	 * @param prognoseEnde
+	 *            der Zeitpunkt des Endes des Prognoseintervalls.
+	 * @param nurLangfristigeAuswahl
+	 *            Nur Auswahlverfahren der langfristigen Prognose benutzen?
+	 */
+	public Anfrage(SystemObject mq, long prognoseBeginn, long prognoseEnde,
+			boolean nurLangfristigeAuswahl) {
+		this(mq, prognoseBeginn, prognoseEnde, nurLangfristigeAuswahl, false,
+				1, 0, 1);
+	}
+
+	/**
 	 * Gibt die Anzahl der ausgeschlossenen Ereignistypen dieser Anfrage
 	 * zur&uuml;ck.
 	 * 
@@ -149,13 +173,37 @@ public class Anfrage {
 	}
 
 	/**
+	 * F&uuml;gt einen Ereignistyp der Filterliste hinzu.
+	 * 
+	 * @param typ
+	 *            ein Ereignistyp
+	 * @return {@code true}, wenn der Typ hinzugef&uuml;gt wurde und
+	 *         {@code false}, wenn er bereits enthalten war.
+	 */
+	public boolean addEreignisTyp(EreignisTyp typ) {
+		return ereignisTypen.add(typ);
+	}
+
+	/**
+	 * Entfernt einen Ereignistyp aus der Filterliste.
+	 * 
+	 * @param typ
+	 *            ein Ereignistyp
+	 * @return {@code true}, wenn der Typ enthalten war und {@code false},
+	 *         wenn er bereits enthalten war.
+	 */
+	public boolean removeEreignisTyp(EreignisTyp typ) {
+		return ereignisTypen.remove(typ);
+	}
+
+	/**
 	 * Gibt einen Iterator &uuml;ber die ausgeschlossenen Ereignistypen
 	 * zur&uuml;ck.
 	 * 
 	 * @return Ereignistypeniterator
 	 */
-	public Collection<EreignisTyp> getEreignisTypen() {
-		return new ArrayList<EreignisTyp>(ereignisTypen);
+	public Set<EreignisTyp> getEreignisTypen() {
+		return new HashSet<EreignisTyp>(ereignisTypen);
 	}
 
 	/**
@@ -216,7 +264,7 @@ public class Anfrage {
 	 * @return Schwellwert in Prozent
 	 * @see #isZyklischePrognose()
 	 */
-	public float getSchwelle() {
+	public double getSchwelle() {
 		return schwelle;
 	}
 
@@ -258,6 +306,7 @@ public class Anfrage {
 	 */
 	protected Data getDaten(Data daten) {
 		Array feld;
+		int i;
 
 		daten.getReferenceValue("Messquerschnitt").setSystemObject(mq);
 		daten.getTimeValue("ZeitpunktPrognoseBeginn").setMillis(prognoseBeginn);
@@ -280,9 +329,10 @@ public class Anfrage {
 
 		feld = daten.getArray("EreignisTyp");
 		feld.setLength(ereignisTypen.size());
-		for (int i = 0; i < ereignisTypen.size(); i++) {
-			feld.getItem(i).asReferenceValue().setSystemObject(
-					ereignisTypen.get(i).getSystemObject());
+		i = 0;
+		for (EreignisTyp et : ereignisTypen) {
+			feld.getItem(i++).asReferenceValue().setSystemObject(
+					et.getSystemObject());
 		}
 
 		return daten;

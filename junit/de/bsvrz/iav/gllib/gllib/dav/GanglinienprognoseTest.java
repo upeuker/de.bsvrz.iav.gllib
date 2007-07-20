@@ -61,12 +61,12 @@ public class GanglinienprognoseTest implements StandardApplication,
 		AnfrageNachricht anfrage;
 		SystemObject mq;
 
-		mq = connection.getDataModel().getObject("mq.a10.0000");
+		mq = connection.getDataModel().getObject("mq.a14.0001");
 		prognose = new Ganglinienprognose(connection);
 		prognose.addAntwortListener(this);
 		anfrage = new AnfrageNachricht(connection.getLocalApplicationObject(),
 				"Mein Test");
-		anfrage.add(new Anfrage(mq, 1, 1, false, false, 100, 0.0F, 100));
+		anfrage.add(new Anfrage(mq, 1, 1, false));
 		prognose.sendeAnfrage(anfrage);
 	}
 

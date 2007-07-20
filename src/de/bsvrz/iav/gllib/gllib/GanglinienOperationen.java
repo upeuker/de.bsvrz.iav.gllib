@@ -401,7 +401,7 @@ public class GanglinienOperationen {
 		} else {
 			ende = g2.stuetzstellen.lastKey();
 		}
-		breite = Math.round((float) (ende - start) / intervalle);
+		breite = Math.round((double) (ende - start) / intervalle);
 
 		// Haltepunkte bestimmen
 		zeitstempel = new TreeSet<Long>();

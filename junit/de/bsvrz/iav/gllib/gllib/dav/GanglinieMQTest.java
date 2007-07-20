@@ -88,9 +88,9 @@ public class GanglinieMQTest {
 		GanglinieMQ g;
 
 		g = new GanglinieMQ();
-		g.setStuetzstelle(10, new Messwerte(90F, 10F, 130F, 80F));
-		g.setStuetzstelle(30, new Messwerte(50F, 5F, 180F, 90F));
-		g.setStuetzstelle(40, new Messwerte(70F, 20F, 100F, 70F));
+		g.setStuetzstelle(10, new Messwerte(90.0, 10.0, 130.0, 80.0));
+		g.setStuetzstelle(30, new Messwerte(50.0, 5.0, 180.0, 90.0));
+		g.setStuetzstelle(40, new Messwerte(70.0, 20.0, 100.0, 70.0));
 
 		assertEquals(3, g.anzahlStuetzstellen());
 		assertEquals(3, g.getStuetzstellen().size());
@@ -113,12 +113,12 @@ public class GanglinieMQTest {
 		assertFalse(g.isValid(9));
 		assertFalse(g.isValid(45));
 
-		assertEquals(new Stuetzstelle<Messwerte>(10, new Messwerte(90F, 10F,
-				130F, 80F)), g.getStuetzstelle(10));
-		assertEquals(new Stuetzstelle<Messwerte>(30, new Messwerte(50F, 5F,
-				180F, 90F)), g.getStuetzstelle(30));
-		assertEquals(new Stuetzstelle<Messwerte>(40, new Messwerte(70F, 20F,
-				100F, 70F)), g.getStuetzstelle(40));
+		assertEquals(new Stuetzstelle<Messwerte>(10, new Messwerte(90.0, 10.0,
+				130.0, 80.0)), g.getStuetzstelle(10));
+		assertEquals(new Stuetzstelle<Messwerte>(30, new Messwerte(50.0, 5.0,
+				180.0, 90.0)), g.getStuetzstelle(30));
+		assertEquals(new Stuetzstelle<Messwerte>(40, new Messwerte(70.0, 20.0,
+				100.0, 70.0)), g.getStuetzstelle(40));
 	}
 
 }

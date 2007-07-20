@@ -188,6 +188,21 @@ public class Ganglinie<T> {
 		return liste;
 	}
 
+	public List<Stuetzstelle<T>> getStuetzstellen(Intervall intervall) {
+		SortedMap<Long, T> menge;
+		List<Stuetzstelle<T>> liste;
+
+		menge = stuetzstellen.subMap(intervall.getStart(),
+				intervall.getEnde() + 1);
+		liste = new ArrayList<Stuetzstelle<T>>();
+		for (long t : menge.keySet()) {
+			liste.add(getStuetzstelle(t));
+		}
+
+		return liste;
+
+	}
+
 	/**
 	 * Nimmt eine St&uuml;tzstelle in die Ganglinie auf. Existiert zu dem
 	 * Zeitpunkt bereits eine, wird diese &uuml;berschrieben.

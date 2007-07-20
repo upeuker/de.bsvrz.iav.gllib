@@ -46,16 +46,16 @@ import de.bsvrz.sys.funclib.bitctrl.util.dav.Umrechung;
 public class Messwerte {
 
 	/** Wert f&uuml;r die Verkehrsst&auml;rke der Lkw. */
-	private final Float qLkw;
+	private final Double qLkw;
 
 	/** Wert f&uuml;r die Verkehrsst&auml;rke der Kfz. */
-	private final Float qKfz;
+	private final Double qKfz;
 
 	/** Wert f&uuml;r die Geschwindigkeit der Pkw. */
-	private final Float vPkw;
+	private final Double vPkw;
 
 	/** Wert f&uuml;r die Geschwindigkeit der Lkw. */
-	private final Float vLkw;
+	private final Double vLkw;
 
 	/** Parameter f&uuml;r die Berechnung von QB. */
 	private final float k1;
@@ -63,6 +63,15 @@ public class Messwerte {
 	/** Parameter f&uuml;r die Berechnung von QB. */
 	private final float k2;
 
+	public Messwerte() {
+		this.qKfz = null;
+		this.qLkw = null;
+		this.vPkw = null;
+		this.vLkw = null;
+		this.k1 = -1;
+		this.k2 = -1;
+	}
+	
 	/**
 	 * Zuweisungskonstruktor.
 	 * 
@@ -75,7 +84,7 @@ public class Messwerte {
 	 * @param vLkw
 	 *            Geschwindigkeit Lkw
 	 */
-	public Messwerte(Float qKfz, Float qLkw, Float vPkw, Float vLkw) {
+	public Messwerte(Double qKfz, Double qLkw, Double vPkw, Double vLkw) {
 		this.qKfz = qKfz;
 		this.qLkw = qLkw;
 		this.vPkw = vPkw;
@@ -100,7 +109,7 @@ public class Messwerte {
 	 * @param k2
 	 *            Parameter f&uuml;r die Berechnung von QB
 	 */
-	protected Messwerte(Float qKfz, Float qLkw, Float vPkw, Float vLkw, float k1, float k2) {
+	protected Messwerte(Double qKfz, Double qLkw, Double vPkw, Double vLkw, float k1, float k2) {
 		this.qKfz = qKfz;
 		this.qLkw = qLkw;
 		this.vPkw = vPkw;
@@ -114,7 +123,7 @@ public class Messwerte {
 	 * 
 	 * @return Wert f&uuml;r QLkw
 	 */
-	public Float getQLkw() {
+	public Double getQLkw() {
 		return qLkw;
 	}
 
@@ -123,7 +132,7 @@ public class Messwerte {
 	 * 
 	 * @return Wert f&uuml;r QKfz
 	 */
-	public Float getQKfz() {
+	public Double getQKfz() {
 		return qKfz;
 	}
 
@@ -132,7 +141,7 @@ public class Messwerte {
 	 * 
 	 * @return Wert f&uuml;r VPkw
 	 */
-	public Float getVPkw() {
+	public Double getVPkw() {
 		return vPkw;
 	}
 
@@ -141,7 +150,7 @@ public class Messwerte {
 	 * 
 	 * @return Wert f&uuml;r VLkw
 	 */
-	public Float getVLkw() {
+	public Double getVLkw() {
 		return vLkw;
 	}
 
@@ -151,7 +160,7 @@ public class Messwerte {
 	 * 
 	 * @return Wert f&uuml;r QPkw
 	 */
-	public Float getQPkw() {
+	public Double getQPkw() {
 		return Umrechung.getQPkw(qKfz, qLkw);
 	}
 
@@ -161,7 +170,7 @@ public class Messwerte {
 	 * 
 	 * @return Wert f&uuml;r VKfz
 	 */
-	public Float getVKfz() {
+	public Double getVKfz() {
 		return Umrechung.getVKfz(qLkw, qKfz, vPkw, vLkw);
 	}
 
@@ -171,7 +180,7 @@ public class Messwerte {
 	 * 
 	 * @return Wert f&uuml;r QB
 	 */
-	public Float getQB() {
+	public Double getQB() {
 		return Umrechung.getQB(qLkw, qKfz, vPkw, vLkw, k1, k2);
 	}
 

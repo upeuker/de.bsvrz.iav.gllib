@@ -27,7 +27,10 @@
 package de.bsvrz.iav.gllib.gllib.dav;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+
+import com.sun.org.apache.bcel.internal.generic.CPInstruction;
 
 import stauma.dav.clientside.Data;
 import stauma.dav.clientside.Data.Array;
@@ -69,8 +72,11 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	/** Datenkatalogkonstante f&uuml;r eine relative multiplikative Ganglinie. */
 	public static final int TYP_MULTIPLIKATIV = 2;
 
+	/** Konstante f&uuml;r den undefinierten Wert einer St&uuml;tzstelle. */
+	protected static final int UNDEFINIERT = Integer.MIN_VALUE;
+
 	/** Faktor mit dem intern die St&uuml;tzstellenwerte multipliziert werden. */
-	private static final int FAKTOR = 1000;
+	protected static final int FAKTOR = 1000;
 
 	/** Der Messquerschnitt, zu dem die Ganglinie geh&ouml;rt. */
 	protected SystemObject mq;
@@ -97,16 +103,16 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	protected int typ;
 
 	/** Cached die Approximation f&uuml;r QKfz. */
-	private Approximation<Number> qKfz;
+	private Approximation<Double> qKfz;
 
 	/** Cached die Approximation f&uuml;r QLkw. */
-	private Approximation<Number> qLkw;
+	private Approximation<Double> qLkw;
 
 	/** Cached die Approximation f&uuml;r VPkw. */
-	private Approximation<Number> vPkw;
+	private Approximation<Double> vPkw;
 
 	/** Cached die Approximation f&uuml;r VLkw. */
-	private Approximation<Number> vLkw;
+	private Approximation<Double> vLkw;
 
 	/**
 	 * F&uuml;hrt die Initialisierung der Member durch.
@@ -121,6 +127,17 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 		typ = TYP_ABSOLUT;
 	}
 
+	protected GanglinieMQ(Collection<Stuetzstelle<Messwerte>> stuetzstellen) {
+		super(stuetzstellen);
+		k1 = 2.0f;
+		k2 = 0.01f;
+		letzteVerschmelzung = 1;
+		anzahlVerschmelzungen = 0;
+		ereignisTyp = null;
+		referenz = false;
+		typ = TYP_ABSOLUT;
+	}
+	
 	/**
 	 * Gibt den Messquerschnitt der Ganglinie zur&uuml;ck.
 	 * 
@@ -249,13 +266,23 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 		for (int i = 0; i < feld.getLength(); i++) {
 			Messwerte mw;
 
-			mw = new Messwerte(feld.getItem(i).getScaledValue("QKfz")
-					.floatValue(), feld.getItem(i).getScaledValue("QLkw")
-					.floatValue(), feld.getItem(i).getScaledValue("VPkw")
-					.floatValue(), feld.getItem(i).getScaledValue("VLkw")
-					.floatValue(), k1, k2);
-			setStuetzstelle(feld.getItem(i).getTimeValue("Zeit").getMillis(),
-					mw);
+			long zeitstempel;
+			Double qKfz, qLkw, vPkw, vLkw;
+
+			zeitstempel = feld.getItem(i).getTimeValue("Zeit").getMillis();
+			qKfz = feld.getItem(i).getScaledValue("QKfz").doubleValue();
+			if (qKfz == UNDEFINIERT)
+				qKfz = null;
+			qLkw = feld.getItem(i).getScaledValue("QLkw").doubleValue();
+			if (qLkw == UNDEFINIERT)
+				qLkw = null;
+			vPkw = feld.getItem(i).getScaledValue("VPkw").doubleValue();
+			if (vPkw == UNDEFINIERT)
+				vPkw = null;
+			vLkw = feld.getItem(i).getScaledValue("VLkw").doubleValue();
+			if (vLkw == UNDEFINIERT)
+				vLkw = null;
+			setStuetzstelle(zeitstempel, new Messwerte(qKfz, qLkw, vPkw, vLkw));
 		}
 	}
 
@@ -264,29 +291,29 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 */
 	@Override
 	protected void aktualisiereApproximation() {
-		List<Stuetzstelle<Number>> stellenQKfz;
-		List<Stuetzstelle<Number>> stellenQLkw;
-		List<Stuetzstelle<Number>> stellenVPkw;
-		List<Stuetzstelle<Number>> stellenVLkw;
+		List<Stuetzstelle<Double>> stellenQKfz;
+		List<Stuetzstelle<Double>> stellenQLkw;
+		List<Stuetzstelle<Double>> stellenVPkw;
+		List<Stuetzstelle<Double>> stellenVLkw;
 
 		if (getApproximation() == null) {
 			// Wenn keine Approximation festgelegt wurde, gibt es nichts zu tun
 			return;
 		}
 
-		stellenQKfz = new ArrayList<Stuetzstelle<Number>>();
-		stellenQLkw = new ArrayList<Stuetzstelle<Number>>();
-		stellenVPkw = new ArrayList<Stuetzstelle<Number>>();
-		stellenVLkw = new ArrayList<Stuetzstelle<Number>>();
+		stellenQKfz = new ArrayList<Stuetzstelle<Double>>();
+		stellenQLkw = new ArrayList<Stuetzstelle<Double>>();
+		stellenVPkw = new ArrayList<Stuetzstelle<Double>>();
+		stellenVLkw = new ArrayList<Stuetzstelle<Double>>();
 
 		for (long t : stuetzstellen.keySet()) {
 			Messwerte werte;
 
 			werte = stuetzstellen.get(t);
-			stellenQKfz.add(new Stuetzstelle<Number>(t, werte.getQKfz()));
-			stellenQLkw.add(new Stuetzstelle<Number>(t, werte.getQLkw()));
-			stellenVPkw.add(new Stuetzstelle<Number>(t, werte.getVPkw()));
-			stellenVLkw.add(new Stuetzstelle<Number>(t, werte.getVLkw()));
+			stellenQKfz.add(new Stuetzstelle<Double>(t, werte.getQKfz()));
+			stellenQLkw.add(new Stuetzstelle<Double>(t, werte.getQLkw()));
+			stellenVPkw.add(new Stuetzstelle<Double>(t, werte.getVPkw()));
+			stellenVLkw.add(new Stuetzstelle<Double>(t, werte.getVLkw()));
 		}
 
 		try {
@@ -320,11 +347,30 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 
 		if (getApproximation() != null) {
 			// Approximation vorhanden und benutzen
-			w = new Messwerte(qKfz.get(zeitstempel).getWert().floatValue()
-					/ FAKTOR, qLkw.get(zeitstempel).getWert().floatValue()
-					/ FAKTOR, vPkw.get(zeitstempel).getWert().floatValue()
-					/ FAKTOR, vLkw.get(zeitstempel).getWert().floatValue()
-					/ FAKTOR, k1, k2);
+
+			Double qKfz, qLkw, vPkw, vLkw;
+
+			qKfz = this.qKfz.get(zeitstempel).getWert();
+			if (qKfz != null) {
+				qKfz /= FAKTOR;
+			}
+
+			qLkw = this.qLkw.get(zeitstempel).getWert();
+			if (qLkw != null) {
+				qLkw /= FAKTOR;
+			}
+
+			vPkw = this.vPkw.get(zeitstempel).getWert();
+			if (vPkw != null) {
+				vPkw /= FAKTOR;
+			}
+
+			vLkw = this.vLkw.get(zeitstempel).getWert();
+			if (vLkw != null) {
+				vLkw /= FAKTOR;
+			}
+
+			w = new Messwerte(qKfz, qLkw, vPkw, vLkw, k1, k2);
 		} else {
 			// Keine Approximation festgelegt, evtl. Stützstelle vorhanden?
 			Stuetzstelle<Messwerte> s;
@@ -369,9 +415,29 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	public boolean setStuetzstelle(long zeitstempel, Messwerte wert) {
 		Messwerte w;
 		boolean neu;
+		Double qKfz, qLkw, vPkw, vLkw;
 
-		w = new Messwerte(wert.getQKfz() * FAKTOR, wert.getQLkw() * FAKTOR,
-				wert.getVPkw() * FAKTOR, wert.getVLkw() * FAKTOR, k1, k2);
+		qKfz = wert.getQKfz();
+		if (qKfz != null) {
+			qKfz *= FAKTOR;
+		}
+
+		qLkw = wert.getQLkw();
+		if (qLkw != null) {
+			qLkw *= FAKTOR;
+		}
+
+		vPkw = wert.getVPkw();
+		if (vPkw != null) {
+			vPkw *= FAKTOR;
+		}
+
+		vLkw = wert.getVLkw();
+		if (vLkw != null) {
+			vLkw *= FAKTOR;
+		}
+
+		w = new Messwerte(qKfz, qLkw, vPkw, vLkw, k1, k2);
 
 		neu = stuetzstellen.put(zeitstempel, w) == null;
 		aktualisiereApproximation();
