@@ -29,9 +29,9 @@ package de.bsvrz.iav.gllib.gllib.dav;
 import java.util.HashSet;
 import java.util.Set;
 
-import stauma.dav.clientside.Data;
-import stauma.dav.clientside.Data.Array;
-import stauma.dav.configuration.interfaces.SystemObject;
+import de.bsvrz.dav.daf.main.Data;
+import de.bsvrz.dav.daf.main.Data.Array;
+import de.bsvrz.dav.daf.main.config.SystemObject;
 import de.bsvrz.sys.funclib.bitctrl.modell.kalender.EreignisTyp;
 
 /**

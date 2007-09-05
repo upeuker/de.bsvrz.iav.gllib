@@ -26,11 +26,11 @@
 
 package de.bsvrz.iav.gllib.gllib.dav;
 
-import stauma.dav.clientside.ClientDavInterface;
-import stauma.dav.configuration.interfaces.SystemObject;
-import sys.funclib.ArgumentList;
-import sys.funclib.application.StandardApplication;
-import sys.funclib.application.StandardApplicationRunner;
+import de.bsvrz.dav.daf.main.ClientDavInterface;
+import de.bsvrz.dav.daf.main.config.SystemObject;
+import de.bsvrz.sys.funclib.application.StandardApplication;
+import de.bsvrz.sys.funclib.application.StandardApplicationRunner;
+import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
 
 /**
  * Testprogramm f&uuml;r Anfragen an die Ganglinienprognose.

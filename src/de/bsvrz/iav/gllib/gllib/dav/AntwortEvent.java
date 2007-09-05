@@ -32,10 +32,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import stauma.dav.clientside.Data;
-import stauma.dav.clientside.Data.Array;
-import stauma.dav.configuration.interfaces.ClientApplication;
-import stauma.dav.configuration.interfaces.SystemObject;
+import de.bsvrz.dav.daf.main.Data;
+import de.bsvrz.dav.daf.main.Data.Array;
+import de.bsvrz.dav.daf.main.config.ClientApplication;
+import de.bsvrz.dav.daf.main.config.SystemObject;
 
 /**
  * Repr&auml;sentiert eine Antwortnachricht der Ganglinienprognose. Enthalten

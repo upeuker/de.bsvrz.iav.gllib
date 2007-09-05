@@ -32,24 +32,24 @@ import java.util.ListIterator;
 
 import javax.swing.event.EventListenerList;
 
-import stauma.dav.clientside.ClientDavInterface;
-import stauma.dav.clientside.ClientReceiverInterface;
-import stauma.dav.clientside.ClientSenderInterface;
-import stauma.dav.clientside.Data;
-import stauma.dav.clientside.DataDescription;
-import stauma.dav.clientside.DataNotSubscribedException;
-import stauma.dav.clientside.ReceiveOptions;
-import stauma.dav.clientside.ReceiverRole;
-import stauma.dav.clientside.ResultData;
-import stauma.dav.clientside.SenderRole;
-import stauma.dav.common.OneSubscriptionPerSendData;
-import stauma.dav.common.SendSubscriptionNotConfirmed;
-import stauma.dav.configuration.interfaces.Aspect;
-import stauma.dav.configuration.interfaces.AttributeGroup;
-import stauma.dav.configuration.interfaces.ClientApplication;
-import stauma.dav.configuration.interfaces.DataModel;
-import stauma.dav.configuration.interfaces.SystemObject;
-import sys.funclib.debug.Debug;
+import de.bsvrz.dav.daf.main.ClientDavInterface;
+import de.bsvrz.dav.daf.main.ClientReceiverInterface;
+import de.bsvrz.dav.daf.main.ClientSenderInterface;
+import de.bsvrz.dav.daf.main.Data;
+import de.bsvrz.dav.daf.main.DataDescription;
+import de.bsvrz.dav.daf.main.DataNotSubscribedException;
+import de.bsvrz.dav.daf.main.OneSubscriptionPerSendData;
+import de.bsvrz.dav.daf.main.ReceiveOptions;
+import de.bsvrz.dav.daf.main.ReceiverRole;
+import de.bsvrz.dav.daf.main.ResultData;
+import de.bsvrz.dav.daf.main.SendSubscriptionNotConfirmed;
+import de.bsvrz.dav.daf.main.SenderRole;
+import de.bsvrz.dav.daf.main.config.Aspect;
+import de.bsvrz.dav.daf.main.config.AttributeGroup;
+import de.bsvrz.dav.daf.main.config.ClientApplication;
+import de.bsvrz.dav.daf.main.config.DataModel;
+import de.bsvrz.dav.daf.main.config.SystemObject;
+import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
  * Mit dieser Klasse k&ouml;nnen Applikation bequem Anfragen an die
