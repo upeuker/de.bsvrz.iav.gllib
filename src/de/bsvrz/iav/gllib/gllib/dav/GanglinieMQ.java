@@ -102,16 +102,16 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	protected int typ;
 
 	/** Cached die Approximation f&uuml;r QKfz. */
-	private Approximation<Double> qKfz;
+	private Approximation<Double> qKfzApprox;
 
 	/** Cached die Approximation f&uuml;r QLkw. */
-	private Approximation<Double> qLkw;
+	private Approximation<Double> qLkwApprox;
 
 	/** Cached die Approximation f&uuml;r VPkw. */
-	private Approximation<Double> vPkw;
+	private Approximation<Double> vPkwApprox;
 
 	/** Cached die Approximation f&uuml;r VLkw. */
-	private Approximation<Double> vLkw;
+	private Approximation<Double> vLkwApprox;
 
 	/**
 	 * F&uuml;hrt die Initialisierung der Member durch.
@@ -137,7 +137,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 		typ = TYP_ABSOLUT;
 	}
 	
-	public GanglinieMQ(SortedMap<Long, Messwerte> stuetzstellen) {
+	protected GanglinieMQ(SortedMap<Long, Messwerte> stuetzstellen) {
 		super(stuetzstellen);
 		k1 = 2.0f;
 		k2 = 0.01f;
@@ -333,25 +333,25 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 		}
 
 		try {
-			qKfz = getApproximation().clone();
-			qLkw = getApproximation().clone();
-			vPkw = getApproximation().clone();
-			vLkw = getApproximation().clone();
+			qKfzApprox = getApproximation().clone();
+			qLkwApprox = getApproximation().clone();
+			vPkwApprox = getApproximation().clone();
+			vLkwApprox = getApproximation().clone();
 		} catch (CloneNotSupportedException e) {
 			throw new IllegalStateException(
 					"Die verwendete Approximation muss clone() unterstützen.");
 		}
-		qKfz.setStuetzstellen(stellenQKfz);
-		qKfz.initialisiere();
+		qKfzApprox.setStuetzstellen(stellenQKfz);
+		qKfzApprox.initialisiere();
 
-		qLkw.setStuetzstellen(stellenQLkw);
-		qLkw.initialisiere();
+		qLkwApprox.setStuetzstellen(stellenQLkw);
+		qLkwApprox.initialisiere();
 
-		vPkw.setStuetzstellen(stellenVPkw);
-		vPkw.initialisiere();
+		vPkwApprox.setStuetzstellen(stellenVPkw);
+		vPkwApprox.initialisiere();
 
-		vLkw.setStuetzstellen(stellenVLkw);
-		vLkw.initialisiere();
+		vLkwApprox.setStuetzstellen(stellenVLkw);
+		vLkwApprox.initialisiere();
 	}
 
 	/**
@@ -366,22 +366,22 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 
 			Double qKfz, qLkw, vPkw, vLkw;
 
-			qKfz = this.qKfz.get(zeitstempel).getWert();
+			qKfz = this.qKfzApprox.get(zeitstempel).getWert();
 			if (qKfz != null) {
 				qKfz /= FAKTOR;
 			}
 
-			qLkw = this.qLkw.get(zeitstempel).getWert();
+			qLkw = this.qLkwApprox.get(zeitstempel).getWert();
 			if (qLkw != null) {
 				qLkw /= FAKTOR;
 			}
 
-			vPkw = this.vPkw.get(zeitstempel).getWert();
+			vPkw = this.vPkwApprox.get(zeitstempel).getWert();
 			if (vPkw != null) {
 				vPkw /= FAKTOR;
 			}
 
-			vLkw = this.vLkw.get(zeitstempel).getWert();
+			vLkw = this.vLkwApprox.get(zeitstempel).getWert();
 			if (vLkw != null) {
 				vLkw /= FAKTOR;
 			}
