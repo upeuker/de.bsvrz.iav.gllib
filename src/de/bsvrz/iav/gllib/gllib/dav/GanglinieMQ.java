@@ -26,8 +26,10 @@
 
 package de.bsvrz.iav.gllib.gllib.dav;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.SortedMap;
 
@@ -136,7 +138,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 		referenz = false;
 		typ = TYP_ABSOLUT;
 	}
-	
+
 	protected GanglinieMQ(SortedMap<Long, Messwerte> stuetzstellen) {
 		super(stuetzstellen);
 		k1 = 2.0f;
@@ -300,6 +302,17 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 			}
 			setStuetzstelle(zeitstempel, new Messwerte(qKfz, qLkw, vPkw, vLkw));
 		}
+
+		// Meta-Daten
+		typ = daten.getUnscaledValue("GanglinienTyp").intValue();
+		referenz = daten.getUnscaledValue("Referenzganglinie").intValue() == 1 ? true
+				: false;
+		anzahlVerschmelzungen = daten.getUnscaledValue("AnzahlVerschmelzungen")
+				.longValue();
+		letzteVerschmelzung = daten.getTimeValue("LetzteVerschmelzung")
+				.getMillis();
+		ereignisTyp = new EreignisTyp(daten.getReferenceValue("EreignisTyp")
+				.getSystemObject());
 	}
 
 	/**
@@ -474,7 +487,20 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 */
 	@Override
 	public String toString() {
-		return mq + ": " + getStuetzstellen();
-	}
+		String result;
 
+		result = getClass().getName() + "[";
+		result += "mq=" + mq;
+		result += ", ereignisTyp=" + ereignisTyp;
+		result += ", referenz=" + referenz;
+		result += ", anzahlVerschmelzungen=" + anzahlVerschmelzungen;
+		result += ", letzteVerschmelzung="
+				+ DateFormat.getDateInstance().format(
+						new Date(letzteVerschmelzung));
+		result += ", typ=" + typ;
+		result += ", approximation=" + getApproximation();
+		result += ", stuetzstellen=" + getStuetzstellen();
+		result += "]";
+		return result;
+	}
 }
