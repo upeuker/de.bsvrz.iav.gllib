@@ -52,13 +52,13 @@ import de.bsvrz.dav.daf.main.config.SystemObject;
 public class GlProgAntwortEvent extends EventObject {
 
 	/** Die anfragende Applikation. */
-	protected final ClientApplication anfrager;
+	private final ClientApplication anfrager;
 
 	/** Eine beliebige Zeichenkette die der Absender frei eingetragen kann. */
-	protected String absenderZeichen;
+	private String absenderZeichen;
 
 	/** Hash zum einfachen auffinden der passenden Ganglinie. */
-	protected final Map<SystemObject, GanglinieMQ> prognosen;
+	private final Map<SystemObject, GanglinieMQ> prognosen;
 
 	/**
 	 * Initialisiert interne Felder.

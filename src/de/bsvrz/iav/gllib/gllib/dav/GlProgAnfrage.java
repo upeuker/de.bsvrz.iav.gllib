@@ -44,31 +44,31 @@ import de.bsvrz.sys.funclib.bitctrl.modell.kalender.EreignisTyp;
 public class GlProgAnfrage {
 
 	/** Messquerschnitt f&uuml;r den eine Ganglinie angefragt wird. */
-	protected SystemObject mq;
+	private SystemObject mq;
 
 	/** Zeitpunkt des Beginns des Prognoseintervalls. */
-	protected long prognoseBeginn;
+	private long prognoseBeginn;
 
 	/** Zeitpunkt des Endes des Prognoseintervalls. */
-	protected long prognoseEnde;
+	private long prognoseEnde;
 
 	/** Nur Auswahlverfahren der langfristigen Prognose benutzen? */
-	protected boolean nurLangfristigeAuswahl;
+	private boolean nurLangfristigeAuswahl;
 
 	/** Diese Ereignistypen werden bei der Ganglinienauswahl ignoriert. */
-	protected final Set<EreignisTyp> ereignisTypen;
+	private final Set<EreignisTyp> ereignisTypen;
 
 	/** Soll eine zyklische Prognose erstellt werden? */
-	protected boolean zyklischePrognose;
+	private boolean zyklischePrognose;
 
 	/** Sp&auml;testens nach dieser Zeit in Sekunden Prognose pr&uuml;fen. */
-	protected long pruefIntervall;
+	private long pruefIntervall;
 
 	/** Maximale &Auml;nderung in Prozent zwischen zwei zyklischen Prognosen. */
-	protected double schwelle;
+	private double schwelle;
 
 	/** Sp&auml;testens nach dieser Zeit in Sekunden Prognose publizieren. */
-	protected long sendeIntervall;
+	private long sendeIntervall;
 
 	/**
 	 * Konstruktor f&uuml;r Vererbung.
