@@ -177,6 +177,9 @@ public class GlProgAntwortEvent extends EventObject {
 	/**
 	 * Baut aus den Informationen der Antwort einen Datensatz. Das Ergebnis wird
 	 * im Parameter abgelegt!
+	 * <p>
+	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
+	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
 	 * 
 	 * @param daten
 	 *            ein Datum, welches eine Antwortnachricht darstellt.

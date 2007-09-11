@@ -300,6 +300,9 @@ public class GlProgAnfrage {
 	 * Baut aus den Informationen der Anfrage ein Datum.
 	 * <p>
 	 * Hinweis: Das Ergebnis wird auch im Parameter abgelegt!
+	 * <p>
+	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
+	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
 	 * 
 	 * @param daten
 	 *            ein Datum, welches eine (leere) Anfrage darstellt.
