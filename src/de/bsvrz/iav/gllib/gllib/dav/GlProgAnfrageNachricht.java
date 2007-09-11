@@ -199,6 +199,7 @@ public class GlProgAnfrageNachricht {
 				.getSystemObject();
 		absenderZeichen = daten.getTextValue("AbsenderZeichen").getText();
 
+		anfragen.clear();
 		feld = daten.getArray("PrognoseGanglinienAnfrage");
 		for (int i = 0; i < feld.getLength(); i++) {
 			GlProgAnfrage anfrage;

@@ -137,6 +137,7 @@ public class GlProgAntwortEvent extends EventObject {
 
 		absenderZeichen = daten.getTextValue("AbsenderZeichen").getText();
 
+		prognosen.clear();
 		feld = daten.getArray("PrognoseGanglinie");
 		for (int i = 0; i < feld.getLength(); i++) {
 			GanglinieMQ g;

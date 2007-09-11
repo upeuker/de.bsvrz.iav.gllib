@@ -377,6 +377,7 @@ public class GlProgAnfrage {
 			zyklischePrognose = false;
 		}
 
+		ereignisTypen.clear();
 		feld = daten.getArray("EreignisTyp");
 		for (int i = 0; i < feld.getLength(); i++) {
 			ereignisTypen.add(new EreignisTyp(feld.getItem(i)

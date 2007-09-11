@@ -431,6 +431,9 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	 * <p>
 	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
 	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
+	 * <p>
+	 * <em>Hinweis:</em> Diese Methode darf nur direkt nach dem
+	 * Standardkonstruktor aufgerufen werden.
 	 * 
 	 * @param daten
 	 *            ein Datum, welches eine Prognoseganglinie darstellt.
@@ -508,6 +511,9 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	 * <p>
 	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
 	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
+	 * <p>
+	 * <em>Hinweis:</em> Diese Methode darf nur direkt nach dem
+	 * Standardkonstruktor aufgerufen werden.
 	 * 
 	 * @param daten
 	 *            ein Datum, welches eine Ganglinie aus der Ganglinienliste des
