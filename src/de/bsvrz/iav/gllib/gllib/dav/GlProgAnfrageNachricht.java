@@ -45,18 +45,18 @@ import de.bsvrz.dav.daf.main.config.SystemObject;
 public class GlProgAnfrageNachricht {
 
 	/** Die anfragende Applikation. */
-	protected ClientApplication absender;
+	private ClientApplication absender;
 
 	/** Eine beliebige Zeichenkette die der Absender frei eingetragen kann. */
-	protected String absenderZeichen;
+	private String absenderZeichen;
 
 	/** Liste der Anfragen in dieser Nachricht. */
-	protected final Map<SystemObject, GlProgAnfrage> anfragen;
+	private final Map<SystemObject, GlProgAnfrage> anfragen;
 
 	/**
 	 * Konstruktor f&uuml;r Vererbung.
 	 */
-	protected GlProgAnfrageNachricht() {
+	public GlProgAnfrageNachricht() {
 		anfragen = new HashMap<SystemObject, GlProgAnfrage>();
 	}
 
@@ -157,13 +157,16 @@ public class GlProgAnfrageNachricht {
 	/**
 	 * Baut aus den Informationen der Anfragen einen Datensatz.
 	 * <p>
-	 * Hinweis: Das Ergebnis wird auch im Parameter abgelegt!
+	 * <em>Hinweis:</em> Das Ergebnis wird auch im Parameter abgelegt!
+	 * <p>
+	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
+	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
 	 * 
 	 * @param daten
 	 *            ein Datum, welches eine (leere) Anfragenachricht darstellt.
 	 * @return das ausgef&uuml;llte Datum.
 	 */
-	protected Data getDaten(Data daten) {
+	public Data getDaten(Data daten) {
 		Array feld;
 		int i;
 
