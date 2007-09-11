@@ -58,15 +58,15 @@ public class GanglinienprognoseTest implements StandardApplication,
 	 */
 	public void initialize(ClientDavInterface connection) throws Exception {
 		Ganglinienprognose prognose;
-		AnfrageNachricht anfrage;
+		GlProgAnfrageNachricht anfrage;
 		SystemObject mq;
 
 		mq = connection.getDataModel().getObject("mq.a14.0001");
 		prognose = new Ganglinienprognose(connection);
 		prognose.addAntwortListener(this);
-		anfrage = new AnfrageNachricht(connection.getLocalApplicationObject(),
+		anfrage = new GlProgAnfrageNachricht(connection.getLocalApplicationObject(),
 				"Mein Test");
-		anfrage.add(new Anfrage(mq, 1, 2 * 24 * 60 * 60 * 1000, false));
+		anfrage.add(new GlProgAnfrage(mq, 1, 2 * 24 * 60 * 60 * 1000, false));
 		prognose.sendeAnfrage(anfrage);
 	}
 
@@ -86,7 +86,7 @@ public class GanglinienprognoseTest implements StandardApplication,
 	 * <p>
 	 * {@inheritDoc}
 	 */
-	public void antwortEingetroffen(AntwortEvent e) {
+	public void antwortEingetroffen(GlProgAntwortEvent e) {
 		for (SystemObject mq : e.getMessquerschnitte()) {
 			System.out.println(e.getPrognose(mq));
 		}

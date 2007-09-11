@@ -49,7 +49,7 @@ import de.bsvrz.dav.daf.main.config.SystemObject;
  * @version $Id$
  */
 @SuppressWarnings("serial")
-public class AntwortEvent extends EventObject {
+public class GlProgAntwortEvent extends EventObject {
 
 	/** Die anfragende Applikation. */
 	protected final ClientApplication anfrager;
@@ -68,7 +68,7 @@ public class AntwortEvent extends EventObject {
 	 * @param anfrager
 	 *            die anfragende Applikation.
 	 */
-	public AntwortEvent(Object quelle, ClientApplication anfrager) {
+	public GlProgAntwortEvent(Object quelle, ClientApplication anfrager) {
 		super(quelle);
 		this.anfrager = anfrager;
 		prognosen = new HashMap<SystemObject, GanglinieMQ>();
@@ -125,11 +125,14 @@ public class AntwortEvent extends EventObject {
 
 	/**
 	 * Extrahiert die enthaltenen Informationen aus den &uuml;bergebenen Daten.
+	 * <p>
+	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
+	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
 	 * 
 	 * @param daten
 	 *            die auszulesenden Daten.
 	 */
-	protected void setDaten(Data daten) {
+	public void setDaten(Data daten) {
 		Array feld;
 
 		absenderZeichen = daten.getTextValue("AbsenderZeichen").getText();
@@ -145,12 +148,58 @@ public class AntwortEvent extends EventObject {
 	}
 
 	/**
+	 * Setzt das Absenderzeichen. In der Regel wird dieses lediglich aus der
+	 * Anfrage in die Antwort kopiert.
+	 * <p>
+	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
+	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
+	 * 
+	 * @param absenderZeichen
+	 *            ein beliebiger Text.
+	 */
+	public void setAbsenderZeichen(String absenderZeichen) {
+		this.absenderZeichen = absenderZeichen;
+	}
+
+	/**
+	 * F&uuml;gt der Antwort eine Prognoseganglinie hinzu.
+	 * <p>
+	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
+	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
+	 * 
+	 * @param ganglinie
+	 *            eine Prognoseganglinie.
+	 */
+	public void addGanglinie(GanglinieMQ ganglinie) {
+		prognosen.put(ganglinie.getMessQuerschnitt(), ganglinie);
+	}
+
+	/**
+	 * Baut aus den Informationen der Antwort einen Datensatz. Das Ergebnis wird
+	 * im Parameter abgelegt!
+	 * 
+	 * @param daten
+	 *            ein Datum, welches eine Antwortnachricht darstellt.
+	 */
+	public void getDaten(Data daten) {
+		Array feld;
+		int i;
+
+		daten.getTextValue("AbsenderZeichen").setText(absenderZeichen);
+		feld = daten.getArray("PrognoseGanglinie");
+		feld.setLength(prognosen.size());
+		i = 0;
+		for (GanglinieMQ g : prognosen.values()) {
+			g.getDaten(feld.getItem(i));
+		}
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public String toString() {
-		return getClass().getSimpleName() + "=" + source + ", "
-				+ absenderZeichen;
+		return getClass().getName() + "=" + source + ", " + absenderZeichen;
 	}
 
 }

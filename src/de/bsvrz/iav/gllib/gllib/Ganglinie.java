@@ -48,22 +48,23 @@ import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
  * 
  * @author BitrCtrl, Schumann
  * @version $Id$
- * @param <T>
- *            der Typ der Werte an den St&uuml;tzstellen der Ganglinie.
  */
-public class Ganglinie<T> {
+public class Ganglinie implements IGanglinie<Double> {
 
 	/** Speicher der St&uuml;tzstellen. */
-	protected SortedMap<Long, T> stuetzstellen;
+	SortedMap<Long, Double> stuetzstellen;
 
 	/** Verfahren zur Berechnung der Punkte zwischen den St&uuml;tzstellen. */
 	private Approximation approximation;
+
+	/** Flag, ob die Approximation aktuallisiert werden muss. */
+	private boolean approximationAktuell = false;
 
 	/**
 	 * Konstruiert eine Ganglinie ohne St&uuml;tzstellen.
 	 */
 	public Ganglinie() {
-		stuetzstellen = new TreeMap<Long, T>();
+		stuetzstellen = new TreeMap<Long, Double>();
 	}
 
 	/**
@@ -73,12 +74,11 @@ public class Ganglinie<T> {
 	 * @param stuetzstellen
 	 *            Die St&uuml;tzstellen der Ganglinie.
 	 */
-	public Ganglinie(Collection<Stuetzstelle<T>> stuetzstellen) {
+	public Ganglinie(Collection<Stuetzstelle<Double>> stuetzstellen) {
 		this();
-		for (Stuetzstelle<T> s : stuetzstellen) {
+		for (Stuetzstelle<Double> s : stuetzstellen) {
 			this.stuetzstellen.put(s.getZeitstempel(), s.getWert());
 		}
-		aktualisiereApproximation();
 	}
 
 	/**
@@ -89,44 +89,29 @@ public class Ganglinie<T> {
 	 * @param stuetzstellen
 	 *            Die St&uuml;tzstellen der Ganglinie.
 	 */
-	public Ganglinie(Map<Long, T> stuetzstellen) {
+	public Ganglinie(Map<Long, Double> stuetzstellen) {
 		this();
 		for (long t : stuetzstellen.keySet()) {
 			this.stuetzstellen.put(t, stuetzstellen.get(t));
 		}
-		aktualisiereApproximation();
 	}
 
 	/**
-	 * Gibt die Anzahl der St&uuml;tzstellen der Ganglinie zur&uuml;ck.
-	 * 
-	 * @return St&uuml;tzstellenanzahl
+	 * {@inheritDoc}
 	 */
 	public int anzahlStuetzstellen() {
 		return stuetzstellen.size();
 	}
 
 	/**
-	 * Pr&uuml;ft ob zu einem Zeitstempel eine reale St&uuml;tzstelle existiert.
-	 * 
-	 * @param zeitstempel
-	 *            Ein Zeitstempel
-	 * @return {@code true}, wenn die Ganglinie eine St&uuml;tzstelle zum
-	 *         Zeitpunkt speichert und {@code false}, wenn zu dem Zeitpunkt die
-	 *         St&uuml;tzstelle berechnet werden muss
+	 * {@inheritDoc}
 	 */
 	public boolean existsStuetzstelle(long zeitstempel) {
 		return stuetzstellen.containsKey(zeitstempel);
 	}
 
 	/**
-	 * Pr&uuml;ft ob ein Zeitstempel im Definitionsbereich der Ganglinie liegt.
-	 * 
-	 * @param zeitstempel
-	 *            zu pr&uuml;fender Zeitstempel
-	 * @return <code>true</code>, wenn <code>zeitstempel</code> im
-	 *         definierten Bereich der Ganglinie liegt
-	 * @see #getIntervalle()
+	 * {@inheritDoc}
 	 */
 	public boolean isValid(long zeitstempel) {
 		boolean ok;
@@ -143,19 +128,9 @@ public class Ganglinie<T> {
 	}
 
 	/**
-	 * Gibt die St&uuml;tzstelle zu einem bestimmten Zeitpunkt zur&uuml;ck. Es
-	 * wird die mit der Approximation berechnete St&uuml;tzstelle ausgeliefert.
-	 * Wurde keine Approximation festgelegt ({@code getApproximation() == null}),
-	 * dann wird die real existierende St&uuml;tzstelle ausgeliefert. Existiert
-	 * zum angefragten Zeitpunkt keine St&uuml;tzstelle, wird {@code null}
-	 * zur&uuml;ckgegegeben.
-	 * 
-	 * @param zeitstempel
-	 *            Der Zeitstempel zu dem eine St&uuml;tzstelle gesucht wird
-	 * @return Die gesuchte St&uuml;tzstelle oder {@code null}, wenn keine
-	 *         berechnet werden konnte und keine existiert
+	 * {@inheritDoc}
 	 */
-	public Stuetzstelle<T> getStuetzstelle(long zeitstempel) {
+	public Stuetzstelle<Double> getStuetzstelle(long zeitstempel) {
 		if (approximation != null) {
 			return approximation.get(zeitstempel);
 		}
@@ -163,7 +138,7 @@ public class Ganglinie<T> {
 		// Rückfallebene, wenn keine Approximation festgelegt, wird falls
 		// vorhanden eine existierende Stützstelle zurückgegeben.
 		if (stuetzstellen.containsKey(zeitstempel)) {
-			return new Stuetzstelle<T>(zeitstempel, stuetzstellen
+			return new Stuetzstelle<Double>(zeitstempel, stuetzstellen
 					.get(zeitstempel));
 		}
 
@@ -172,15 +147,12 @@ public class Ganglinie<T> {
 	}
 
 	/**
-	 * Gibt ein sortiertes Feld der existierenden St&uuml;tzstellen
-	 * zur&uuml;ck;.
-	 * 
-	 * @return Nach Zeitstempel sortiere St&uuml;tzstellen
+	 * {@inheritDoc}
 	 */
-	public List<Stuetzstelle<T>> getStuetzstellen() {
-		List<Stuetzstelle<T>> liste;
+	public List<Stuetzstelle<Double>> getStuetzstellen() {
+		List<Stuetzstelle<Double>> liste;
 
-		liste = new ArrayList<Stuetzstelle<T>>();
+		liste = new ArrayList<Stuetzstelle<Double>>();
 		for (long t : stuetzstellen.keySet()) {
 			liste.add(getStuetzstelle(t));
 		}
@@ -188,73 +160,55 @@ public class Ganglinie<T> {
 		return liste;
 	}
 
-	public List<Stuetzstelle<T>> getStuetzstellen(Intervall intervall) {
-		SortedMap<Long, T> menge;
-		List<Stuetzstelle<T>> liste;
+	/**
+	 * {@inheritDoc}
+	 */
+	public List<Stuetzstelle<Double>> getStuetzstellen(Intervall intervall) {
+		SortedMap<Long, Double> menge;
+		List<Stuetzstelle<Double>> liste;
 
 		menge = stuetzstellen.subMap(intervall.getStart(),
 				intervall.getEnde() + 1);
-		liste = new ArrayList<Stuetzstelle<T>>();
+		liste = new ArrayList<Stuetzstelle<Double>>();
 		for (long t : menge.keySet()) {
 			liste.add(getStuetzstelle(t));
 		}
 
 		return liste;
-
 	}
 
 	/**
-	 * Nimmt eine St&uuml;tzstelle in die Ganglinie auf. Existiert zu dem
-	 * Zeitpunkt bereits eine, wird diese &uuml;berschrieben.
-	 * 
-	 * @param zeitstempel
-	 *            Zeitstempel der St&uuml;tzstelle
-	 * @param wert
-	 *            Wert der St&uuml;tzstelle
-	 * @return {@code true}, wenn die St&uuml;tzstelle neu angelegt wurde und
-	 *         {@code false}, wenn eine vorhandene St&uuml;tzstelle ersetzt
-	 *         wurde.
+	 * {@inheritDoc}
 	 */
-	public boolean setStuetzstelle(long zeitstempel, T wert) {
+	public boolean setStuetzstelle(long zeitstempel, Double wert) {
 		boolean neu;
 
 		neu = stuetzstellen.put(zeitstempel, wert) == null;
-		aktualisiereApproximation();
-
+		approximationAktuell = false;
 		return neu;
 	}
 
 	/**
-	 * Nimmt eine St&uuml;tzstelle in die Ganglinie auf. Existiert zu dem
-	 * Zeitpunkt bereits eine, wird diese &uuml;berschrieben. Ruft intern
-	 * {@link #setStuetzstelle(long, Object)} auf.
-	 * 
-	 * @param s
-	 *            Die neue Stu&uuml;tzstelle
-	 * @return {@code true}, wenn die St&uuml;tzstelle neu angelegt wurde und
-	 *         {@code false}, wenn eine vorhandene St&uuml;tzstelle ersetzt
-	 *         wurde.
+	 * {@inheritDoc}
 	 */
-	public boolean setStuetzstelle(Stuetzstelle<T> s) {
-		return setStuetzstelle(s.getZeitstempel(), s.getWert());
+	public boolean setStuetzstelle(Stuetzstelle<Double> s) {
+		boolean neu;
+
+		neu = setStuetzstelle(s.getZeitstempel(), s.getWert());
+		approximationAktuell = false;
+		return neu;
 	}
 
 	/**
-	 * Entfernt eine St&uuml;tzstelle.
-	 * 
-	 * @param zeitstempel
-	 *            Zeitstempel der St&uuml;tzstelle, die entfernt werden soll
+	 * {@inheritDoc}
 	 */
 	public void remove(long zeitstempel) {
 		stuetzstellen.remove(zeitstempel);
-		aktualisiereApproximation();
+		approximationAktuell = false;
 	}
 
 	/**
-	 * Gibt das Zeitintervall der Ganglinie zur&uuml;ck.
-	 * 
-	 * @return Ein {@link Intervall} oder {@code null}, wenn keine
-	 *         St&uuml;tzstellen vorhanden sind
+	 * {@inheritDoc}
 	 */
 	public Intervall getIntervall() {
 		if (stuetzstellen.size() == 0) {
@@ -265,9 +219,7 @@ public class Ganglinie<T> {
 	}
 
 	/**
-	 * Bestimmt die Intervalle in denen die Ganglinie definiert ist.
-	 * 
-	 * @return Liste von Intervallen
+	 * {@inheritDoc}
 	 */
 	public List<Intervall> getIntervalle() {
 		List<Intervall> intervalle;
@@ -305,57 +257,34 @@ public class Ganglinie<T> {
 	}
 
 	/**
-	 * Die Ganglinie als Approximation zu&uuml;ck.
-	 * 
-	 * @return die Approximation der Ganglinie oder {@code null}, wenn keine
-	 *         Approximation festgelegt wurde.
+	 * {@inheritDoc}
 	 */
 	public Approximation getApproximation() {
 		return approximation;
 	}
 
 	/**
-	 * Legt das Approximationsverfahren fest, mit dem die Werte zwischen den
-	 * St&uuml;tzstellen bestimmt werden soll.
-	 * 
-	 * @param approximation
-	 *            Klasse eines Approximationsverfahrens. Die Klasse m&uuml;ss
-	 *            einen parameterlosen Konstruktor besitzen.
-	 * @throws IllegalArgumentException
-	 *             Wenn die Klassen keinen &ouml;ffentlichen parameterlosen
-	 *             Konstruktor besitzt
+	 * {@inheritDoc}
 	 */
 	public void setApproximation(Approximation approximation) {
 		this.approximation = approximation;
-		aktualisiereApproximation();
-	}
-
-	/**
-	 * Aktualisiert die Approximation. Muss bei &Auml;nderung an den
-	 * St&uuml;tzstellen der Ganglinie aufgerufen werden.
-	 */
-	protected void aktualisiereApproximation() {
-		if (approximation != null) {
-			approximation.initialisiere();
-		}
+		approximationAktuell = false;
 	}
 
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @see java.lang.Object#equals(Object)
 	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public boolean equals(Object o) {
-		if (o instanceof Ganglinie) {
-			Ganglinie g;
+	public boolean isApproximationAktuell() {
+		return approximationAktuell;
+	}
 
-			g = (Ganglinie) o;
-			return stuetzstellen.equals(g.stuetzstellen);
-		}
-
-		return false;
+	/**
+	 * {@inheritDoc}
+	 */
+	public void aktualisiereApproximation() {
+		approximation.setStuetzstellen(getStuetzstellen());
+		approximation.initialisiere();
+		approximationAktuell = true;
 	}
 
 	/**
@@ -365,7 +294,7 @@ public class Ganglinie<T> {
 	 */
 	@Override
 	public String toString() {
-		return getStuetzstellen().toString();
+		return getClass().getName() + "[" + getStuetzstellen().toString() + "]";
 	}
 
 }

@@ -42,7 +42,7 @@ import de.bsvrz.sys.funclib.bitctrl.math.algebra.Vektor;
  * @author BitCtrl, Schumann
  * @version $Id$
  */
-public class CubicSpline extends AbstractApproximation<Integer> {
+public class CubicSpline extends AbstractApproximation {
 
 	/** Der erste Koeffizient des Polynoms. */
 	private RationaleZahl[] a;
@@ -62,19 +62,18 @@ public class CubicSpline extends AbstractApproximation<Integer> {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Stuetzstelle<Integer> get(long zeitstempel) {
-		if (zeitstempel < stuetzstellen.get(0).getZeitstempel()
-				|| zeitstempel > stuetzstellen.get(stuetzstellen.size() - 1)
-						.getZeitstempel()) {
+	public Stuetzstelle<Double> get(long zeitstempel) {
+		if (anzahl() == 0 || zeitstempel < get(0).getZeitstempel()
+				|| zeitstempel > get(anzahl() - 1).getZeitstempel()) {
 			// Zeitstempel liegt auﬂerhalb der Ganglinie
-			return new Stuetzstelle<Integer>(zeitstempel, null);
+			return new Stuetzstelle<Double>(zeitstempel, null);
 		}
 
 		// R‰nder der Ganglinie unver‰ndert ausliefern
-		if (stuetzstellen.get(0).getZeitstempel() == zeitstempel) {
-			return stuetzstellen.get(0);
-		} else if (stuetzstellen.get(stuetzstellen.size() - 1).getZeitstempel() == zeitstempel) {
-			return stuetzstellen.get(stuetzstellen.size() - 1);
+		if (get(0).getZeitstempel() == zeitstempel) {
+			return get(0);
+		} else if (get(anzahl() - 1).getZeitstempel() == zeitstempel) {
+			return get(anzahl() - 1);
 		}
 
 		return berechneStuetzstelle(zeitstempel);
@@ -87,18 +86,18 @@ public class CubicSpline extends AbstractApproximation<Integer> {
 	 *            Zeitstempel der gesuchten St&uuml;tzstelle
 	 * @return Die gesuchte St&uuml;tzstelle
 	 */
-	private Stuetzstelle<Integer> berechneStuetzstelle(long zeitstempel) {
+	private Stuetzstelle<Double> berechneStuetzstelle(long zeitstempel) {
 		RationaleZahl r, x, xi;
 		int index;
 
 		index = -1;
-		for (int i = 0; i < stuetzstellen.size(); i++) {
-			if (stuetzstellen.get(i).getZeitstempel() > zeitstempel) {
+		for (int i = 0; i < anzahl(); i++) {
+			if (get(i).getZeitstempel() > zeitstempel) {
 				index = i - 1;
 				break;
 			}
 		}
-		xi = new RationaleZahl(stuetzstellen.get(index).getZeitstempel());
+		xi = new RationaleZahl(get(index).getZeitstempel());
 		x = new RationaleZahl(zeitstempel);
 
 		r = addiere(addiere(addiere(a[index], multipliziere(b[index],
@@ -106,7 +105,7 @@ public class CubicSpline extends AbstractApproximation<Integer> {
 				subtrahiere(x, xi), 2))), multipliziere(d[index], potenz(
 				subtrahiere(x, xi), 3)));
 
-		return new Stuetzstelle<Integer>(zeitstempel, r.intValue());
+		return new Stuetzstelle<Double>(zeitstempel, r.doubleValue());
 	}
 
 	/**
@@ -117,7 +116,7 @@ public class CubicSpline extends AbstractApproximation<Integer> {
 		Matrix m;
 		Vektor v;
 
-		n = stuetzstellen.size();
+		n = anzahl();
 
 		a = new RationaleZahl[n];
 		b = new RationaleZahl[n];
@@ -127,14 +126,13 @@ public class CubicSpline extends AbstractApproximation<Integer> {
 
 		for (int i = 0; i < n; i++) {
 			// Erster Koeffizent
-			a[i] = new RationaleZahl(stuetzstellen.get(i).getWert());
+			a[i] = new RationaleZahl(get(i).getWert());
 
 			// Intervallbreite
 			if (i < n - 1) {
-				h[i] = RationaleZahl
-						.subtrahiere(new RationaleZahl(stuetzstellen.get(i + 1)
-								.getZeitstempel()), new RationaleZahl(
-								stuetzstellen.get(i).getZeitstempel()));
+				h[i] = RationaleZahl.subtrahiere(new RationaleZahl(get(i + 1)
+						.getZeitstempel()), new RationaleZahl(get(i)
+						.getZeitstempel()));
 			}
 		}
 
@@ -174,22 +172,6 @@ public class CubicSpline extends AbstractApproximation<Integer> {
 					(h[i - 1])), multipliziere(dividiere(addiere(multipliziere(
 					c[i - 1], 2), c[i]), 3), h[i - 1]));
 		}
-	}
-
-	/**
-	 * Erzeugt eine flache Kopie des Cubic-Splines.
-	 * <p>
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Approximation<Integer> clone() {
-		CubicSpline klon;
-
-		klon = new CubicSpline();
-		klon.stuetzstellen.addAll(stuetzstellen);
-		klon.initialisiere();
-
-		return klon;
 	}
 
 	/**

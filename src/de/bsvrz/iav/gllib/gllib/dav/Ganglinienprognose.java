@@ -72,13 +72,13 @@ public class Ganglinienprognose {
 			ClientReceiverInterface {
 
 		/** Der Logger. */
-		private final Debug logger;
+		private final Debug kommLogger;
 
 		/** Die zu verwendende Datenverteilerverbindung. */
 		private final ClientDavInterface verbindung;
 
 		/** Cached die gestellte Anfragen. */
-		private final List<AnfrageNachricht> anfragen;
+		private final List<GlProgAnfrageNachricht> anfragen;
 
 		/** Das Systemobjekt, an dass die Anfragen geschickt werden. */
 		private final SystemObject soPrognose;
@@ -105,8 +105,8 @@ public class Ganglinienprognose {
 			Aspect asp;
 
 			this.verbindung = verbindung;
-			anfragen = new ArrayList<AnfrageNachricht>();
-			logger = Debug.getLogger();
+			anfragen = new ArrayList<GlProgAnfrageNachricht>();
+			kommLogger = Debug.getLogger();
 
 			modell = verbindung.getDataModel();
 
@@ -126,7 +126,7 @@ public class Ganglinienprognose {
 				throw new IllegalStateException(ex.getLocalizedMessage());
 			}
 
-			logger.config("Kommunikationschnittstelle bereit.");
+			kommLogger.config("Kommunikationschnittstelle bereit.");
 		}
 
 		/**
@@ -135,7 +135,7 @@ public class Ganglinienprognose {
 		 * @param anfrage
 		 *            die Nachricht mit den Anfragen.
 		 */
-		public void sendeAnfrage(AnfrageNachricht anfrage) {
+		public void sendeAnfrage(GlProgAnfrageNachricht anfrage) {
 			anfragen.add(anfrage);
 			sendeAnfragen();
 		}
@@ -145,14 +145,14 @@ public class Ganglinienprognose {
 		 * gesendete Anfragen werden aus dem Cache entfernt.
 		 */
 		private void sendeAnfragen() {
-			ListIterator<AnfrageNachricht> iterator;
+			ListIterator<GlProgAnfrageNachricht> iterator;
 
 			iterator = anfragen.listIterator();
 			while (sendenErlaubt && iterator.hasNext()) {
 				Data daten;
 				ResultData datensatz;
 				SystemObject so;
-				AnfrageNachricht anfrage;
+				GlProgAnfrageNachricht anfrage;
 
 				anfrage = iterator.next();
 
@@ -160,7 +160,7 @@ public class Ganglinienprognose {
 				so = anfrage.getAbsender();
 				verbindung.subscribeReceiver(this, so, dbsAntwort,
 						ReceiveOptions.normal(), ReceiverRole.receiver());
-				logger
+				kommLogger
 						.finer(
 								"Als Empfänger der Antwort angemeldet für die Anfrage von",
 								so);
@@ -181,7 +181,7 @@ public class Ganglinienprognose {
 					continue;
 				}
 
-				logger.finer("Anfrage wurde gesendet", anfrage);
+				kommLogger.finer("Anfrage wurde gesendet", anfrage);
 			}
 		}
 
@@ -219,7 +219,7 @@ public class Ganglinienprognose {
 			for (ResultData datensatz : results) {
 				if (datensatz.getDataDescription().equals(dbsAntwort)
 						&& datensatz.hasData()) {
-					logger.finer("Prognoseantwort erhalten für die Anfrage von",
+					kommLogger.finer("Prognoseantwort erhalten für die Anfrage von",
 							datensatz.getObject());
 					fireAntwort((ClientApplication) datensatz.getObject(),
 							datensatz.getData());
@@ -283,7 +283,7 @@ public class Ganglinienprognose {
 	 * @param anfrage
 	 *            die Nachricht mit den Anfragen.
 	 */
-	public void sendeAnfrage(AnfrageNachricht anfrage) {
+	public void sendeAnfrage(GlProgAnfrageNachricht anfrage) {
 		kommunikation.sendeAnfrage(anfrage);
 		logger.fine("Neue Anfrage entgegengenommen", anfrage);
 	}
@@ -298,7 +298,7 @@ public class Ganglinienprognose {
 	 */
 	protected synchronized void fireAntwort(ClientApplication anfrager,
 			Data daten) {
-		AntwortEvent e = new AntwortEvent(this, anfrager);
+		GlProgAntwortEvent e = new GlProgAntwortEvent(this, anfrager);
 		e.setDaten(daten);
 
 		for (GlProgAntwortListener l : listeners

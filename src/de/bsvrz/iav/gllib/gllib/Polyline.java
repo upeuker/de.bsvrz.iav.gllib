@@ -26,7 +26,6 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
-
 /**
  * Approximation einer Ganglinie mit Hilfe von Polylines. Der Wert der
  * St&uuml;tzstelle zu einem Zeitstempel wird nach folgender Formel berechnet:
@@ -37,7 +36,7 @@ package de.bsvrz.iav.gllib.gllib;
  * @author BitCtrl, Schumann
  * @version $Id$
  */
-public class Polyline extends AbstractApproximation<Double> {
+public class Polyline extends AbstractApproximation {
 
 	/**
 	 * {@inheritDoc}
@@ -49,10 +48,10 @@ public class Polyline extends AbstractApproximation<Double> {
 		int index;
 
 		index = -1;
-		for (int i = 0; i < stuetzstellen.size(); i++) {
-			if (stuetzstellen.get(i).getZeitstempel() == zeitstempel) {
-				return stuetzstellen.get(i);
-			} else if (stuetzstellen.get(i).getZeitstempel() > zeitstempel) {
+		for (int i = 0; i < anzahl(); i++) {
+			if (get(i).getZeitstempel() == zeitstempel) {
+				return get(i);
+			} else if (get(i).getZeitstempel() > zeitstempel) {
 				index = i - 1;
 				break;
 			}
@@ -63,8 +62,8 @@ public class Polyline extends AbstractApproximation<Double> {
 			return new Stuetzstelle<Double>(zeitstempel, null);
 		}
 
-		s0 = stuetzstellen.get(index);
-		s1 = stuetzstellen.get(index + 1);
+		s0 = get(index);
+		s1 = get(index + 1);
 		x0 = s0.getZeitstempel();
 		y0 = s0.getWert().doubleValue();
 		x1 = s1.getZeitstempel();
@@ -80,22 +79,6 @@ public class Polyline extends AbstractApproximation<Double> {
 	 */
 	public void initialisiere() {
 		// nichts
-	}
-
-	/**
-	 * Erzeugt eine flache Kopie der Polylinie.
-	 * <p>
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Approximation<Double> clone() {
-		Polyline klon;
-
-		klon = new Polyline();
-		klon.stuetzstellen.addAll(stuetzstellen);
-		klon.initialisiere();
-
-		return klon;
 	}
 
 	/**

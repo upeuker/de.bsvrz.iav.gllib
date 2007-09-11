@@ -41,7 +41,7 @@ import de.bsvrz.sys.funclib.bitctrl.modell.kalender.EreignisTyp;
  * @author BitCtrl Systems GmbH, Schumann
  * @version $Id$
  */
-public class Anfrage {
+public class GlProgAnfrage {
 
 	/** Messquerschnitt f&uuml;r den eine Ganglinie angefragt wird. */
 	protected SystemObject mq;
@@ -73,7 +73,7 @@ public class Anfrage {
 	/**
 	 * Konstruktor f&uuml;r Vererbung.
 	 */
-	protected Anfrage() {
+	protected GlProgAnfrage() {
 		ereignisTypen = new HashSet<EreignisTyp>();
 	}
 
@@ -101,9 +101,10 @@ public class Anfrage {
 	 *            Sp&auml;testens nach dieser Zeit in Sekunden Prognose
 	 *            publizieren.
 	 */
-	public Anfrage(SystemObject mq, long prognoseBeginn, long prognoseEnde,
-			boolean nurLangfristigeAuswahl, boolean zyklischePrognose,
-			long pruefIntervall, double schwelle, long sendeIntervall) {
+	public GlProgAnfrage(SystemObject mq, long prognoseBeginn,
+			long prognoseEnde, boolean nurLangfristigeAuswahl,
+			boolean zyklischePrognose, long pruefIntervall, double schwelle,
+			long sendeIntervall) {
 		this();
 
 		if (mq == null) {
@@ -156,8 +157,8 @@ public class Anfrage {
 	 * @param nurLangfristigeAuswahl
 	 *            Nur Auswahlverfahren der langfristigen Prognose benutzen?
 	 */
-	public Anfrage(SystemObject mq, long prognoseBeginn, long prognoseEnde,
-			boolean nurLangfristigeAuswahl) {
+	public GlProgAnfrage(SystemObject mq, long prognoseBeginn,
+			long prognoseEnde, boolean nurLangfristigeAuswahl) {
 		this(mq, prognoseBeginn, prognoseEnde, nurLangfristigeAuswahl, false,
 				1, 0, 1);
 	}
@@ -304,7 +305,7 @@ public class Anfrage {
 	 *            ein Datum, welches eine (leere) Anfrage darstellt.
 	 * @return das ausgef&uuml;llte Datum.
 	 */
-	protected Data getDaten(Data daten) {
+	public Data getDaten(Data daten) {
 		Array feld;
 		int i;
 
@@ -336,6 +337,48 @@ public class Anfrage {
 		}
 
 		return daten;
+	}
+
+	/**
+	 * &Uuml;bernimmt die Informationen aus dem Datum als inneren Zustand.
+	 * <p>
+	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
+	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
+	 * 
+	 * @param daten
+	 *            ein Datum, welches eine Anfrage darstellt.
+	 */
+	public void setDaten(Data daten) {
+		Array feld;
+
+		mq = daten.getReferenceValue("Messquerschnitt").getSystemObject();
+		prognoseBeginn = daten.getTimeValue("ZeitpunktPrognoseBeginn")
+				.getMillis();
+		prognoseEnde = daten.getTimeValue("ZeitpunktPrognoseEnde").getMillis();
+		pruefIntervall = daten.getScaledValue("Überprüfungsintervall")
+				.longValue();
+		schwelle = daten.getScaledValue("Aktualisierungsschwelle").floatValue();
+		sendeIntervall = daten.getScaledValue("Aktualisierungsintervall")
+				.longValue();
+
+		if (daten.getUnscaledValue("NurLangfristigeAuswahl").getText().equals(
+				"Ja")) {
+			nurLangfristigeAuswahl = true;
+		} else {
+			nurLangfristigeAuswahl = false;
+		}
+
+		if (daten.getUnscaledValue("ZyklischePrognose").getText().equals("Ja")) {
+			zyklischePrognose = true;
+		} else {
+			zyklischePrognose = false;
+		}
+
+		feld = daten.getArray("EreignisTyp");
+		for (int i = 0; i < feld.getLength(); i++) {
+			ereignisTypen.add(new EreignisTyp(feld.getItem(i)
+					.asReferenceValue().getSystemObject()));
+		}
 	}
 
 	/**

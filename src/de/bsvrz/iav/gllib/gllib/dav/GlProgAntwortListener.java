@@ -44,6 +44,6 @@ public interface GlProgAntwortListener extends EventListener {
 	 * @param e
 	 *            Das Event, welches die Antwort darstellt.
 	 */
-	void antwortEingetroffen(AntwortEvent e);
+	void antwortEingetroffen(GlProgAntwortEvent e);
 
 }

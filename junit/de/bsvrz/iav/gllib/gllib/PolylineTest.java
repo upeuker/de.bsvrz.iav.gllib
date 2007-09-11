@@ -40,14 +40,14 @@ import org.junit.Test;
 public class PolylineTest {
 
 	/** Die Testganglinie. */
-	private Ganglinie<Double> ganglinie;
+	private Ganglinie ganglinie;
 
 	/**
 	 * Testganglinie initialisieren.
 	 */
 	@Before
 	public void setUp() {
-		ganglinie = new Ganglinie<Double>();
+		ganglinie = new Ganglinie();
 		ganglinie.setStuetzstelle(0, 0.0);
 		ganglinie.setStuetzstelle(30, 30.0);
 		ganglinie.setStuetzstelle(40, 20.0);

@@ -37,10 +37,8 @@ import java.util.SortedSet;
  * 
  * @author BitCtrl, Schumann
  * @version $Id$
- * @param <T>
- *            der Typ der approximierten Werte.
  */
-public interface Approximation<T> {
+public interface Approximation {
 
 	/**
 	 * F&uuml;hrt notwendige Initialisierungsarbeiten der Approximation aus.
@@ -53,7 +51,7 @@ public interface Approximation<T> {
 	 * @param menge
 	 *            die Menge der bekannten St&uuml;tzstellen.
 	 */
-	void setStuetzstellen(Collection<Stuetzstelle<T>> menge);
+	void setStuetzstellen(Collection<Stuetzstelle<Double>> menge);
 
 	/**
 	 * Gibt die St&uuml;tzstelle zum angegebenen Zeitstempel zur&uuml;ck.
@@ -62,7 +60,7 @@ public interface Approximation<T> {
 	 *            Zeitstempel
 	 * @return Wert als St&uuml;tzstelle
 	 */
-	Stuetzstelle<T> get(long zeitstempel);
+	Stuetzstelle<Double> get(long zeitstempel);
 
 	/**
 	 * Gibt eine Interpolation der Approximation zur&uuml;ck. N&uuml;tzlich
@@ -76,7 +74,7 @@ public interface Approximation<T> {
 	 * @throws IllegalArgumentException
 	 *             Wenn die Intervallbreite kleiner oder gleich 0 ist
 	 */
-	SortedSet<Stuetzstelle<T>> interpoliere(long intervallBreite);
+	SortedSet<Stuetzstelle<Double>> interpoliere(long intervallBreite);
 
 	/**
 	 * Erzeugt eine Kopie der Approximation.
@@ -85,6 +83,6 @@ public interface Approximation<T> {
 	 * @throws CloneNotSupportedException
 	 *             wenn das Klonen nicht unterst&uuml;tzt wird.
 	 */
-	Approximation<T> clone() throws CloneNotSupportedException;
+	Approximation clone() throws CloneNotSupportedException;
 
 }

@@ -42,7 +42,7 @@ import de.bsvrz.dav.daf.main.config.SystemObject;
  * @author BitCtrl Systems GmbH, Schumann
  * @version $Id$
  */
-public class AnfrageNachricht {
+public class GlProgAnfrageNachricht {
 
 	/** Die anfragende Applikation. */
 	protected ClientApplication absender;
@@ -51,13 +51,13 @@ public class AnfrageNachricht {
 	protected String absenderZeichen;
 
 	/** Liste der Anfragen in dieser Nachricht. */
-	protected final Map<SystemObject, Anfrage> anfragen;
+	protected final Map<SystemObject, GlProgAnfrage> anfragen;
 
 	/**
 	 * Konstruktor f&uuml;r Vererbung.
 	 */
-	protected AnfrageNachricht() {
-		anfragen = new HashMap<SystemObject, Anfrage>();
+	protected GlProgAnfrageNachricht() {
+		anfragen = new HashMap<SystemObject, GlProgAnfrage>();
 	}
 
 	/**
@@ -70,7 +70,8 @@ public class AnfrageNachricht {
 	 *            Antworten benutzen kann.
 	 * 
 	 */
-	public AnfrageNachricht(ClientApplication absender, String absenderZeichen) {
+	public GlProgAnfrageNachricht(ClientApplication absender,
+			String absenderZeichen) {
 		this();
 		this.absender = absender;
 		this.absenderZeichen = absenderZeichen;
@@ -82,7 +83,7 @@ public class AnfrageNachricht {
 	 * @param anfrage
 	 *            eine Anfrage.
 	 */
-	public void add(Anfrage anfrage) {
+	public void add(GlProgAnfrage anfrage) {
 		anfragen.put(anfrage.getMq(), anfrage);
 	}
 
@@ -121,7 +122,7 @@ public class AnfrageNachricht {
 	 *            Index der gesuchten Anfrage
 	 * @return Die Anfrage zum Index
 	 */
-	public Anfrage getAnfrage(int index) {
+	public GlProgAnfrage getAnfrage(int index) {
 		return anfragen.get(index);
 	}
 
@@ -142,8 +143,8 @@ public class AnfrageNachricht {
 	 *            ein Messquerschnitt.
 	 * @return die Prognoseganglinie des Messquerschnitts.
 	 */
-	public Anfrage getAnfrage(SystemObject mq) {
-		Anfrage anfrage;
+	public GlProgAnfrage getAnfrage(SystemObject mq) {
+		GlProgAnfrage anfrage;
 
 		anfrage = anfragen.get(mq);
 		if (anfrage == null) {
@@ -172,7 +173,7 @@ public class AnfrageNachricht {
 		feld = daten.getArray("PrognoseGanglinienAnfrage");
 		feld.setLength(anfragen.size());
 		i = 0;
-		for (Anfrage anfrage : anfragen.values()) {
+		for (GlProgAnfrage anfrage : anfragen.values()) {
 			anfrage.getDaten(feld.getItem(i));
 		}
 
@@ -180,11 +181,38 @@ public class AnfrageNachricht {
 	}
 
 	/**
+	 * &Uuml;bernimmt die Informationen aus dem Datum als inneren Zustand.
+	 * <p>
+	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
+	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
+	 * 
+	 * @param daten
+	 *            ein Datum, welches eine Anfrage darstellt.
+	 */
+	public void setDaten(Data daten) {
+		Array feld;
+
+		absender = (ClientApplication) daten.getReferenceValue("absenderId")
+				.getSystemObject();
+		absenderZeichen = daten.getTextValue("AbsenderZeichen").getText();
+
+		feld = daten.getArray("PrognoseGanglinienAnfrage");
+		for (int i = 0; i < feld.getLength(); i++) {
+			GlProgAnfrage anfrage;
+
+			anfrage = new GlProgAnfrage();
+			anfrage.setDaten(feld.getItem(i));
+			anfragen.put(anfrage.getMq(), anfrage);
+		}
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public String toString() {
-		return "Anfrage von " + absender + " mit Absenderzeichen: \"" + absenderZeichen + "\"";
+		return "Anfrage von " + absender + " mit Absenderzeichen: \""
+				+ absenderZeichen + "\"";
 	}
 
 }

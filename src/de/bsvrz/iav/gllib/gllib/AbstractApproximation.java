@@ -38,19 +38,37 @@ import java.util.TreeSet;
  * 
  * @author BitCtrl, Schumann
  * @version $Id$
- * @param <T>
- *            der Typ der approximierten Werte.
  */
-public abstract class AbstractApproximation<T> implements Approximation<T> {
+public abstract class AbstractApproximation implements Approximation {
 
 	/** Liste der verwendeten Stützstellen. */
-	protected final List<Stuetzstelle<T>> stuetzstellen;
+	private final List<Stuetzstelle<Double>> stuetzstellen;
 
 	/**
 	 * Initialisiert die St&uuml;tzstellenliste.
 	 */
 	protected AbstractApproximation() {
-		stuetzstellen = new ArrayList<Stuetzstelle<T>>();
+		stuetzstellen = new ArrayList<Stuetzstelle<Double>>();
+	}
+
+	/**
+	 * Gibt die St&uuml;tzstelle mit dem angegebenen Index zur&uml;ck.
+	 * 
+	 * @param index
+	 *            ein g&uuml;ltiger Index.
+	 * @return die St&uuml;tzstelle zum Index.
+	 */
+	protected Stuetzstelle<Double> get(int index) {
+		return stuetzstellen.get(index);
+	}
+
+	/**
+	 * Gibt die Anzahl der St&uuml;tzstellen zur&uuml;ck.
+	 * 
+	 * @return die St&uuml;tzstellenanzahl.
+	 */
+	protected int anzahl() {
+		return stuetzstellen.size();
 	}
 
 	/**
@@ -60,9 +78,9 @@ public abstract class AbstractApproximation<T> implements Approximation<T> {
 	 * <p>
 	 * {@inheritDoc}
 	 */
-	public void setStuetzstellen(Collection<Stuetzstelle<T>> menge) {
+	public void setStuetzstellen(Collection<Stuetzstelle<Double>> menge) {
 		stuetzstellen.clear();
-		for (Stuetzstelle<T> s : menge) {
+		for (Stuetzstelle<Double> s : menge) {
 			if (s.getWert() != null) {
 				stuetzstellen.add(s);
 			}
@@ -73,16 +91,16 @@ public abstract class AbstractApproximation<T> implements Approximation<T> {
 	/**
 	 * {@inheritDoc}
 	 */
-	public SortedSet<Stuetzstelle<T>> interpoliere(long intervallBreite) {
+	public SortedSet<Stuetzstelle<Double>> interpoliere(long intervallBreite) {
 		if (intervallBreite <= 0) {
 			throw new IllegalArgumentException(
 					"Intervallbreite muss größer null sein.");
 		}
 
-		SortedSet<Stuetzstelle<T>> interpolation;
+		SortedSet<Stuetzstelle<Double>> interpolation;
 		long zeitstempel;
 
-		interpolation = new TreeSet<Stuetzstelle<T>>();
+		interpolation = new TreeSet<Stuetzstelle<Double>>();
 
 		// Sonderfall: keine Stützstellen vorhanden
 		if (stuetzstellen.size() == 0) {
@@ -108,7 +126,7 @@ public abstract class AbstractApproximation<T> implements Approximation<T> {
 	 * @throws CloneNotSupportedException
 	 */
 	@Override
-	public Approximation<T> clone() throws CloneNotSupportedException {
+	public Approximation clone() throws CloneNotSupportedException {
 		throw new CloneNotSupportedException();
 	}
 

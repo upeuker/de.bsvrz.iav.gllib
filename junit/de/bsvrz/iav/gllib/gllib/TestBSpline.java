@@ -45,10 +45,10 @@ public class TestBSpline {
 	 */
 	@Test
 	public void testGetA() {
-		Ganglinie<Double> g;
+		Ganglinie g;
 		BSpline spline;
 
-		g = new Ganglinie<Double>();
+		g = new Ganglinie();
 		g.setStuetzstelle(0, 0.0);
 		g.setStuetzstelle(300, 300.0);
 		g.setStuetzstelle(400, 200.0);
@@ -75,10 +75,10 @@ public class TestBSpline {
 	 */
 	@Test
 	public void testGetB() {
-		Ganglinie<Double> g;
+		Ganglinie g;
 		BSpline spline;
 
-		g = new Ganglinie<Double>();
+		g = new Ganglinie();
 		for (int i = 0; i < 100; i++) {
 			long x = (long) (Math.random() * 1000);
 			double y = (int) (Math.random() * 1000);

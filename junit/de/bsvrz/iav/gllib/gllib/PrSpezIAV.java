@@ -93,12 +93,12 @@ public class PrSpezIAV {
 	 */
 	@Test
 	public void testfall6() {
-		Ganglinie<Double> g, erg;
+		Ganglinie g, erg;
 		Intervall i;
 
 		logger.config("Tesfall 6: Cut-Operation");
 
-		g = new Ganglinie<Double>();
+		g = new Ganglinie();
 		g.setStuetzstelle(5, 35.0);
 		g.setStuetzstelle(15, 20.0);
 		g.setStuetzstelle(20, 30.0);
@@ -114,14 +114,14 @@ public class PrSpezIAV {
 		g = GanglinienOperationen.auschneiden(g, i);
 		logger.info("Neue Ganglinie: " + g);
 
-		erg = new Ganglinie<Double>();
+		erg = new Ganglinie();
 		erg.setStuetzstelle(20, 30.0);
 		erg.setStuetzstelle(35, 10.0);
 		erg.setStuetzstelle(50, 25.0);
 		erg.setStuetzstelle(65, 20.0);
 		erg.setStuetzstelle(70, 25.0);
 
-		assertEquals(erg, g);
+		assertEquals(erg.getStuetzstellen(), g.getStuetzstellen());
 		logger.info("Testfall bestanden.");
 	}
 

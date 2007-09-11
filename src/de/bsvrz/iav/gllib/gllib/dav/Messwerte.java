@@ -63,6 +63,9 @@ public class Messwerte {
 	/** Parameter f&uuml;r die Berechnung von QB. */
 	private final float k2;
 
+	/**
+	 * Kreiert einen undefinierten Messwert.
+	 */
 	public Messwerte() {
 		this.qKfz = null;
 		this.qLkw = null;
@@ -71,7 +74,7 @@ public class Messwerte {
 		this.k1 = -1;
 		this.k2 = -1;
 	}
-	
+
 	/**
 	 * Zuweisungskonstruktor.
 	 * 
@@ -92,7 +95,7 @@ public class Messwerte {
 		k1 = -1;
 		k2 = -1;
 	}
-	
+
 	/**
 	 * Zuweisungskonstruktor.
 	 * 
@@ -109,7 +112,8 @@ public class Messwerte {
 	 * @param k2
 	 *            Parameter f&uuml;r die Berechnung von QB
 	 */
-	protected Messwerte(Double qKfz, Double qLkw, Double vPkw, Double vLkw, float k1, float k2) {
+	Messwerte(Double qKfz, Double qLkw, Double vPkw, Double vLkw,
+			float k1, float k2) {
 		this.qKfz = qKfz;
 		this.qLkw = qLkw;
 		this.vPkw = vPkw;
@@ -240,7 +244,7 @@ public class Messwerte {
 	@Override
 	public String toString() {
 		return "QKfz=" + qKfz + ", QPkw=" + getQPkw() + ", QLkw=" + qLkw
-				+ ", VKfz=" + getVKfz() + ", VPkw=" + vPkw + ", VLkw" + vLkw
+				+ ", VKfz=" + getVKfz() + ", VPkw=" + vPkw + ", VLkw=" + vLkw
 				+ ", QB=" + getQB();
 	}
 
