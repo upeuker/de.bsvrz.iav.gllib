@@ -31,6 +31,7 @@ import de.bsvrz.sys.funclib.application.StandardApplication;
 import de.bsvrz.sys.funclib.application.StandardApplicationRunner;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
 import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnitt;
+import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
 import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
 
 /**
@@ -68,7 +69,8 @@ public class GanglinienprognoseTest implements StandardApplication,
 		prognose.addAntwortListener(this);
 		anfrage = new GlProgAnfrageNachricht(connection
 				.getLocalApplicationObject(), "Mein Test");
-		anfrage.add(new GlProgAnfrage(mq, 1, 2 * 24 * 60 * 60 * 1000, false));
+		anfrage.add(new GlProgAnfrage(mq, new Intervall(1, 2 * 24 * 60 * 60
+				* 1000), false));
 		prognose.sendeAnfrage(anfrage);
 	}
 

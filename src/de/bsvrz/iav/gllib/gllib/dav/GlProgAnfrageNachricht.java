@@ -84,7 +84,7 @@ public class GlProgAnfrageNachricht {
 	 *            eine Anfrage.
 	 */
 	public void add(GlProgAnfrage anfrage) {
-		anfragen.put(anfrage.getMq(), anfrage);
+		anfragen.put(anfrage.getMessQuerschnitt(), anfrage);
 	}
 
 	/**
@@ -206,7 +206,7 @@ public class GlProgAnfrageNachricht {
 
 			anfrage = new GlProgAnfrage();
 			anfrage.setDaten(feld.getItem(i));
-			anfragen.put(anfrage.getMq(), anfrage);
+			anfragen.put(anfrage.getMessQuerschnitt(), anfrage);
 		}
 	}
 

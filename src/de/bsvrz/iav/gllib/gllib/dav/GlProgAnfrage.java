@@ -34,6 +34,7 @@ import de.bsvrz.dav.daf.main.Data.Array;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
 import de.bsvrz.sys.funclib.bitctrl.modell.kalender.EreignisTyp;
 import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnitt;
+import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
 
 /**
  * Repr&auml;sentiert eine einzelne Anfrage einer Anfragenachricht an die
@@ -45,13 +46,10 @@ import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnitt;
 public class GlProgAnfrage {
 
 	/** Messquerschnitt f&uuml;r den eine Ganglinie angefragt wird. */
-	private MessQuerschnitt mq;
+	private MessQuerschnitt messQuerschnitt;
 
-	/** Zeitpunkt des Beginns des Prognoseintervalls. */
-	private long prognoseBeginn;
-
-	/** Zeitpunkt des Endes des Prognoseintervalls. */
-	private long prognoseEnde;
+	/** Der Zeitraum in f&uuml;r den die Ganglinie bestimmt werden soll. */
+	private Intervall prognoseZeitraum;
 
 	/** Nur Auswahlverfahren der langfristigen Prognose benutzen? */
 	private boolean nurLangfristigeAuswahl;
@@ -84,10 +82,8 @@ public class GlProgAnfrage {
 	 * @param mq
 	 *            der Messquerschnitt f&uuml;r den eine Ganglinie angefragt
 	 *            wird.
-	 * @param prognoseBeginn
-	 *            der Zeitpunkt des Beginns des Prognoseintervalls.
-	 * @param prognoseEnde
-	 *            der Zeitpunkt des Endes des Prognoseintervalls.
+	 * @param prognoseZeitraum
+	 *            der Zeitraum der Prognose.
 	 * @param nurLangfristigeAuswahl
 	 *            Nur Auswahlverfahren der langfristigen Prognose benutzen?
 	 * @param zyklischePrognose
@@ -102,23 +98,14 @@ public class GlProgAnfrage {
 	 *            Sp&auml;testens nach dieser Zeit in Sekunden Prognose
 	 *            publizieren.
 	 */
-	public GlProgAnfrage(MessQuerschnitt mq, long prognoseBeginn,
-			long prognoseEnde, boolean nurLangfristigeAuswahl,
-			boolean zyklischePrognose, long pruefIntervall, double schwelle,
-			long sendeIntervall) {
+	public GlProgAnfrage(MessQuerschnitt mq, Intervall prognoseZeitraum,
+			boolean nurLangfristigeAuswahl, boolean zyklischePrognose,
+			long pruefIntervall, double schwelle, long sendeIntervall) {
 		this();
 
 		if (mq == null) {
 			throw new NullPointerException(
 					"Der Messquerschnitt darf nicht null sein.");
-		}
-		if (prognoseBeginn > prognoseEnde) {
-			throw new IllegalArgumentException(
-					"Der Prognosebeginn darf nicht vor dem Prognoseende liegen.");
-		}
-		if (prognoseBeginn <= 0 || prognoseEnde <= 0) {
-			throw new IllegalArgumentException(
-					"Prognosebeginn und -ende müssen größer 0 sein.");
 		}
 		if (pruefIntervall <= 0) {
 			throw new IllegalArgumentException(
@@ -133,9 +120,8 @@ public class GlProgAnfrage {
 					"Das Aktualisierungsintervall muss größer 0 sein.");
 		}
 
-		this.mq = mq;
-		this.prognoseBeginn = prognoseBeginn;
-		this.prognoseEnde = prognoseEnde;
+		this.messQuerschnitt = mq;
+		this.prognoseZeitraum = prognoseZeitraum;
 		this.nurLangfristigeAuswahl = nurLangfristigeAuswahl;
 		this.zyklischePrognose = zyklischePrognose;
 		this.pruefIntervall = pruefIntervall;
@@ -151,17 +137,14 @@ public class GlProgAnfrage {
 	 * @param mq
 	 *            der Messquerschnitt f&uuml;r den eine Ganglinie angefragt
 	 *            wird.
-	 * @param prognoseBeginn
-	 *            der Zeitpunkt des Beginns des Prognoseintervalls.
-	 * @param prognoseEnde
-	 *            der Zeitpunkt des Endes des Prognoseintervalls.
+	 * @param prognoseZeitraum
+	 *            der Zeitraum der Prognose.
 	 * @param nurLangfristigeAuswahl
 	 *            Nur Auswahlverfahren der langfristigen Prognose benutzen?
 	 */
-	public GlProgAnfrage(MessQuerschnitt mq, long prognoseBeginn,
-			long prognoseEnde, boolean nurLangfristigeAuswahl) {
-		this(mq, prognoseBeginn, prognoseEnde, nurLangfristigeAuswahl, false,
-				1, 0, 1);
+	public GlProgAnfrage(MessQuerschnitt mq, Intervall prognoseZeitraum,
+			boolean nurLangfristigeAuswahl) {
+		this(mq, prognoseZeitraum, nurLangfristigeAuswahl, false, 1, 0, 1);
 	}
 
 	/**
@@ -214,8 +197,8 @@ public class GlProgAnfrage {
 	 * 
 	 * @return Ein Messquerschnitt
 	 */
-	public MessQuerschnitt getMq() {
-		return mq;
+	public MessQuerschnitt getMessQuerschnitt() {
+		return messQuerschnitt;
 	}
 
 	/**
@@ -228,21 +211,12 @@ public class GlProgAnfrage {
 	}
 
 	/**
-	 * Gibt den Zeitpunkt des Beginns des Prognoseintervalls zur&uuml;ck.
+	 * Gibt den Prognosezeitraum zur&uuml;ck.
 	 * 
-	 * @return Zeitpunkt in Millisekunden
+	 * @return der Zeitraum f&uuml;r den die Ganglinie bestimmt wird.
 	 */
-	public long getPrognoseBeginn() {
-		return prognoseBeginn;
-	}
-
-	/**
-	 * Gibt den Zeitpunkt des Endes des Prognoseintervalls zur&uuml;ck.
-	 * 
-	 * @return Zeitpunkt in Millisekunden
-	 */
-	public long getPrognoseEnde() {
-		return prognoseEnde;
+	public Intervall getPrognoseZeitraum() {
+		return prognoseZeitraum;
 	}
 
 	/**
@@ -313,9 +287,12 @@ public class GlProgAnfrage {
 		Array feld;
 		int i;
 
-		daten.getReferenceValue("Messquerschnitt").setSystemObject(mq.getSystemObject());
-		daten.getTimeValue("ZeitpunktPrognoseBeginn").setMillis(prognoseBeginn);
-		daten.getTimeValue("ZeitpunktPrognoseEnde").setMillis(prognoseEnde);
+		daten.getReferenceValue("Messquerschnitt").setSystemObject(
+				messQuerschnitt.getSystemObject());
+		daten.getTimeValue("ZeitpunktPrognoseBeginn").setMillis(
+				prognoseZeitraum.getStart());
+		daten.getTimeValue("ZeitpunktPrognoseEnde").setMillis(
+				prognoseZeitraum.getEnde());
 		daten.getScaledValue("Überprüfungsintervall").set(pruefIntervall);
 		daten.getScaledValue("Aktualisierungsschwelle").set(schwelle);
 		daten.getScaledValue("Aktualisierungsintervall").set(sendeIntervall);
@@ -355,11 +332,11 @@ public class GlProgAnfrage {
 	public void setDaten(Data daten) {
 		Array feld;
 
-		mq = (MessQuerschnitt) ObjektFactory.getModellobjekt(daten
+		messQuerschnitt = (MessQuerschnitt) ObjektFactory.getModellobjekt(daten
 				.getReferenceValue("Messquerschnitt").getSystemObject());
-		prognoseBeginn = daten.getTimeValue("ZeitpunktPrognoseBeginn")
-				.getMillis();
-		prognoseEnde = daten.getTimeValue("ZeitpunktPrognoseEnde").getMillis();
+		prognoseZeitraum = new Intervall(daten.getTimeValue(
+				"ZeitpunktPrognoseBeginn").getMillis(), daten.getTimeValue(
+				"ZeitpunktPrognoseEnde").getMillis());
 		pruefIntervall = daten.getScaledValue("Überprüfungsintervall")
 				.longValue();
 		schwelle = daten.getScaledValue("Aktualisierungsschwelle").floatValue();
@@ -392,14 +369,13 @@ public class GlProgAnfrage {
 	 */
 	@Override
 	public String toString() {
-		if (isZyklischePrognose()) {
-			return "Zyklische Anfrage für " + mq + " von " + prognoseBeginn
-					+ " bis " + prognoseEnde + " alle " + getSendeIntervall()
-					+ " Sekunden.";
-		}
-
-		return "Einmalige Anfrage für " + mq + " von " + prognoseBeginn
-				+ " bis " + prognoseEnde;
+		return getClass().getName() + "[messQuerschnitt=" + messQuerschnitt
+				+ ", prognoseZeitraum=" + prognoseZeitraum
+				+ ", nurLangfristigeAuswahl=" + nurLangfristigeAuswahl
+				+ ", ereignisTypen=" + ereignisTypen + ", zyklischePrognose="
+				+ zyklischePrognose + ", pruefIntervall=" + pruefIntervall
+				+ ", schwelle=" + schwelle + ", sendeIntervall="
+				+ sendeIntervall + "]";
 	}
 
 }
