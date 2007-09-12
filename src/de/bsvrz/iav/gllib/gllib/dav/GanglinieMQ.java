@@ -35,7 +35,6 @@ import java.util.SortedMap;
 
 import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.Data.Array;
-import de.bsvrz.dav.daf.main.config.SystemObject;
 import de.bsvrz.iav.gllib.gllib.Approximation;
 import de.bsvrz.iav.gllib.gllib.BSpline;
 import de.bsvrz.iav.gllib.gllib.CubicSpline;
@@ -43,7 +42,9 @@ import de.bsvrz.iav.gllib.gllib.Ganglinie;
 import de.bsvrz.iav.gllib.gllib.IGanglinie;
 import de.bsvrz.iav.gllib.gllib.Polyline;
 import de.bsvrz.iav.gllib.gllib.Stuetzstelle;
+import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
 import de.bsvrz.sys.funclib.bitctrl.modell.kalender.EreignisTyp;
+import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnitt;
 import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
 
 /**
@@ -85,7 +86,7 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	public static final int UNDEFINIERT = Integer.MIN_VALUE;
 
 	/** Der Messquerschnitt, zu dem die Ganglinie geh&ouml;rt. */
-	private SystemObject mq;
+	private MessQuerschnitt messQuerschnitt;
 
 	/** Parameter f&uuml;r die Berechnung von QB. Standard ist 2,0. */
 	private float k1 = 2.0f;
@@ -182,8 +183,8 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	 * 
 	 * @return ein Messquerschnitt.
 	 */
-	public SystemObject getMessQuerschnitt() {
-		return mq;
+	public MessQuerschnitt getMessQuerschnitt() {
+		return messQuerschnitt;
 	}
 
 	/**
@@ -325,23 +326,13 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	}
 
 	/**
-	 * Gibt den Messquerschnitt auf den sich die Ganglinie bezieht zur&uuml;ck.
-	 * 
-	 * @return ein Messquerschnitt.
-	 */
-	public SystemObject getMq() {
-		return mq;
-	}
-
-	/**
 	 * Legt den Messquerschnitt fest, auf den sich die Ganglinie bezieht.
 	 * 
 	 * @param mq
-	 *            ein Messquerschnitt. (Der Parameter wird nicht
-	 *            &uuml;berprüft.)
+	 *            ein Messquerschnitt.
 	 */
-	public void setMq(SystemObject mq) {
-		this.mq = mq;
+	public void setMessQuerschnitt(MessQuerschnitt mq) {
+		this.messQuerschnitt = mq;
 	}
 
 	/**
@@ -443,7 +434,7 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 		List<Stuetzstelle<Messwerte>> liste;
 
 		daten.getReferenceValue("Messquerschnitt").setSystemObject(
-				getMessQuerschnitt());
+				getMessQuerschnitt().getSystemObject());
 		daten.getTimeValue("ZeitpunktPrognoseBeginn").setMillis(
 				getIntervall().getStart());
 		daten.getTimeValue("ZeitpunktPrognoseEnde").setMillis(
@@ -523,8 +514,8 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 		Array feld;
 		BSpline bspline;
 
-		ereignisTyp = new EreignisTyp(daten.getReferenceValue("EreignisTyp")
-				.getSystemObject());
+		ereignisTyp = (EreignisTyp) ObjektFactory.getModellobjekt(daten
+				.getReferenceValue("EreignisTyp").getSystemObject());
 		anzahlVerschmelzungen = daten.getUnscaledValue("AnzahlVerschmelzungen")
 				.longValue();
 		letzteVerschmelzung = daten.getTimeValue("LetzteVerschmelzung")
@@ -595,7 +586,8 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	public void setDatenVonPrognoseGanglinie(Data daten) {
 		Array feld;
 
-		mq = daten.getReferenceValue("Messquerschnitt").getSystemObject();
+		messQuerschnitt = (MessQuerschnitt) ObjektFactory.getModellobjekt(daten
+				.getReferenceValue("Messquerschnitt").getSystemObject());
 
 		// Verfahren
 		switch (daten.getUnscaledValue("GanglinienVerfahren").intValue()) {
@@ -857,7 +849,7 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 		String result;
 
 		result = getClass().getName() + "[";
-		result += "mq=" + mq;
+		result += "mq=" + messQuerschnitt;
 		result += ", ereignisTyp=" + ereignisTyp;
 		result += ", referenz=" + referenz;
 		result += ", anzahlVerschmelzungen=" + anzahlVerschmelzungen;

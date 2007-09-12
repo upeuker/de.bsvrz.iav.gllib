@@ -34,7 +34,7 @@ import java.util.NoSuchElementException;
 import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.Data.Array;
 import de.bsvrz.dav.daf.main.config.ClientApplication;
-import de.bsvrz.dav.daf.main.config.SystemObject;
+import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnitt;
 
 /**
  * Repr&auml;sentuiert eine Anfrage an die Ganglinienprognose.
@@ -51,13 +51,13 @@ public class GlProgAnfrageNachricht {
 	private String absenderZeichen;
 
 	/** Liste der Anfragen in dieser Nachricht. */
-	private final Map<SystemObject, GlProgAnfrage> anfragen;
+	private final Map<MessQuerschnitt, GlProgAnfrage> anfragen;
 
 	/**
 	 * Konstruktor f&uuml;r Vererbung.
 	 */
 	public GlProgAnfrageNachricht() {
-		anfragen = new HashMap<SystemObject, GlProgAnfrage>();
+		anfragen = new HashMap<MessQuerschnitt, GlProgAnfrage>();
 	}
 
 	/**
@@ -132,7 +132,7 @@ public class GlProgAnfrageNachricht {
 	 * 
 	 * @return eine Menge von Messquerschnitten.
 	 */
-	public Collection<SystemObject> getMessquerschnitte() {
+	public Collection<MessQuerschnitt> getMessquerschnitte() {
 		return anfragen.keySet();
 	}
 
@@ -143,7 +143,7 @@ public class GlProgAnfrageNachricht {
 	 *            ein Messquerschnitt.
 	 * @return die Prognoseganglinie des Messquerschnitts.
 	 */
-	public GlProgAnfrage getAnfrage(SystemObject mq) {
+	public GlProgAnfrage getAnfrage(MessQuerschnitt mq) {
 		GlProgAnfrage anfrage;
 
 		anfrage = anfragen.get(mq);

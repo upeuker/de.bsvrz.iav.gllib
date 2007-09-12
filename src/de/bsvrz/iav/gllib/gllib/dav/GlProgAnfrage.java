@@ -31,8 +31,9 @@ import java.util.Set;
 
 import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.Data.Array;
-import de.bsvrz.dav.daf.main.config.SystemObject;
+import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
 import de.bsvrz.sys.funclib.bitctrl.modell.kalender.EreignisTyp;
+import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnitt;
 
 /**
  * Repr&auml;sentiert eine einzelne Anfrage einer Anfragenachricht an die
@@ -44,7 +45,7 @@ import de.bsvrz.sys.funclib.bitctrl.modell.kalender.EreignisTyp;
 public class GlProgAnfrage {
 
 	/** Messquerschnitt f&uuml;r den eine Ganglinie angefragt wird. */
-	private SystemObject mq;
+	private MessQuerschnitt mq;
 
 	/** Zeitpunkt des Beginns des Prognoseintervalls. */
 	private long prognoseBeginn;
@@ -101,7 +102,7 @@ public class GlProgAnfrage {
 	 *            Sp&auml;testens nach dieser Zeit in Sekunden Prognose
 	 *            publizieren.
 	 */
-	public GlProgAnfrage(SystemObject mq, long prognoseBeginn,
+	public GlProgAnfrage(MessQuerschnitt mq, long prognoseBeginn,
 			long prognoseEnde, boolean nurLangfristigeAuswahl,
 			boolean zyklischePrognose, long pruefIntervall, double schwelle,
 			long sendeIntervall) {
@@ -157,7 +158,7 @@ public class GlProgAnfrage {
 	 * @param nurLangfristigeAuswahl
 	 *            Nur Auswahlverfahren der langfristigen Prognose benutzen?
 	 */
-	public GlProgAnfrage(SystemObject mq, long prognoseBeginn,
+	public GlProgAnfrage(MessQuerschnitt mq, long prognoseBeginn,
 			long prognoseEnde, boolean nurLangfristigeAuswahl) {
 		this(mq, prognoseBeginn, prognoseEnde, nurLangfristigeAuswahl, false,
 				1, 0, 1);
@@ -213,7 +214,7 @@ public class GlProgAnfrage {
 	 * 
 	 * @return Ein Messquerschnitt
 	 */
-	public SystemObject getMq() {
+	public MessQuerschnitt getMq() {
 		return mq;
 	}
 
@@ -312,7 +313,7 @@ public class GlProgAnfrage {
 		Array feld;
 		int i;
 
-		daten.getReferenceValue("Messquerschnitt").setSystemObject(mq);
+		daten.getReferenceValue("Messquerschnitt").setSystemObject(mq.getSystemObject());
 		daten.getTimeValue("ZeitpunktPrognoseBeginn").setMillis(prognoseBeginn);
 		daten.getTimeValue("ZeitpunktPrognoseEnde").setMillis(prognoseEnde);
 		daten.getScaledValue("Überprüfungsintervall").set(pruefIntervall);
@@ -354,7 +355,8 @@ public class GlProgAnfrage {
 	public void setDaten(Data daten) {
 		Array feld;
 
-		mq = daten.getReferenceValue("Messquerschnitt").getSystemObject();
+		mq = (MessQuerschnitt) ObjektFactory.getModellobjekt(daten
+				.getReferenceValue("Messquerschnitt").getSystemObject());
 		prognoseBeginn = daten.getTimeValue("ZeitpunktPrognoseBeginn")
 				.getMillis();
 		prognoseEnde = daten.getTimeValue("ZeitpunktPrognoseEnde").getMillis();
