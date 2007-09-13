@@ -26,10 +26,10 @@
 
 package de.bsvrz.iav.gllib.gllib.dav;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.Data.Array;
@@ -51,13 +51,13 @@ public class GlProgAnfrageNachricht {
 	private String absenderZeichen;
 
 	/** Liste der Anfragen in dieser Nachricht. */
-	private final Map<MessQuerschnitt, GlProgAnfrage> anfragen;
+	private final List<GlProgAnfrage> anfragen;
 
 	/**
 	 * Konstruktor f&uuml;r Vererbung.
 	 */
 	public GlProgAnfrageNachricht() {
-		anfragen = new HashMap<MessQuerschnitt, GlProgAnfrage>();
+		anfragen = new ArrayList<GlProgAnfrage>();
 	}
 
 	/**
@@ -84,7 +84,7 @@ public class GlProgAnfrageNachricht {
 	 *            eine Anfrage.
 	 */
 	public void add(GlProgAnfrage anfrage) {
-		anfragen.put(anfrage.getMessQuerschnitt(), anfrage);
+		anfragen.add(anfrage);
 	}
 
 	/**
@@ -107,51 +107,28 @@ public class GlProgAnfrageNachricht {
 	}
 
 	/**
-	 * Gibt die Anzahl der Anfragen dieser Nachricht zur&uuml;ck.
-	 * 
-	 * @return Anfragenanzahl
-	 */
-	public int getAnzahlAnfragen() {
-		return anfragen.size();
-	}
-
-	/**
-	 * Gibt eine bestimmte Anfrage zur&uuml;ck.
-	 * 
-	 * @param index
-	 *            Index der gesuchten Anfrage
-	 * @return Die Anfrage zum Index
-	 */
-	public GlProgAnfrage getAnfrage(int index) {
-		return anfragen.get(index);
-	}
-
-	/**
 	 * Gibt die Menge der Messquerschnitte zur&uuml;ck, f&uuml;r die Ganglinien
 	 * prognostiziert wurden.
 	 * 
 	 * @return eine Menge von Messquerschnitten.
 	 */
-	public Collection<MessQuerschnitt> getMessquerschnitte() {
-		return anfragen.keySet();
+	public Set<MessQuerschnitt> getMessquerschnitte() {
+		Set<MessQuerschnitt> menge;
+
+		menge = new HashSet<MessQuerschnitt>();
+		for (GlProgAnfrage a : anfragen) {
+			menge.add(a.getMessQuerschnitt());
+		}
+		return menge;
 	}
 
 	/**
-	 * Gibt die prognostizierte Ganglinie zu einem Messquerschnitt zur&uuml;ck.
+	 * Gibt alle Anfragen dieser Nachricht zur&uuml;ck.
 	 * 
-	 * @param mq
-	 *            ein Messquerschnitt.
-	 * @return die Prognoseganglinie des Messquerschnitts.
+	 * @return ein Feld mit Anfragen.
 	 */
-	public GlProgAnfrage getAnfrage(MessQuerschnitt mq) {
-		GlProgAnfrage anfrage;
-
-		anfrage = anfragen.get(mq);
-		if (anfrage == null) {
-			throw new NoSuchElementException(
-					"Für den Messquerschnitt wurde keine Prognoseganglinie angefragt.");
-		}
-		return anfrage;
+	public GlProgAnfrage[] getAnfragen() {
+		return anfragen.toArray(new GlProgAnfrage[anfragen.size()]);
 	}
 
 	/**
@@ -176,7 +153,7 @@ public class GlProgAnfrageNachricht {
 		feld = daten.getArray("PrognoseGanglinienAnfrage");
 		feld.setLength(anfragen.size());
 		i = 0;
-		for (GlProgAnfrage anfrage : anfragen.values()) {
+		for (GlProgAnfrage anfrage : anfragen) {
 			anfrage.getDaten(feld.getItem(i));
 		}
 
@@ -206,7 +183,7 @@ public class GlProgAnfrageNachricht {
 
 			anfrage = new GlProgAnfrage();
 			anfrage.setDaten(feld.getItem(i));
-			anfragen.put(anfrage.getMessQuerschnitt(), anfrage);
+			anfragen.add(anfrage);
 		}
 	}
 

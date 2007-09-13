@@ -154,7 +154,7 @@ public class Ganglinie implements IGanglinie<Double> {
 
 		liste = new ArrayList<Stuetzstelle<Double>>();
 		for (long t : stuetzstellen.keySet()) {
-			liste.add(getStuetzstelle(t));
+			liste.add(new Stuetzstelle<Double>(t, stuetzstellen.get(t)));
 		}
 
 		return liste;
