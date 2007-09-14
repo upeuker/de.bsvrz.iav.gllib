@@ -231,7 +231,7 @@ public class GanglinienOperationen {
 
 		v = new Ganglinie();
 		for (long t : g.stuetzstellen.keySet()) {
-			v.setStuetzstelle(t + offset, g.getStuetzstelle(t).getWert());
+			v.setStuetzstelle(t + offset, g.stuetzstellen.get(t));
 		}
 
 		return v;

@@ -118,22 +118,25 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	/** Flag, ob die Approximation aktuallisiert werden muss. */
 	private boolean approximationAktuell = false;
 
+	/** Das Intervall für das die Ganglinie prognostiziert wird. */
+	private Intervall prognoseZeitraum;
+
 	// Die folgenden vier Ganglinien müssen identische Stützstellen besitzen,
 	// was deren Zeitpunkt angeht. Unter Einbehaltung dieser Vorgabe, wird die
 	// Ganglinie für QKfz stellvertretend für alle vier verwendet, wenn nur die
 	// Zeitstempel der Stützstellen relevant sind.
 
 	/** Ganglinie f&uuml;r QKfz. */
-	private Ganglinie qKfz;
+	Ganglinie qKfz;
 
 	/** Ganglinie f&uuml;r QLkw. */
-	private Ganglinie qLkw;
+	Ganglinie qLkw;
 
 	/** Ganglinie f&uuml;r VPkw. */
-	private Ganglinie vPkw;
+	Ganglinie vPkw;
 
 	/** Ganglinie f&uuml;r VLkw. */
-	private Ganglinie vLkw;
+	Ganglinie vLkw;
 
 	/**
 	 * Allgemeine Initialisierung.
@@ -404,16 +407,62 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 
 	/**
 	 * {@inheritDoc}
+	 * 
+	 * @see #setPrognoseZeitraum(Intervall)
 	 */
 	public Intervall getIntervall() {
-		return qKfz.getIntervall();
+		Intervall intervall;
+
+		intervall = qKfz.getIntervall();
+		if (prognoseZeitraum != null) {
+			if (intervall != null) {
+				if (prognoseZeitraum.getStart() > intervall.getStart()) {
+					intervall = new Intervall(prognoseZeitraum.getStart(),
+							intervall.getEnde());
+
+				}
+				if (prognoseZeitraum.getEnde() < intervall.getEnde()) {
+					intervall = new Intervall(intervall.getStart(),
+							prognoseZeitraum.getEnde());
+
+				}
+			} else {
+				intervall = prognoseZeitraum;
+			}
+		}
+		return intervall;
 	}
 
 	/**
 	 * {@inheritDoc}
+	 * 
+	 * @see #setPrognoseZeitraum(Intervall)
 	 */
 	public List<Intervall> getIntervalle() {
-		return qKfz.getIntervalle();
+		List<Intervall> intervalle;
+
+		intervalle = new ArrayList<Intervall>();
+		if (prognoseZeitraum != null) {
+			for (Intervall i : qKfz.getIntervalle()) {
+				Intervall i0;
+
+				i0 = i;
+				if (prognoseZeitraum.getStart() > i0.getStart()) {
+					i0 = new Intervall(prognoseZeitraum.getStart(), i0
+							.getEnde());
+
+				}
+				if (prognoseZeitraum.getEnde() < i0.getEnde()) {
+					i0 = new Intervall(i0.getStart(), prognoseZeitraum
+							.getEnde());
+
+				}
+
+				intervalle.add(i0);
+			}
+		}
+
+		return intervalle;
 	}
 
 	/**
@@ -689,20 +738,32 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 
 	/**
 	 * {@inheritDoc}
+	 * 
+	 * @see #setPrognoseZeitraum(Intervall)
 	 */
 	public Stuetzstelle<Messwerte> getStuetzstelle(long zeitstempel) {
 		Double qKfz0, qLkw0, vPkw0, vLkw0;
 
-		qKfz0 = qKfz.getStuetzstelle(zeitstempel).getWert();
-		qLkw0 = qLkw.getStuetzstelle(zeitstempel).getWert();
-		vPkw0 = vPkw.getStuetzstelle(zeitstempel).getWert();
-		vLkw0 = vLkw.getStuetzstelle(zeitstempel).getWert();
+		if (prognoseZeitraum != null
+				&& !prognoseZeitraum.isEnthalten(zeitstempel)) {
+			qKfz0 = null;
+			qLkw0 = null;
+			vPkw0 = null;
+			vLkw0 = null;
+		} else {
+			qKfz0 = qKfz.getStuetzstelle(zeitstempel).getWert();
+			qLkw0 = qLkw.getStuetzstelle(zeitstempel).getWert();
+			vPkw0 = vPkw.getStuetzstelle(zeitstempel).getWert();
+			vLkw0 = vLkw.getStuetzstelle(zeitstempel).getWert();
+		}
 		return new Stuetzstelle<Messwerte>(zeitstempel, new Messwerte(qKfz0,
 				qLkw0, vPkw0, vLkw0, k1, k2));
 	}
 
 	/**
 	 * {@inheritDoc}
+	 * 
+	 * @see #setPrognoseZeitraum(Intervall)
 	 */
 	public List<Stuetzstelle<Messwerte>> getStuetzstellen() {
 		List<Stuetzstelle<Messwerte>> liste;
@@ -717,6 +778,10 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 			long zeitstempel;
 
 			zeitstempel = qKfz0.get(i).getZeitstempel();
+			if (prognoseZeitraum != null
+					&& !prognoseZeitraum.isEnthalten(zeitstempel)) {
+				continue;
+			}
 			liste
 					.add(new Stuetzstelle<Messwerte>(zeitstempel,
 							new Messwerte(qKfz0.get(i).getWert(), qLkw0.get(i)
@@ -768,6 +833,8 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 
 	/**
 	 * {@inheritDoc}
+	 * 
+	 * @see #setPrognoseZeitraum(Intervall)
 	 */
 	public List<Stuetzstelle<Messwerte>> getStuetzstellen(Intervall intervall) {
 		List<Stuetzstelle<Double>> qKfz0, qLkw0, vPkw0, vLkw0;
@@ -783,6 +850,10 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 			long zeitstempel;
 
 			zeitstempel = qKfz0.get(i).getZeitstempel();
+			if (prognoseZeitraum != null
+					&& !prognoseZeitraum.isEnthalten(zeitstempel)) {
+				continue;
+			}
 			liste
 					.add(new Stuetzstelle<Messwerte>(zeitstempel,
 							new Messwerte(qKfz0.get(i).getWert(), qLkw0.get(i)
@@ -861,6 +932,28 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 		result += ", stuetzstellen=" + getStuetzstellen();
 		result += "]";
 		return result;
+	}
+
+	/**
+	 * Gibt das Prognoseintervall der Ganglinie zur&uuml;ck.
+	 * 
+	 * @return das Prognoseintervall.
+	 */
+	public Intervall getPrognoseIntervall() {
+		return prognoseZeitraum;
+	}
+
+	/**
+	 * Legt das Prognoseintervall fest. Die getter-Methoden für Stützstellen
+	 * liefern nur Stützstellen innerhalb dieses Intervalls. Ist das
+	 * Prognoseintervall gleich {@code null}, dann werden alle vorhanden
+	 * Stützstellen berücksichtigt.
+	 * 
+	 * @param prognoseZeitraum
+	 *            ein Intervall.
+	 */
+	public void setPrognoseZeitraum(Intervall prognoseZeitraum) {
+		this.prognoseZeitraum = prognoseZeitraum;
 	}
 
 }

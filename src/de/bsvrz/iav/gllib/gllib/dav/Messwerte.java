@@ -112,8 +112,8 @@ public class Messwerte {
 	 * @param k2
 	 *            Parameter f&uuml;r die Berechnung von QB
 	 */
-	Messwerte(Double qKfz, Double qLkw, Double vPkw, Double vLkw,
-			float k1, float k2) {
+	Messwerte(Double qKfz, Double qLkw, Double vPkw, Double vLkw, float k1,
+			float k2) {
 		this.qKfz = qKfz;
 		this.qLkw = qLkw;
 		this.vPkw = vPkw;
@@ -243,9 +243,9 @@ public class Messwerte {
 	 */
 	@Override
 	public String toString() {
-		return "QKfz=" + qKfz + ", QPkw=" + getQPkw() + ", QLkw=" + qLkw
-				+ ", VKfz=" + getVKfz() + ", VPkw=" + vPkw + ", VLkw=" + vLkw
-				+ ", QB=" + getQB();
+		return getClass().getName() + "[QKfz=" + qKfz + ", QPkw=" + getQPkw()
+				+ ", QLkw=" + qLkw + ", VKfz=" + getVKfz() + ", VPkw=" + vPkw
+				+ ", VLkw=" + vLkw + ", QB=" + getQB() + "]";
 	}
 
 }

@@ -41,7 +41,8 @@ package de.bsvrz.iav.gllib.gllib;
  * 
  * @author BitCtrl, Schumann
  * @version $Id$
- * @param <T> der Typ des Wertes der St&uuml;tzstelle.
+ * @param <T>
+ *            der Typ des Wertes der St&uuml;tzstelle.
  */
 public class Stuetzstelle<T> implements Comparable<Stuetzstelle<T>> {
 
@@ -127,7 +128,7 @@ public class Stuetzstelle<T> implements Comparable<Stuetzstelle<T>> {
 	public boolean equals(Object obj) {
 		if (obj instanceof Stuetzstelle) {
 			Stuetzstelle s;
-			
+
 			s = (Stuetzstelle) obj;
 			if (wert != null) {
 				return zeitstempel == s.zeitstempel && wert.equals(s.wert);
@@ -145,7 +146,8 @@ public class Stuetzstelle<T> implements Comparable<Stuetzstelle<T>> {
 	 */
 	@Override
 	public String toString() {
-		return zeitstempel + "=>" + wert;
+		return getClass().getName() + "[zeitstempel=" + zeitstempel + ", wert="
+				+ wert + "]";
 	}
 
 }

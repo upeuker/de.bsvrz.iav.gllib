@@ -203,7 +203,9 @@ public class GlProgAntwortEvent extends EventObject {
 	 */
 	@Override
 	public String toString() {
-		return getClass().getName() + "=" + source + ", " + absenderZeichen;
+		return getClass().getName() + "[source=" + source + ", anfrager="
+				+ anfrager + ", absenderZeichen" + absenderZeichen
+				+ ", prognosen=" + prognosen;
 	}
 
 }
