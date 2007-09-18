@@ -54,7 +54,7 @@ public class GlProgAnfrageNachricht {
 	private final List<GlProgAnfrage> anfragen;
 
 	/**
-	 * Konstruktor f&uuml;r Vererbung.
+	 * Initialisierung.
 	 */
 	public GlProgAnfrageNachricht() {
 		anfragen = new ArrayList<GlProgAnfrage>();
