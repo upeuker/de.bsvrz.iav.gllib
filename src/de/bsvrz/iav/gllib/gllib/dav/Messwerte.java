@@ -243,7 +243,7 @@ public class Messwerte {
 	 */
 	@Override
 	public String toString() {
-		return getClass().getName() + "[QKfz=" + qKfz + ", QPkw=" + getQPkw()
+		return getClass().getSimpleName() + "[QKfz=" + qKfz + ", QPkw=" + getQPkw()
 				+ ", QLkw=" + qLkw + ", VKfz=" + getVKfz() + ", VPkw=" + vPkw
 				+ ", VLkw=" + vLkw + ", QB=" + getQB() + "]";
 	}

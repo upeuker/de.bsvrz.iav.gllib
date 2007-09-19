@@ -146,8 +146,8 @@ public class Stuetzstelle<T> implements Comparable<Stuetzstelle<T>> {
 	 */
 	@Override
 	public String toString() {
-		return getClass().getName() + "[zeitstempel=" + zeitstempel + ", wert="
-				+ wert + "]";
+		return getClass().getSimpleName() + "[zeitstempel=" + zeitstempel
+				+ ", wert=" + wert + "]";
 	}
 
 }

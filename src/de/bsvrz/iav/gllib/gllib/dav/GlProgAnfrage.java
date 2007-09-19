@@ -369,8 +369,8 @@ public class GlProgAnfrage {
 	 */
 	@Override
 	public String toString() {
-		return getClass().getName() + "[messQuerschnitt=" + messQuerschnitt
-				+ ", prognoseZeitraum=" + prognoseZeitraum
+		return getClass().getSimpleName() + "[messQuerschnitt="
+				+ messQuerschnitt + ", prognoseZeitraum=" + prognoseZeitraum
 				+ ", nurLangfristigeAuswahl=" + nurLangfristigeAuswahl
 				+ ", ereignisTypen=" + ereignisTypen + ", zyklischePrognose="
 				+ zyklischePrognose + ", pruefIntervall=" + pruefIntervall

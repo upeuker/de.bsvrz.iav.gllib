@@ -192,8 +192,8 @@ public class GlProgAnfrageNachricht {
 	 */
 	@Override
 	public String toString() {
-		return "Anfrage von " + absender + " mit Absenderzeichen: \""
-				+ absenderZeichen + "\"";
+		return getClass().getSimpleName() + "[absender=" + absender
+				+ ", absenderZeichen=" + absenderZeichen + "]";
 	}
 
 }

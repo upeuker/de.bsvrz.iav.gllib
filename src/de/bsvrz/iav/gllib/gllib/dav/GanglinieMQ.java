@@ -919,7 +919,7 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	public String toString() {
 		String result;
 
-		result = getClass().getName() + "[";
+		result = getClass().getSimpleName() + "[";
 		result += "mq=" + messQuerschnitt;
 		result += ", ereignisTyp=" + ereignisTyp;
 		result += ", referenz=" + referenz;
@@ -929,7 +929,6 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 						new Date(letzteVerschmelzung));
 		result += ", typ=" + typ;
 		result += ", approximation=" + getApproximation();
-		result += ", stuetzstellen=" + getStuetzstellen();
 		result += "]";
 		return result;
 	}
