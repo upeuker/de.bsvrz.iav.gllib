@@ -288,6 +288,21 @@ public class Ganglinie implements IGanglinie<Double> {
 	}
 
 	/**
+	 * Kopiert die St&uumltzstellen und das Approximationsverfahren. Der Wert
+	 * f&uuml;r {@code approximationAktuell} wird auf false gesetzt.
+	 * 
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Ganglinie clone() {
+		Ganglinie g;
+
+		g = new Ganglinie(stuetzstellen);
+		g.setApproximation(approximation);
+		return g;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 * 
 	 * @see java.lang.Object#toString()

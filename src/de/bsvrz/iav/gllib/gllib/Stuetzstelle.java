@@ -26,6 +26,9 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
+import java.text.DateFormat;
+import java.util.Date;
+
 /**
  * Repr&auml;sentiert eine allgemeine St&uuml;tzstelle f&uuml;r Ganglinien
  * bestehend aus Zeitstempel und Wert. Die St&uuml;tzstellen k&ouml;nnen nach
@@ -146,8 +149,10 @@ public class Stuetzstelle<T> implements Comparable<Stuetzstelle<T>> {
 	 */
 	@Override
 	public String toString() {
-		return getClass().getSimpleName() + "[zeitstempel=" + zeitstempel
-				+ ", wert=" + wert + "]";
+		return getClass().getSimpleName()
+				+ "[zeitstempel="
+				+ DateFormat.getDateTimeInstance()
+						.format(new Date(zeitstempel)) + ", wert=" + wert + "]";
 	}
 
 }

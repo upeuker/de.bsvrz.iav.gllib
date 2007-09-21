@@ -167,6 +167,8 @@ public class GanglinienMQOperationen {
 
 	/**
 	 * Verschiebt eine GanglinieMQ auf der Zeitachse.
+	 * <p>
+	 * <em>Hinweis:</em> Es wird die Ganglinie im Parameter verschoben.
 	 * 
 	 * @param g
 	 *            Zu verschiebende Ganglinie
@@ -175,24 +177,21 @@ public class GanglinienMQOperationen {
 	 * @return Die verschobene Ganglinie
 	 */
 	public static GanglinieMQ verschiebe(GanglinieMQ g, long offset) {
-		GanglinieMQ g0;
+		g.qKfz = GanglinienOperationen.verschiebe(g.qKfz, offset);
+		g.qLkw = GanglinienOperationen.verschiebe(g.qLkw, offset);
+		g.vPkw = GanglinienOperationen.verschiebe(g.vPkw, offset);
+		g.vLkw = GanglinienOperationen.verschiebe(g.vLkw, offset);
 
-		g0 = new GanglinieMQ();
-		g0.setMessQuerschnitt(g.getMessQuerschnitt());
-		g0.setApproximation(g.getApproximation());
-
-		g0.qKfz = GanglinienOperationen.verschiebe(g.qKfz, offset);
-		g0.qLkw = GanglinienOperationen.verschiebe(g.qLkw, offset);
-		g0.vPkw = GanglinienOperationen.verschiebe(g.vPkw, offset);
-		g0.vLkw = GanglinienOperationen.verschiebe(g.vLkw, offset);
-
-		return g0;
+		return g;
 	}
 
 	/**
 	 * Schneidet ein Intervall aus einer GanglinieMQ heraus. Existieren keine
 	 * St&uuml;tzstellen in den Intervallgrenzen, werden an diesen Stellen
 	 * mittels Approximation durch Polyline St&uuml;tzstellen hinzugef&uuml;gt.
+	 * <p>
+	 * <em>Hinweis:</em> Das Intervall wird aus der Ganglinie im Parameter
+	 * ausgeschnitten.
 	 * 
 	 * @param g
 	 *            Eine Ganglinie
@@ -201,18 +200,12 @@ public class GanglinienMQOperationen {
 	 * @return Der Intervallausschnitt
 	 */
 	public static GanglinieMQ auschneiden(GanglinieMQ g, Intervall i) {
-		GanglinieMQ g0;
+		g.qKfz = GanglinienOperationen.auschneiden(g.qKfz, i);
+		g.qLkw = GanglinienOperationen.auschneiden(g.qLkw, i);
+		g.vPkw = GanglinienOperationen.auschneiden(g.vPkw, i);
+		g.vLkw = GanglinienOperationen.auschneiden(g.vLkw, i);
 
-		g0 = new GanglinieMQ();
-		g0.setMessQuerschnitt(g.getMessQuerschnitt());
-		g0.setApproximation(g.getApproximation());
-
-		g0.qKfz = GanglinienOperationen.auschneiden(g.qKfz, i);
-		g0.qLkw = GanglinienOperationen.auschneiden(g.qLkw, i);
-		g0.vPkw = GanglinienOperationen.auschneiden(g.vPkw, i);
-		g0.vLkw = GanglinienOperationen.auschneiden(g.vLkw, i);
-
-		return g0;
+		return g;
 	}
 
 	/**

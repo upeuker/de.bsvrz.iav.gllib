@@ -82,9 +82,6 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	/** Datenkatalogkonstante f&uuml;r eine relative multiplikative Ganglinie. */
 	public static final int TYP_MULTIPLIKATIV = 2;
 
-	/** Konstante f&uuml;r den undefinierten Wert einer St&uuml;tzstelle. */
-	public static final int UNDEFINIERT = Integer.MIN_VALUE;
-
 	/** Der Messquerschnitt, zu dem die Ganglinie geh&ouml;rt. */
 	private MessQuerschnitt messQuerschnitt;
 
@@ -331,11 +328,11 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	/**
 	 * Legt den Messquerschnitt fest, auf den sich die Ganglinie bezieht.
 	 * 
-	 * @param mq
+	 * @param messQuerschnitt
 	 *            ein Messquerschnitt.
 	 */
-	public void setMessQuerschnitt(MessQuerschnitt mq) {
-		this.messQuerschnitt = mq;
+	public void setMessQuerschnitt(MessQuerschnitt messQuerschnitt) {
+		this.messQuerschnitt = messQuerschnitt;
 	}
 
 	/**
@@ -384,11 +381,11 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	 * Legt die Ordnung des B-Spline fest. Wird zur Approximation kein B-Spline
 	 * benutzt, wird der Wert ignoriert.
 	 * 
-	 * @param approxOrdnung
+	 * @param bSplineOrdnung
 	 *            die neue Ordnung des B-Spline.
 	 */
-	public void setBSplineOrdnung(byte approxOrdnung) {
-		this.bSplineOrdnung = approxOrdnung;
+	public void setBSplineOrdnung(byte bSplineOrdnung) {
+		this.bSplineOrdnung = bSplineOrdnung;
 		approximationAktuell = false;
 	}
 
@@ -411,26 +408,11 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	 * @see #setPrognoseZeitraum(Intervall)
 	 */
 	public Intervall getIntervall() {
-		Intervall intervall;
-
-		intervall = qKfz.getIntervall();
 		if (prognoseZeitraum != null) {
-			if (intervall != null) {
-				if (prognoseZeitraum.getStart() > intervall.getStart()) {
-					intervall = new Intervall(prognoseZeitraum.getStart(),
-							intervall.getEnde());
-
-				}
-				if (prognoseZeitraum.getEnde() < intervall.getEnde()) {
-					intervall = new Intervall(intervall.getStart(),
-							prognoseZeitraum.getEnde());
-
-				}
-			} else {
-				intervall = prognoseZeitraum;
-			}
+			return prognoseZeitraum;
 		}
-		return intervall;
+
+		return qKfz.getIntervall();
 	}
 
 	/**
@@ -523,25 +505,29 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 				feld.getItem(i).getScaledValue("QKfz").set(
 						s.getWert().getQKfz());
 			} else {
-				feld.getItem(i).getUnscaledValue("QKfz").set(UNDEFINIERT);
+				feld.getItem(i).getScaledValue("QKfz").set(
+						Messwerte.UNDEFINIERT);
 			}
 			if (s.getWert().getQLkw() != null) {
 				feld.getItem(i).getScaledValue("QLkw").set(
 						s.getWert().getQLkw());
 			} else {
-				feld.getItem(i).getUnscaledValue("QLkw").set(UNDEFINIERT);
+				feld.getItem(i).getScaledValue("QLkw").set(
+						Messwerte.UNDEFINIERT);
 			}
 			if (s.getWert().getVPkw() != null) {
 				feld.getItem(i).getScaledValue("VPkw").set(
 						s.getWert().getVPkw());
 			} else {
-				feld.getItem(i).getUnscaledValue("VPkw").set(UNDEFINIERT);
+				feld.getItem(i).getScaledValue("VPkw").set(
+						Messwerte.UNDEFINIERT);
 			}
 			if (s.getWert().getVLkw() != null) {
 				feld.getItem(i).getScaledValue("VLkw").set(
 						s.getWert().getVLkw());
 			} else {
-				feld.getItem(i).getUnscaledValue("VLkw").set(UNDEFINIERT);
+				feld.getItem(i).getScaledValue("VLkw").set(
+						Messwerte.UNDEFINIERT);
 			}
 		}
 	}
@@ -601,19 +587,19 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 
 			zeitstempel = feld.getItem(i).getTimeValue("Zeit").getMillis();
 			qKfz0 = feld.getItem(i).getScaledValue("QKfz").doubleValue();
-			if (qKfz0 == UNDEFINIERT) {
+			if (qKfz0 == Messwerte.UNDEFINIERT) {
 				qKfz0 = null;
 			}
 			qLkw0 = feld.getItem(i).getScaledValue("QLkw").doubleValue();
-			if (qLkw0 == UNDEFINIERT) {
+			if (qLkw0 == Messwerte.UNDEFINIERT) {
 				qLkw0 = null;
 			}
 			vPkw0 = feld.getItem(i).getScaledValue("VPkw").doubleValue();
-			if (vPkw0 == UNDEFINIERT) {
+			if (vPkw0 == Messwerte.UNDEFINIERT) {
 				vPkw0 = null;
 			}
 			vLkw0 = feld.getItem(i).getScaledValue("VLkw").doubleValue();
-			if (vLkw0 == UNDEFINIERT) {
+			if (vLkw0 == Messwerte.UNDEFINIERT) {
 				vLkw0 = null;
 			}
 			setStuetzstelle(zeitstempel, new Messwerte(qKfz0, qLkw0, vPkw0,
@@ -661,22 +647,22 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 			Double qKfz0, qLkw0, vPkw0, vLkw0;
 
 			zeitstempel = feld.getItem(i).getTimeValue("Zeit").getMillis();
-			if (feld.getItem(i).getUnscaledValue("QKfz").intValue() == UNDEFINIERT) {
+			if (feld.getItem(i).getScaledValue("QKfz").intValue() == Messwerte.UNDEFINIERT) {
 				qKfz0 = null;
 			} else {
 				qKfz0 = feld.getItem(i).getScaledValue("QKfz").doubleValue();
 			}
-			if (feld.getItem(i).getUnscaledValue("QLkw").intValue() == UNDEFINIERT) {
+			if (feld.getItem(i).getScaledValue("QLkw").intValue() == Messwerte.UNDEFINIERT) {
 				qLkw0 = null;
 			} else {
 				qLkw0 = feld.getItem(i).getScaledValue("QLkw").doubleValue();
 			}
-			if (feld.getItem(i).getUnscaledValue("VPkw").intValue() == UNDEFINIERT) {
+			if (feld.getItem(i).getScaledValue("VPkw").intValue() == Messwerte.UNDEFINIERT) {
 				vPkw0 = null;
 			} else {
 				vPkw0 = feld.getItem(i).getScaledValue("VPkw").doubleValue();
 			}
-			if (feld.getItem(i).getUnscaledValue("VLkw").intValue() == UNDEFINIERT) {
+			if (feld.getItem(i).getScaledValue("VLkw").intValue() == Messwerte.UNDEFINIERT) {
 				vLkw0 = null;
 			} else {
 				vLkw0 = feld.getItem(i).getScaledValue("VLkw").doubleValue();
@@ -894,12 +880,7 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	 * {@inheritDoc}
 	 */
 	public void setApproximation(Approximation approximation) {
-		if (approximation == null) {
-			qKfz.setApproximation(null);
-			qLkw.setApproximation(null);
-			vPkw.setApproximation(null);
-			vLkw.setApproximation(null);
-		} else if (approximation instanceof Polyline) {
+		if (approximation instanceof Polyline) {
 			approximationDaK = APPROX_POLYLINE;
 		} else if (approximation instanceof CubicSpline) {
 			approximationDaK = APPROX_CUBICSPLINE;
@@ -910,6 +891,38 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 			approximationDaK = APPROX_UNBESTIMMT;
 		}
 		approximationAktuell = false;
+	}
+
+	/**
+	 * Kopiert die St&uumltzstellen, das Approximationsverfahren und alle
+	 * anderen Eigenschaften bis auf {@code approximationAktuell}. Der Wert
+	 * f&uuml;r {@code approximationAktuell} wird auf false gesetzt.
+	 * 
+	 * {@inheritDoc}
+	 */
+	@Override
+	public GanglinieMQ clone() {
+		GanglinieMQ g;
+
+		g = new GanglinieMQ();
+		g.qKfz = new Ganglinie(qKfz.getStuetzstellen());
+		g.qLkw = new Ganglinie(qLkw.getStuetzstellen());
+		g.vPkw = new Ganglinie(vPkw.getStuetzstellen());
+		g.vLkw = new Ganglinie(vLkw.getStuetzstellen());
+		g.setAnzahlVerschmelzungen(anzahlVerschmelzungen);
+		g.setApproximationDaK(approximationDaK);
+		g.setBSplineOrdnung(bSplineOrdnung);
+		g.setEreignisTyp(ereignisTyp);
+		g.setK1(k1);
+		g.setK2(k2);
+		g.setLetzteVerschmelzung(letzteVerschmelzung);
+		g.setMessQuerschnitt(messQuerschnitt);
+		g.setPrognoseZeitraum(prognoseZeitraum);
+		g.setReferenz(referenz);
+		g.setTyp(typ);
+		g.approximationAktuell = false;
+
+		return g;
 	}
 
 	/**

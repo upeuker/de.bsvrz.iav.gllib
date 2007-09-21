@@ -45,6 +45,9 @@ import de.bsvrz.sys.funclib.bitctrl.util.dav.Umrechung;
  */
 public class Messwerte {
 
+	/** Konstante f&uuml;r einen undefinierten Wert. */
+	public static final double UNDEFINIERT = (double) Integer.MIN_VALUE / 1000;
+
 	/** Wert f&uuml;r die Verkehrsst&auml;rke der Lkw. */
 	private final Double qLkw;
 
@@ -71,8 +74,8 @@ public class Messwerte {
 		this.qLkw = null;
 		this.vPkw = null;
 		this.vLkw = null;
-		this.k1 = -1;
-		this.k2 = -1;
+		this.k1 = 2.0f;
+		this.k2 = 0.01f;
 	}
 
 	/**
@@ -88,12 +91,7 @@ public class Messwerte {
 	 *            Geschwindigkeit Lkw
 	 */
 	public Messwerte(Double qKfz, Double qLkw, Double vPkw, Double vLkw) {
-		this.qKfz = qKfz;
-		this.qLkw = qLkw;
-		this.vPkw = vPkw;
-		this.vLkw = vLkw;
-		k1 = -1;
-		k2 = -1;
+		this(qKfz, qLkw, vPkw, vLkw, 2.0f, 0.01f);
 	}
 
 	/**
@@ -114,10 +112,29 @@ public class Messwerte {
 	 */
 	Messwerte(Double qKfz, Double qLkw, Double vPkw, Double vLkw, float k1,
 			float k2) {
-		this.qKfz = qKfz;
-		this.qLkw = qLkw;
-		this.vPkw = vPkw;
-		this.vLkw = vLkw;
+		if (qKfz != null && !qKfz.equals(UNDEFINIERT)) {
+			this.qKfz = qKfz;
+		} else {
+			this.qKfz = null;
+		}
+		if (qLkw != null && !qLkw.equals(UNDEFINIERT)) {
+			this.qLkw = qLkw;
+		} else {
+			this.qLkw = null;
+		}
+
+		if (vPkw != null && !vPkw.equals(UNDEFINIERT)) {
+			this.vPkw = vPkw;
+		} else {
+			this.vPkw = null;
+		}
+
+		if (vLkw != null && !vLkw.equals(UNDEFINIERT)) {
+			this.vLkw = vLkw;
+		} else {
+			this.vLkw = null;
+		}
+
 		this.k1 = k1;
 		this.k2 = k2;
 	}
@@ -243,9 +260,9 @@ public class Messwerte {
 	 */
 	@Override
 	public String toString() {
-		return getClass().getSimpleName() + "[QKfz=" + qKfz + ", QPkw=" + getQPkw()
-				+ ", QLkw=" + qLkw + ", VKfz=" + getVKfz() + ", VPkw=" + vPkw
-				+ ", VLkw=" + vLkw + ", QB=" + getQB() + "]";
+		return getClass().getSimpleName() + "[QKfz=" + qKfz + ", QPkw="
+				+ getQPkw() + ", QLkw=" + qLkw + ", VKfz=" + getVKfz()
+				+ ", VPkw=" + vPkw + ", VLkw=" + vLkw + ", QB=" + getQB() + "]";
 	}
 
 }

@@ -28,8 +28,10 @@ package de.bsvrz.iav.gllib.gllib;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.SortedMap;
 import java.util.SortedSet;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Map.Entry;
 
@@ -219,6 +221,8 @@ public class GanglinienOperationen {
 
 	/**
 	 * Verschiebt eine Ganglinie auf der Zeitachse.
+	 * <p>
+	 * <em>Hinweis:</em> Es wird die Ganglinie im Parameter verschoben.
 	 * 
 	 * @param g
 	 *            Zu verschiebende Ganglinie
@@ -227,20 +231,23 @@ public class GanglinienOperationen {
 	 * @return Die verschobene Ganglinie
 	 */
 	public static Ganglinie verschiebe(Ganglinie g, long offset) {
-		Ganglinie v;
+		SortedMap<Long, Double> stuetzstellen;
 
-		v = new Ganglinie();
+		stuetzstellen = new TreeMap<Long, Double>();
 		for (long t : g.stuetzstellen.keySet()) {
-			v.setStuetzstelle(t + offset, g.stuetzstellen.get(t));
+			stuetzstellen.put(t + offset, g.stuetzstellen.get(t));
 		}
-
-		return v;
+		g.stuetzstellen = stuetzstellen;
+		return g;
 	}
 
 	/**
 	 * Schneidet ein Intervall aus einer Ganglinie heraus. Existieren keine
 	 * St&uuml;tzstellen in den Intervallgrenzen, werden an diesen Stellen
 	 * mittels Approximation durch Polyline St&uuml;tzstellen hinzugef&uuml;gt.
+	 * <p>
+	 * <em>Hinweis:</em> Das Intervall wird aus der Ganglinie im Parameter
+	 * ausgeschnitten.
 	 * 
 	 * @param g
 	 *            Eine Ganglinie
@@ -249,25 +256,33 @@ public class GanglinienOperationen {
 	 * @return Der Intervallausschnitt
 	 */
 	public static Ganglinie auschneiden(Ganglinie g, Intervall i) {
-		Ganglinie a;
 		Polyline p;
-		SortedMap<Long, Double> teilintervall;
 
-		teilintervall = g.stuetzstellen.subMap(i.start, i.ende + 1);
-		a = new Ganglinie(teilintervall);
 		p = new Polyline();
 		p.setStuetzstellen(g.getStuetzstellen());
 		p.initialisiere();
 
-		if (!a.existsStuetzstelle(i.start)) {
-			a.setStuetzstelle(p.get(i.start));
+		// Stützstellen an den beiden Schnittpunkten ergänzen, falls nötig
+		if (!g.existsStuetzstelle(i.start)) {
+			g.setStuetzstelle(p.get(i.start));
+		}
+		if (!g.existsStuetzstelle(i.ende)) {
+			g.setStuetzstelle(p.get(i.ende));
 		}
 
-		if (!a.existsStuetzstelle(i.ende)) {
-			a.setStuetzstelle(p.get(i.ende));
+		// Stützstellen außerhalb des Intervalls entfernen
+		Iterator<Entry<Long, Double>> iterator;
+		iterator = g.stuetzstellen.entrySet().iterator();
+		while (iterator.hasNext()) {
+			long t;
+
+			t = iterator.next().getKey();
+			if (!i.isEnthalten(t)) {
+				iterator.remove();
+			}
 		}
 
-		return a;
+		return g;
 
 	}
 
@@ -295,9 +310,15 @@ public class GanglinienOperationen {
 		g = new Ganglinie(g1.stuetzstellen);
 		for (long t : g2.stuetzstellen.keySet()) {
 			if (g.existsStuetzstelle(t)) {
+				Double d1, d2;
 
-				g.setStuetzstelle(t, (g.getStuetzstelle(t).getWert() + g2
-						.getStuetzstelle(t).getWert()) / 2);
+				d1 = g.getStuetzstelle(t).getWert();
+				d2 = g2.getStuetzstelle(t).getWert();
+				if (d1 != null && d2 != null) {
+					g.setStuetzstelle(t, (d1 + d2) / 2);
+				} else {
+					g.setStuetzstelle(t, null);
+				}
 			} else {
 				g.setStuetzstelle(g2.getStuetzstelle(t));
 			}
