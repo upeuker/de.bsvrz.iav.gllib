@@ -32,7 +32,7 @@ import java.util.Collection;
 import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.Data.Array;
 import de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ;
-import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnitt;
+import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnittAllgemein;
 
 /**
  * Hilfsklasse zum Bearbeiten aller Ganglinien eines Messquerschnitts. Alle
@@ -54,7 +54,7 @@ public class GanglinienListe extends ArrayList<GanglinieMQ> {
 	private static final long serialVersionUID = 1L;
 
 	/** Merkt sichden Messquerschnitt zu dem die Ganglinien geh&ouml;ren. */
-	private final MessQuerschnitt messQuerschnitt;
+	private final MessQuerschnittAllgemein messQuerschnitt;
 
 	/**
 	 * Konstruiert die Ganglinienliste.
@@ -62,7 +62,7 @@ public class GanglinienListe extends ArrayList<GanglinieMQ> {
 	 * @param messQuerschnitt
 	 *            der Messquerschnitt dessen Ganglinien verwaltet werden.
 	 */
-	public GanglinienListe(MessQuerschnitt messQuerschnitt) {
+	public GanglinienListe(MessQuerschnittAllgemein messQuerschnitt) {
 		this.messQuerschnitt = messQuerschnitt;
 	}
 
@@ -72,7 +72,7 @@ public class GanglinienListe extends ArrayList<GanglinieMQ> {
 	 * 
 	 * @return ein Messquerschnitt.
 	 */
-	public MessQuerschnitt getMessQuerschnitt() {
+	public MessQuerschnittAllgemein getMessQuerschnitt() {
 		return messQuerschnitt;
 	}
 

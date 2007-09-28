@@ -34,7 +34,7 @@ import java.util.Set;
 import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.Data.Array;
 import de.bsvrz.dav.daf.main.config.ClientApplication;
-import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnitt;
+import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnittAllgemein;
 
 /**
  * Repr&auml;sentuiert eine Anfrage an die Ganglinienprognose.
@@ -112,10 +112,10 @@ public class GlProgAnfrageNachricht {
 	 * 
 	 * @return eine Menge von Messquerschnitten.
 	 */
-	public Set<MessQuerschnitt> getMessquerschnitte() {
-		Set<MessQuerschnitt> menge;
+	public Set<MessQuerschnittAllgemein> getMessquerschnitte() {
+		Set<MessQuerschnittAllgemein> menge;
 
-		menge = new HashSet<MessQuerschnitt>();
+		menge = new HashSet<MessQuerschnittAllgemein>();
 		for (GlProgAnfrage a : anfragen) {
 			menge.add(a.getMessQuerschnitt());
 		}

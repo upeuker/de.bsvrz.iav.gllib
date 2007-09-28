@@ -33,7 +33,7 @@ import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.Data.Array;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
 import de.bsvrz.sys.funclib.bitctrl.modell.kalender.EreignisTyp;
-import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnitt;
+import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnittAllgemein;
 import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
 
 /**
@@ -46,7 +46,7 @@ import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
 public class GlProgAnfrage {
 
 	/** Messquerschnitt f&uuml;r den eine Ganglinie angefragt wird. */
-	private MessQuerschnitt messQuerschnitt;
+	private MessQuerschnittAllgemein messQuerschnitt;
 
 	/** Der Zeitraum in f&uuml;r den die Ganglinie bestimmt werden soll. */
 	private Intervall prognoseZeitraum;
@@ -98,7 +98,7 @@ public class GlProgAnfrage {
 	 *            Sp&auml;testens nach dieser Zeit in Sekunden Prognose
 	 *            publizieren.
 	 */
-	public GlProgAnfrage(MessQuerschnitt mq, Intervall prognoseZeitraum,
+	public GlProgAnfrage(MessQuerschnittAllgemein mq, Intervall prognoseZeitraum,
 			boolean nurLangfristigeAuswahl, boolean zyklischePrognose,
 			long pruefIntervall, double schwelle, long sendeIntervall) {
 		this();
@@ -142,7 +142,7 @@ public class GlProgAnfrage {
 	 * @param nurLangfristigeAuswahl
 	 *            Nur Auswahlverfahren der langfristigen Prognose benutzen?
 	 */
-	public GlProgAnfrage(MessQuerschnitt mq, Intervall prognoseZeitraum,
+	public GlProgAnfrage(MessQuerschnittAllgemein mq, Intervall prognoseZeitraum,
 			boolean nurLangfristigeAuswahl) {
 		this(mq, prognoseZeitraum, nurLangfristigeAuswahl, false, 1, 0, 1);
 	}
@@ -197,7 +197,7 @@ public class GlProgAnfrage {
 	 * 
 	 * @return Ein Messquerschnitt
 	 */
-	public MessQuerschnitt getMessQuerschnitt() {
+	public MessQuerschnittAllgemein getMessQuerschnitt() {
 		return messQuerschnitt;
 	}
 
@@ -332,7 +332,7 @@ public class GlProgAnfrage {
 	public void setDaten(Data daten) {
 		Array feld;
 
-		messQuerschnitt = (MessQuerschnitt) ObjektFactory.getModellobjekt(daten
+		messQuerschnitt = (MessQuerschnittAllgemein) ObjektFactory.getModellobjekt(daten
 				.getReferenceValue("Messquerschnitt").getSystemObject());
 		prognoseZeitraum = new Intervall(daten.getTimeValue(
 				"ZeitpunktPrognoseBeginn").getMillis(), daten.getTimeValue(

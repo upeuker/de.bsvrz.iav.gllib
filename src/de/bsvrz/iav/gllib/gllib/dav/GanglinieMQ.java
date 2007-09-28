@@ -44,7 +44,7 @@ import de.bsvrz.iav.gllib.gllib.Polyline;
 import de.bsvrz.iav.gllib.gllib.Stuetzstelle;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
 import de.bsvrz.sys.funclib.bitctrl.modell.kalender.EreignisTyp;
-import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnitt;
+import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnittAllgemein;
 import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
 
 /**
@@ -83,7 +83,7 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	public static final int TYP_MULTIPLIKATIV = 2;
 
 	/** Der Messquerschnitt, zu dem die Ganglinie geh&ouml;rt. */
-	private MessQuerschnitt messQuerschnitt;
+	private MessQuerschnittAllgemein messQuerschnitt;
 
 	/** Parameter f&uuml;r die Berechnung von QB. Standard ist 2,0. */
 	private float k1 = 2.0f;
@@ -183,7 +183,7 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	 * 
 	 * @return ein Messquerschnitt.
 	 */
-	public MessQuerschnitt getMessQuerschnitt() {
+	public MessQuerschnittAllgemein getMessQuerschnitt() {
 		return messQuerschnitt;
 	}
 
@@ -331,7 +331,7 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	 * @param messQuerschnitt
 	 *            ein Messquerschnitt.
 	 */
-	public void setMessQuerschnitt(MessQuerschnitt messQuerschnitt) {
+	public void setMessQuerschnitt(MessQuerschnittAllgemein messQuerschnitt) {
 		this.messQuerschnitt = messQuerschnitt;
 	}
 
@@ -758,7 +758,7 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	public void setDatenVonPrognoseGanglinie(Data daten) {
 		Array feld;
 
-		messQuerschnitt = (MessQuerschnitt) ObjektFactory.getModellobjekt(daten
+		messQuerschnitt = (MessQuerschnittAllgemein) ObjektFactory.getModellobjekt(daten
 				.getReferenceValue("Messquerschnitt").getSystemObject());
 
 		// Verfahren

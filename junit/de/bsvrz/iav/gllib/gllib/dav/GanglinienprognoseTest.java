@@ -30,7 +30,7 @@ import de.bsvrz.dav.daf.main.ClientDavInterface;
 import de.bsvrz.sys.funclib.application.StandardApplication;
 import de.bsvrz.sys.funclib.application.StandardApplicationRunner;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
-import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnitt;
+import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnittAllgemein;
 import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
 import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
 
@@ -61,9 +61,9 @@ public class GanglinienprognoseTest implements StandardApplication,
 	public void initialize(ClientDavInterface connection) throws Exception {
 		Ganglinienprognose prognose;
 		GlProgAnfrageNachricht anfrage;
-		MessQuerschnitt mq;
+		MessQuerschnittAllgemein mq;
 
-		mq = (MessQuerschnitt) ObjektFactory.getModellobjekt(connection
+		mq = (MessQuerschnittAllgemein) ObjektFactory.getModellobjekt(connection
 				.getDataModel().getObject("mq.a14.0001"));
 		prognose = new Ganglinienprognose(connection);
 		prognose.addAntwortListener(this);
@@ -91,7 +91,7 @@ public class GanglinienprognoseTest implements StandardApplication,
 	 * {@inheritDoc}
 	 */
 	public void antwortEingetroffen(GlProgAntwortEvent e) {
-		for (MessQuerschnitt mq : e.getMessquerschnitte()) {
+		for (MessQuerschnittAllgemein mq : e.getMessquerschnitte()) {
 			System.out.println(e.getPrognose(mq));
 		}
 		System.exit(0);

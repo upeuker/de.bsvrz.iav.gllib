@@ -35,7 +35,7 @@ import java.util.Set;
 import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.Data.Array;
 import de.bsvrz.dav.daf.main.config.ClientApplication;
-import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnitt;
+import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnittAllgemein;
 
 /**
  * Repr&auml;sentiert eine Antwortnachricht der Ganglinienprognose. Enthalten
@@ -58,7 +58,7 @@ public class GlProgAntwortEvent extends EventObject {
 	private String absenderZeichen;
 
 	/** Hash zum einfachen auffinden der passenden Ganglinie. */
-	private final Map<MessQuerschnitt, GanglinieMQ> prognosen;
+	private final Map<MessQuerschnittAllgemein, GanglinieMQ> prognosen;
 
 	/**
 	 * Initialisiert interne Felder.
@@ -71,7 +71,7 @@ public class GlProgAntwortEvent extends EventObject {
 	public GlProgAntwortEvent(Object quelle, ClientApplication anfrager) {
 		super(quelle);
 		this.anfrager = anfrager;
-		prognosen = new HashMap<MessQuerschnitt, GanglinieMQ>();
+		prognosen = new HashMap<MessQuerschnittAllgemein, GanglinieMQ>();
 	}
 
 	/**
@@ -101,7 +101,7 @@ public class GlProgAntwortEvent extends EventObject {
 	 * 
 	 * @return eine Menge von Messquerschnitten.
 	 */
-	public Set<MessQuerschnitt> getMessquerschnitte() {
+	public Set<MessQuerschnittAllgemein> getMessquerschnitte() {
 		return prognosen.keySet();
 	}
 
@@ -112,7 +112,7 @@ public class GlProgAntwortEvent extends EventObject {
 	 *            ein Messquerschnitt.
 	 * @return die Prognoseganglinie des Messquerschnitts.
 	 */
-	public GanglinieMQ getPrognose(MessQuerschnitt mq) {
+	public GanglinieMQ getPrognose(MessQuerschnittAllgemein mq) {
 		GanglinieMQ ganglinie;
 
 		ganglinie = prognosen.get(mq);
