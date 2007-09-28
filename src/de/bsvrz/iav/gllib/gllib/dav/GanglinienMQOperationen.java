@@ -249,10 +249,10 @@ public class GanglinienMQOperationen {
 	 *            Zweite Ganglinie
 	 * @return Abstand nach dem Basisabstandsverfahren
 	 */
-	public static double basisabstand(GanglinieMQ g1, GanglinieMQ g2) {
+	public static int basisabstand(GanglinieMQ g1, GanglinieMQ g2) {
 		assert g1.getMessQuerschnitt().equals(g2.getMessQuerschnitt()) : "Die Ganglinien müssen zum gleichen Messquerschnitt gehören.";
 
-		double fehlerQKfz, fehlerQLkw, fehlerVPkw, fehlerVLkw;
+		int fehlerQKfz, fehlerQLkw, fehlerVPkw, fehlerVLkw;
 
 		fehlerQKfz = GanglinienOperationen.basisabstand(g1.qKfz, g2.qKfz);
 		fehlerQLkw = GanglinienOperationen.basisabstand(g1.qLkw, g2.qLkw);
@@ -275,11 +275,11 @@ public class GanglinienMQOperationen {
 	 *            Anzahl der zu vergleichenden Intervalle
 	 * @return Abstand nach dem komplexen Abstandsverfahren
 	 */
-	public static double komplexerAbstand(GanglinieMQ g1, GanglinieMQ g2,
+	public static int komplexerAbstand(GanglinieMQ g1, GanglinieMQ g2,
 			int intervalle) {
 		assert g1.getMessQuerschnitt().equals(g2.getMessQuerschnitt()) : "Die Ganglinien müssen zum gleichen Messquerschnitt gehören.";
 
-		double fehlerQKfz, fehlerQLkw, fehlerVPkw, fehlerVLkw;
+		int fehlerQKfz, fehlerQLkw, fehlerVPkw, fehlerVLkw;
 
 		fehlerQKfz = GanglinienOperationen.komplexerAbstand(g1.qKfz, g2.qKfz,
 				intervalle);
@@ -306,11 +306,11 @@ public class GanglinienMQOperationen {
 	 *            die Breite der zu vergleichenden Intervalle.
 	 * @return Abstand nach dem komplexen Abstandsverfahren
 	 */
-	public static double komplexerAbstand(GanglinieMQ g1, GanglinieMQ g2,
+	public static int komplexerAbstand(GanglinieMQ g1, GanglinieMQ g2,
 			long intervallBreite) {
 		assert g1.getMessQuerschnitt().equals(g2.getMessQuerschnitt()) : "Die Ganglinien müssen zum gleichen Messquerschnitt gehören.";
 
-		double fehlerQKfz, fehlerQLkw, fehlerVPkw, fehlerVLkw;
+		int fehlerQKfz, fehlerQLkw, fehlerVPkw, fehlerVLkw;
 
 		fehlerQKfz = GanglinienOperationen.komplexerAbstand(g1.qKfz, g2.qKfz,
 				intervallBreite);
@@ -407,7 +407,7 @@ public class GanglinienMQOperationen {
 	 * @return das Ergebnis der Verschmelzung.
 	 */
 	public static GanglinieMQ verschmelze(GanglinieMQ ganglinie,
-			GanglinieMQ historGl, int gewicht) {
+			GanglinieMQ historGl, long gewicht) {
 		assert ganglinie.getMessQuerschnitt().equals(
 				historGl.getMessQuerschnitt()) : "Die Ganglinien müssen zum gleichen Messquerschnitt gehören.";
 

@@ -334,9 +334,9 @@ public class GanglinienOperationen {
 	 *            Erste Ganglinie
 	 * @param g2
 	 *            Zweite Ganglinie
-	 * @return Abstand nach dem Basisabstandsverfahren
+	 * @return Abstand nach dem Basisabstandsverfahren in Prozent.
 	 */
-	public static double basisabstand(Ganglinie g1, Ganglinie g2) {
+	public static int basisabstand(Ganglinie g1, Ganglinie g2) {
 		Polyline p1, p2;
 		Queue<Long> zeitstempel;
 		double fehler, summe;
@@ -384,9 +384,9 @@ public class GanglinienOperationen {
 			}
 		}
 		fehler = (fehler * 100)
-				/ (Math.sqrt(summe / (zeitstempel.size() / undefinierte)));
+				/ (Math.sqrt(summe / (zeitstempel.size() - undefinierte)));
 
-		return fehler;
+		return (int) Math.round(fehler);
 	}
 
 	/**
@@ -400,9 +400,9 @@ public class GanglinienOperationen {
 	 *            Zweite Ganglinie.
 	 * @param intervalle
 	 *            die Anzahl der zu vergleichenden Intervalle.
-	 * @return Abstand nach dem komplexen Abstandsverfahren
+	 * @return Abstand nach dem komplexen Abstandsverfahren in Prozent.
 	 */
-	public static double komplexerAbstand(Ganglinie g1, Ganglinie g2,
+	public static int komplexerAbstand(Ganglinie g1, Ganglinie g2,
 			int intervalle) {
 		long start, ende, breite;
 
@@ -433,14 +433,15 @@ public class GanglinienOperationen {
 	 *            Zweite Ganglinie.
 	 * @param intervallBreite
 	 *            die Breite der zu vergleichenden Intervalle.
-	 * @return Abstand nach dem komplexen Abstandsverfahren
+	 * @return Abstand nach dem komplexen Abstandsverfahren in Prozent.
 	 */
-	public static double komplexerAbstand(Ganglinie g1, Ganglinie g2,
+	public static int komplexerAbstand(Ganglinie g1, Ganglinie g2,
 			long intervallBreite) {
 		Polyline p1, p2;
 		List<Long> zeitstempel;
-		double fehler, summe, x;
+		double fehler, summe;
 		long start, ende;
+		int undefinierte;
 
 		p1 = new Polyline();
 		p1.setStuetzstellen(g1.getStuetzstellen());
@@ -470,21 +471,36 @@ public class GanglinienOperationen {
 
 		// Quadratischen Fehler bestimmen
 		summe = 0;
+		undefinierte = 0;
 		for (long z : zeitstempel) {
-			x = p2.get(z).getWert() - p1.get(z).getWert();
-			summe += x * x;
+			if (p1.get(z).getWert() != null && p2.get(z).getWert() != null) {
+				double x;
+
+				x = p2.get(z).getWert() - p1.get(z).getWert();
+				summe += x * x;
+			} else {
+				undefinierte++;
+			}
 		}
-		fehler = Math.sqrt(summe / zeitstempel.size());
+		fehler = Math.sqrt(summe / (zeitstempel.size() - undefinierte));
 
 		// Prozentualen Fehler bestimmen
 		summe = 0;
+		undefinierte = 0;
 		for (long z : zeitstempel) {
-			x = (p1.get(z).getWert() + p2.get(z).getWert()) / 2;
-			summe += x * x;
-		}
-		fehler = (fehler * 100) / (Math.sqrt(summe / zeitstempel.size()));
+			if (p1.get(z).getWert() != null && p2.get(z).getWert() != null) {
+				double x;
 
-		return fehler;
+				x = (p1.get(z).getWert() + p2.get(z).getWert()) / 2;
+				summe += x * x;
+			} else {
+				undefinierte++;
+			}
+		}
+		fehler = (fehler * 100)
+				/ (Math.sqrt(summe / (zeitstempel.size() - undefinierte)));
+
+		return (int) Math.round(fehler);
 	}
 
 	/**
@@ -566,7 +582,7 @@ public class GanglinienOperationen {
 	 * 
 	 * @return das Ergebnis der Verschmelzung.
 	 */
-	public static Ganglinie verschmelze(Ganglinie g1, Ganglinie g2, int gewicht) {
+	public static Ganglinie verschmelze(Ganglinie g1, Ganglinie g2, long gewicht) {
 		Ganglinie g;
 		Polyline p1, p2;
 		Queue<Long> zeitstempel;

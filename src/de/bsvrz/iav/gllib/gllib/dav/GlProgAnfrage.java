@@ -98,9 +98,10 @@ public class GlProgAnfrage {
 	 *            Sp&auml;testens nach dieser Zeit in Sekunden Prognose
 	 *            publizieren.
 	 */
-	public GlProgAnfrage(MessQuerschnittAllgemein mq, Intervall prognoseZeitraum,
-			boolean nurLangfristigeAuswahl, boolean zyklischePrognose,
-			long pruefIntervall, double schwelle, long sendeIntervall) {
+	public GlProgAnfrage(MessQuerschnittAllgemein mq,
+			Intervall prognoseZeitraum, boolean nurLangfristigeAuswahl,
+			boolean zyklischePrognose, long pruefIntervall, double schwelle,
+			long sendeIntervall) {
 		this();
 
 		if (mq == null) {
@@ -142,8 +143,8 @@ public class GlProgAnfrage {
 	 * @param nurLangfristigeAuswahl
 	 *            Nur Auswahlverfahren der langfristigen Prognose benutzen?
 	 */
-	public GlProgAnfrage(MessQuerschnittAllgemein mq, Intervall prognoseZeitraum,
-			boolean nurLangfristigeAuswahl) {
+	public GlProgAnfrage(MessQuerschnittAllgemein mq,
+			Intervall prognoseZeitraum, boolean nurLangfristigeAuswahl) {
 		this(mq, prognoseZeitraum, nurLangfristigeAuswahl, false, 1, 0, 1);
 	}
 
@@ -161,7 +162,8 @@ public class GlProgAnfrage {
 	 * F&uuml;gt einen Ereignistyp der Filterliste hinzu.
 	 * 
 	 * @param typ
-	 *            ein Ereignistyp
+	 *            ein Ereignistyp der bei der Ganglinienprognose ignoriert
+	 *            werden soll.
 	 * @return {@code true}, wenn der Typ hinzugef&uuml;gt wurde und
 	 *         {@code false}, wenn er bereits enthalten war.
 	 */
@@ -173,7 +175,8 @@ public class GlProgAnfrage {
 	 * Entfernt einen Ereignistyp aus der Filterliste.
 	 * 
 	 * @param typ
-	 *            ein Ereignistyp
+	 *            ein Ereignistyp der bei der Ganglinienprognose ignoriert
+	 *            werden soll.
 	 * @return {@code true}, wenn der Typ enthalten war und {@code false},
 	 *         wenn er bereits enthalten war.
 	 */
@@ -332,8 +335,9 @@ public class GlProgAnfrage {
 	public void setDaten(Data daten) {
 		Array feld;
 
-		messQuerschnitt = (MessQuerschnittAllgemein) ObjektFactory.getModellobjekt(daten
-				.getReferenceValue("Messquerschnitt").getSystemObject());
+		messQuerschnitt = (MessQuerschnittAllgemein) ObjektFactory
+				.getModellobjekt(daten.getReferenceValue("Messquerschnitt")
+						.getSystemObject());
 		prognoseZeitraum = new Intervall(daten.getTimeValue(
 				"ZeitpunktPrognoseBeginn").getMillis(), daten.getTimeValue(
 				"ZeitpunktPrognoseEnde").getMillis());

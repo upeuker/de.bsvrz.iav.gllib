@@ -758,8 +758,9 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	public void setDatenVonPrognoseGanglinie(Data daten) {
 		Array feld;
 
-		messQuerschnitt = (MessQuerschnittAllgemein) ObjektFactory.getModellobjekt(daten
-				.getReferenceValue("Messquerschnitt").getSystemObject());
+		messQuerschnitt = (MessQuerschnittAllgemein) ObjektFactory
+				.getModellobjekt(daten.getReferenceValue("Messquerschnitt")
+						.getSystemObject());
 
 		// Verfahren
 		switch (daten.getUnscaledValue("GanglinienVerfahren").intValue()) {

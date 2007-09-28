@@ -27,8 +27,10 @@
 package de.bsvrz.iav.gllib.gllib.dav;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 
 import javax.swing.event.EventListenerList;
 
@@ -88,6 +90,9 @@ public class Ganglinienprognose {
 
 		/** Datenbeschreibung, mit der Antworten empfangen werden. */
 		private final DataDescription dbsAntwort;
+
+		/** Verwaltet die Anmeldungen als Senke der Antworten. */
+		private final List<SystemObject> anmeldungen = new ArrayList<SystemObject>();
 
 		/** D&uuml;rfen Anfragen gesendet werden? */
 		private boolean sendenErlaubt;
@@ -158,12 +163,16 @@ public class Ganglinienprognose {
 
 				// Als Empfänger der Antwort anmelden
 				so = anfrage.getAbsender();
-				verbindung.subscribeReceiver(this, so, dbsAntwort,
-						ReceiveOptions.normal(), ReceiverRole.receiver());
-				kommLogger
-						.finer(
-								"Als Empfänger der Antwort angemeldet für die Anfrage von",
-								so);
+				synchronized (anmeldungen) {
+					if (!anmeldungen.contains(so)) {
+						verbindung.subscribeReceiver(this, so, dbsAntwort,
+								ReceiveOptions.normal(), ReceiverRole.drain());
+					}
+					anmeldungen.add(so);
+				}
+
+				kommLogger.finer("Als Empfänger der Antwort angemeldet für "
+						+ "die Anfrage von", so);
 
 				// Anfrage senden
 				daten = verbindung.createData(dbsAnfrage.getAttributeGroup());
@@ -219,10 +228,16 @@ public class Ganglinienprognose {
 			for (ResultData datensatz : results) {
 				if (datensatz.getDataDescription().equals(dbsAntwort)
 						&& datensatz.hasData()) {
-					kommLogger.finer("Prognoseantwort erhalten für die Anfrage von",
-							datensatz.getObject());
-					fireAntwort((ClientApplication) datensatz.getObject(),
-							datensatz.getData());
+					SystemObject so;
+
+					so = datensatz.getObject();
+					kommLogger.finer("Prognoseantwort erhalten für die "
+							+ "Anfrage von", so);
+					fireAntwort((ClientApplication) so, datensatz.getData());
+					synchronized (anmeldungen) {
+						anmeldungen.remove(so);
+						verbindung.unsubscribeReceiver(this, so, dbsAntwort);
+					}
 				}
 			}
 		}
@@ -238,13 +253,34 @@ public class Ganglinienprognose {
 	/** Die Kommunikationsinstanz. */
 	private final Kommunikation kommunikation;
 
+	/** Sichert die Liste des Singletons pro Datenverteilerverbindung. */
+	private static Map<ClientDavInterface, Ganglinienprognose> singleton;
+
+	/**
+	 * Gibt eine Ganglinienprognose als Singleton pro Datenverteilerverbindung
+	 * zur&uuml;ck.
+	 * 
+	 * @param verbindung
+	 *            eine Datenverteilerverbindung.
+	 * @return die Ganglinienprognose als Singleton.
+	 */
+	public static Ganglinienprognose getInstanz(ClientDavInterface verbindung) {
+		if (singleton == null) {
+			singleton = new HashMap<ClientDavInterface, Ganglinienprognose>();
+		}
+		if (!singleton.containsKey(verbindung)) {
+			singleton.put(verbindung, new Ganglinienprognose(verbindung));
+		}
+		return singleton.get(verbindung);
+	}
+
 	/**
 	 * Initialisiert den inneren Zustand.
 	 * 
 	 * @param verbindung
 	 *            die f&uuml;r Anfragen zu verwendende Datenverteilerverbindung.
 	 */
-	public Ganglinienprognose(ClientDavInterface verbindung) {
+	protected Ganglinienprognose(ClientDavInterface verbindung) {
 		kommunikation = new Kommunikation(verbindung);
 		listeners = new EventListenerList();
 		logger = Debug.getLogger();

@@ -50,9 +50,9 @@ public class GanglinienModellAutomatischesLernenEreignisParameterImpl implements
 	private long matchingIntervallNach;
 	private long matchingIntervallVor;
 	private long matchingSchrittweite;
-	private double maxAbstand;
+	private int maxAbstand;
 	private long maxGanglinien;
-	private double maxMatchingFehler;
+	private int maxMatchingFehler;
 	private int maxWichtungsfaktor;
 	private long vergleichsSchrittweite;
 
@@ -129,7 +129,7 @@ public class GanglinienModellAutomatischesLernenEreignisParameterImpl implements
 	 * 
 	 * @return the maxAbstand
 	 */
-	public double getMaxAbstand() {
+	public int getMaxAbstand() {
 		return maxAbstand;
 	}
 
@@ -147,7 +147,7 @@ public class GanglinienModellAutomatischesLernenEreignisParameterImpl implements
 	 * 
 	 * @return the maxMatchingFehler
 	 */
-	public double getMaxMatchingFehler() {
+	public int getMaxMatchingFehler() {
 		return maxMatchingFehler;
 	}
 
@@ -200,11 +200,10 @@ public class GanglinienModellAutomatischesLernenEreignisParameterImpl implements
 				.getUnscaledValue("AlgMatchingIntervallVor").longValue() * 1000;
 		matchingSchrittweite = daten
 				.getUnscaledValue("AlgMatchingSchrittweite").longValue() * 1000;
-		maxAbstand = (double) daten.getUnscaledValue("AlgMaxAbstand")
-				.intValue() / 100;
+		maxAbstand = daten.getUnscaledValue("AlgMaxAbstand").intValue();
 		maxGanglinien = daten.getUnscaledValue("AlgMaxGanglinien").longValue();
-		maxMatchingFehler = (double) daten.getUnscaledValue(
-				"AlgMaxMatchingFehler").intValue() / 100;
+		maxMatchingFehler = daten.getUnscaledValue("AlgMaxMatchingFehler")
+				.intValue();
 		maxWichtungsfaktor = daten.getUnscaledValue("AlgMaxWichtungsfaktor")
 				.intValue();
 		vergleichsSchrittweite = daten.getUnscaledValue(

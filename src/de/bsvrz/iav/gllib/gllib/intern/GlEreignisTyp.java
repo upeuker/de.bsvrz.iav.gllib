@@ -102,10 +102,21 @@ public class GlEreignisTyp extends EreignisTyp implements EreignisTypParameter,
 	 */
 	@Override
 	public String toString() {
-		return getClass().getSimpleName() + "[name="
-				+ getSystemObject().getName() + ", pid="
-				+ getSystemObject().getPid() + ", prioritaet="
-				+ (parameter != null ? parameter.getPrioritaet() : null) + "]";
+		return getClass().getSimpleName()
+				+ "[name="
+				+ getSystemObject().getName()
+				+ ", pid="
+				+ getSystemObject().getPid()
+				+ ", prioritaet="
+				+ (parameter != null ? parameter.getPrioritaet() : null)
+				+ ", ganglinienTyp="
+				+ (lernParameter != null ? lernParameter.getGanglinienTyp()
+						: null)
+				+ ", maxAbstand="
+				+ (lernParameter != null ? lernParameter.getMaxAbstand() : null)
+				+ ", maxMatchingFehler="
+				+ (lernParameter != null ? lernParameter.getMaxMatchingFehler()
+						: null) + "]";
 	}
 
 	/**
@@ -176,7 +187,7 @@ public class GlEreignisTyp extends EreignisTyp implements EreignisTypParameter,
 	 * 
 	 * @see de.bsvrz.iav.gllib.gllib.intern.GanglinienModellAutomatischesLernenEreignisParameter#getMaxAbstand()
 	 */
-	public double getMaxAbstand() {
+	public int getMaxAbstand() {
 		return lernParameter.getMaxAbstand();
 	}
 
@@ -194,7 +205,7 @@ public class GlEreignisTyp extends EreignisTyp implements EreignisTypParameter,
 	 * 
 	 * @see de.bsvrz.iav.gllib.gllib.intern.GanglinienModellAutomatischesLernenEreignisParameter#getMaxMatchingFehler()
 	 */
-	public double getMaxMatchingFehler() {
+	public int getMaxMatchingFehler() {
 		return lernParameter.getMaxMatchingFehler();
 	}
 

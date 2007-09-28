@@ -74,7 +74,7 @@ public interface GanglinienModellAutomatischesLernenEreignisParameter {
 	 * @return der maximaler Abstand in Prozent beim komplexen
 	 *         Abstandsverfahren.
 	 */
-	double getMaxAbstand();
+	int getMaxAbstand();
 
 	/**
 	 * Gibt eine Liste von Ereignistypen zur&uuml;ck, auf die sich eine relative
@@ -90,7 +90,7 @@ public interface GanglinienModellAutomatischesLernenEreignisParameter {
 	 * 
 	 * @return der maximaler Abstand in Prozent beim Pattern-Matching.
 	 */
-	double getMaxMatchingFehler();
+	int getMaxMatchingFehler();
 
 	/**
 	 * Gibt die zu verwendende Schrittweite beim Pattern-Matching zur&uuml;ck.
