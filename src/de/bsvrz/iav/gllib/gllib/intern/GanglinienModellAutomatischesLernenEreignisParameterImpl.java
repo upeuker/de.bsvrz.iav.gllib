@@ -43,23 +43,63 @@ import de.bsvrz.sys.funclib.bitctrl.modell.kalender.EreignisTyp;
 public class GanglinienModellAutomatischesLernenEreignisParameterImpl implements
 		GanglinienModellAutomatischesLernenEreignisParameter {
 
-	private final List<EreignisTyp> ausschlussliste;
-	private final List<EreignisTyp> bezugsereignistypen;
-	private int darstellungsverfahren;
-	private int ganglinienTyp;
-	private long matchingIntervallNach;
-	private long matchingIntervallVor;
-	private long matchingSchrittweite;
-	private int maxAbstand;
-	private long maxGanglinien;
-	private int maxMatchingFehler;
-	private int maxWichtungsfaktor;
-	private long vergleichsSchrittweite;
+	/** Die Liste der Ausschlussereignistypen. */
+	private final List<EreignisTyp> ausschlussliste = new ArrayList<EreignisTyp>();
 
-	public GanglinienModellAutomatischesLernenEreignisParameterImpl() {
-		ausschlussliste = new ArrayList<EreignisTyp>();
-		bezugsereignistypen = new ArrayList<EreignisTyp>();
-	}
+	/** Die Liste der Bezugsereignistypen (nur f&uuml;r relative Ganglinien). */
+	private final List<EreignisTyp> bezugsereignistypen = new ArrayList<EreignisTyp>();
+
+	/**
+	 * Das Darstellungsverfahren der Ganglinie.
+	 * 
+	 * @see de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ#APPROX_BSPLINE
+	 * @see de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ#APPROX_CUBICSPLINE
+	 * @see de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ#APPROX_POLYLINE
+	 * @see de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ#APPROX_UNBESTIMMT
+	 */
+	private int darstellungsverfahren;
+
+	/**
+	 * Der Typ der Ganglinie.
+	 * 
+	 * @see de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ#TYP_ABSOLUT
+	 * @see de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ#TYP_ADDITIV
+	 * @see de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ#TYP_MULTIPLIKATIV
+	 */
+	private int ganglinienTyp;
+
+	/**
+	 * Das Intervall nach der Ganglinie, welches beim Pattern-Matching
+	 * einbezogen wird.
+	 */
+	private long matchingIntervallNach;
+
+	/**
+	 * Das Intervall vor der Ganglinie, welches beim Pattern-Matching einbezogen
+	 * wird.
+	 */
+	private long matchingIntervallVor;
+
+	/** Die Schrittweite die beim Pattern-Matching benutzt wird. */
+	private long matchingSchrittweite;
+
+	/** Der maximale Abstand, bei dem Ganglinien verschmolzen werden. */
+	private int maxAbstand;
+
+	/** Die maximale Anzahl von Ganglinien f&uuml;r den Ereignistyp. */
+	private long maxGanglinien;
+
+	/** Der maximal erlaubte Fehler beim Pattern-Matching. */
+	private int maxMatchingFehler;
+
+	/**
+	 * Der maximale Wichtungsfaktor der historischen Ganglinie beim
+	 * Verschmelzen.
+	 */
+	private int maxWichtungsfaktor;
+
+	/** Die Schrittweite beim Vergleichen mittels komplexer Abstandsberechnugn. */
+	private long vergleichsSchrittweite;
 
 	/**
 	 * Gibt den Wert der Eigenschaft ausschlussliste wieder.

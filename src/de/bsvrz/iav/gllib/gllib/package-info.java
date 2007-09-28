@@ -25,9 +25,7 @@
  */
 
 /**
- * Mit der Klasse {@link de.bsvrz.iav.gllib.gllib.dav.Ganglinienprognose}
- * k&ouml;nnen Anfragen an die Ganglinienprognose gestellt werden, ohne den
- * Datenkatalog kennen zu m&uuml;ssen.
+ * Allgemeine Ganglinienfunktionen ohne direkten Bezug zum Datenverteiler.
  */
-package de.bsvrz.iav.gllib.gllib.dav;
+package de.bsvrz.iav.gllib.gllib;
 

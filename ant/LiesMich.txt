@@ -29,20 +29,14 @@ sich in folgende Funktionsbereiche einteilen:
 Versionsgeschichte
 ==================
 
+1.1.0
+
+  - Umstellung auf neue Paketstruktur.
+  - Erweiterung des Funktionsumfangs für SWE 5.1 und 5.3.
+
 1.0.0
 
   - Erste Auslieferung
-  
-  
-Offene Punkte
-=============
-
- - Der Attributtyp zum sichern der Stützstellenwerte kann nicht einfach der
-   selbe Attributtyp sein wie vom Messwert. Für eine additive Ganglinie kann die
-   Differenz, also der Wert, auch negativ sein. Negative Werte sind jedoch für
-   Messwerte nicht erlaubt. Für eine multiplikative Ganglinie wird plus oder
-   minus 10% durch 1,10 bzw. 0,90 dargestellt. Gleit- oder Festkommazahlen sind
-   jedoch ebenfalls nicht erlaubt.
 
 
 Hinweise

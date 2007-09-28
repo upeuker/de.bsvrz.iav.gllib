@@ -24,29 +24,9 @@
  * mailto: info@bitctrl.de
  */
 
-package de.bsvrz.iav.gllib.gllib;
-
-import org.junit.Test;
-
-import de.bsvrz.sys.funclib.bitctrl.i18n.MessageHandler;
-import de.bsvrz.sys.funclib.bitctrl.i18n.Messages;
-
 /**
- * Testet den Message-Handler der Ganglinienbibliothek.
- * 
- * @author BitCtrl, Schumann
- * @version $Id$
+ * Interne Funktionen f&uuml;r die SWE 5.1 <em>Ganglinienprognose</em> und 5.3
+ * <em>Automatisches Lernen Ganglinien</em>.
  */
-public class TestGlLibMessages {
+package de.bsvrz.iav.gllib.gllib.intern;
 
-	/**
-	 * Testet ob alle Nachrichten-Konstanten eine Nachricht liefern.
-	 */
-	@Test
-	public void messages() {
-		for (MessageHandler e : GlLibMessages.values()) {
-			Messages.get(e);
-		}
-	}
-
-}
