@@ -31,6 +31,7 @@ import static org.junit.Assert.fail;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.List;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -49,6 +50,9 @@ import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
  * @version $Id$
  */
 public class PrSpezIAV {
+
+	/** Anzahl Millisekunden pro Minute. */
+	private static final long MILLIS_PER_MINUTE = 60 * 1000;
 
 	/** Protokolllogger. */
 	private final Logger logger;
@@ -89,7 +93,6 @@ public class PrSpezIAV {
 
 	/**
 	 * F&uuml;hrt den Testfall 6 "Cut-Operation" aus.
-	 * 
 	 */
 	@Test
 	public void testfall6() {
@@ -99,30 +102,72 @@ public class PrSpezIAV {
 		logger.config("Tesfall 6: Cut-Operation");
 
 		g = new Ganglinie();
-		g.setStuetzstelle(5, 35.0);
-		g.setStuetzstelle(15, 20.0);
-		g.setStuetzstelle(20, 30.0);
-		g.setStuetzstelle(35, 10.0);
-		g.setStuetzstelle(50, 25.0);
-		g.setStuetzstelle(65, 20.0);
-		g.setStuetzstelle(75, 30.0);
-		g.setStuetzstelle(80, 20.0);
+		g.setStuetzstelle(5 * MILLIS_PER_MINUTE, 35.0);
+		g.setStuetzstelle(15 * MILLIS_PER_MINUTE, 20.0);
+		g.setStuetzstelle(20 * MILLIS_PER_MINUTE, 30.0);
+		g.setStuetzstelle(35 * MILLIS_PER_MINUTE, 10.0);
+		g.setStuetzstelle(50 * MILLIS_PER_MINUTE, 25.0);
+		g.setStuetzstelle(65 * MILLIS_PER_MINUTE, 20.0);
+		g.setStuetzstelle(75 * MILLIS_PER_MINUTE, 30.0);
+		g.setStuetzstelle(80 * MILLIS_PER_MINUTE, 20.0);
 		logger.info("Verwende Ganglinie: " + g);
 
-		i = new Intervall(20, 70);
+		i = new Intervall(20 * MILLIS_PER_MINUTE, 70 * MILLIS_PER_MINUTE);
 		logger.info("Schneide Bereich aus: " + i);
 		g = GanglinienOperationen.auschneiden(g, i);
 		logger.info("Neue Ganglinie: " + g);
 
 		erg = new Ganglinie();
-		erg.setStuetzstelle(20, 30.0);
-		erg.setStuetzstelle(35, 10.0);
-		erg.setStuetzstelle(50, 25.0);
-		erg.setStuetzstelle(65, 20.0);
-		erg.setStuetzstelle(70, 25.0);
+		erg.setStuetzstelle(20 * MILLIS_PER_MINUTE, 30.0);
+		erg.setStuetzstelle(35 * MILLIS_PER_MINUTE, 10.0);
+		erg.setStuetzstelle(50 * MILLIS_PER_MINUTE, 25.0);
+		erg.setStuetzstelle(65 * MILLIS_PER_MINUTE, 20.0);
+		erg.setStuetzstelle(70 * MILLIS_PER_MINUTE, 25.0);
 
 		assertEquals(erg.getStuetzstellen(), g.getStuetzstellen());
 		logger.info("Testfall bestanden.");
 	}
 
+	/**
+	 * F&uuml;hrt Teile des Testfalls 8 "Automatisches Lernen" aus.
+	 * <p>
+	 * Getestet wird das Verschmelzen zweier Ganglinien. Da das Verschmelzen von
+	 * Messquerschnittsganglinien auf dem Verschmelzen von einfachen Ganglinien
+	 * beruht, wird nur letzteres getestet.
+	 */
+	@Test
+	public void testfall8() {
+		Ganglinie g1, g2, g;
+		List<Stuetzstelle<Double>> stuetzstellen;
+		final int gewicht;
+
+		logger.config("Tesfall 8: Automatisches Lernen (Verschmelzen)");
+
+		g1 = new Ganglinie();
+		g1.setStuetzstelle(10 * MILLIS_PER_MINUTE, 10.0);
+		g1.setStuetzstelle(20 * MILLIS_PER_MINUTE, 40.0);
+		g1.setStuetzstelle(30 * MILLIS_PER_MINUTE, 10.0);
+		g1.setStuetzstelle(40 * MILLIS_PER_MINUTE, 60.0);
+		g1.setStuetzstelle(50 * MILLIS_PER_MINUTE, 20.0);
+		logger.info("Ganglinie zum Verschmelzen: " + g1);
+
+		g2 = new Ganglinie();
+		g2.setStuetzstelle(10 * MILLIS_PER_MINUTE, 30.0);
+		g2.setStuetzstelle(20 * MILLIS_PER_MINUTE, 10.0);
+		g2.setStuetzstelle(30 * MILLIS_PER_MINUTE, 20.0);
+		g2.setStuetzstelle(40 * MILLIS_PER_MINUTE, 20.0);
+		g2.setStuetzstelle(50 * MILLIS_PER_MINUTE, 40.0);
+		gewicht = 3;
+		logger.info("Ursprungsganglinie mit Gewicht " + gewicht + ": " + g2);
+
+		g = GanglinienOperationen.verschmelze(g1, g2, gewicht);
+		logger.info("Neue Ganglinie: " + g);
+		stuetzstellen = g.getStuetzstellen();
+		assertEquals(25, stuetzstellen.get(0).getWert());
+		assertEquals(17.5, stuetzstellen.get(1).getWert());
+		assertEquals(17.5, stuetzstellen.get(2).getWert());
+		assertEquals(30, stuetzstellen.get(3).getWert());
+		assertEquals(35, stuetzstellen.get(4).getWert());
+		logger.info("Testfall bestanden.");
+	}
 }

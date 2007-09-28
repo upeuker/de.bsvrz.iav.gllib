@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE konfigurationsBereich PUBLIC "-//K2S//DTD Dokument//DE" "K2S.dtd">
+<konfigurationsBereich pid="kb.testEreignisTypObjekte" name="TestEreignisTypObjekte" verantwortlich="kv.aoe.bitctrl.tester">
+	<info>
+		<kurzinfo>Bereich mit einigen Ereignistypen.</kurzinfo>
+	</info>
+	<modell></modell>
+	<objekte>
+
+		<konfigurationsObjekt pid="ergTyp.montag" name="Montag" typ="typ.ereignisTyp">
+			<datensatz attributgruppe="atg.ereignisTypEigenschaften">
+				<datenfeld name="ZusätzlicheAttribute" />
+			</datensatz>
+			<defaultParameter attributgruppe="atg.ereignisTypParameter" typ="typ.ereignisTyp">
+				<datum name="EreignisTypPriorität" wert="10" />
+			</defaultParameter>
+			<defaultParameter attributgruppe="atg.ganglinienModellAutomatischesLernenEreignis" typ="typ.ereignisTyp">
+				<datenfeld name="AlgAusschlussliste"></datenfeld>
+				<datenfeld name="AlgBezugsereignistypen"></datenfeld>
+				<datum name="AlgDarstellungsverfahren" wert="1" />
+				<datum name="AlgGanglinienTyp" wert="0" />
+				<datum name="AlgMatchingIntervallNach" wert="0" />
+				<datum name="AlgMatchingIntervallVor" wert="0" />
+				<datum name="AlgMatchingSchrittweite" wert="60" />
+				<datum name="AlgMaxAbstand" wert="5%" />
+				<datum name="AlgMaxGanglinien" wert="20" />
+				<datum name="AlgMaxMatchingFehler" wert="5%" />
+				<datum name="AlgMaxWichtungsfaktor" wert="10" />
+				<datum name="AlgVergleichsSchrittweite" wert="600" />
+			</defaultParameter>
+		</konfigurationsObjekt>
+		<konfigurationsObjekt pid="ergTyp.dienstag" name="Dienstag" typ="typ.ereignisTyp">
+			<datensatz attributgruppe="atg.ereignisTypEigenschaften">
+				<datenfeld name="ZusätzlicheAttribute" />
+			</datensatz>
+			<defaultParameter attributgruppe="atg.ereignisTypParameter" typ="typ.ereignisTyp">
+				<datum name="EreignisTypPriorität" wert="10" />
+			</defaultParameter>
+			<defaultParameter attributgruppe="atg.ganglinienModellAutomatischesLernenEreignis" typ="typ.ereignisTyp">
+				<datenfeld name="AlgAusschlussliste"></datenfeld>
+				<datenfeld name="AlgBezugsereignistypen"></datenfeld>
+				<datum name="AlgDarstellungsverfahren" wert="1" />
+				<datum name="AlgGanglinienTyp" wert="0" />
+				<datum name="AlgMatchingIntervallNach" wert="0" />
+				<datum name="AlgMatchingIntervallVor" wert="0" />
+				<datum name="AlgMatchingSchrittweite" wert="60" />
+				<datum name="AlgMaxAbstand" wert="5%" />
+				<datum name="AlgMaxGanglinien" wert="20" />
+				<datum name="AlgMaxMatchingFehler" wert="5%" />
+				<datum name="AlgMaxWichtungsfaktor" wert="10" />
+				<datum name="AlgVergleichsSchrittweite" wert="600" />
+			</defaultParameter>
+		</konfigurationsObjekt>
+		<konfigurationsObjekt pid="ergTyp.mittwoch" name="Mittwoch" typ="typ.ereignisTyp">
+			<datensatz attributgruppe="atg.ereignisTypEigenschaften">
+				<datenfeld name="ZusätzlicheAttribute" />
+			</datensatz>
+			<defaultParameter attributgruppe="atg.ereignisTypParameter" typ="typ.ereignisTyp">
+				<datum name="EreignisTypPriorität" wert="10" />
+			</defaultParameter>
+			<defaultParameter attributgruppe="atg.ganglinienModellAutomatischesLernenEreignis" typ="typ.ereignisTyp">
+				<datenfeld name="AlgAusschlussliste"></datenfeld>
+				<datenfeld name="AlgBezugsereignistypen"></datenfeld>
+				<datum name="AlgDarstellungsverfahren" wert="1" />
+				<datum name="AlgGanglinienTyp" wert="0" />
+				<datum name="AlgMatchingIntervallNach" wert="0" />
+				<datum name="AlgMatchingIntervallVor" wert="0" />
+				<datum name="AlgMatchingSchrittweite" wert="60" />
+				<datum name="AlgMaxAbstand" wert="5%" />
+				<datum name="AlgMaxGanglinien" wert="20" />
+				<datum name="AlgMaxMatchingFehler" wert="5%" />
+				<datum name="AlgMaxWichtungsfaktor" wert="10" />
+				<datum name="AlgVergleichsSchrittweite" wert="600" />
+			</defaultParameter>
+		</konfigurationsObjekt>
+		<konfigurationsObjekt pid="ergTyp.donnerstag" name="Donnerstag" typ="typ.ereignisTyp">
+			<datensatz attributgruppe="atg.ereignisTypEigenschaften">
+				<datenfeld name="ZusätzlicheAttribute" />
+			</datensatz>
+			<defaultParameter attributgruppe="atg.ereignisTypParameter" typ="typ.ereignisTyp">
+				<datum name="EreignisTypPriorität" wert="10" />
+			</defaultParameter>
+			<defaultParameter attributgruppe="atg.ganglinienModellAutomatischesLernenEreignis" typ="typ.ereignisTyp">
+				<datenfeld name="AlgAusschlussliste"></datenfeld>
+				<datenfeld name="AlgBezugsereignistypen"></datenfeld>
+				<datum name="AlgDarstellungsverfahren" wert="1" />
+				<datum name="AlgGanglinienTyp" wert="0" />
+				<datum name="AlgMatchingIntervallNach" wert="0" />
+				<datum name="AlgMatchingIntervallVor" wert="0" />
+				<datum name="AlgMatchingSchrittweite" wert="60" />
+				<datum name="AlgMaxAbstand" wert="5%" />
+				<datum name="AlgMaxGanglinien" wert="20" />
+				<datum name="AlgMaxMatchingFehler" wert="5%" />
+				<datum name="AlgMaxWichtungsfaktor" wert="10" />
+				<datum name="AlgVergleichsSchrittweite" wert="600" />
+			</defaultParameter>
+		</konfigurationsObjekt>
+		<konfigurationsObjekt pid="ergTyp.freitag" name="Freitag" typ="typ.ereignisTyp">
+			<datensatz attributgruppe="atg.ereignisTypEigenschaften">
+				<datenfeld name="ZusätzlicheAttribute" />
+			</datensatz>
+			<defaultParameter attributgruppe="atg.ereignisTypParameter" typ="typ.ereignisTyp">
+				<datum name="EreignisTypPriorität" wert="10" />
+			</defaultParameter>
+			<defaultParameter attributgruppe="atg.ganglinienModellAutomatischesLernenEreignis" typ="typ.ereignisTyp">
+				<datenfeld name="AlgAusschlussliste"></datenfeld>
+				<datenfeld name="AlgBezugsereignistypen"></datenfeld>
+				<datum name="AlgDarstellungsverfahren" wert="1" />
+				<datum name="AlgGanglinienTyp" wert="0" />
+				<datum name="AlgMatchingIntervallNach" wert="0" />
+				<datum name="AlgMatchingIntervallVor" wert="0" />
+				<datum name="AlgMatchingSchrittweite" wert="60" />
+				<datum name="AlgMaxAbstand" wert="5%" />
+				<datum name="AlgMaxGanglinien" wert="20" />
+				<datum name="AlgMaxMatchingFehler" wert="5%" />
+				<datum name="AlgMaxWichtungsfaktor" wert="10" />
+				<datum name="AlgVergleichsSchrittweite" wert="600" />
+			</defaultParameter>
+		</konfigurationsObjekt>
+		<konfigurationsObjekt pid="ergTyp.samstag" name="Samstag" typ="typ.ereignisTyp">
+			<datensatz attributgruppe="atg.ereignisTypEigenschaften">
+				<datenfeld name="ZusätzlicheAttribute" />
+			</datensatz>
+			<defaultParameter attributgruppe="atg.ereignisTypParameter" typ="typ.ereignisTyp">
+				<datum name="EreignisTypPriorität" wert="15" />
+			</defaultParameter>
+			<defaultParameter attributgruppe="atg.ganglinienModellAutomatischesLernenEreignis" typ="typ.ereignisTyp">
+				<datenfeld name="AlgAusschlussliste"></datenfeld>
+				<datenfeld name="AlgBezugsereignistypen"></datenfeld>
+				<datum name="AlgDarstellungsverfahren" wert="1" />
+				<datum name="AlgGanglinienTyp" wert="0" />
+				<datum name="AlgMatchingIntervallNach" wert="0" />
+				<datum name="AlgMatchingIntervallVor" wert="0" />
+				<datum name="AlgMatchingSchrittweite" wert="60" />
+				<datum name="AlgMaxAbstand" wert="5%" />
+				<datum name="AlgMaxGanglinien" wert="20" />
+				<datum name="AlgMaxMatchingFehler" wert="5%" />
+				<datum name="AlgMaxWichtungsfaktor" wert="10" />
+				<datum name="AlgVergleichsSchrittweite" wert="600" />
+			</defaultParameter>
+		</konfigurationsObjekt>
+		<konfigurationsObjekt pid="ergTyp.sonntag" name="Sonntag" typ="typ.ereignisTyp">
+			<datensatz attributgruppe="atg.ereignisTypEigenschaften">
+				<datenfeld name="ZusätzlicheAttribute" />
+			</datensatz>
+			<defaultParameter attributgruppe="atg.ereignisTypParameter" typ="typ.ereignisTyp">
+				<datum name="EreignisTypPriorität" wert="30" />
+			</defaultParameter>
+			<defaultParameter attributgruppe="atg.ganglinienModellAutomatischesLernenEreignis" typ="typ.ereignisTyp">
+				<datenfeld name="AlgAusschlussliste"></datenfeld>
+				<datenfeld name="AlgBezugsereignistypen"></datenfeld>
+				<datum name="AlgDarstellungsverfahren" wert="1" />
+				<datum name="AlgGanglinienTyp" wert="0" />
+				<datum name="AlgMatchingIntervallNach" wert="0" />
+				<datum name="AlgMatchingIntervallVor" wert="0" />
+				<datum name="AlgMatchingSchrittweite" wert="60" />
+				<datum name="AlgMaxAbstand" wert="5%" />
+				<datum name="AlgMaxGanglinien" wert="20" />
+				<datum name="AlgMaxMatchingFehler" wert="5%" />
+				<datum name="AlgMaxWichtungsfaktor" wert="10" />
+				<datum name="AlgVergleichsSchrittweite" wert="600" />
+			</defaultParameter>
+		</konfigurationsObjekt>
+		<konfigurationsObjekt pid="ergTyp.sportEreignis" name="SportEreignis" typ="typ.ereignisTyp">
+			<datensatz attributgruppe="atg.ereignisTypEigenschaften">
+				<datenfeld name="ZusätzlicheAttribute" />
+			</datensatz>
+			<defaultParameter attributgruppe="atg.ereignisTypParameter" typ="typ.ereignisTyp">
+				<datum name="EreignisTypPriorität" wert="30" />
+			</defaultParameter>
+			<defaultParameter attributgruppe="atg.ganglinienModellAutomatischesLernenEreignis" typ="typ.ereignisTyp">
+				<datenfeld name="AlgAusschlussliste"></datenfeld>
+				<datenfeld name="AlgBezugsereignistypen"></datenfeld>
+				<datum name="AlgDarstellungsverfahren" wert="1" />
+				<datum name="AlgGanglinienTyp" wert="1" />
+				<datum name="AlgMatchingIntervallNach" wert="0" />
+				<datum name="AlgMatchingIntervallVor" wert="0" />
+				<datum name="AlgMatchingSchrittweite" wert="60" />
+				<datum name="AlgMaxAbstand" wert="5%" />
+				<datum name="AlgMaxGanglinien" wert="20" />
+				<datum name="AlgMaxMatchingFehler" wert="5%" />
+				<datum name="AlgMaxWichtungsfaktor" wert="10" />
+				<datum name="AlgVergleichsSchrittweite" wert="600" />
+			</defaultParameter>
+		</konfigurationsObjekt>
+		<konfigurationsObjekt pid="ergTyp.Fest" name="Fest" typ="typ.ereignisTyp">
+			<datensatz attributgruppe="atg.ereignisTypEigenschaften">
+				<datenfeld name="ZusätzlicheAttribute" />
+			</datensatz>
+			<defaultParameter attributgruppe="atg.ereignisTypParameter" typ="typ.ereignisTyp">
+				<datum name="EreignisTypPriorität" wert="30" />
+			</defaultParameter>
+			<defaultParameter attributgruppe="atg.ganglinienModellAutomatischesLernenEreignis" typ="typ.ereignisTyp">
+				<datenfeld name="AlgAusschlussliste"></datenfeld>
+				<datenfeld name="AlgBezugsereignistypen"></datenfeld>
+				<datum name="AlgDarstellungsverfahren" wert="1" />
+				<datum name="AlgGanglinienTyp" wert="1" />
+				<datum name="AlgMatchingIntervallNach" wert="0" />
+				<datum name="AlgMatchingIntervallVor" wert="0" />
+				<datum name="AlgMatchingSchrittweite" wert="60" />
+				<datum name="AlgMaxAbstand" wert="5%" />
+				<datum name="AlgMaxGanglinien" wert="20" />
+				<datum name="AlgMaxMatchingFehler" wert="5%" />
+				<datum name="AlgMaxWichtungsfaktor" wert="10" />
+				<datum name="AlgVergleichsSchrittweite" wert="600" />
+			</defaultParameter>
+		</konfigurationsObjekt>
+		<konfigurationsObjekt pid="ergTyp.messe" name="Messe" typ="typ.ereignisTyp">
+			<datensatz attributgruppe="atg.ereignisTypEigenschaften">
+				<datenfeld name="ZusätzlicheAttribute" />
+			</datensatz>
+			<defaultParameter attributgruppe="atg.ereignisTypParameter" typ="typ.ereignisTyp">
+				<datum name="EreignisTypPriorität" wert="30" />
+			</defaultParameter>
+			<defaultParameter attributgruppe="atg.ganglinienModellAutomatischesLernenEreignis" typ="typ.ereignisTyp">
+				<datenfeld name="AlgAusschlussliste"></datenfeld>
+				<datenfeld name="AlgBezugsereignistypen"></datenfeld>
+				<datum name="AlgDarstellungsverfahren" wert="1" />
+				<datum name="AlgGanglinienTyp" wert="1" />
+				<datum name="AlgMatchingIntervallNach" wert="0" />
+				<datum name="AlgMatchingIntervallVor" wert="0" />
+				<datum name="AlgMatchingSchrittweite" wert="60" />
+				<datum name="AlgMaxAbstand" wert="5%" />
+				<datum name="AlgMaxGanglinien" wert="20" />
+				<datum name="AlgMaxMatchingFehler" wert="5%" />
+				<datum name="AlgMaxWichtungsfaktor" wert="10" />
+				<datum name="AlgVergleichsSchrittweite" wert="600" />
+			</defaultParameter>
+		</konfigurationsObjekt>
+	</objekte>
+</konfigurationsBereich>

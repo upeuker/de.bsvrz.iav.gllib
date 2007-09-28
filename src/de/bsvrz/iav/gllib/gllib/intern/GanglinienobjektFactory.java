@@ -1,5 +1,5 @@
 /*
- * Segment 5 Intelligente Analyseverfahren, SWE 5.1 Ganglinienprognose
+ * Segment 5 Intelligente Analyseverfahren, SWE 5.5 Funktionen Ganglinie
  * Copyright (C) 2007 BitCtrl Systems GmbH 
  * 
  * This program is free software; you can redistribute it and/or modify it under
@@ -41,6 +41,9 @@ import de.bsvrz.sys.funclib.bitctrl.modell.kalender.KalenderModellTypen;
 /**
  * Fabrikmethode f&uuml;r gekapselte Systemobjekte aus dem Verkehrsmodell. Jedes
  * gekapselte Objekt wird als Singleton behandelt und zwischengespeichert.
+ * <p>
+ * <em>Hinweis:</em> Diese Klasse ist nicht Teil der öffentlichen API und
+ * sollte nicht außerhalb der Ganglinie-API verwendet werden.
  * 
  * @author BitCtrl, Schumann
  * @version $Id$

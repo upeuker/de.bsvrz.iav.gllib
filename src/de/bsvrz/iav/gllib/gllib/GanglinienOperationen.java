@@ -26,9 +26,12 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
@@ -67,7 +70,7 @@ public class GanglinienOperationen {
 	public static Ganglinie addiere(Ganglinie g1, Ganglinie g2) {
 		Ganglinie g;
 		Polyline p1, p2;
-		SortedSet<Long> zeitstempel;
+		Queue<Long> zeitstempel;
 
 		p1 = new Polyline();
 		p1.setStuetzstellen(g1.getStuetzstellen());
@@ -81,8 +84,7 @@ public class GanglinienOperationen {
 		while (!zeitstempel.isEmpty()) {
 			long z;
 
-			z = zeitstempel.first();
-			zeitstempel.remove(z);
+			z = zeitstempel.poll();
 
 			if (p1.get(z).getWert() == null || p2.get(z).getWert() == null) {
 				g.setStuetzstelle(z, null);
@@ -108,7 +110,7 @@ public class GanglinienOperationen {
 	public static Ganglinie subtrahiere(Ganglinie g1, Ganglinie g2) {
 		Ganglinie g;
 		Polyline p1, p2;
-		SortedSet<Long> zeitstempel;
+		Queue<Long> zeitstempel;
 
 		p1 = new Polyline();
 		p1.setStuetzstellen(g1.getStuetzstellen());
@@ -122,8 +124,7 @@ public class GanglinienOperationen {
 		while (!zeitstempel.isEmpty()) {
 			long z;
 
-			z = zeitstempel.first();
-			zeitstempel.remove(z);
+			z = zeitstempel.poll();
 
 			if (p1.get(z).getWert() == null || p2.get(z).getWert() == null) {
 				g.setStuetzstelle(z, null);
@@ -149,7 +150,7 @@ public class GanglinienOperationen {
 	public static Ganglinie multipliziere(Ganglinie g1, Ganglinie g2) {
 		Ganglinie g;
 		Polyline p1, p2;
-		SortedSet<Long> zeitstempel;
+		Queue<Long> zeitstempel;
 
 		p1 = new Polyline();
 		p1.setStuetzstellen(g1.getStuetzstellen());
@@ -163,8 +164,7 @@ public class GanglinienOperationen {
 		while (!zeitstempel.isEmpty()) {
 			long z;
 
-			z = zeitstempel.first();
-			zeitstempel.remove(z);
+			z = zeitstempel.poll();
 
 			if (p1.get(z).getWert() == null || p2.get(z).getWert() == null) {
 				g.setStuetzstelle(z, null);
@@ -190,7 +190,7 @@ public class GanglinienOperationen {
 	public static Ganglinie dividiere(Ganglinie g1, Ganglinie g2) {
 		Ganglinie g;
 		Polyline p1, p2;
-		SortedSet<Long> zeitstempel;
+		Queue<Long> zeitstempel;
 
 		p1 = new Polyline();
 		p1.setStuetzstellen(g1.getStuetzstellen());
@@ -204,8 +204,7 @@ public class GanglinienOperationen {
 		while (!zeitstempel.isEmpty()) {
 			long z;
 
-			z = zeitstempel.first();
-			zeitstempel.remove(z);
+			z = zeitstempel.poll();
 
 			if (p1.get(z).getWert() == null || p2.get(z).getWert() == null
 					|| p2.get(z).getWert() == 0) {
@@ -339,8 +338,9 @@ public class GanglinienOperationen {
 	 */
 	public static double basisabstand(Ganglinie g1, Ganglinie g2) {
 		Polyline p1, p2;
-		SortedSet<Long> zeitstempel;
-		double fehler, summe, x;
+		Queue<Long> zeitstempel;
+		double fehler, summe;
+		int undefinierte;
 
 		p1 = new Polyline();
 		p1.setStuetzstellen(g1.getStuetzstellen());
@@ -348,33 +348,43 @@ public class GanglinienOperationen {
 		p2 = new Polyline();
 		p2.setStuetzstellen(g2.getStuetzstellen());
 		p2.initialisiere();
-		zeitstempel = vervollstaendigeStuetzstellen(g1, g2);
 
 		// Quadratischen Fehler bestimmen
 		summe = 0;
+		undefinierte = 0;
+		zeitstempel = vervollstaendigeStuetzstellen(g1, g2);
 		while (!zeitstempel.isEmpty()) {
 			long z;
 
-			z = zeitstempel.first();
-			zeitstempel.remove(z);
+			z = zeitstempel.poll();
+			if (p1.get(z).getWert() != null && p2.get(z).getWert() != null) {
+				double x;
 
-			x = p2.get(z).getWert() - p1.get(z).getWert();
-			summe += x * x;
+				x = p2.get(z).getWert() - p1.get(z).getWert();
+				summe += x * x;
+			} else {
+				// Undefinierte Stützstellen werden nicht berücksichtigt
+				undefinierte++;
+			}
 		}
-		fehler = Math.sqrt(summe / zeitstempel.size());
+		fehler = Math.sqrt(summe / (zeitstempel.size() - undefinierte));
 
 		// Prozentualen Fehler bestimmen
 		summe = 0;
+		zeitstempel = vervollstaendigeStuetzstellen(g1, g2);
 		while (!zeitstempel.isEmpty()) {
 			long z;
 
-			z = zeitstempel.first();
-			zeitstempel.remove(z);
+			z = zeitstempel.poll();
+			if (p1.get(z).getWert() != null && p2.get(z).getWert() != null) {
+				double x;
 
-			x = (p1.get(z).getWert() + p2.get(z).getWert()) / 2;
-			summe += x * x;
+				x = (p1.get(z).getWert() + p2.get(z).getWert()) / 2;
+				summe += x * x;
+			}
 		}
-		fehler = (fehler * 100) / (Math.sqrt(summe / zeitstempel.size()));
+		fehler = (fehler * 100)
+				/ (Math.sqrt(summe / (zeitstempel.size() / undefinierte)));
 
 		return fehler;
 	}
@@ -385,19 +395,52 @@ public class GanglinienOperationen {
 	 * verglichen.
 	 * 
 	 * @param g1
-	 *            Erste Ganglinie
+	 *            Erste Ganglinie.
 	 * @param g2
-	 *            Zweite Ganglinie
+	 *            Zweite Ganglinie.
 	 * @param intervalle
-	 *            Anzahl der zu vergleichenden Intervalle
+	 *            die Anzahl der zu vergleichenden Intervalle.
 	 * @return Abstand nach dem komplexen Abstandsverfahren
 	 */
 	public static double komplexerAbstand(Ganglinie g1, Ganglinie g2,
 			int intervalle) {
-		Polyline p1, p2;
-		SortedSet<Long> zeitstempel;
-		double fehler, summe, x;
 		long start, ende, breite;
+
+		// Zu betrachtendes Intervall und Intervallbreite bestimmen
+		if (g1.stuetzstellen.firstKey() < g2.stuetzstellen.firstKey()) {
+			start = g2.stuetzstellen.firstKey();
+		} else {
+			start = g1.stuetzstellen.firstKey();
+		}
+		if (g1.stuetzstellen.lastKey() < g2.stuetzstellen.lastKey()) {
+			ende = g1.stuetzstellen.lastKey();
+		} else {
+			ende = g2.stuetzstellen.lastKey();
+		}
+		breite = Math.round((double) (ende - start) / intervalle);
+
+		return komplexerAbstand(g1, g2, breite);
+	}
+
+	/**
+	 * Berechnet den Abstand zweier Ganglinien mit Hilfe des komplexen
+	 * Abstandsverfahren. Es werden jeweils die Werte an den Intervallgrenzen
+	 * verglichen.
+	 * 
+	 * @param g1
+	 *            Erste Ganglinie.
+	 * @param g2
+	 *            Zweite Ganglinie.
+	 * @param intervallBreite
+	 *            die Breite der zu vergleichenden Intervalle.
+	 * @return Abstand nach dem komplexen Abstandsverfahren
+	 */
+	public static double komplexerAbstand(Ganglinie g1, Ganglinie g2,
+			long intervallBreite) {
+		Polyline p1, p2;
+		List<Long> zeitstempel;
+		double fehler, summe, x;
+		long start, ende;
 
 		p1 = new Polyline();
 		p1.setStuetzstellen(g1.getStuetzstellen());
@@ -417,23 +460,17 @@ public class GanglinienOperationen {
 		} else {
 			ende = g2.stuetzstellen.lastKey();
 		}
-		breite = Math.round((double) (ende - start) / intervalle);
 
 		// Haltepunkte bestimmen
-		zeitstempel = new TreeSet<Long>();
-		for (int i = 0; i < intervalle; i++) {
-			zeitstempel.add(start + i * breite);
+		zeitstempel = new ArrayList<Long>();
+		for (long i = start; i < ende; i += intervallBreite) {
+			zeitstempel.add(i);
 		}
 		zeitstempel.add(ende);
 
 		// Quadratischen Fehler bestimmen
 		summe = 0;
-		while (!zeitstempel.isEmpty()) {
-			long z;
-
-			z = zeitstempel.first();
-			zeitstempel.remove(z);
-
+		for (long z : zeitstempel) {
 			x = p2.get(z).getWert() - p1.get(z).getWert();
 			summe += x * x;
 		}
@@ -441,12 +478,7 @@ public class GanglinienOperationen {
 
 		// Prozentualen Fehler bestimmen
 		summe = 0;
-		while (!zeitstempel.isEmpty()) {
-			long z;
-
-			z = zeitstempel.first();
-			zeitstempel.remove(z);
-
+		for (long z : zeitstempel) {
 			x = (p1.get(z).getWert() + p2.get(z).getWert()) / 2;
 			summe += x * x;
 		}
@@ -461,50 +493,108 @@ public class GanglinienOperationen {
 	 * geringsten Abstand zur Referenzganglinie.
 	 * 
 	 * @param referenz
-	 *            Die Referenzganglinie
-	 * @param menge
-	 *            Eine Menge von zu vergleichenden Ganglinien
-	 * @param offset
-	 *            Offset, in dem die Ganglinien vor un zur&uuml;ck verschoben
-	 *            werden
+	 *            die Referenzganglinie.
+	 * @param liste
+	 *            die Liste von zu vergleichenden Ganglinien.
+	 * @param offsetVor
+	 *            der Offset, in dem die Ganglinien nach vorn verschoben werden
+	 *            kann.
+	 * @param offsetNach
+	 *            der Offset, in dem die Ganglinien nach hinten verschoben
+	 *            werden kann.
 	 * @param intervall
-	 *            Intervall, in dem die Ganglinien innerhalb des Offsets
-	 *            verschoben werden
-	 * @return Die Ganglinie mit dem kleinsten Abstand
+	 *            das Intervall, in dem die Ganglinien innerhalb des Offsets
+	 *            verschoben werden.
+	 * @return der Index der Ganglinie mit dem kleinsten Abstand.
 	 */
-	public static Ganglinie patternMatching(Ganglinie referenz,
-			Collection<Ganglinie> menge, long offset, long intervall) {
-		HashMap<Ganglinie, Double> fehler;
-		Ganglinie erg;
+	public static int patternMatching(Ganglinie referenz,
+			List<Ganglinie> liste, long offsetVor, long offsetNach,
+			long intervall) {
+		HashMap<Integer, Double> fehler;
+		int index;
+		long start, ende; // Start und Ende des Pattern-Matching-Intervalls
 
-		fehler = new HashMap<Ganglinie, Double>();
+		fehler = new HashMap<Integer, Double>();
+		start = referenz.getIntervall().getStart() - offsetVor;
+		ende = referenz.getIntervall().getEnde() + offsetNach;
 
 		// Abstände der Ganglinien bestimmen
-		for (Ganglinie g : menge) {
+		for (int i = 0; i < liste.size(); i++) {
+			Ganglinie g, ref;
 			double abstand;
 			int tests;
 
+			ref = referenz.clone();
+			GanglinienOperationen.verschiebe(ref, -offsetVor);
+			g = liste.get(i);
 			abstand = 0;
 			tests = 0;
-			for (long i = -offset; i <= offset; i += intervall) {
-				abstand += basisabstand(referenz, g);
+			for (long j = start; j <= ende; j += intervall) {
+				GanglinienOperationen.verschiebe(ref, intervall);
+				abstand += basisabstand(ref, g);
 				tests++;
 			}
-			fehler.put(g, abstand / tests);
+			fehler.put(i, abstand / tests);
 		}
 
 		// Ganglinie mit dem kleinsten Abstand bestimmen
-		erg = null;
-		for (Entry<Ganglinie, Double> e : fehler.entrySet()) {
-			if (erg == null) {
-				erg = e.getKey();
+		index = -1;
+		for (Entry<Integer, Double> e : fehler.entrySet()) {
+			if (index == -1) {
+				index = e.getKey();
 			} else {
-				if (e.getValue() < fehler.get(erg)) {
-					erg = e.getKey();
+				if (e.getValue() < fehler.get(index)) {
+					index = e.getKey();
 				}
 			}
 		}
-		return erg;
+		return index;
+	}
+
+	/**
+	 * Verschmilzt eine Ganglinie mit einer anderen. Dabei wird das gewichtete
+	 * arithmetische Mittel der vervollst&auml;ndigten St&uuml;tzstellen
+	 * gebildet. Die zweite Ganglinie hat immer das Gewicht 1.
+	 * 
+	 * @param g1
+	 *            die Ganglinie mit der verschmolzen wird. Sie hat immer das
+	 *            Gewicht 1.
+	 * @param g2
+	 *            die Ganglinie die verschmolzen wird.
+	 * @param gewicht
+	 *            das Gewicht der zweiten Ganglinie.
+	 * 
+	 * @return das Ergebnis der Verschmelzung.
+	 */
+	public static Ganglinie verschmelze(Ganglinie g1, Ganglinie g2, int gewicht) {
+		Ganglinie g;
+		Polyline p1, p2;
+		Queue<Long> zeitstempel;
+
+		p1 = new Polyline();
+		p1.setStuetzstellen(g1.getStuetzstellen());
+		p1.initialisiere();
+		p2 = new Polyline();
+		p2.setStuetzstellen(g2.getStuetzstellen());
+		p2.initialisiere();
+		g = new Ganglinie();
+		zeitstempel = vervollstaendigeStuetzstellen(g1, g2);
+
+		while (!zeitstempel.isEmpty()) {
+			long z;
+
+			z = zeitstempel.poll();
+
+			if (p1.get(z).getWert() == null || p2.get(z).getWert() == null) {
+				g.setStuetzstelle(z, null);
+			} else {
+				g.setStuetzstelle(z, (p1.get(z).getWert() + p2.get(z).getWert()
+						* gewicht)
+						/ (gewicht + 1));
+			}
+		}
+
+		return g;
 	}
 
 	/**
@@ -516,7 +606,7 @@ public class GanglinienOperationen {
 	 *            Zweite Ganglinie
 	 * @return Menge von St&uuml;tzstellenreferenzen in Form von Zeitstempeln
 	 */
-	private static SortedSet<Long> vervollstaendigeStuetzstellen(Ganglinie g1,
+	private static LinkedList<Long> vervollstaendigeStuetzstellen(Ganglinie g1,
 			Ganglinie g2) {
 		SortedSet<Long> zeitstempel;
 
@@ -524,7 +614,7 @@ public class GanglinienOperationen {
 		zeitstempel.addAll(g1.stuetzstellen.keySet());
 		zeitstempel.addAll(g2.stuetzstellen.keySet());
 
-		return zeitstempel;
+		return new LinkedList<Long>(zeitstempel);
 	}
 
 }

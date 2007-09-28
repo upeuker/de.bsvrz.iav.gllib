@@ -26,8 +26,8 @@
 
 package de.bsvrz.iav.gllib.gllib.dav;
 
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 
 import de.bsvrz.iav.gllib.gllib.GanglinienOperationen;
@@ -294,55 +294,142 @@ public class GanglinienMQOperationen {
 	}
 
 	/**
+	 * Berechnet den Abstand zweier Ganglinien mit Hilfe des komplexen
+	 * Abstandsverfahren. Es werden jeweils die Werte an den Intervallgrenzen
+	 * verglichen.
+	 * 
+	 * @param g1
+	 *            Erste Ganglinie.
+	 * @param g2
+	 *            Zweite Ganglinie.
+	 * @param intervallBreite
+	 *            die Breite der zu vergleichenden Intervalle.
+	 * @return Abstand nach dem komplexen Abstandsverfahren
+	 */
+	public static double komplexerAbstand(GanglinieMQ g1, GanglinieMQ g2,
+			long intervallBreite) {
+		assert g1.getMessQuerschnitt().equals(g2.getMessQuerschnitt()) : "Die Ganglinien müssen zum gleichen Messquerschnitt gehören.";
+
+		double fehlerQKfz, fehlerQLkw, fehlerVPkw, fehlerVLkw;
+
+		fehlerQKfz = GanglinienOperationen.komplexerAbstand(g1.qKfz, g2.qKfz,
+				intervallBreite);
+		fehlerQLkw = GanglinienOperationen.komplexerAbstand(g1.qLkw, g2.qLkw,
+				intervallBreite);
+		fehlerVPkw = GanglinienOperationen.komplexerAbstand(g1.vPkw, g2.vPkw,
+				intervallBreite);
+		fehlerVLkw = GanglinienOperationen.komplexerAbstand(g1.vLkw, g2.vLkw,
+				intervallBreite);
+
+		return (fehlerQKfz + fehlerQLkw + fehlerVLkw + fehlerVPkw) / 4;
+	}
+
+	/**
 	 * Führt das Pattern-Matching einer Menge von Ganglinien mit einer
 	 * Referenzganglinie aus. Ergebnis ist die Ganglinie aus der Menge mit dem
 	 * geringsten Abstand zur Referenzganglinie.
 	 * 
 	 * @param referenz
-	 *            Die Referenzganglinie
-	 * @param menge
-	 *            Eine Menge von zu vergleichenden Ganglinien
-	 * @param offset
-	 *            Offset, in dem die Ganglinien vor un zur&uuml;ck verschoben
-	 *            werden
+	 *            die Referenzganglinie.
+	 * @param liste
+	 *            die Liste von zu vergleichenden Ganglinien.
+	 * @param offsetVor
+	 *            der Offset, in dem die Ganglinien nach vorn verschoben werden
+	 *            kann.
+	 * @param offsetNach
+	 *            der Offset, in dem die Ganglinien nach hinten verschoben
+	 *            werden kann.
 	 * @param intervall
-	 *            Intervall, in dem die Ganglinien innerhalb des Offsets
-	 *            verschoben werden
-	 * @return Die Ganglinie mit dem kleinsten Abstand
+	 *            das Intervall, in dem die Ganglinien innerhalb des Offsets
+	 *            verschoben werden.
+	 * @return der Index der Ganglinie mit dem kleinsten Abstand.
 	 */
-	public static GanglinieMQ patternMatching(GanglinieMQ referenz,
-			Collection<GanglinieMQ> menge, long offset, long intervall) {
-		HashMap<GanglinieMQ, Double> fehler;
-		GanglinieMQ erg;
+	public static int patternMatching(GanglinieMQ referenz,
+			List<GanglinieMQ> liste, long offsetVor, long offsetNach,
+			long intervall) {
+		HashMap<Integer, Double> fehler;
+		int index;
+		long start, ende; // Start und Ende des Pattern-Matching-Intervalls
 
-		fehler = new HashMap<GanglinieMQ, Double>();
+		fehler = new HashMap<Integer, Double>();
+		start = referenz.getIntervall().getStart() - offsetVor;
+		ende = referenz.getIntervall().getEnde() + offsetNach;
 
 		// Abstände der Ganglinien bestimmen
-		for (GanglinieMQ g : menge) {
+		for (int i = 0; i < liste.size(); i++) {
+			GanglinieMQ g, ref;
 			double abstand;
 			int tests;
 
+			ref = referenz.clone();
+			GanglinienMQOperationen.verschiebe(ref, -offsetVor);
+			g = liste.get(i);
 			abstand = 0;
 			tests = 0;
-			for (long i = -offset; i <= offset; i += intervall) {
-				abstand += basisabstand(referenz, g);
+			for (long j = start; j <= ende; j += intervall) {
+				GanglinienMQOperationen.verschiebe(ref, intervall);
+				abstand += basisabstand(ref, g);
 				tests++;
 			}
-			fehler.put(g, abstand / tests);
+			fehler.put(i, abstand / tests);
 		}
 
 		// Ganglinie mit dem kleinsten Abstand bestimmen
-		erg = null;
-		for (Entry<GanglinieMQ, Double> e : fehler.entrySet()) {
-			if (erg == null) {
-				erg = e.getKey();
+		index = -1;
+		for (Entry<Integer, Double> e : fehler.entrySet()) {
+			if (index == -1) {
+				index = e.getKey();
 			} else {
-				if (e.getValue() < fehler.get(erg)) {
-					erg = e.getKey();
+				if (e.getValue() < fehler.get(index)) {
+					index = e.getKey();
 				}
 			}
 		}
-		return erg;
+		return index;
+	}
+
+	/**
+	 * Verschmilzt eine Ganglinie mit einer anderen. Dabei wird das gewichtete
+	 * arithmetische Mittel der vervollst&auml;ndigten St&uuml;tzstellen
+	 * gebildet. Die zweite Ganglinie hat immer das Gewicht 1. Die beiden
+	 * Ganglinien werden dabei nicht ver&auml;ndert.
+	 * <p>
+	 * Die Anzahl der Verschmelzungen und der Zeitpunkt der letzten
+	 * Verschmelzungen werden aktualisiert.
+	 * 
+	 * @param ganglinie
+	 *            die Ganglinie mit der verschmolzen wird. Sie hat immer das
+	 *            Gewicht 1.
+	 * @param historGl
+	 *            die historische Ganglinie die verschmolzen wird.
+	 * @param gewicht
+	 *            das Gewicht der zweiten Ganglinie.
+	 * @return das Ergebnis der Verschmelzung.
+	 */
+	public static GanglinieMQ verschmelze(GanglinieMQ ganglinie,
+			GanglinieMQ historGl, int gewicht) {
+		assert ganglinie.getMessQuerschnitt().equals(
+				historGl.getMessQuerschnitt()) : "Die Ganglinien müssen zum gleichen Messquerschnitt gehören.";
+
+		GanglinieMQ g;
+
+		g = new GanglinieMQ();
+		g.setMessQuerschnitt(ganglinie.getMessQuerschnitt());
+		g.setApproximation(ganglinie.getApproximation());
+
+		g.qKfz = GanglinienOperationen.verschmelze(ganglinie.qKfz,
+				historGl.qKfz, gewicht);
+		g.qLkw = GanglinienOperationen.verschmelze(ganglinie.qLkw,
+				historGl.qLkw, gewicht);
+		g.vPkw = GanglinienOperationen.verschmelze(ganglinie.vPkw,
+				historGl.vPkw, gewicht);
+		g.vLkw = GanglinienOperationen.verschmelze(ganglinie.vLkw,
+				historGl.vLkw, gewicht);
+
+		g.setAnzahlVerschmelzungen(historGl.getAnzahlVerschmelzungen() + 1);
+		g.setLetzteVerschmelzung(System.currentTimeMillis());
+
+		return g;
 	}
 
 }

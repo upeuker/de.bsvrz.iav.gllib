@@ -79,7 +79,6 @@ public class BSpline extends AbstractApproximation {
 		}
 
 		this.ordnung = ordnung;
-		initialisiere();
 	}
 
 	/**

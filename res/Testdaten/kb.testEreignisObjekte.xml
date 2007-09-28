@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE konfigurationsBereich PUBLIC "-//K2S//DTD Dokument//DE" "K2S.dtd">
+<konfigurationsBereich pid="kb.testEreignisObjekte"
+	name="TestEreignisObjekte" verantwortlich="kv.aoe.bitctrl.tester">
+	<info>
+		<kurzinfo>Bereich mit einigen Ereignisse.</kurzinfo>
+	</info>
+	<modell></modell>
+	<objekte>
+
+		<konfigurationsObjekt pid="erg.montag" name="Montag"
+			typ="typ.ereignis">
+			<datensatz attributgruppe="atg.ereignisEigenschaften">
+				<datum name="Ereignisbeschreibung"
+					wert="Montag (Tagesereignis)" />
+				<datum name="EreignisTypReferenz" wert="ergTyp.montag" />
+			</datensatz>
+			<defaultParameter attributgruppe="atg.ereignisParameter"
+				typ="typ.ereignis">
+				<datenfeld name="RäumlicheGültigkeit">
+					<datum name="-" wert="ss.a14.0001" />
+				</datenfeld>
+				<datum name="BeginnZeitlicheGültigkeit"
+					wert="2007-09-03 00:00:00" />
+				<datum name="EndeZeitlicheGültigkeit"
+					wert="2007-09-03 24:00:00" />
+				<datum name="SystemKalenderEintragReferenz" wert="" />
+				<datenfeld name="VerkehrlicheGültigkeit"></datenfeld>
+				<datum name="Quelle" wert="Test" />
+			</defaultParameter>
+		</konfigurationsObjekt>
+		<konfigurationsObjekt pid="erg.dienstag" name="Dienstag"
+			typ="typ.ereignis">
+			<datensatz attributgruppe="atg.ereignisEigenschaften">
+				<datum name="Ereignisbeschreibung"
+					wert="Dienstag (Tagesereignis)" />
+				<datum name="EreignisTypReferenz"
+					wert="ergTyp.dienstag" />
+			</datensatz>
+			<defaultParameter attributgruppe="atg.ereignisParameter"
+				typ="typ.ereignis">
+				<datenfeld name="RäumlicheGültigkeit">
+					<datum name="-" wert="ss.a14.0001" />
+				</datenfeld>
+				<datum name="BeginnZeitlicheGültigkeit"
+					wert="2007-09-04 00:00:00" />
+				<datum name="EndeZeitlicheGültigkeit"
+					wert="2007-09-04 24:00:00" />
+				<datum name="SystemKalenderEintragReferenz" wert="" />
+				<datenfeld name="VerkehrlicheGültigkeit"></datenfeld>
+				<datum name="Quelle" wert="Test" />
+			</defaultParameter>
+		</konfigurationsObjekt>
+		<konfigurationsObjekt pid="erg.mittwoch" name="Mittwoch"
+			typ="typ.ereignis">
+			<datensatz attributgruppe="atg.ereignisEigenschaften">
+				<datum name="Ereignisbeschreibung"
+					wert="Mittwoch (Tagesereignis)" />
+				<datum name="EreignisTypReferenz"
+					wert="ergTyp.mittwoch" />
+			</datensatz>
+			<defaultParameter attributgruppe="atg.ereignisParameter"
+				typ="typ.ereignis">
+				<datenfeld name="RäumlicheGültigkeit">
+					<datum name="-" wert="ss.a14.0001" />
+				</datenfeld>
+				<datum name="BeginnZeitlicheGültigkeit"
+					wert="2007-09-05 00:00:00" />
+				<datum name="EndeZeitlicheGültigkeit"
+					wert="2007-09-05 24:00:00" />
+				<datum name="SystemKalenderEintragReferenz" wert="" />
+				<datenfeld name="VerkehrlicheGültigkeit"></datenfeld>
+				<datum name="Quelle" wert="Test" />
+			</defaultParameter>
+		</konfigurationsObjekt>
+		<konfigurationsObjekt pid="erg.donnerstag" name="Donnerstag"
+			typ="typ.ereignis">
+			<datensatz attributgruppe="atg.ereignisEigenschaften">
+				<datum name="Ereignisbeschreibung"
+					wert="Donnerstag (Tagesereignis)" />
+				<datum name="EreignisTypReferenz"
+					wert="ergTyp.donnerstag" />
+			</datensatz>
+			<defaultParameter attributgruppe="atg.ereignisParameter"
+				typ="typ.ereignis">
+				<datenfeld name="RäumlicheGültigkeit">
+					<datum name="-" wert="ss.a14.0001" />
+				</datenfeld>
+				<datum name="BeginnZeitlicheGültigkeit"
+					wert="2007-09-06 00:00:00" />
+				<datum name="EndeZeitlicheGültigkeit"
+					wert="2007-09-06 24:00:00" />
+				<datum name="SystemKalenderEintragReferenz" wert="" />
+				<datenfeld name="VerkehrlicheGültigkeit"></datenfeld>
+				<datum name="Quelle" wert="Test" />
+			</defaultParameter>
+		</konfigurationsObjekt>
+		<konfigurationsObjekt pid="erg.freitag" name="Freitag"
+			typ="typ.ereignis">
+			<datensatz attributgruppe="atg.ereignisEigenschaften">
+				<datum name="Ereignisbeschreibung"
+					wert="Freitag (Tagesereignis)" />
+				<datum name="EreignisTypReferenz" wert="ergTyp.freitag" />
+			</datensatz>
+			<defaultParameter attributgruppe="atg.ereignisParameter"
+				typ="typ.ereignis">
+				<datenfeld name="RäumlicheGültigkeit">
+					<datum name="-" wert="ss.a14.0001" />
+				</datenfeld>
+				<datum name="BeginnZeitlicheGültigkeit"
+					wert="2007-09-07 00:00:00" />
+				<datum name="EndeZeitlicheGültigkeit"
+					wert="2007-09-07 24:00:00" />
+				<datum name="SystemKalenderEintragReferenz" wert="" />
+				<datenfeld name="VerkehrlicheGültigkeit"></datenfeld>
+				<datum name="Quelle" wert="Test" />
+			</defaultParameter>
+		</konfigurationsObjekt>
+		<konfigurationsObjekt pid="erg.samstag" name="Samstag"
+			typ="typ.ereignis">
+			<datensatz attributgruppe="atg.ereignisEigenschaften">
+				<datum name="Ereignisbeschreibung"
+					wert="Samstag (Tagesereignis)" />
+				<datum name="EreignisTypReferenz" wert="ergTyp.samstag" />
+			</datensatz>
+			<defaultParameter attributgruppe="atg.ereignisParameter"
+				typ="typ.ereignis">
+				<datenfeld name="RäumlicheGültigkeit">
+					<datum name="-" wert="ss.a14.0001" />
+				</datenfeld>
+				<datum name="BeginnZeitlicheGültigkeit"
+					wert="2007-09-08 00:00:00" />
+				<datum name="EndeZeitlicheGültigkeit"
+					wert="2007-09-08 24:00:00" />
+				<datum name="SystemKalenderEintragReferenz" wert="" />
+				<datenfeld name="VerkehrlicheGültigkeit"></datenfeld>
+				<datum name="Quelle" wert="Test" />
+			</defaultParameter>
+		</konfigurationsObjekt>
+		<konfigurationsObjekt pid="erg.sonntag" name="Sonntag"
+			typ="typ.ereignis">
+			<datensatz attributgruppe="atg.ereignisEigenschaften">
+				<datum name="Ereignisbeschreibung"
+					wert="Sonntag (Tagesereignis)" />
+				<datum name="EreignisTypReferenz" wert="ergTyp.sonntag" />
+			</datensatz>
+			<defaultParameter attributgruppe="atg.ereignisParameter"
+				typ="typ.ereignis">
+				<datenfeld name="RäumlicheGültigkeit">
+					<datum name="-" wert="ss.a14.0001" />
+				</datenfeld>
+				<datum name="BeginnZeitlicheGültigkeit"
+					wert="2007-09-09 00:00:00" />
+				<datum name="EndeZeitlicheGültigkeit"
+					wert="2007-09-09 24:00:00" />
+				<datum name="SystemKalenderEintragReferenz" wert="" />
+				<datenfeld name="VerkehrlicheGültigkeit"></datenfeld>
+				<datum name="Quelle" wert="Test" />
+			</defaultParameter>
+		</konfigurationsObjekt>
+
+		<konfigurationsObjekt pid="erg.ami" name="Automesse AMI"
+			typ="typ.ereignis">
+			<datensatz attributgruppe="atg.ereignisEigenschaften">
+				<datum name="Ereignisbeschreibung" wert="AMI" />
+				<datum name="EreignisTypReferenz" wert="ergTyp.messe" />
+			</datensatz>
+			<defaultParameter attributgruppe="atg.ereignisParameter"
+				typ="typ.ereignis">
+				<datenfeld name="RäumlicheGültigkeit">
+					<datum name="-" wert="ss.a14.0001" />
+				</datenfeld>
+				<datum name="BeginnZeitlicheGültigkeit"
+					wert="2007-09-09 00:00:00" />
+				<datum name="EndeZeitlicheGültigkeit"
+					wert="2007-09-09 24:00:00" />
+				<datum name="SystemKalenderEintragReferenz" wert="" />
+				<datenfeld name="VerkehrlicheGültigkeit"></datenfeld>
+				<datum name="Quelle" wert="Test" />
+			</defaultParameter>
+		</konfigurationsObjekt>
+		<konfigurationsObjekt pid="erg.iaa" name="Automesse IAA"
+			typ="typ.ereignis">
+			<datensatz attributgruppe="atg.ereignisEigenschaften">
+				<datum name="Ereignisbeschreibung" wert="IAA" />
+				<datum name="EreignisTypReferenz" wert="ergTyp.messe" />
+			</datensatz>
+			<defaultParameter attributgruppe="atg.ereignisParameter"
+				typ="typ.ereignis">
+				<datenfeld name="RäumlicheGültigkeit">
+					<datum name="-" wert="ss.a14.0001" />
+				</datenfeld>
+				<datum name="BeginnZeitlicheGültigkeit"
+					wert="2007-09-09 00:00:00" />
+				<datum name="EndeZeitlicheGültigkeit"
+					wert="2007-09-09 24:00:00" />
+				<datum name="SystemKalenderEintragReferenz" wert="" />
+				<datenfeld name="VerkehrlicheGültigkeit"></datenfeld>
+				<datum name="Quelle" wert="Test" />
+			</defaultParameter>
+		</konfigurationsObjekt>
+
+		<konfigurationsObjekt pid="erg.stadtfest" name="Stadtfest"
+			typ="typ.ereignis">
+			<datensatz attributgruppe="atg.ereignisEigenschaften">
+				<datum name="Ereignisbeschreibung" wert="Stadtfest" />
+				<datum name="EreignisTypReferenz" wert="ergTyp.Fest" />
+			</datensatz>
+			<defaultParameter attributgruppe="atg.ereignisParameter"
+				typ="typ.ereignis">
+				<datenfeld name="RäumlicheGültigkeit">
+					<datum name="-" wert="ss.a14.0001" />
+				</datenfeld>
+				<datum name="BeginnZeitlicheGültigkeit"
+					wert="2007-09-09 00:00:00" />
+				<datum name="EndeZeitlicheGültigkeit"
+					wert="2007-09-09 24:00:00" />
+				<datum name="SystemKalenderEintragReferenz" wert="" />
+				<datenfeld name="VerkehrlicheGültigkeit"></datenfeld>
+				<datum name="Quelle" wert="Test" />
+			</defaultParameter>
+		</konfigurationsObjekt>
+
+		<konfigurationsObjekt pid="erg.fussball" name="Fussball"
+			typ="typ.ereignis">
+			<datensatz attributgruppe="atg.ereignisEigenschaften">
+				<datum name="Ereignisbeschreibung" wert="Fussball" />
+				<datum name="EreignisTypReferenz"
+					wert="ergTyp.sportEreignis" />
+			</datensatz>
+			<defaultParameter attributgruppe="atg.ereignisParameter"
+				typ="typ.ereignis">
+				<datenfeld name="RäumlicheGültigkeit">
+					<datum name="-" wert="ss.a14.0001" />
+				</datenfeld>
+				<datum name="BeginnZeitlicheGültigkeit"
+					wert="2007-09-09 00:00:00" />
+				<datum name="EndeZeitlicheGültigkeit"
+					wert="2007-09-09 24:00:00" />
+				<datum name="SystemKalenderEintragReferenz" wert="" />
+				<datenfeld name="VerkehrlicheGültigkeit"></datenfeld>
+				<datum name="Quelle" wert="Test" />
+			</defaultParameter>
+		</konfigurationsObjekt>
+
+		<konfigurationsObjekt pid="erg.football" name="Football"
+			typ="typ.ereignis">
+			<datensatz attributgruppe="atg.ereignisEigenschaften">
+				<datum name="Ereignisbeschreibung"
+					wert="American Football" />
+				<datum name="EreignisTypReferenz"
+					wert="ergTyp.sportEreignis" />
+			</datensatz>
+			<defaultParameter attributgruppe="atg.ereignisParameter"
+				typ="typ.ereignis">
+				<datenfeld name="RäumlicheGültigkeit">
+					<datum name="-" wert="ss.a14.0001" />
+				</datenfeld>
+				<datum name="BeginnZeitlicheGültigkeit"
+					wert="2007-09-09 00:00:00" />
+				<datum name="EndeZeitlicheGültigkeit"
+					wert="2007-09-09 24:00:00" />
+				<datum name="SystemKalenderEintragReferenz" wert="" />
+				<datenfeld name="VerkehrlicheGültigkeit"></datenfeld>
+				<datum name="Quelle" wert="Test" />
+			</defaultParameter>
+		</konfigurationsObjekt>
+
+		<konfigurationsObjekt pid="erg.synchronschwimmen"
+			name="Synchronschwimmen" typ="typ.ereignis">
+			<datensatz attributgruppe="atg.ereignisEigenschaften">
+				<datum name="Ereignisbeschreibung"
+					wert="Synchronschwimmen" />
+				<datum name="EreignisTypReferenz"
+					wert="ergTyp.sportEreignis" />
+			</datensatz>
+			<defaultParameter attributgruppe="atg.ereignisParameter"
+				typ="typ.ereignis">
+				<datenfeld name="RäumlicheGültigkeit">
+					<datum name="-" wert="ss.a14.0001" />
+				</datenfeld>
+				<datum name="BeginnZeitlicheGültigkeit"
+					wert="2007-09-09 00:00:00" />
+				<datum name="EndeZeitlicheGültigkeit"
+					wert="2007-09-09 24:00:00" />
+				<datum name="SystemKalenderEintragReferenz" wert="" />
+				<datenfeld name="VerkehrlicheGültigkeit"></datenfeld>
+				<datum name="Quelle" wert="Test" />
+			</defaultParameter>
+		</konfigurationsObjekt>
+
+	</objekte>
+</konfigurationsBereich>

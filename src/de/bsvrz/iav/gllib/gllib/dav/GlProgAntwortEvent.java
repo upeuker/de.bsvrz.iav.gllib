@@ -194,7 +194,7 @@ public class GlProgAntwortEvent extends EventObject {
 		feld.setLength(prognosen.size());
 		i = 0;
 		for (GanglinieMQ g : prognosen.values()) {
-			g.getDaten(feld.getItem(i));
+			g.getDatenFuerPrognoseGanglinie(feld.getItem(i));
 		}
 	}
 

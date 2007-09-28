@@ -1,5 +1,5 @@
 /*
- * Segment 5 Intelligente Analyseverfahren, SWE 5.1 Ganglinienprognose
+ * Segment 5 Intelligente Analyseverfahren, SWE 5.5 Funktionen Ganglinie
  * Copyright (C) 2007 BitCtrl Systems GmbH 
  * 
  * This program is free software; you can redistribute it and/or modify it under
@@ -26,6 +26,8 @@
 
 package de.bsvrz.iav.gllib.gllib.intern;
 
+import java.util.List;
+
 import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.config.SystemObject;
 import de.bsvrz.sys.funclib.bitctrl.modell.kalender.EreignisTyp;
@@ -34,14 +36,21 @@ import de.bsvrz.sys.funclib.bitctrl.modell.kalender.EreignisTypParameterImpl;
 
 /**
  * Erweitert ein Ereignistyp um dessen Priorit&auml;t.
+ * <p>
+ * <em>Hinweis:</em> Diese Klasse ist nicht Teil der öffentlichen API und
+ * sollte nicht außerhalb der Ganglinie-API verwendet werden.
  * 
  * @author BitCtrl Systems GmbH, Schumann
  * @version $Id$
  */
-public class GlEreignisTyp extends EreignisTyp implements EreignisTypParameter {
+public class GlEreignisTyp extends EreignisTyp implements EreignisTypParameter,
+		GanglinienModellAutomatischesLernenEreignisParameter {
 
 	/** Die Priori&auml;t des Ereignistyps. */
 	private EreignisTypParameter parameter;
+
+	/** Der Parameter f&uuml;r das Ganglinienlernen. */
+	private GanglinienModellAutomatischesLernenEreignisParameterImpl lernParameter;
 
 	/**
 	 * Ruft den Superkonstruktor auf.
@@ -51,7 +60,6 @@ public class GlEreignisTyp extends EreignisTyp implements EreignisTypParameter {
 	 */
 	public GlEreignisTyp(SystemObject obj) {
 		super(obj);
-		parameter = new EreignisTypParameterImpl();
 	}
 
 	/**
@@ -75,7 +83,18 @@ public class GlEreignisTyp extends EreignisTyp implements EreignisTypParameter {
 	 *            ein g&uuml;ltiges Datum.
 	 */
 	public void setDaten(Data daten) {
-		parameter.setDaten(daten);
+		if (daten.getName().equals("atg.ereignisTypParameter")) {
+			if (parameter == null) {
+				parameter = new EreignisTypParameterImpl();
+			}
+			parameter.setDaten(daten);
+		} else if (daten.getName().equals(
+				"atg.ganglinienModellAutomatischesLernenEreignis")) {
+			if (lernParameter == null) {
+				lernParameter = new GanglinienModellAutomatischesLernenEreignisParameterImpl();
+			}
+			lernParameter.setDaten(daten);
+		}
 	}
 
 	/**
@@ -86,7 +105,115 @@ public class GlEreignisTyp extends EreignisTyp implements EreignisTypParameter {
 		return getClass().getSimpleName() + "[name="
 				+ getSystemObject().getName() + ", pid="
 				+ getSystemObject().getPid() + ", prioritaet="
-				+ parameter.getPrioritaet() + "]";
+				+ (parameter != null ? parameter.getPrioritaet() : null) + "]";
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see de.bsvrz.iav.gllib.gllib.intern.GanglinienModellAutomatischesLernenEreignisParameter#getAusschlussliste()
+	 */
+	public List<EreignisTyp> getAusschlussliste() {
+		return lernParameter.getAusschlussliste();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see de.bsvrz.iav.gllib.gllib.intern.GanglinienModellAutomatischesLernenEreignisParameter#getBezugsereignistypen()
+	 */
+	public List<EreignisTyp> getBezugsereignistypen() {
+		return lernParameter.getBezugsereignistypen();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see de.bsvrz.iav.gllib.gllib.intern.GanglinienModellAutomatischesLernenEreignisParameter#getDarstellungsverfahren()
+	 */
+	public int getDarstellungsverfahren() {
+		return lernParameter.getDarstellungsverfahren();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see de.bsvrz.iav.gllib.gllib.intern.GanglinienModellAutomatischesLernenEreignisParameter#getGanglinienTyp()
+	 */
+	public int getGanglinienTyp() {
+		return lernParameter.getGanglinienTyp();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see de.bsvrz.iav.gllib.gllib.intern.GanglinienModellAutomatischesLernenEreignisParameter#getMatchingIntervallNach()
+	 */
+	public long getMatchingIntervallNach() {
+		return lernParameter.getMatchingIntervallNach();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see de.bsvrz.iav.gllib.gllib.intern.GanglinienModellAutomatischesLernenEreignisParameter#getMatchingIntervallVor()
+	 */
+	public long getMatchingIntervallVor() {
+		return lernParameter.getMatchingIntervallVor();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see de.bsvrz.iav.gllib.gllib.intern.GanglinienModellAutomatischesLernenEreignisParameter#getMatchingSchrittweite()
+	 */
+	public long getMatchingSchrittweite() {
+		return lernParameter.getMatchingSchrittweite();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see de.bsvrz.iav.gllib.gllib.intern.GanglinienModellAutomatischesLernenEreignisParameter#getMaxAbstand()
+	 */
+	public double getMaxAbstand() {
+		return lernParameter.getMaxAbstand();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see de.bsvrz.iav.gllib.gllib.intern.GanglinienModellAutomatischesLernenEreignisParameter#getMaxGanglinien()
+	 */
+	public long getMaxGanglinien() {
+		return lernParameter.getMaxGanglinien();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see de.bsvrz.iav.gllib.gllib.intern.GanglinienModellAutomatischesLernenEreignisParameter#getMaxMatchingFehler()
+	 */
+	public double getMaxMatchingFehler() {
+		return lernParameter.getMaxMatchingFehler();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see de.bsvrz.iav.gllib.gllib.intern.GanglinienModellAutomatischesLernenEreignisParameter#getMaxWichtungsfaktor()
+	 */
+	public int getMaxWichtungsfaktor() {
+		return lernParameter.getMaxWichtungsfaktor();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see de.bsvrz.iav.gllib.gllib.intern.GanglinienModellAutomatischesLernenEreignisParameter#getVergleichsSchrittweite()
+	 */
+	public long getVergleichsSchrittweite() {
+		return lernParameter.getVergleichsSchrittweite();
 	}
 
 }

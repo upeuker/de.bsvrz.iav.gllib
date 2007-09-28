@@ -61,7 +61,6 @@ public class StuetzstelleTest {
 		s = new Stuetzstelle<Integer>(10);
 		assertEquals(10L, s.getZeitstempel());
 		assertEquals(null, s.getWert());
-		assertEquals("10=>null", s.toString());
 	}
 
 	/**
@@ -75,7 +74,6 @@ public class StuetzstelleTest {
 		s = new Stuetzstelle<Integer>(10, 50);
 		assertEquals(10L, s.getZeitstempel());
 		assertEquals(50, s.getWert());
-		assertEquals("10=>50", s.toString());
 	}
 
 	/**

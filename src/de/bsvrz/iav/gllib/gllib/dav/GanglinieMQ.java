@@ -421,30 +421,98 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	 * @see #setPrognoseZeitraum(Intervall)
 	 */
 	public List<Intervall> getIntervalle() {
-		List<Intervall> intervalle;
+		throw new UnsupportedOperationException("Es müssen die Intervalle der "
+				+ "einzelnen Ganglinien für Q, V und QB abgefragt werden.");
+	}
 
-		intervalle = new ArrayList<Intervall>();
-		if (prognoseZeitraum != null) {
-			for (Intervall i : qKfz.getIntervalle()) {
-				Intervall i0;
+	/**
+	 * Gibt die Ganglinie f&uuml;r QKfz zur&uuml;ck.
+	 * 
+	 * @return eine einfache mathematische Ganglinie mit den St&uuml;tzstellen
+	 *         von QKfz.
+	 */
+	public Ganglinie getGanglinieQKfz() {
+		return qKfz.clone();
+	}
 
-				i0 = i;
-				if (prognoseZeitraum.getStart() > i0.getStart()) {
-					i0 = new Intervall(prognoseZeitraum.getStart(), i0
-							.getEnde());
+	/**
+	 * Gibt die Ganglinie f&uuml;r QLkw zur&uuml;ck.
+	 * 
+	 * @return eine einfache mathematische Ganglinie mit den St&uuml;tzstellen
+	 *         von QLkw.
+	 */
+	public Ganglinie getGanglinieQLkw() {
+		return qLkw.clone();
+	}
 
-				}
-				if (prognoseZeitraum.getEnde() < i0.getEnde()) {
-					i0 = new Intervall(i0.getStart(), prognoseZeitraum
-							.getEnde());
+	/**
+	 * Gibt die Ganglinie f&uuml;r QPkw zur&uuml;ck.
+	 * 
+	 * @return eine einfache mathematische Ganglinie mit den St&uuml;tzstellen
+	 *         von QPkw.
+	 */
+	public Ganglinie getGanglinieQPkw() {
+		Ganglinie qPkw;
 
-				}
-
-				intervalle.add(i0);
-			}
+		qPkw = new Ganglinie();
+		for (Stuetzstelle<Messwerte> s : getStuetzstellen()) {
+			qPkw.setStuetzstelle(s.getZeitstempel(), s.getWert().getQPkw());
 		}
+		return qPkw;
+	}
 
-		return intervalle;
+	/**
+	 * Gibt die Ganglinie f&uuml;r VKfz zur&uuml;ck.
+	 * 
+	 * @return eine einfache mathematische Ganglinie mit den St&uuml;tzstellen
+	 *         von VKfz.
+	 */
+	public Ganglinie getGanglinieVKfz() {
+		Ganglinie vKfz;
+
+		vKfz = new Ganglinie();
+		for (Stuetzstelle<Messwerte> s : getStuetzstellen()) {
+			vKfz.setStuetzstelle(s.getZeitstempel(), s.getWert().getVKfz());
+		}
+		return vKfz;
+
+	}
+
+	/**
+	 * Gibt die Ganglinie f&uuml;r VLkw zur&uuml;ck.
+	 * 
+	 * @return eine einfache mathematische Ganglinie mit den St&uuml;tzstellen
+	 *         von VLkw.
+	 */
+	public Ganglinie getGanglinieVLkw() {
+		return vLkw.clone();
+	}
+
+	/**
+	 * Gibt die Ganglinie f&uuml;r QPkw zur&uuml;ck.
+	 * 
+	 * @return eine einfache mathematische Ganglinie mit den St&uuml;tzstellen
+	 *         von QPkw.
+	 */
+	public Ganglinie getGanglinieVPkw() {
+		return vPkw.clone();
+	}
+
+	/**
+	 * Gibt die Ganglinie f&uuml;r QB zur&uuml;ck.
+	 * 
+	 * @return eine einfache mathematische Ganglinie mit den St&uuml;tzstellen
+	 *         von QB.
+	 */
+	public Ganglinie getGanglinieQB() {
+		Ganglinie qb;
+
+		qb = new Ganglinie();
+		for (Stuetzstelle<Messwerte> s : getStuetzstellen()) {
+			qb.setStuetzstelle(s.getZeitstempel(), s.getWert().getQB());
+		}
+		return qb;
+
 	}
 
 	/**
@@ -453,14 +521,11 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	 * <p>
 	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
 	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
-	 * <p>
-	 * <em>Hinweis:</em> Diese Methode darf nur direkt nach dem
-	 * Standardkonstruktor aufgerufen werden.
 	 * 
 	 * @param daten
 	 *            ein Datum, welches eine Prognoseganglinie darstellt.
 	 */
-	public void getDaten(Data daten) {
+	public void getDatenFuerPrognoseGanglinie(Data daten) {
 		Array feld;
 		List<Stuetzstelle<Messwerte>> liste;
 
@@ -533,6 +598,79 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	}
 
 	/**
+	 * Baut aus den Informationen der Ganglinie einen Datensatz. Das Ergebnis
+	 * wird im Parameter abgelegt!
+	 * <p>
+	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
+	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
+	 * 
+	 * @param daten
+	 *            ein Datum, welches eine Messquerschnittsganglinie darstellt.
+	 */
+	public void getDatenFuerGanglinie(Data daten) {
+		Array feld;
+
+		daten.getReferenceValue("EreignisTyp").setSystemObject(
+				ereignisTyp.getSystemObject());
+		daten.getUnscaledValue("AnzahlVerschmelzungen").set(
+				anzahlVerschmelzungen);
+		daten.getTimeValue("LetzteVerschmelzung")
+				.setMillis(letzteVerschmelzung);
+		daten.getUnscaledValue("GanglinienTyp").set(typ);
+
+		if (referenz) {
+			daten.getUnscaledValue("Referenzganglinie").setText("Ja");
+		} else {
+			daten.getUnscaledValue("Referenzganglinie").setText("Nein");
+		}
+
+		daten.getUnscaledValue("GanglinienVerfahren").set(approximationDaK);
+		daten.getUnscaledValue("Ordnung").set(bSplineOrdnung);
+
+		feld = daten.getArray("Stützstelle");
+		List<Stuetzstelle<Messwerte>> liste = getStuetzstellen();
+		int i = 0;
+		feld.setLength(liste.size());
+		for (Stuetzstelle<Messwerte> s : liste) {
+			feld.getItem(i).getTimeValue("Zeit").setMillis(s.getZeitstempel());
+
+			if (s.getWert().getQKfz() != null) {
+				feld.getItem(i).getScaledValue("QKfz").set(
+						s.getWert().getQKfz());
+			} else {
+				feld.getItem(i).getScaledValue("QKfz").set(
+						Messwerte.UNDEFINIERT);
+			}
+
+			if (s.getWert().getQLkw() != null) {
+				feld.getItem(i).getScaledValue("QLkw").set(
+						s.getWert().getQLkw());
+			} else {
+				feld.getItem(i).getScaledValue("QLkw").set(
+						Messwerte.UNDEFINIERT);
+			}
+
+			if (s.getWert().getVLkw() != null) {
+				feld.getItem(i).getScaledValue("VLkw").set(
+						s.getWert().getVLkw());
+			} else {
+				feld.getItem(i).getScaledValue("VLkw").set(
+						Messwerte.UNDEFINIERT);
+			}
+
+			if (s.getWert().getVPkw() != null) {
+				feld.getItem(i).getScaledValue("VPkw").set(
+						s.getWert().getVPkw());
+			} else {
+				feld.getItem(i).getScaledValue("VPkw").set(
+						Messwerte.UNDEFINIERT);
+			}
+
+			i++;
+		}
+	}
+
+	/**
 	 * &Uuml;bernimmt die Informationen aus dem Datum als inneren Zustand.
 	 * <p>
 	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
@@ -547,7 +685,6 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	 */
 	public void setDatenVonGanglinie(Data daten) {
 		Array feld;
-		BSpline bspline;
 
 		ereignisTyp = (EreignisTyp) ObjektFactory.getModellobjekt(daten
 				.getReferenceValue("EreignisTyp").getSystemObject());
@@ -565,9 +702,9 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 
 		switch (daten.getUnscaledValue("GanglinienVerfahren").intValue()) {
 		case APPROX_BSPLINE:
-			bspline = new BSpline();
-			bspline.setOrdnung(daten.getUnscaledValue("Ordnung").byteValue());
-			setApproximation(bspline);
+			setApproximation(new BSpline());
+			setBSplineOrdnung((byte) daten.getUnscaledValue("Ordnung")
+					.longValue());
 			break;
 		case APPROX_CUBICSPLINE:
 			setApproximation(new CubicSpline());
@@ -576,8 +713,8 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 			setApproximation(new Polyline());
 			break;
 		default:
-			bspline = new BSpline((byte) 5);
-			setApproximation(bspline);
+			setApproximation(new BSpline());
+			setBSplineOrdnung((byte) 5);
 		}
 
 		feld = daten.getArray("Stützstelle");
@@ -627,8 +764,9 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 		// Verfahren
 		switch (daten.getUnscaledValue("GanglinienVerfahren").intValue()) {
 		case APPROX_BSPLINE:
-			setApproximation(new BSpline(daten.getUnscaledValue("Ordnung")
-					.byteValue()));
+			setApproximation(new BSpline());
+			setBSplineOrdnung((byte) daten.getUnscaledValue("Ordnung")
+					.longValue());
 			break;
 		case APPROX_CUBICSPLINE:
 			setApproximation(new CubicSpline());
@@ -933,7 +1071,7 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 		String result;
 
 		result = getClass().getSimpleName() + "[";
-		result += "mq=" + messQuerschnitt;
+		result += "messQuerschnitt=" + messQuerschnitt;
 		result += ", ereignisTyp=" + ereignisTyp;
 		result += ", referenz=" + referenz;
 		result += ", anzahlVerschmelzungen=" + anzahlVerschmelzungen;
@@ -942,6 +1080,7 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 						new Date(letzteVerschmelzung));
 		result += ", typ=" + typ;
 		result += ", approximation=" + getApproximation();
+		result += ", stuetzstellen=" + getStuetzstellen();
 		result += "]";
 		return result;
 	}
