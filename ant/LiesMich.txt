@@ -39,11 +39,12 @@ Versionsgeschichte
   - Erste Auslieferung
 
 
-Hinweise
-========
+Bemerkungen
+===========
 
- - Die Kommunikation mit dem Datenverteiler bzw. das Modul zum Senden und
-   Empfangen von Ganglinien ist noch nicht implementiert. Siehe offene Punkte.
+Die SWE stellt eine Softwarebibliothek dar. Die JAR-Datei muss zur Benutzung
+lediglich im Klassenpfad der Anwendung aufgenommen werden. Die Beschreibung der
+Schnittstelle kann in der API-Dokumentation nachgelesen werden.
 
 
 Disclaimer

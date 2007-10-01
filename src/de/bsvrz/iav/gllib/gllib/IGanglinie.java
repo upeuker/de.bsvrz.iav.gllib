@@ -34,7 +34,7 @@ import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
  * Definiert eine gemeinsame Schnittstelle für Ganglinien.
  * 
  * @author BitrCtrl, Schumann
- * @version $Id: Ganglinie.java 2394 2007-07-20 12:33:36Z Schumann $
+ * @version $Id$
  * @param <T>
  *            der Typ des Wertes eines St&uuml;tzstelle.
  */
