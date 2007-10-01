@@ -236,7 +236,10 @@ public class Ganglinienprognose {
 					fireAntwort((ClientApplication) so, datensatz.getData());
 					synchronized (anmeldungen) {
 						anmeldungen.remove(so);
-						verbindung.unsubscribeReceiver(this, so, dbsAntwort);
+						if (!anmeldungen.contains(so)) {
+							verbindung
+									.unsubscribeReceiver(this, so, dbsAntwort);
+						}
 					}
 				}
 			}
