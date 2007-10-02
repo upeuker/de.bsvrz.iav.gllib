@@ -2,19 +2,19 @@
  * Segment 5 Intelligente Analyseverfahren, SWE 5.5 Funktionen Ganglinie
  * Copyright (C) 2007 BitCtrl Systems GmbH 
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
+ * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
  * details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 51
- * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA.
  *
  * Contact Information:
  * BitCtrl Systems GmbH
@@ -40,7 +40,7 @@ import de.bsvrz.sys.funclib.bitctrl.util.dav.Umrechung;
  * </ul>
  * </p>
  * 
- * @author BitCtrl, Schumann
+ * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
  */
 public class Messwerte {
@@ -140,72 +140,6 @@ public class Messwerte {
 	}
 
 	/**
-	 * Gibt den Wert f&uuml;r QLkw zur&uuml;ck.
-	 * 
-	 * @return Wert f&uuml;r QLkw
-	 */
-	public Double getQLkw() {
-		return qLkw;
-	}
-
-	/**
-	 * Gibt den Wert f&uuml;r QKfz zur&uuml;ck.
-	 * 
-	 * @return Wert f&uuml;r QKfz
-	 */
-	public Double getQKfz() {
-		return qKfz;
-	}
-
-	/**
-	 * Gibt den Wert f&uuml;r VPkw zur&uuml;ck.
-	 * 
-	 * @return Wert f&uuml;r VPkw
-	 */
-	public Double getVPkw() {
-		return vPkw;
-	}
-
-	/**
-	 * Gibt den Wert f&uuml;r VLkw zur&uuml;ck.
-	 * 
-	 * @return Wert f&uuml;r VLkw
-	 */
-	public Double getVLkw() {
-		return vLkw;
-	}
-
-	/**
-	 * Gibt den Wert f&uuml;r QPkw zur&uuml;ck. Diese Property ist read-only, da
-	 * sie aus den in der Ganglinie gesicherten Werten berechnet wird.
-	 * 
-	 * @return Wert f&uuml;r QPkw
-	 */
-	public Double getQPkw() {
-		return Umrechung.getQPkw(qKfz, qLkw);
-	}
-
-	/**
-	 * Gibt den Wert f&uuml;r VKfz zur&uuml;ck. Diese Property ist read-only, da
-	 * sie aus den in der Ganglinie gesicherten Werten berechnet wird.
-	 * 
-	 * @return Wert f&uuml;r VKfz
-	 */
-	public Double getVKfz() {
-		return Umrechung.getVKfz(qLkw, qKfz, vPkw, vLkw);
-	}
-
-	/**
-	 * Gibt den Wert f&uuml;r QB zur&uuml;ck. Diese Property ist read-only, da
-	 * sie aus den in der Ganglinie gesicherten Werten berechnet wird.
-	 * 
-	 * @return Wert f&uuml;r QB
-	 */
-	public Double getQB() {
-		return Umrechung.getQB(qLkw, qKfz, vPkw, vLkw, k1, k2);
-	}
-
-	/**
 	 * Zwei St&uuml;tzstellen sind identisch, wenn beide den selben Zeitstempel
 	 * und die selben Werte haben.
 	 * 
@@ -249,6 +183,72 @@ public class Messwerte {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Gibt den Wert f&uuml;r QB zur&uuml;ck. Diese Property ist read-only, da
+	 * sie aus den in der Ganglinie gesicherten Werten berechnet wird.
+	 * 
+	 * @return Wert f&uuml;r QB
+	 */
+	public Double getQB() {
+		return Umrechung.getQB(qLkw, qKfz, vPkw, vLkw, k1, k2);
+	}
+
+	/**
+	 * Gibt den Wert f&uuml;r QKfz zur&uuml;ck.
+	 * 
+	 * @return Wert f&uuml;r QKfz
+	 */
+	public Double getQKfz() {
+		return qKfz;
+	}
+
+	/**
+	 * Gibt den Wert f&uuml;r QLkw zur&uuml;ck.
+	 * 
+	 * @return Wert f&uuml;r QLkw
+	 */
+	public Double getQLkw() {
+		return qLkw;
+	}
+
+	/**
+	 * Gibt den Wert f&uuml;r QPkw zur&uuml;ck. Diese Property ist read-only, da
+	 * sie aus den in der Ganglinie gesicherten Werten berechnet wird.
+	 * 
+	 * @return Wert f&uuml;r QPkw
+	 */
+	public Double getQPkw() {
+		return Umrechung.getQPkw(qKfz, qLkw);
+	}
+
+	/**
+	 * Gibt den Wert f&uuml;r VKfz zur&uuml;ck. Diese Property ist read-only, da
+	 * sie aus den in der Ganglinie gesicherten Werten berechnet wird.
+	 * 
+	 * @return Wert f&uuml;r VKfz
+	 */
+	public Double getVKfz() {
+		return Umrechung.getVKfz(qLkw, qKfz, vPkw, vLkw);
+	}
+
+	/**
+	 * Gibt den Wert f&uuml;r VLkw zur&uuml;ck.
+	 * 
+	 * @return Wert f&uuml;r VLkw
+	 */
+	public Double getVLkw() {
+		return vLkw;
+	}
+
+	/**
+	 * Gibt den Wert f&uuml;r VPkw zur&uuml;ck.
+	 * 
+	 * @return Wert f&uuml;r VPkw
+	 */
+	public Double getVPkw() {
+		return vPkw;
 	}
 
 	/**

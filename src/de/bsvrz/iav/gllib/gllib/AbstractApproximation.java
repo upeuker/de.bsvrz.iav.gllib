@@ -2,19 +2,19 @@
  * Segment 5 Intelligente Analyseverfahren, SWE 5.5 Funktionen Ganglinie
  * Copyright (C) 2007 BitCtrl Systems GmbH 
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
+ * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
  * details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 51
- * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA.
  *
  * Contact Information:
  * BitCtrl Systems GmbH
@@ -36,7 +36,7 @@ import java.util.TreeSet;
 /**
  * Implementiert nur die Property <code>Ganglinie</code> der Schnittstelle.
  * 
- * @author BitCtrl, Schumann
+ * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
  */
 public abstract class AbstractApproximation implements Approximation {
@@ -52,40 +52,15 @@ public abstract class AbstractApproximation implements Approximation {
 	}
 
 	/**
-	 * Gibt die St&uuml;tzstelle mit dem angegebenen Index zur&uml;ck.
-	 * 
-	 * @param index
-	 *            ein g&uuml;ltiger Index.
-	 * @return die St&uuml;tzstelle zum Index.
-	 */
-	protected Stuetzstelle<Double> get(int index) {
-		return stuetzstellen.get(index);
-	}
-
-	/**
-	 * Gibt die Anzahl der St&uuml;tzstellen zur&uuml;ck.
-	 * 
-	 * @return die St&uuml;tzstellenanzahl.
-	 */
-	protected int anzahl() {
-		return stuetzstellen.size();
-	}
-
-	/**
-	 * Bestimmt die Liste der verwendeten St&uuml;tzstellen. Die Liste
-	 * entspricht der Ganglinie, abz&uuml;glich der undefinierten
-	 * St&uuml;tzstellen.
+	 * Wirft immer eine {@link java.lang.CloneNotSupportedException}.
 	 * <p>
 	 * {@inheritDoc}
+	 * 
+	 * @throws CloneNotSupportedException
 	 */
-	public void setStuetzstellen(Collection<Stuetzstelle<Double>> menge) {
-		stuetzstellen.clear();
-		for (Stuetzstelle<Double> s : menge) {
-			if (s.getWert() != null) {
-				stuetzstellen.add(s);
-			}
-		}
-		Collections.sort(stuetzstellen);
+	@Override
+	public Approximation clone() throws CloneNotSupportedException {
+		throw new CloneNotSupportedException();
 	}
 
 	/**
@@ -119,15 +94,40 @@ public abstract class AbstractApproximation implements Approximation {
 	}
 
 	/**
-	 * Wirft immer eine {@link java.lang.CloneNotSupportedException}.
+	 * Bestimmt die Liste der verwendeten St&uuml;tzstellen. Die Liste
+	 * entspricht der Ganglinie, abz&uuml;glich der undefinierten
+	 * St&uuml;tzstellen.
 	 * <p>
 	 * {@inheritDoc}
-	 * 
-	 * @throws CloneNotSupportedException
 	 */
-	@Override
-	public Approximation clone() throws CloneNotSupportedException {
-		throw new CloneNotSupportedException();
+	public void setStuetzstellen(Collection<Stuetzstelle<Double>> menge) {
+		stuetzstellen.clear();
+		for (Stuetzstelle<Double> s : menge) {
+			if (s.getWert() != null) {
+				stuetzstellen.add(s);
+			}
+		}
+		Collections.sort(stuetzstellen);
+	}
+
+	/**
+	 * Gibt die Anzahl der St&uuml;tzstellen zur&uuml;ck.
+	 * 
+	 * @return die St&uuml;tzstellenanzahl.
+	 */
+	protected int anzahl() {
+		return stuetzstellen.size();
+	}
+
+	/**
+	 * Gibt die St&uuml;tzstelle mit dem angegebenen Index zur&uml;ck.
+	 * 
+	 * @param index
+	 *            ein g&uuml;ltiger Index.
+	 * @return die St&uuml;tzstelle zum Index.
+	 */
+	protected Stuetzstelle<Double> get(int index) {
+		return stuetzstellen.get(index);
 	}
 
 }

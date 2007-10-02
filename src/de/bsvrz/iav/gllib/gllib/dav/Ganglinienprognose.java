@@ -2,19 +2,19 @@
  * Segment 5 Intelligente Analyseverfahren, SWE 5.5 Funktionen Ganglinie
  * Copyright (C) 2007 BitCtrl Systems GmbH 
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
+ * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
  * details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 51
- * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA.
  *
  * Contact Information:
  * BitCtrl Systems GmbH
@@ -135,6 +135,33 @@ public class Ganglinienprognose {
 		}
 
 		/**
+		 * {@inheritDoc}
+		 */
+		public void dataRequest(SystemObject object,
+				DataDescription dataDescription, byte state) {
+			if (object.equals(soPrognose) && dataDescription.equals(dbsAnfrage)
+					&& state == ClientSenderInterface.START_SENDING) {
+				sendenErlaubt = true;
+				sendeAnfragen();
+			} else {
+				sendenErlaubt = false;
+			}
+		}
+
+		/**
+		 * Sendesteuerung wird verwendet.
+		 * <p>
+		 * {@inheritDoc}
+		 */
+		public boolean isRequestSupported(SystemObject object,
+				DataDescription dataDescription) {
+			if (object.equals(soPrognose) && dataDescription.equals(dbsAnfrage)) {
+				return true;
+			}
+			return false;
+		}
+
+		/**
 		 * Sendet eine Anfrage an die Ganglinienprognose.
 		 * 
 		 * @param anfrage
@@ -143,6 +170,30 @@ public class Ganglinienprognose {
 		public void sendeAnfrage(GlProgAnfrageNachricht anfrage) {
 			anfragen.add(anfrage);
 			sendeAnfragen();
+		}
+
+		/**
+		 * {@inheritDoc}
+		 */
+		public void update(ResultData[] results) {
+			for (ResultData datensatz : results) {
+				if (datensatz.getDataDescription().equals(dbsAntwort)
+						&& datensatz.hasData()) {
+					SystemObject so;
+
+					so = datensatz.getObject();
+					kommLogger.finer("Prognoseantwort erhalten für die "
+							+ "Anfrage von", so);
+					fireAntwort((ClientApplication) so, datensatz.getData());
+					synchronized (anmeldungen) {
+						anmeldungen.remove(so);
+						if (!anmeldungen.contains(so)) {
+							verbindung
+									.unsubscribeReceiver(this, so, dbsAntwort);
+						}
+					}
+				}
+			}
 		}
 
 		/**
@@ -194,67 +245,7 @@ public class Ganglinienprognose {
 			}
 		}
 
-		/**
-		 * {@inheritDoc}
-		 */
-		public void dataRequest(SystemObject object,
-				DataDescription dataDescription, byte state) {
-			if (object.equals(soPrognose) && dataDescription.equals(dbsAnfrage)
-					&& state == ClientSenderInterface.START_SENDING) {
-				sendenErlaubt = true;
-				sendeAnfragen();
-			} else {
-				sendenErlaubt = false;
-			}
-		}
-
-		/**
-		 * Sendesteuerung wird verwendet.
-		 * <p>
-		 * {@inheritDoc}
-		 */
-		public boolean isRequestSupported(SystemObject object,
-				DataDescription dataDescription) {
-			if (object.equals(soPrognose) && dataDescription.equals(dbsAnfrage)) {
-				return true;
-			}
-			return false;
-		}
-
-		/**
-		 * {@inheritDoc}
-		 */
-		public void update(ResultData[] results) {
-			for (ResultData datensatz : results) {
-				if (datensatz.getDataDescription().equals(dbsAntwort)
-						&& datensatz.hasData()) {
-					SystemObject so;
-
-					so = datensatz.getObject();
-					kommLogger.finer("Prognoseantwort erhalten für die "
-							+ "Anfrage von", so);
-					fireAntwort((ClientApplication) so, datensatz.getData());
-					synchronized (anmeldungen) {
-						anmeldungen.remove(so);
-						if (!anmeldungen.contains(so)) {
-							verbindung
-									.unsubscribeReceiver(this, so, dbsAntwort);
-						}
-					}
-				}
-			}
-		}
-
 	}
-
-	/** Der Logger. */
-	private final Debug logger;
-
-	/** Angemeldete Listener. */
-	private final EventListenerList listeners;
-
-	/** Die Kommunikationsinstanz. */
-	private final Kommunikation kommunikation;
 
 	/** Sichert die Liste des Singletons pro Datenverteilerverbindung. */
 	private static Map<ClientDavInterface, Ganglinienprognose> singleton;
@@ -276,6 +267,15 @@ public class Ganglinienprognose {
 		}
 		return singleton.get(verbindung);
 	}
+
+	/** Der Logger. */
+	private final Debug logger;
+
+	/** Angemeldete Listener. */
+	private final EventListenerList listeners;
+
+	/** Die Kommunikationsinstanz. */
+	private final Kommunikation kommunikation;
 
 	/**
 	 * Initialisiert den inneren Zustand.

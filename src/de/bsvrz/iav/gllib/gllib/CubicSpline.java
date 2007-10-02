@@ -2,19 +2,19 @@
  * Segment 5 Intelligente Analyseverfahren, SWE 5.5 Funktionen Ganglinie
  * Copyright (C) 2007 BitCtrl Systems GmbH 
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
+ * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
  * details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 51
- * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA.
  *
  * Contact Information:
  * BitCtrl Systems GmbH
@@ -39,7 +39,7 @@ import de.bsvrz.sys.funclib.bitctrl.math.algebra.Vektor;
 /**
  * Approximation einer Ganglinie mit Hilfe eines Cubic-Splines.
  * 
- * @author BitCtrl, Schumann
+ * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
  */
 public class CubicSpline extends AbstractApproximation {
@@ -77,35 +77,6 @@ public class CubicSpline extends AbstractApproximation {
 		}
 
 		return berechneStuetzstelle(zeitstempel);
-	}
-
-	/**
-	 * Berechnet die St&uuml;tzstelle.
-	 * 
-	 * @param zeitstempel
-	 *            Zeitstempel der gesuchten St&uuml;tzstelle
-	 * @return Die gesuchte St&uuml;tzstelle
-	 */
-	private Stuetzstelle<Double> berechneStuetzstelle(long zeitstempel) {
-		RationaleZahl r, x, xi;
-		int index;
-
-		index = -1;
-		for (int i = 0; i < anzahl(); i++) {
-			if (get(i).getZeitstempel() > zeitstempel) {
-				index = i - 1;
-				break;
-			}
-		}
-		xi = new RationaleZahl(get(index).getZeitstempel());
-		x = new RationaleZahl(zeitstempel);
-
-		r = addiere(addiere(addiere(a[index], multipliziere(b[index],
-				subtrahiere(x, xi))), multipliziere(c[index], potenz(
-				subtrahiere(x, xi), 2))), multipliziere(d[index], potenz(
-				subtrahiere(x, xi), 3)));
-
-		return new Stuetzstelle<Double>(zeitstempel, r.doubleValue());
 	}
 
 	/**
@@ -180,6 +151,35 @@ public class CubicSpline extends AbstractApproximation {
 	@Override
 	public String toString() {
 		return "Cubic-Spline";
+	}
+
+	/**
+	 * Berechnet die St&uuml;tzstelle.
+	 * 
+	 * @param zeitstempel
+	 *            Zeitstempel der gesuchten St&uuml;tzstelle
+	 * @return Die gesuchte St&uuml;tzstelle
+	 */
+	private Stuetzstelle<Double> berechneStuetzstelle(long zeitstempel) {
+		RationaleZahl r, x, xi;
+		int index;
+
+		index = -1;
+		for (int i = 0; i < anzahl(); i++) {
+			if (get(i).getZeitstempel() > zeitstempel) {
+				index = i - 1;
+				break;
+			}
+		}
+		xi = new RationaleZahl(get(index).getZeitstempel());
+		x = new RationaleZahl(zeitstempel);
+
+		r = addiere(addiere(addiere(a[index], multipliziere(b[index],
+				subtrahiere(x, xi))), multipliziere(c[index], potenz(
+				subtrahiere(x, xi), 2))), multipliziere(d[index], potenz(
+				subtrahiere(x, xi), 3)));
+
+		return new Stuetzstelle<Double>(zeitstempel, r.doubleValue());
 	}
 
 }

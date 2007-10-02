@@ -2,19 +2,19 @@
  * Segment 5 Intelligente Analyseverfahren, SWE 5.5 Funktionen Ganglinie
  * Copyright (C) 2007 BitCtrl Systems GmbH 
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
+ * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
  * details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 51
- * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA.
  *
  * Contact Information:
  * BitCtrl Systems GmbH
@@ -35,23 +35,19 @@ import java.util.SortedSet;
  * <p>
  * TODO: Undefinierte Intervalle innerhalb der Ganglinie berücksichtigen
  * 
- * @author BitCtrl, Schumann
+ * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
  */
 public interface Approximation {
 
 	/**
-	 * F&uuml;hrt notwendige Initialisierungsarbeiten der Approximation aus.
-	 */
-	void initialisiere();
-
-	/**
-	 * Legt die St&uuml;tzstellen der Approximation fest.
+	 * Erzeugt eine Kopie der Approximation.
 	 * 
-	 * @param menge
-	 *            die Menge der bekannten St&uuml;tzstellen.
+	 * @return die kopierte Approximation.
+	 * @throws CloneNotSupportedException
+	 *             wenn das Klonen nicht unterst&uuml;tzt wird.
 	 */
-	void setStuetzstellen(Collection<Stuetzstelle<Double>> menge);
+	Approximation clone() throws CloneNotSupportedException;
 
 	/**
 	 * Gibt die St&uuml;tzstelle zum angegebenen Zeitstempel zur&uuml;ck.
@@ -61,6 +57,11 @@ public interface Approximation {
 	 * @return Wert als St&uuml;tzstelle
 	 */
 	Stuetzstelle<Double> get(long zeitstempel);
+
+	/**
+	 * F&uuml;hrt notwendige Initialisierungsarbeiten der Approximation aus.
+	 */
+	void initialisiere();
 
 	/**
 	 * Gibt eine Interpolation der Approximation zur&uuml;ck. N&uuml;tzlich
@@ -77,12 +78,11 @@ public interface Approximation {
 	SortedSet<Stuetzstelle<Double>> interpoliere(long intervallBreite);
 
 	/**
-	 * Erzeugt eine Kopie der Approximation.
+	 * Legt die St&uuml;tzstellen der Approximation fest.
 	 * 
-	 * @return die kopierte Approximation.
-	 * @throws CloneNotSupportedException
-	 *             wenn das Klonen nicht unterst&uuml;tzt wird.
+	 * @param menge
+	 *            die Menge der bekannten St&uuml;tzstellen.
 	 */
-	Approximation clone() throws CloneNotSupportedException;
+	void setStuetzstellen(Collection<Stuetzstelle<Double>> menge);
 
 }

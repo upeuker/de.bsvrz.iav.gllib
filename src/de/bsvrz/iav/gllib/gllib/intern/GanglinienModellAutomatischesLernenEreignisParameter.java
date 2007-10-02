@@ -2,19 +2,19 @@
  * Segment 5 Intelligente Analyseverfahren, SWE 5.5 Funktionen Ganglinie
  * Copyright (C) 2007 BitCtrl Systems GmbH 
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
+ * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
  * details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 51
- * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA.
  *
  * Contact Information:
  * BitCtrl Systems GmbH
@@ -36,7 +36,8 @@ import de.bsvrz.sys.funclib.bitctrl.modell.kalender.EreignisTyp;
  * der pro Ereignistyp parametriert wird.
  * 
  * @author BitCtrl Systems GmbH, Schumann
- * @version $Id$
+ * @version $Id: GanglinienModellAutomatischesLernenEreignisParameter.java 3962
+ *          2007-10-01 13:09:43Z Schumann $
  */
 public interface GanglinienModellAutomatischesLernenEreignisParameter {
 
@@ -47,6 +48,25 @@ public interface GanglinienModellAutomatischesLernenEreignisParameter {
 	 * @return Liste von Ereignistypen.
 	 */
 	List<EreignisTyp> getAusschlussliste();
+
+	/**
+	 * Gibt eine Liste von Ereignistypen zur&uuml;ck, auf die sich eine relative
+	 * Ganglinie beziehen kann. Wird für absolute Ganglinien ignoriert.
+	 * 
+	 * @return eine Liste von Ereignistypen.
+	 */
+	List<EreignisTyp> getBezugsereignistypen();
+
+	/**
+	 * Gibt das zu verwendete Approximationsverfahren der zu genierenden
+	 * Ganglinie fest.
+	 * 
+	 * @return eines der Verfahren
+	 *         {@link de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ#TYP_ABSOLUT},
+	 *         {@link de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ#TYP_ADDITIV} oder
+	 *         {@link de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ#TYP_MULTIPLIKATIV}.
+	 */
+	int getDarstellungsverfahren();
 
 	/**
 	 * Gibt den Typ der zu lernenden Ganglinien zur&uuml;ck.
@@ -61,11 +81,27 @@ public interface GanglinienModellAutomatischesLernenEreignisParameter {
 	int getGanglinienTyp();
 
 	/**
-	 * Gibt die Schrittweite für das komplexe Abstandsverfahren zur&uuml;ck.
+	 * Gibt die Zeit nach dem Lernzeitraum zur&uuml;ck, der ebenfalls beim
+	 * Lernen einbezogen werden soll.
 	 * 
-	 * @return die Schrittweite f&uuml;r das Pattern-Matching.
+	 * @return zu ber&uuml;cksichtigender Zeitraum nach dem Lernzeitraum.
 	 */
-	long getVergleichsSchrittweite();
+	long getMatchingIntervallNach();
+
+	/**
+	 * Gibt die Zeit vor dem Lernzeitraum zur&uuml;ck, der ebenfalls beim Lernen
+	 * einbezogen werden soll.
+	 * 
+	 * @return zu ber&uuml;cksichtigender Zeitraum vor dem Lernzeitraum.
+	 */
+	long getMatchingIntervallVor();
+
+	/**
+	 * Gibt die zu verwendende Schrittweite beim Pattern-Matching zur&uuml;ck.
+	 * 
+	 * @return die zuverwende Schritte beim Pattern-Matching.
+	 */
+	long getMatchingSchrittweite();
 
 	/**
 	 * Gibt in Prozent den maximalen Abstand der Analyseganglinie zu einer
@@ -77,12 +113,11 @@ public interface GanglinienModellAutomatischesLernenEreignisParameter {
 	int getMaxAbstand();
 
 	/**
-	 * Gibt eine Liste von Ereignistypen zur&uuml;ck, auf die sich eine relative
-	 * Ganglinie beziehen kann. Wird für absolute Ganglinien ignoriert.
+	 * Gibt die maximale Anzahl von Ganglinien pro Ereignistyp zur&uuml;ck.
 	 * 
-	 * @return eine Liste von Ereignistypen.
+	 * @return die maximale Ganglinienanzahl pro Ereignistyp.
 	 */
-	List<EreignisTyp> getBezugsereignistypen();
+	long getMaxGanglinien();
 
 	/**
 	 * Gibt in Prozent den maximalen Abstand der Analyseganglinie zu einer
@@ -93,29 +128,6 @@ public interface GanglinienModellAutomatischesLernenEreignisParameter {
 	int getMaxMatchingFehler();
 
 	/**
-	 * Gibt die zu verwendende Schrittweite beim Pattern-Matching zur&uuml;ck.
-	 * 
-	 * @return die zuverwende Schritte beim Pattern-Matching.
-	 */
-	long getMatchingSchrittweite();
-
-	/**
-	 * Gibt die Zeit vor dem Lernzeitraum zur&uuml;ck, der ebenfalls beim Lernen
-	 * einbezogen werden soll.
-	 * 
-	 * @return zu ber&uuml;cksichtigender Zeitraum vor dem Lernzeitraum.
-	 */
-	long getMatchingIntervallVor();
-
-	/**
-	 * Gibt die Zeit nach dem Lernzeitraum zur&uuml;ck, der ebenfalls beim
-	 * Lernen einbezogen werden soll.
-	 * 
-	 * @return zu ber&uuml;cksichtigender Zeitraum nach dem Lernzeitraum.
-	 */
-	long getMatchingIntervallNach();
-
-	/**
 	 * Gibt das maximale Gewicht einer historischen Ganglinie beim Verschmelzen
 	 * zur&uuml;ck.
 	 * 
@@ -124,22 +136,11 @@ public interface GanglinienModellAutomatischesLernenEreignisParameter {
 	int getMaxWichtungsfaktor();
 
 	/**
-	 * Gibt das zu verwendete Approximationsverfahren der zu genierenden
-	 * Ganglinie fest.
+	 * Gibt die Schrittweite für das komplexe Abstandsverfahren zur&uuml;ck.
 	 * 
-	 * @return eines der Verfahren
-	 *         {@link de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ#TYP_ABSOLUT},
-	 *         {@link de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ#TYP_ADDITIV} oder
-	 *         {@link de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ#TYP_MULTIPLIKATIV}.
+	 * @return die Schrittweite f&uuml;r das Pattern-Matching.
 	 */
-	int getDarstellungsverfahren();
-
-	/**
-	 * Gibt die maximale Anzahl von Ganglinien pro Ereignistyp zur&uuml;ck.
-	 * 
-	 * @return die maximale Ganglinienanzahl pro Ereignistyp.
-	 */
-	long getMaxGanglinien();
+	long getVergleichsSchrittweite();
 
 	/**
 	 * &Uuml;bernimmt die Werte aus einem Datum als inneren Zustand.

@@ -2,19 +2,19 @@
  * Segment 5 Intelligente Analyseverfahren, SWE 5.5 Funktionen Ganglinie
  * Copyright (C) 2007 BitCtrl Systems GmbH 
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
+ * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
  * details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 51
- * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA.
  *
  * Contact Information:
  * BitCtrl Systems GmbH
@@ -29,7 +29,7 @@ package de.bsvrz.iav.gllib.gllib;
 /**
  * Approximation einer Ganglinie mit Hilfe eines B-Splines beliebiger Ordung.
  * 
- * @author BitCtrl, Schumann
+ * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
  */
 public class BSpline extends AbstractApproximation {
@@ -58,36 +58,12 @@ public class BSpline extends AbstractApproximation {
 	}
 
 	/**
-	 * Gibt die Ordgung des B-Splines zur&uuml;ck.
-	 * 
-	 * @return Ordnung
-	 */
-	public byte getOrdnung() {
-		return ordnung;
-	}
-
-	/**
-	 * Legt die Ordnung des B-Splines fest.
-	 * 
-	 * @param ordnung
-	 *            Ordnung
-	 */
-	public void setOrdnung(byte ordnung) {
-		if (ordnung < 1 || ordnung > anzahl()) {
-			throw new IllegalArgumentException(
-					"Die Ordnung muss zwischen 1 und der Anzahl der definierten Stützstellen liegen.");
-		}
-
-		this.ordnung = ordnung;
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	public Stuetzstelle<Double> get(long zeitstempel) {
 		double t0, f;
 		Stuetzstelle<Double> s;
-		
+
 		if (anzahl() == 0 || get(0).getZeitstempel() < zeitstempel
 				|| zeitstempel > get(anzahl() - 1).getZeitstempel()) {
 			// Zeitstempel liegt außerhalb der Ganglinie
@@ -124,20 +100,90 @@ public class BSpline extends AbstractApproximation {
 	}
 
 	/**
-	 * Bestimmt zu einem Zeitstempel die Intervallposition.
+	 * Gibt die Ordgung des B-Splines zur&uuml;ck.
 	 * 
-	 * @param zeitstempel
-	 *            Ein Zeitstempel
-	 * @return Die dazugehörige Intervallposition
+	 * @return Ordnung
 	 */
-	private double zeitstempelNachT(long zeitstempel) {
-		double t0;
+	public byte getOrdnung() {
+		return ordnung;
+	}
 
-		t0 = zeitstempel;
-		t0 /= get(anzahl() - 1).getZeitstempel() - get(0).getZeitstempel();
-		t0 *= t[t.length - 1];
+	/**
+	 * Bestimmt die Intervallgrenzen der Interpolation. Es gibt n+k-1 Intervalle
+	 * mit n&nbsp;=&nbsp;Knotenanzahl und k&nbsp;=&nbsp;Ordnung des B-Spline.
+	 * 
+	 * {@inheritDoc}
+	 */
+	public void initialisiere() {
+		t = new int[anzahl() + ordnung];
+		for (int j = 0; j < t.length; j++) {
+			if (j < ordnung) {
+				t[j] = 0;
+			} else if (ordnung <= j && j <= anzahl() - 1) {
+				t[j] = j - ordnung + 1;
+			} else if (j > anzahl() - 1) {
+				t[j] = anzahl() - 1 - ordnung + 2;
+			} else {
+				throw new IllegalStateException();
+			}
+		}
+	}
 
-		return t0;
+	/**
+	 * Legt die Ordnung des B-Splines fest.
+	 * 
+	 * @param ordnung
+	 *            Ordnung
+	 */
+	public void setOrdnung(byte ordnung) {
+		if (ordnung < 1 || ordnung > anzahl()) {
+			throw new IllegalArgumentException(
+					"Die Ordnung muss zwischen 1 und der Anzahl der definierten Stützstellen liegen.");
+		}
+
+		this.ordnung = ordnung;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return "B-Spline mit Ordnung " + ordnung;
+	}
+
+	/**
+	 * Berechnet die Stützstelle zu einer Intervallstelle.
+	 * 
+	 * @param t0
+	 *            Eine Stelle im Intervall des Parameters t
+	 * @return Die berechnete Stützstelle
+	 */
+	private Stuetzstelle<Double> bspline(double t0) {
+		double bx, by;
+		int i;
+
+		// Ränder der Ganglinie werden 1:1 übernommen
+		if (t0 <= t[0]) {
+			return get(0);
+		} else if (t0 >= t[t.length - 1]) {
+			return get(anzahl() - 1);
+		}
+
+		bx = by = 0;
+		i = (int) t0 + ordnung - 1;
+		// for (int j = 0; j < p.length; j++) {
+		for (int j = i - ordnung + 1; j <= i; j++) {
+
+			double n;
+
+			n = n(j, ordnung, t0);
+			bx += get(j).getZeitstempel() * n;
+			by += get(j).getWert().doubleValue() * n;
+
+		}
+
+		return new Stuetzstelle<Double>(Math.round(bx), by);
 	}
 
 	/**
@@ -190,66 +236,20 @@ public class BSpline extends AbstractApproximation {
 	}
 
 	/**
-	 * Berechnet die Stützstelle zu einer Intervallstelle.
+	 * Bestimmt zu einem Zeitstempel die Intervallposition.
 	 * 
-	 * @param t0
-	 *            Eine Stelle im Intervall des Parameters t
-	 * @return Die berechnete Stützstelle
+	 * @param zeitstempel
+	 *            Ein Zeitstempel
+	 * @return Die dazugehörige Intervallposition
 	 */
-	private Stuetzstelle<Double> bspline(double t0) {
-		double bx, by;
-		int i;
+	private double zeitstempelNachT(long zeitstempel) {
+		double t0;
 
-		// Ränder der Ganglinie werden 1:1 übernommen
-		if (t0 <= t[0]) {
-			return get(0);
-		} else if (t0 >= t[t.length - 1]) {
-			return get(anzahl() - 1);
-		}
+		t0 = zeitstempel;
+		t0 /= get(anzahl() - 1).getZeitstempel() - get(0).getZeitstempel();
+		t0 *= t[t.length - 1];
 
-		bx = by = 0;
-		i = (int) t0 + ordnung - 1;
-		// for (int j = 0; j < p.length; j++) {
-		for (int j = i - ordnung + 1; j <= i; j++) {
-
-			double n;
-
-			n = n(j, ordnung, t0);
-			bx += get(j).getZeitstempel() * n;
-			by += get(j).getWert().doubleValue() * n;
-
-		}
-
-		return new Stuetzstelle<Double>(Math.round(bx), by);
-	}
-
-	/**
-	 * Bestimmt die Intervallgrenzen der Interpolation. Es gibt n+k-1 Intervalle
-	 * mit n&nbsp;=&nbsp;Knotenanzahl und k&nbsp;=&nbsp;Ordnung des B-Spline.
-	 * 
-	 * {@inheritDoc}
-	 */
-	public void initialisiere() {
-		t = new int[anzahl() + ordnung];
-		for (int j = 0; j < t.length; j++) {
-			if (j < ordnung) {
-				t[j] = 0;
-			} else if (ordnung <= j && j <= anzahl() - 1) {
-				t[j] = j - ordnung + 1;
-			} else if (j > anzahl() - 1) {
-				t[j] = anzahl() - 1 - ordnung + 2;
-			} else {
-				throw new IllegalStateException();
-			}
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String toString() {
-		return "B-Spline mit Ordnung " + ordnung;
+		return t0;
 	}
 
 }

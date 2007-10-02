@@ -24,8 +24,3 @@
  * mailto: info@bitctrl.de
  */
 
-/**
- * Allgemeine Ganglinienfunktionen ohne direkten Bezug zum Datenverteiler.
- */
-package de.bsvrz.iav.gllib.gllib;
-

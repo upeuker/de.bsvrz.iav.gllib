@@ -2,19 +2,19 @@
  * Segment 5 Intelligente Analyseverfahren, SWE 5.5 Funktionen Ganglinie
  * Copyright (C) 2007 BitCtrl Systems GmbH 
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
+ * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
  * details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 51
- * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA.
  *
  * Contact Information:
  * BitCtrl Systems GmbH
@@ -35,7 +35,8 @@ import org.junit.Test;
  * Testet die Verwendung einer Ganglinie.
  * 
  * @author BitCtrl Systems GmbH, Schumann
- * @version $Id$
+ * @version $Id: TestGanglinienOperationen.java 3962 2007-10-01 13:09:43Z
+ *          Schumann $
  */
 
 public class TestGanglinienOperationen {
@@ -85,11 +86,11 @@ public class TestGanglinienOperationen {
 	}
 
 	/**
-	 * Testet die Subtraktion zweier Ganglinien.
+	 * Testet die Division zweier Ganglinien.
 	 */
 	@Test
-	public void testSubtrahiere() {
-		System.out.println("Subtrahiere zwei Ganglinien ...");
+	public void testDividiere() {
+		System.out.println("Dividiere zwei Ganglinien ...");
 
 		Ganglinie g1, g2, ist, soll;
 
@@ -106,16 +107,16 @@ public class TestGanglinienOperationen {
 		g2.setStuetzstelle(70, 0.0);
 		g2.setStuetzstelle(90, 20.0);
 
-		ist = GanglinienOperationen.subtrahiere(g1, g2);
+		ist = GanglinienOperationen.dividiere(g1, g2);
 
 		soll = new Ganglinie();
 		soll.setStuetzstelle(0, null);
-		soll.setStuetzstelle(10, -10.0);
-		soll.setStuetzstelle(30, -10.0);
-		soll.setStuetzstelle(40, -10.0);
-		soll.setStuetzstelle(60, 30.0);
-		soll.setStuetzstelle(70, 30.0);
-		soll.setStuetzstelle(90, -10.0);
+		soll.setStuetzstelle(10, 0.5);
+		soll.setStuetzstelle(30, 0.75);
+		soll.setStuetzstelle(40, 0.6666666666666666);
+		soll.setStuetzstelle(60, 4.0);
+		soll.setStuetzstelle(70, null);
+		soll.setStuetzstelle(90, 0.5);
 
 		assertEquals(soll.getStuetzstellen(), ist.getStuetzstellen());
 	}
@@ -157,11 +158,11 @@ public class TestGanglinienOperationen {
 	}
 
 	/**
-	 * Testet die Division zweier Ganglinien.
+	 * Testet die Subtraktion zweier Ganglinien.
 	 */
 	@Test
-	public void testDividiere() {
-		System.out.println("Dividiere zwei Ganglinien ...");
+	public void testSubtrahiere() {
+		System.out.println("Subtrahiere zwei Ganglinien ...");
 
 		Ganglinie g1, g2, ist, soll;
 
@@ -178,16 +179,16 @@ public class TestGanglinienOperationen {
 		g2.setStuetzstelle(70, 0.0);
 		g2.setStuetzstelle(90, 20.0);
 
-		ist = GanglinienOperationen.dividiere(g1, g2);
+		ist = GanglinienOperationen.subtrahiere(g1, g2);
 
 		soll = new Ganglinie();
 		soll.setStuetzstelle(0, null);
-		soll.setStuetzstelle(10, 0.5);
-		soll.setStuetzstelle(30, 0.75);
-		soll.setStuetzstelle(40, 0.6666666666666666);
-		soll.setStuetzstelle(60, 4.0);
-		soll.setStuetzstelle(70, null);
-		soll.setStuetzstelle(90, 0.5);
+		soll.setStuetzstelle(10, -10.0);
+		soll.setStuetzstelle(30, -10.0);
+		soll.setStuetzstelle(40, -10.0);
+		soll.setStuetzstelle(60, 30.0);
+		soll.setStuetzstelle(70, 30.0);
+		soll.setStuetzstelle(90, -10.0);
 
 		assertEquals(soll.getStuetzstellen(), ist.getStuetzstellen());
 	}

@@ -2,19 +2,19 @@
  * Segment 5 Intelligente Analyseverfahren, SWE 5.5 Funktionen Ganglinie
  * Copyright (C) 2007 BitCtrl Systems GmbH 
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
+ * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
  * details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 51
- * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA.
  *
  * Contact Information:
  * BitCtrl Systems GmbH
@@ -70,10 +70,21 @@ public class GlProgAnfrage {
 	private long sendeIntervall;
 
 	/**
-	 * Konstruktor f&uuml;r Vererbung.
+	 * Generiert eine einmalige Anfrage. Die Option "zyklische Anfrage" wird auf
+	 * {@code false} gesetzt und die davon abh&auml;ngigen Parameter mit
+	 * Defaultwerten belegt.
+	 * 
+	 * @param mq
+	 *            der Messquerschnitt f&uuml;r den eine Ganglinie angefragt
+	 *            wird.
+	 * @param prognoseZeitraum
+	 *            der Zeitraum der Prognose.
+	 * @param nurLangfristigeAuswahl
+	 *            Nur Auswahlverfahren der langfristigen Prognose benutzen?
 	 */
-	protected GlProgAnfrage() {
-		ereignisTypen = new HashSet<EreignisTyp>();
+	public GlProgAnfrage(MessQuerschnittAllgemein mq,
+			Intervall prognoseZeitraum, boolean nurLangfristigeAuswahl) {
+		this(mq, prognoseZeitraum, nurLangfristigeAuswahl, false, 1, 0, 1);
 	}
 
 	/**
@@ -131,31 +142,10 @@ public class GlProgAnfrage {
 	}
 
 	/**
-	 * Generiert eine einmalige Anfrage. Die Option "zyklische Anfrage" wird auf
-	 * {@code false} gesetzt und die davon abh&auml;ngigen Parameter mit
-	 * Defaultwerten belegt.
-	 * 
-	 * @param mq
-	 *            der Messquerschnitt f&uuml;r den eine Ganglinie angefragt
-	 *            wird.
-	 * @param prognoseZeitraum
-	 *            der Zeitraum der Prognose.
-	 * @param nurLangfristigeAuswahl
-	 *            Nur Auswahlverfahren der langfristigen Prognose benutzen?
+	 * Konstruktor f&uuml;r Vererbung.
 	 */
-	public GlProgAnfrage(MessQuerschnittAllgemein mq,
-			Intervall prognoseZeitraum, boolean nurLangfristigeAuswahl) {
-		this(mq, prognoseZeitraum, nurLangfristigeAuswahl, false, 1, 0, 1);
-	}
-
-	/**
-	 * Gibt die Anzahl der ausgeschlossenen Ereignistypen dieser Anfrage
-	 * zur&uuml;ck.
-	 * 
-	 * @return Anzahl der Ereignistypen
-	 */
-	public int getAnzahlEreignisTypen() {
-		return ereignisTypen.size();
+	protected GlProgAnfrage() {
+		ereignisTypen = new HashSet<EreignisTyp>();
 	}
 
 	/**
@@ -172,106 +162,13 @@ public class GlProgAnfrage {
 	}
 
 	/**
-	 * Entfernt einen Ereignistyp aus der Filterliste.
-	 * 
-	 * @param typ
-	 *            ein Ereignistyp der bei der Ganglinienprognose ignoriert
-	 *            werden soll.
-	 * @return {@code true}, wenn der Typ enthalten war und {@code false},
-	 *         wenn er bereits enthalten war.
-	 */
-	public boolean removeEreignisTyp(EreignisTyp typ) {
-		return ereignisTypen.remove(typ);
-	}
-
-	/**
-	 * Gibt einen Iterator &uuml;ber die ausgeschlossenen Ereignistypen
+	 * Gibt die Anzahl der ausgeschlossenen Ereignistypen dieser Anfrage
 	 * zur&uuml;ck.
 	 * 
-	 * @return Ereignistypeniterator
+	 * @return Anzahl der Ereignistypen
 	 */
-	public Set<EreignisTyp> getEreignisTypen() {
-		return new HashSet<EreignisTyp>(ereignisTypen);
-	}
-
-	/**
-	 * Gibt den Messquerschnitt f&uuml;r den eine Ganglinie angefragt wird
-	 * zur&uuml;ck.
-	 * 
-	 * @return Ein Messquerschnitt
-	 */
-	public MessQuerschnittAllgemein getMessQuerschnitt() {
-		return messQuerschnitt;
-	}
-
-	/**
-	 * Sollen nur Auswahlverfahren der langfristigen Prognose benutzt werden?
-	 * 
-	 * @return {@code true}, wenn dies der Fall ist, sonst {@code false}
-	 */
-	public boolean isNurLangfristigeAuswahl() {
-		return nurLangfristigeAuswahl;
-	}
-
-	/**
-	 * Gibt den Prognosezeitraum zur&uuml;ck.
-	 * 
-	 * @return der Zeitraum f&uuml;r den die Ganglinie bestimmt wird.
-	 */
-	public Intervall getPrognoseZeitraum() {
-		return prognoseZeitraum;
-	}
-
-	/**
-	 * Sp&auml;testens nach dieser Zeit in Sekunden wird die Prognose
-	 * gepr&uuml;ft.
-	 * <p>
-	 * TODO: Was wird nach dieser Zeit geprüft?
-	 * 
-	 * @return Pr&uuml;fintervall in Sekunden
-	 * @see #isZyklischePrognose()
-	 */
-	public long getPruefIntervall() {
-		return pruefIntervall;
-	}
-
-	/**
-	 * Maximale &Auml;nderung in Prozent zwischen zwei zyklischen Prognosen.
-	 * Wird dieser Schwellwert &uuml;berschritten, wird eine neue Prognose
-	 * publiziert.
-	 * 
-	 * @return Schwellwert in Prozent
-	 * @see #isZyklischePrognose()
-	 */
-	public double getSchwelle() {
-		return schwelle;
-	}
-
-	/**
-	 * Sp&auml;testens nach dieser Zeit in Sekunden wird eine Prognose
-	 * publiziert. Die Ganglinie wird nach dieser Zeit auch publiziert, wenn sie
-	 * sich nicht ge&auml;ndert hat.
-	 * 
-	 * @return Zyklus des Publizierens in Sekunden
-	 * @see #isZyklischePrognose()
-	 */
-	public long getSendeIntervall() {
-		return sendeIntervall;
-	}
-
-	/**
-	 * Gibt zur&uuml;ck, ob es sich um eine zyklische oder einmalige Prognose
-	 * handelt.
-	 * 
-	 * @return {@code true}, wenn die Prognose zyklisch wiederholt wird und
-	 *         {@code false}, wenn die Prognose nur einmal durchgef&uuml;hrt
-	 *         wird
-	 * @see #getPruefIntervall()
-	 * @see #getSchwelle()
-	 * @see #getSendeIntervall()
-	 */
-	public boolean isZyklischePrognose() {
-		return zyklischePrognose;
+	public int getAnzahlEreignisTypen() {
+		return ereignisTypen.size();
 	}
 
 	/**
@@ -321,6 +218,109 @@ public class GlProgAnfrage {
 		}
 
 		return daten;
+	}
+
+	/**
+	 * Gibt einen Iterator &uuml;ber die ausgeschlossenen Ereignistypen
+	 * zur&uuml;ck.
+	 * 
+	 * @return Ereignistypeniterator
+	 */
+	public Set<EreignisTyp> getEreignisTypen() {
+		return new HashSet<EreignisTyp>(ereignisTypen);
+	}
+
+	/**
+	 * Gibt den Messquerschnitt f&uuml;r den eine Ganglinie angefragt wird
+	 * zur&uuml;ck.
+	 * 
+	 * @return Ein Messquerschnitt
+	 */
+	public MessQuerschnittAllgemein getMessQuerschnitt() {
+		return messQuerschnitt;
+	}
+
+	/**
+	 * Gibt den Prognosezeitraum zur&uuml;ck.
+	 * 
+	 * @return der Zeitraum f&uuml;r den die Ganglinie bestimmt wird.
+	 */
+	public Intervall getPrognoseZeitraum() {
+		return prognoseZeitraum;
+	}
+
+	/**
+	 * Sp&auml;testens nach dieser Zeit in Sekunden wird die Prognose
+	 * gepr&uuml;ft.
+	 * <p>
+	 * TODO: Was wird nach dieser Zeit geprüft?
+	 * 
+	 * @return Pr&uuml;fintervall in Sekunden
+	 * @see #isZyklischePrognose()
+	 */
+	public long getPruefIntervall() {
+		return pruefIntervall;
+	}
+
+	/**
+	 * Maximale &Auml;nderung in Prozent zwischen zwei zyklischen Prognosen.
+	 * Wird dieser Schwellwert &uuml;berschritten, wird eine neue Prognose
+	 * publiziert.
+	 * 
+	 * @return Schwellwert in Prozent
+	 * @see #isZyklischePrognose()
+	 */
+	public double getSchwelle() {
+		return schwelle;
+	}
+
+	/**
+	 * Sp&auml;testens nach dieser Zeit in Sekunden wird eine Prognose
+	 * publiziert. Die Ganglinie wird nach dieser Zeit auch publiziert, wenn sie
+	 * sich nicht ge&auml;ndert hat.
+	 * 
+	 * @return Zyklus des Publizierens in Sekunden
+	 * @see #isZyklischePrognose()
+	 */
+	public long getSendeIntervall() {
+		return sendeIntervall;
+	}
+
+	/**
+	 * Sollen nur Auswahlverfahren der langfristigen Prognose benutzt werden?
+	 * 
+	 * @return {@code true}, wenn dies der Fall ist, sonst {@code false}
+	 */
+	public boolean isNurLangfristigeAuswahl() {
+		return nurLangfristigeAuswahl;
+	}
+
+	/**
+	 * Gibt zur&uuml;ck, ob es sich um eine zyklische oder einmalige Prognose
+	 * handelt.
+	 * 
+	 * @return {@code true}, wenn die Prognose zyklisch wiederholt wird und
+	 *         {@code false}, wenn die Prognose nur einmal durchgef&uuml;hrt
+	 *         wird
+	 * @see #getPruefIntervall()
+	 * @see #getSchwelle()
+	 * @see #getSendeIntervall()
+	 */
+	public boolean isZyklischePrognose() {
+		return zyklischePrognose;
+	}
+
+	/**
+	 * Entfernt einen Ereignistyp aus der Filterliste.
+	 * 
+	 * @param typ
+	 *            ein Ereignistyp der bei der Ganglinienprognose ignoriert
+	 *            werden soll.
+	 * @return {@code true}, wenn der Typ enthalten war und {@code false},
+	 *         wenn er bereits enthalten war.
+	 */
+	public boolean removeEreignisTyp(EreignisTyp typ) {
+		return ereignisTypen.remove(typ);
 	}
 
 	/**

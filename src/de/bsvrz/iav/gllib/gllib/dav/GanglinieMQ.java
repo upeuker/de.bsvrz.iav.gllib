@@ -2,19 +2,19 @@
  * Segment 5 Intelligente Analyseverfahren, SWE 5.5 Funktionen Ganglinie
  * Copyright (C) 2007 BitCtrl Systems GmbH 
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
+ * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
  * details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 51
- * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA.
  *
  * Contact Information:
  * BitCtrl Systems GmbH
@@ -53,7 +53,7 @@ import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
  * Werten lassen sich die drei davon abh&auml;ngigen Gr&ouml;&szlig;e QPkw, VKfz
  * und QB berechnen.
  * 
- * @author BitCtrl, Schumann
+ * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
  */
 public class GanglinieMQ implements IGanglinie<Messwerte> {
@@ -82,6 +82,18 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	/** Datenkatalogkonstante f&uuml;r eine relative multiplikative Ganglinie. */
 	public static final int TYP_MULTIPLIKATIV = 2;
 
+	/** Ganglinie f&uuml;r QKfz. */
+	Ganglinie qKfz;
+
+	/** Ganglinie f&uuml;r QLkw. */
+	Ganglinie qLkw;
+
+	/** Ganglinie f&uuml;r VPkw. */
+	Ganglinie vPkw;
+
+	/** Ganglinie f&uuml;r VLkw. */
+	Ganglinie vLkw;
+
 	/** Der Messquerschnitt, zu dem die Ganglinie geh&ouml;rt. */
 	private MessQuerschnittAllgemein messQuerschnitt;
 
@@ -106,6 +118,11 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	/** Typ der Ganglinie. Standard ist {@link #TYP_ABSOLUT}. */
 	private int typ = TYP_ABSOLUT;
 
+	// Die folgenden vier Ganglinien müssen identische Stützstellen besitzen,
+	// was deren Zeitpunkt angeht. Unter Einbehaltung dieser Vorgabe, wird die
+	// Ganglinie für QKfz stellvertretend für alle vier verwendet, wenn nur die
+	// Zeitstempel der Stützstellen relevant sind.
+
 	/** Art der Approximation. Standard ist {@link #APPROX_BSPLINE}. */
 	private int approximationDaK = APPROX_BSPLINE;
 
@@ -117,23 +134,6 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 
 	/** Das Intervall für das die Ganglinie prognostiziert wird. */
 	private Intervall prognoseZeitraum;
-
-	// Die folgenden vier Ganglinien müssen identische Stützstellen besitzen,
-	// was deren Zeitpunkt angeht. Unter Einbehaltung dieser Vorgabe, wird die
-	// Ganglinie für QKfz stellvertretend für alle vier verwendet, wenn nur die
-	// Zeitstempel der Stützstellen relevant sind.
-
-	/** Ganglinie f&uuml;r QKfz. */
-	Ganglinie qKfz;
-
-	/** Ganglinie f&uuml;r QLkw. */
-	Ganglinie qLkw;
-
-	/** Ganglinie f&uuml;r VPkw. */
-	Ganglinie vPkw;
-
-	/** Ganglinie f&uuml;r VLkw. */
-	Ganglinie vLkw;
 
 	/**
 	 * Allgemeine Initialisierung.
@@ -179,22 +179,86 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	}
 
 	/**
-	 * Gibt den Messquerschnitt der Ganglinie zur&uuml;ck.
-	 * 
-	 * @return ein Messquerschnitt.
+	 * {@inheritDoc}
 	 */
-	public MessQuerschnittAllgemein getMessQuerschnitt() {
-		return messQuerschnitt;
+	public void aktualisiereApproximation() {
+		switch (approximationDaK) {
+		case APPROX_POLYLINE:
+			qKfz.setApproximation(new Polyline());
+			qLkw.setApproximation(new Polyline());
+			vPkw.setApproximation(new Polyline());
+			vLkw.setApproximation(new Polyline());
+			break;
+		case APPROX_CUBICSPLINE:
+			qKfz.setApproximation(new CubicSpline());
+			qLkw.setApproximation(new CubicSpline());
+			vPkw.setApproximation(new CubicSpline());
+			vLkw.setApproximation(new CubicSpline());
+			break;
+		case APPROX_BSPLINE:
+			qKfz.setApproximation(new BSpline(bSplineOrdnung));
+			qLkw.setApproximation(new BSpline(bSplineOrdnung));
+			vPkw.setApproximation(new BSpline(bSplineOrdnung));
+			vLkw.setApproximation(new BSpline(bSplineOrdnung));
+			break;
+		default:
+			qKfz.setApproximation(new BSpline(APPROX_STANDARD_ORDNUNG));
+			qLkw.setApproximation(new BSpline(APPROX_STANDARD_ORDNUNG));
+			vPkw.setApproximation(new BSpline(APPROX_STANDARD_ORDNUNG));
+			vLkw.setApproximation(new BSpline(APPROX_STANDARD_ORDNUNG));
+			break;
+		}
+		qKfz.aktualisiereApproximation();
+		qLkw.aktualisiereApproximation();
+		vPkw.aktualisiereApproximation();
+		vLkw.aktualisiereApproximation();
+		approximationAktuell = true;
 	}
 
 	/**
-	 * Besitzt die Ganglinie die Auszeichnung als Referenz?
-	 * 
-	 * @return <code>true</code>, wenn diese Ganglinie eine Referenzganglinie
-	 *         ist, sonst <code>false</code>
+	 * {@inheritDoc}
 	 */
-	public boolean getReferenz() {
-		return referenz;
+	public int anzahlStuetzstellen() {
+		return qKfz.anzahlStuetzstellen();
+	}
+
+	/**
+	 * Kopiert die St&uumltzstellen, das Approximationsverfahren und alle
+	 * anderen Eigenschaften bis auf {@code approximationAktuell}. Der Wert
+	 * f&uuml;r {@code approximationAktuell} wird auf false gesetzt.
+	 * 
+	 * {@inheritDoc}
+	 */
+	@Override
+	public GanglinieMQ clone() {
+		GanglinieMQ g;
+
+		g = new GanglinieMQ();
+		g.qKfz = new Ganglinie(qKfz.getStuetzstellen());
+		g.qLkw = new Ganglinie(qLkw.getStuetzstellen());
+		g.vPkw = new Ganglinie(vPkw.getStuetzstellen());
+		g.vLkw = new Ganglinie(vLkw.getStuetzstellen());
+		g.setAnzahlVerschmelzungen(anzahlVerschmelzungen);
+		g.setApproximationDaK(approximationDaK);
+		g.setBSplineOrdnung(bSplineOrdnung);
+		g.setEreignisTyp(ereignisTyp);
+		g.setK1(k1);
+		g.setK2(k2);
+		g.setLetzteVerschmelzung(letzteVerschmelzung);
+		g.setMessQuerschnitt(messQuerschnitt);
+		g.setPrognoseZeitraum(prognoseZeitraum);
+		g.setReferenz(referenz);
+		g.setTyp(typ);
+		g.approximationAktuell = false;
+
+		return g;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean existsStuetzstelle(long zeitstempel) {
+		return qKfz.existsStuetzstelle(zeitstempel);
 	}
 
 	/**
@@ -208,131 +272,12 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	}
 
 	/**
-	 * Gibt den Zeitpunkt der letzten Verschmelzung als Zeitstempel zur&uuml;ck.
+	 * Gibt stellvertretend die Approximation f&uuml;r QKfz zur&uuml;ck.
 	 * 
-	 * @return Zeitstempel
+	 * {@inheritDoc}
 	 */
-	public long getLetzteVerschmelzung() {
-		return letzteVerschmelzung;
-	}
-
-	/**
-	 * Gibt den Ereignistyp der Ganglinie zur&uuml;ck.
-	 * 
-	 * @return der Ereignistyp.
-	 */
-	public EreignisTyp getEreignisTyp() {
-		return ereignisTyp;
-	}
-
-	/**
-	 * Gibt den Ganglinientyp zur&uuml;ck.
-	 * 
-	 * @return der Typ der Ganglinie.
-	 */
-	public int getTyp() {
-		return typ;
-	}
-
-	/**
-	 * Gibt einen Parameter f&uuml;r die Berechnung von QB zur&uuml;ck.
-	 * 
-	 * @return der Parameter.
-	 */
-	public float getK1() {
-		return k1;
-	}
-
-	/**
-	 * Gibt einen Parameter f&uuml;r die Berechnung von QB zur&uuml;ck.
-	 * 
-	 * @return der Parameter
-	 */
-	public float getK2() {
-		return k2;
-	}
-
-	/**
-	 * Legt den Parameter k1 f&uuml;r die Berechnung von QB fest.
-	 * 
-	 * @param k1
-	 *            der parameter k1
-	 */
-	public void setK1(float k1) {
-		this.k1 = k1;
-	}
-
-	/**
-	 * Legt den Parameter k2 f&uuml;r die Berechnung von QB fest.
-	 * 
-	 * @param k2
-	 *            der parameter k2
-	 */
-	public void setK2(float k2) {
-		this.k2 = k2;
-	}
-
-	/**
-	 * Legt den Ereignistyp der Ganglinie fest.
-	 * <p>
-	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
-	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
-	 * 
-	 * @param ereignisTyp
-	 *            PID des Ereignistyp
-	 */
-	public void setEreignisTyp(EreignisTyp ereignisTyp) {
-		this.ereignisTyp = ereignisTyp;
-	}
-
-	/**
-	 * Legt die Anzahl der bisherigen Verschmelzungen fest.
-	 * <p>
-	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
-	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
-	 * 
-	 * @param anzahlVerschmelzungen
-	 *            Anzahl der Verschmelzungen
-	 */
-	public void setAnzahlVerschmelzungen(long anzahlVerschmelzungen) {
-		this.anzahlVerschmelzungen = anzahlVerschmelzungen;
-	}
-
-	/**
-	 * Legt die Anzahl der bisherigen Verschmelzungen fest.
-	 * <p>
-	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
-	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
-	 * 
-	 * @param letzteVerschmelzung
-	 *            die neue Anzahl der Verschmelzungen.
-	 */
-	public void setLetzteVerschmelzung(long letzteVerschmelzung) {
-		this.letzteVerschmelzung = letzteVerschmelzung;
-	}
-
-	/**
-	 * Kennzeichnet die Ganglinie als Referenzganglinie.
-	 * <p>
-	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
-	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
-	 * 
-	 * @param referenz
-	 *            <code>true</code>, wenn diese Ganglinie eine
-	 *            Referenzganglinie sein soll, sonst <code>false</code>
-	 */
-	public void setReferenz(boolean referenz) {
-		this.referenz = referenz;
-	}
-
-	/**
-	 * Legt den Messquerschnitt fest, auf den sich die Ganglinie bezieht.
-	 * 
-	 * @param messQuerschnitt
-	 *            ein Messquerschnitt.
-	 */
-	public void setMessQuerschnitt(MessQuerschnittAllgemein messQuerschnitt) {
-		this.messQuerschnitt = messQuerschnitt;
+	public Approximation getApproximation() {
+		return qKfz.getApproximation();
 	}
 
 	/**
@@ -347,27 +292,6 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	}
 
 	/**
-	 * Legt die zu verwendende Approximation mit Hilfe einer
-	 * Datenkatalogkonstante fest.
-	 * 
-	 * @param approximationDaK
-	 *            eine der Konstante {@link #APPROX_POLYLINE},
-	 *            {@link #APPROX_CUBICSPLINE}, {@link #APPROX_BSPLINE} oder
-	 *            {@link #APPROX_UNBESTIMMT}.
-	 */
-	public void setApproximationDaK(int approximationDaK) {
-		this.approximationDaK = approximationDaK;
-		approximationAktuell = false;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public boolean isApproximationAktuell() {
-		return approximationAktuell;
-	}
-
-	/**
 	 * Gibt die Ordnung des B-Spline zur&uuml;ck. Wird zur Approximation kein
 	 * B-Spline benutzt, wird der Wert ignoriert.
 	 * 
@@ -378,141 +302,76 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	}
 
 	/**
-	 * Legt die Ordnung des B-Spline fest. Wird zur Approximation kein B-Spline
-	 * benutzt, wird der Wert ignoriert.
-	 * 
-	 * @param bSplineOrdnung
-	 *            die neue Ordnung des B-Spline.
-	 */
-	public void setBSplineOrdnung(byte bSplineOrdnung) {
-		this.bSplineOrdnung = bSplineOrdnung;
-		approximationAktuell = false;
-	}
-
-	/**
-	 * Legt den Ganglinientyp fest.
+	 * Baut aus den Informationen der Ganglinie einen Datensatz. Das Ergebnis
+	 * wird im Parameter abgelegt!
 	 * <p>
 	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
 	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
 	 * 
-	 * @param typ
-	 *            der Typ der Ganglinie.
+	 * @param daten
+	 *            ein Datum, welches eine Messquerschnittsganglinie darstellt.
 	 */
-	public void setTyp(int typ) {
-		this.typ = typ;
-	}
+	public void getDatenFuerGanglinie(Data daten) {
+		Array feld;
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see #setPrognoseZeitraum(Intervall)
-	 */
-	public Intervall getIntervall() {
-		if (prognoseZeitraum != null) {
-			return prognoseZeitraum;
+		daten.getReferenceValue("EreignisTyp").setSystemObject(
+				ereignisTyp.getSystemObject());
+		daten.getUnscaledValue("AnzahlVerschmelzungen").set(
+				anzahlVerschmelzungen);
+		daten.getTimeValue("LetzteVerschmelzung")
+				.setMillis(letzteVerschmelzung);
+		daten.getUnscaledValue("GanglinienTyp").set(typ);
+
+		if (referenz) {
+			daten.getUnscaledValue("Referenzganglinie").setText("Ja");
+		} else {
+			daten.getUnscaledValue("Referenzganglinie").setText("Nein");
 		}
 
-		return qKfz.getIntervall();
-	}
+		daten.getUnscaledValue("GanglinienVerfahren").set(approximationDaK);
+		daten.getUnscaledValue("Ordnung").set(bSplineOrdnung);
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see #setPrognoseZeitraum(Intervall)
-	 */
-	public List<Intervall> getIntervalle() {
-		throw new UnsupportedOperationException("Es müssen die Intervalle der "
-				+ "einzelnen Ganglinien für Q, V und QB abgefragt werden.");
-	}
+		feld = daten.getArray("Stützstelle");
+		List<Stuetzstelle<Messwerte>> liste = getStuetzstellen();
+		int i = 0;
+		feld.setLength(liste.size());
+		for (Stuetzstelle<Messwerte> s : liste) {
+			feld.getItem(i).getTimeValue("Zeit").setMillis(s.getZeitstempel());
 
-	/**
-	 * Gibt die Ganglinie f&uuml;r QKfz zur&uuml;ck.
-	 * 
-	 * @return eine einfache mathematische Ganglinie mit den St&uuml;tzstellen
-	 *         von QKfz.
-	 */
-	public Ganglinie getGanglinieQKfz() {
-		return qKfz.clone();
-	}
+			if (s.getWert().getQKfz() != null) {
+				feld.getItem(i).getScaledValue("QKfz").set(
+						s.getWert().getQKfz());
+			} else {
+				feld.getItem(i).getScaledValue("QKfz").set(
+						Messwerte.UNDEFINIERT);
+			}
 
-	/**
-	 * Gibt die Ganglinie f&uuml;r QLkw zur&uuml;ck.
-	 * 
-	 * @return eine einfache mathematische Ganglinie mit den St&uuml;tzstellen
-	 *         von QLkw.
-	 */
-	public Ganglinie getGanglinieQLkw() {
-		return qLkw.clone();
-	}
+			if (s.getWert().getQLkw() != null) {
+				feld.getItem(i).getScaledValue("QLkw").set(
+						s.getWert().getQLkw());
+			} else {
+				feld.getItem(i).getScaledValue("QLkw").set(
+						Messwerte.UNDEFINIERT);
+			}
 
-	/**
-	 * Gibt die Ganglinie f&uuml;r QPkw zur&uuml;ck.
-	 * 
-	 * @return eine einfache mathematische Ganglinie mit den St&uuml;tzstellen
-	 *         von QPkw.
-	 */
-	public Ganglinie getGanglinieQPkw() {
-		Ganglinie qPkw;
+			if (s.getWert().getVLkw() != null) {
+				feld.getItem(i).getScaledValue("VLkw").set(
+						s.getWert().getVLkw());
+			} else {
+				feld.getItem(i).getScaledValue("VLkw").set(
+						Messwerte.UNDEFINIERT);
+			}
 
-		qPkw = new Ganglinie();
-		for (Stuetzstelle<Messwerte> s : getStuetzstellen()) {
-			qPkw.setStuetzstelle(s.getZeitstempel(), s.getWert().getQPkw());
+			if (s.getWert().getVPkw() != null) {
+				feld.getItem(i).getScaledValue("VPkw").set(
+						s.getWert().getVPkw());
+			} else {
+				feld.getItem(i).getScaledValue("VPkw").set(
+						Messwerte.UNDEFINIERT);
+			}
+
+			i++;
 		}
-		return qPkw;
-	}
-
-	/**
-	 * Gibt die Ganglinie f&uuml;r VKfz zur&uuml;ck.
-	 * 
-	 * @return eine einfache mathematische Ganglinie mit den St&uuml;tzstellen
-	 *         von VKfz.
-	 */
-	public Ganglinie getGanglinieVKfz() {
-		Ganglinie vKfz;
-
-		vKfz = new Ganglinie();
-		for (Stuetzstelle<Messwerte> s : getStuetzstellen()) {
-			vKfz.setStuetzstelle(s.getZeitstempel(), s.getWert().getVKfz());
-		}
-		return vKfz;
-
-	}
-
-	/**
-	 * Gibt die Ganglinie f&uuml;r VLkw zur&uuml;ck.
-	 * 
-	 * @return eine einfache mathematische Ganglinie mit den St&uuml;tzstellen
-	 *         von VLkw.
-	 */
-	public Ganglinie getGanglinieVLkw() {
-		return vLkw.clone();
-	}
-
-	/**
-	 * Gibt die Ganglinie f&uuml;r QPkw zur&uuml;ck.
-	 * 
-	 * @return eine einfache mathematische Ganglinie mit den St&uuml;tzstellen
-	 *         von QPkw.
-	 */
-	public Ganglinie getGanglinieVPkw() {
-		return vPkw.clone();
-	}
-
-	/**
-	 * Gibt die Ganglinie f&uuml;r QB zur&uuml;ck.
-	 * 
-	 * @return eine einfache mathematische Ganglinie mit den St&uuml;tzstellen
-	 *         von QB.
-	 */
-	public Ganglinie getGanglinieQB() {
-		Ganglinie qb;
-
-		qb = new Ganglinie();
-		for (Stuetzstelle<Messwerte> s : getStuetzstellen()) {
-			qb.setStuetzstelle(s.getZeitstempel(), s.getWert().getQB());
-		}
-		return qb;
-
 	}
 
 	/**
@@ -598,76 +457,358 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	}
 
 	/**
-	 * Baut aus den Informationen der Ganglinie einen Datensatz. Das Ergebnis
-	 * wird im Parameter abgelegt!
+	 * Gibt den Ereignistyp der Ganglinie zur&uuml;ck.
+	 * 
+	 * @return der Ereignistyp.
+	 */
+	public EreignisTyp getEreignisTyp() {
+		return ereignisTyp;
+	}
+
+	/**
+	 * Gibt die Ganglinie f&uuml;r QB zur&uuml;ck.
+	 * 
+	 * @return eine einfache mathematische Ganglinie mit den St&uuml;tzstellen
+	 *         von QB.
+	 */
+	public Ganglinie getGanglinieQB() {
+		Ganglinie qb;
+
+		qb = new Ganglinie();
+		for (Stuetzstelle<Messwerte> s : getStuetzstellen()) {
+			qb.setStuetzstelle(s.getZeitstempel(), s.getWert().getQB());
+		}
+		return qb;
+
+	}
+
+	/**
+	 * Gibt die Ganglinie f&uuml;r QKfz zur&uuml;ck.
+	 * 
+	 * @return eine einfache mathematische Ganglinie mit den St&uuml;tzstellen
+	 *         von QKfz.
+	 */
+	public Ganglinie getGanglinieQKfz() {
+		return qKfz.clone();
+	}
+
+	/**
+	 * Gibt die Ganglinie f&uuml;r QLkw zur&uuml;ck.
+	 * 
+	 * @return eine einfache mathematische Ganglinie mit den St&uuml;tzstellen
+	 *         von QLkw.
+	 */
+	public Ganglinie getGanglinieQLkw() {
+		return qLkw.clone();
+	}
+
+	/**
+	 * Gibt die Ganglinie f&uuml;r QPkw zur&uuml;ck.
+	 * 
+	 * @return eine einfache mathematische Ganglinie mit den St&uuml;tzstellen
+	 *         von QPkw.
+	 */
+	public Ganglinie getGanglinieQPkw() {
+		Ganglinie qPkw;
+
+		qPkw = new Ganglinie();
+		for (Stuetzstelle<Messwerte> s : getStuetzstellen()) {
+			qPkw.setStuetzstelle(s.getZeitstempel(), s.getWert().getQPkw());
+		}
+		return qPkw;
+	}
+
+	/**
+	 * Gibt die Ganglinie f&uuml;r VKfz zur&uuml;ck.
+	 * 
+	 * @return eine einfache mathematische Ganglinie mit den St&uuml;tzstellen
+	 *         von VKfz.
+	 */
+	public Ganglinie getGanglinieVKfz() {
+		Ganglinie vKfz;
+
+		vKfz = new Ganglinie();
+		for (Stuetzstelle<Messwerte> s : getStuetzstellen()) {
+			vKfz.setStuetzstelle(s.getZeitstempel(), s.getWert().getVKfz());
+		}
+		return vKfz;
+
+	}
+
+	/**
+	 * Gibt die Ganglinie f&uuml;r VLkw zur&uuml;ck.
+	 * 
+	 * @return eine einfache mathematische Ganglinie mit den St&uuml;tzstellen
+	 *         von VLkw.
+	 */
+	public Ganglinie getGanglinieVLkw() {
+		return vLkw.clone();
+	}
+
+	/**
+	 * Gibt die Ganglinie f&uuml;r QPkw zur&uuml;ck.
+	 * 
+	 * @return eine einfache mathematische Ganglinie mit den St&uuml;tzstellen
+	 *         von QPkw.
+	 */
+	public Ganglinie getGanglinieVPkw() {
+		return vPkw.clone();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see #setPrognoseZeitraum(Intervall)
+	 */
+	public Intervall getIntervall() {
+		if (prognoseZeitraum != null) {
+			return prognoseZeitraum;
+		}
+
+		return qKfz.getIntervall();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see #setPrognoseZeitraum(Intervall)
+	 */
+	public List<Intervall> getIntervalle() {
+		throw new UnsupportedOperationException("Es müssen die Intervalle der "
+				+ "einzelnen Ganglinien für Q, V und QB abgefragt werden.");
+	}
+
+	/**
+	 * Gibt einen Parameter f&uuml;r die Berechnung von QB zur&uuml;ck.
+	 * 
+	 * @return der Parameter.
+	 */
+	public float getK1() {
+		return k1;
+	}
+
+	/**
+	 * Gibt einen Parameter f&uuml;r die Berechnung von QB zur&uuml;ck.
+	 * 
+	 * @return der Parameter
+	 */
+	public float getK2() {
+		return k2;
+	}
+
+	/**
+	 * Gibt den Zeitpunkt der letzten Verschmelzung als Zeitstempel zur&uuml;ck.
+	 * 
+	 * @return Zeitstempel
+	 */
+	public long getLetzteVerschmelzung() {
+		return letzteVerschmelzung;
+	}
+
+	/**
+	 * Gibt den Messquerschnitt der Ganglinie zur&uuml;ck.
+	 * 
+	 * @return ein Messquerschnitt.
+	 */
+	public MessQuerschnittAllgemein getMessQuerschnitt() {
+		return messQuerschnitt;
+	}
+
+	/**
+	 * Gibt das Prognoseintervall der Ganglinie zur&uuml;ck.
+	 * 
+	 * @return das Prognoseintervall.
+	 */
+	public Intervall getPrognoseIntervall() {
+		return prognoseZeitraum;
+	}
+
+	/**
+	 * Besitzt die Ganglinie die Auszeichnung als Referenz?
+	 * 
+	 * @return <code>true</code>, wenn diese Ganglinie eine Referenzganglinie
+	 *         ist, sonst <code>false</code>
+	 */
+	public boolean getReferenz() {
+		return referenz;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see #setPrognoseZeitraum(Intervall)
+	 */
+	public Stuetzstelle<Messwerte> getStuetzstelle(long zeitstempel) {
+		Double qKfz0, qLkw0, vPkw0, vLkw0;
+
+		if (prognoseZeitraum != null
+				&& !prognoseZeitraum.isEnthalten(zeitstempel)) {
+			qKfz0 = null;
+			qLkw0 = null;
+			vPkw0 = null;
+			vLkw0 = null;
+		} else {
+			qKfz0 = qKfz.getStuetzstelle(zeitstempel).getWert();
+			qLkw0 = qLkw.getStuetzstelle(zeitstempel).getWert();
+			vPkw0 = vPkw.getStuetzstelle(zeitstempel).getWert();
+			vLkw0 = vLkw.getStuetzstelle(zeitstempel).getWert();
+		}
+		return new Stuetzstelle<Messwerte>(zeitstempel, new Messwerte(qKfz0,
+				qLkw0, vPkw0, vLkw0, k1, k2));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see #setPrognoseZeitraum(Intervall)
+	 */
+	public List<Stuetzstelle<Messwerte>> getStuetzstellen() {
+		List<Stuetzstelle<Messwerte>> liste;
+		List<Stuetzstelle<Double>> qKfz0, qLkw0, vPkw0, vLkw0;
+
+		liste = new ArrayList<Stuetzstelle<Messwerte>>();
+		qKfz0 = qKfz.getStuetzstellen();
+		qLkw0 = qLkw.getStuetzstellen();
+		vPkw0 = vPkw.getStuetzstellen();
+		vLkw0 = vLkw.getStuetzstellen();
+		for (int i = 0; i < qKfz0.size(); i++) {
+			long zeitstempel;
+
+			zeitstempel = qKfz0.get(i).getZeitstempel();
+			if (prognoseZeitraum != null
+					&& !prognoseZeitraum.isEnthalten(zeitstempel)) {
+				continue;
+			}
+			liste
+					.add(new Stuetzstelle<Messwerte>(zeitstempel,
+							new Messwerte(qKfz0.get(i).getWert(), qLkw0.get(i)
+									.getWert(), vPkw0.get(i).getWert(), vLkw0
+									.get(i).getWert(), k1, k2)));
+		}
+
+		return liste;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see #setPrognoseZeitraum(Intervall)
+	 */
+	public List<Stuetzstelle<Messwerte>> getStuetzstellen(Intervall intervall) {
+		List<Stuetzstelle<Double>> qKfz0, qLkw0, vPkw0, vLkw0;
+		List<Stuetzstelle<Messwerte>> liste;
+
+		qKfz0 = qKfz.getStuetzstellen(intervall);
+		qLkw0 = qLkw.getStuetzstellen(intervall);
+		vPkw0 = vPkw.getStuetzstellen(intervall);
+		vLkw0 = vLkw.getStuetzstellen(intervall);
+
+		liste = new ArrayList<Stuetzstelle<Messwerte>>();
+		for (int i = 0; i < qKfz0.size(); i++) {
+			long zeitstempel;
+
+			zeitstempel = qKfz0.get(i).getZeitstempel();
+			if (prognoseZeitraum != null
+					&& !prognoseZeitraum.isEnthalten(zeitstempel)) {
+				continue;
+			}
+			liste
+					.add(new Stuetzstelle<Messwerte>(zeitstempel,
+							new Messwerte(qKfz0.get(i).getWert(), qLkw0.get(i)
+									.getWert(), vPkw0.get(i).getWert(), vLkw0
+									.get(i).getWert(), k1, k2)));
+		}
+
+		return liste;
+	}
+
+	/**
+	 * Gibt den Ganglinientyp zur&uuml;ck.
+	 * 
+	 * @return der Typ der Ganglinie.
+	 */
+	public int getTyp() {
+		return typ;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean isApproximationAktuell() {
+		return approximationAktuell;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean isValid(long zeitstempel) {
+		return qKfz.isValid(zeitstempel);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void remove(long zeitstempel) {
+		qKfz.remove(zeitstempel);
+		qLkw.remove(zeitstempel);
+		vPkw.remove(zeitstempel);
+		vLkw.remove(zeitstempel);
+	}
+
+	/**
+	 * Legt die Anzahl der bisherigen Verschmelzungen fest.
 	 * <p>
 	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
 	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
 	 * 
-	 * @param daten
-	 *            ein Datum, welches eine Messquerschnittsganglinie darstellt.
+	 * @param anzahlVerschmelzungen
+	 *            Anzahl der Verschmelzungen
 	 */
-	public void getDatenFuerGanglinie(Data daten) {
-		Array feld;
+	public void setAnzahlVerschmelzungen(long anzahlVerschmelzungen) {
+		this.anzahlVerschmelzungen = anzahlVerschmelzungen;
+	}
 
-		daten.getReferenceValue("EreignisTyp").setSystemObject(
-				ereignisTyp.getSystemObject());
-		daten.getUnscaledValue("AnzahlVerschmelzungen").set(
-				anzahlVerschmelzungen);
-		daten.getTimeValue("LetzteVerschmelzung")
-				.setMillis(letzteVerschmelzung);
-		daten.getUnscaledValue("GanglinienTyp").set(typ);
-
-		if (referenz) {
-			daten.getUnscaledValue("Referenzganglinie").setText("Ja");
+	/**
+	 * {@inheritDoc}
+	 */
+	public void setApproximation(Approximation approximation) {
+		if (approximation instanceof Polyline) {
+			approximationDaK = APPROX_POLYLINE;
+		} else if (approximation instanceof CubicSpline) {
+			approximationDaK = APPROX_CUBICSPLINE;
+		} else if (approximation instanceof BSpline) {
+			approximationDaK = APPROX_BSPLINE;
+			bSplineOrdnung = ((BSpline) approximation).getOrdnung();
 		} else {
-			daten.getUnscaledValue("Referenzganglinie").setText("Nein");
+			approximationDaK = APPROX_UNBESTIMMT;
 		}
+		approximationAktuell = false;
+	}
 
-		daten.getUnscaledValue("GanglinienVerfahren").set(approximationDaK);
-		daten.getUnscaledValue("Ordnung").set(bSplineOrdnung);
+	/**
+	 * Legt die zu verwendende Approximation mit Hilfe einer
+	 * Datenkatalogkonstante fest.
+	 * 
+	 * @param approximationDaK
+	 *            eine der Konstante {@link #APPROX_POLYLINE},
+	 *            {@link #APPROX_CUBICSPLINE}, {@link #APPROX_BSPLINE} oder
+	 *            {@link #APPROX_UNBESTIMMT}.
+	 */
+	public void setApproximationDaK(int approximationDaK) {
+		this.approximationDaK = approximationDaK;
+		approximationAktuell = false;
+	}
 
-		feld = daten.getArray("Stützstelle");
-		List<Stuetzstelle<Messwerte>> liste = getStuetzstellen();
-		int i = 0;
-		feld.setLength(liste.size());
-		for (Stuetzstelle<Messwerte> s : liste) {
-			feld.getItem(i).getTimeValue("Zeit").setMillis(s.getZeitstempel());
-
-			if (s.getWert().getQKfz() != null) {
-				feld.getItem(i).getScaledValue("QKfz").set(
-						s.getWert().getQKfz());
-			} else {
-				feld.getItem(i).getScaledValue("QKfz").set(
-						Messwerte.UNDEFINIERT);
-			}
-
-			if (s.getWert().getQLkw() != null) {
-				feld.getItem(i).getScaledValue("QLkw").set(
-						s.getWert().getQLkw());
-			} else {
-				feld.getItem(i).getScaledValue("QLkw").set(
-						Messwerte.UNDEFINIERT);
-			}
-
-			if (s.getWert().getVLkw() != null) {
-				feld.getItem(i).getScaledValue("VLkw").set(
-						s.getWert().getVLkw());
-			} else {
-				feld.getItem(i).getScaledValue("VLkw").set(
-						Messwerte.UNDEFINIERT);
-			}
-
-			if (s.getWert().getVPkw() != null) {
-				feld.getItem(i).getScaledValue("VPkw").set(
-						s.getWert().getVPkw());
-			} else {
-				feld.getItem(i).getScaledValue("VPkw").set(
-						Messwerte.UNDEFINIERT);
-			}
-
-			i++;
-		}
+	/**
+	 * Legt die Ordnung des B-Spline fest. Wird zur Approximation kein B-Spline
+	 * benutzt, wird der Wert ignoriert.
+	 * 
+	 * @param bSplineOrdnung
+	 *            die neue Ordnung des B-Spline.
+	 */
+	public void setBSplineOrdnung(byte bSplineOrdnung) {
+		this.bSplineOrdnung = bSplineOrdnung;
+		approximationAktuell = false;
 	}
 
 	/**
@@ -812,8 +953,11 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 
 		// Meta-Daten
 		typ = daten.getUnscaledValue("GanglinienTyp").intValue();
-		referenz = daten.getUnscaledValue("Referenzganglinie").intValue() == 1 ? true
-				: false;
+		if (daten.getUnscaledValue("Referenzganglinie").intValue() == 1) {
+			referenz = true;
+		} else {
+			referenz = false;
+		}
 		anzahlVerschmelzungen = daten.getUnscaledValue("AnzahlVerschmelzungen")
 				.longValue();
 		letzteVerschmelzung = daten.getTimeValue("LetzteVerschmelzung")
@@ -825,96 +969,86 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Legt den Ereignistyp der Ganglinie fest.
+	 * <p>
+	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
+	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
+	 * 
+	 * @param ereignisTyp
+	 *            PID des Ereignistyp
 	 */
-	public void aktualisiereApproximation() {
-		switch (approximationDaK) {
-		case APPROX_POLYLINE:
-			qKfz.setApproximation(new Polyline());
-			qLkw.setApproximation(new Polyline());
-			vPkw.setApproximation(new Polyline());
-			vLkw.setApproximation(new Polyline());
-			break;
-		case APPROX_CUBICSPLINE:
-			qKfz.setApproximation(new CubicSpline());
-			qLkw.setApproximation(new CubicSpline());
-			vPkw.setApproximation(new CubicSpline());
-			vLkw.setApproximation(new CubicSpline());
-			break;
-		case APPROX_BSPLINE:
-			qKfz.setApproximation(new BSpline(bSplineOrdnung));
-			qLkw.setApproximation(new BSpline(bSplineOrdnung));
-			vPkw.setApproximation(new BSpline(bSplineOrdnung));
-			vLkw.setApproximation(new BSpline(bSplineOrdnung));
-			break;
-		default:
-			qKfz.setApproximation(new BSpline(APPROX_STANDARD_ORDNUNG));
-			qLkw.setApproximation(new BSpline(APPROX_STANDARD_ORDNUNG));
-			vPkw.setApproximation(new BSpline(APPROX_STANDARD_ORDNUNG));
-			vLkw.setApproximation(new BSpline(APPROX_STANDARD_ORDNUNG));
-			break;
-		}
-		qKfz.aktualisiereApproximation();
-		qLkw.aktualisiereApproximation();
-		vPkw.aktualisiereApproximation();
-		vLkw.aktualisiereApproximation();
-		approximationAktuell = true;
+	public void setEreignisTyp(EreignisTyp ereignisTyp) {
+		this.ereignisTyp = ereignisTyp;
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Legt den Parameter k1 f&uuml;r die Berechnung von QB fest.
 	 * 
-	 * @see #setPrognoseZeitraum(Intervall)
+	 * @param k1
+	 *            der parameter k1
 	 */
-	public Stuetzstelle<Messwerte> getStuetzstelle(long zeitstempel) {
-		Double qKfz0, qLkw0, vPkw0, vLkw0;
-
-		if (prognoseZeitraum != null
-				&& !prognoseZeitraum.isEnthalten(zeitstempel)) {
-			qKfz0 = null;
-			qLkw0 = null;
-			vPkw0 = null;
-			vLkw0 = null;
-		} else {
-			qKfz0 = qKfz.getStuetzstelle(zeitstempel).getWert();
-			qLkw0 = qLkw.getStuetzstelle(zeitstempel).getWert();
-			vPkw0 = vPkw.getStuetzstelle(zeitstempel).getWert();
-			vLkw0 = vLkw.getStuetzstelle(zeitstempel).getWert();
-		}
-		return new Stuetzstelle<Messwerte>(zeitstempel, new Messwerte(qKfz0,
-				qLkw0, vPkw0, vLkw0, k1, k2));
+	public void setK1(float k1) {
+		this.k1 = k1;
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Legt den Parameter k2 f&uuml;r die Berechnung von QB fest.
 	 * 
-	 * @see #setPrognoseZeitraum(Intervall)
+	 * @param k2
+	 *            der parameter k2
 	 */
-	public List<Stuetzstelle<Messwerte>> getStuetzstellen() {
-		List<Stuetzstelle<Messwerte>> liste;
-		List<Stuetzstelle<Double>> qKfz0, qLkw0, vPkw0, vLkw0;
+	public void setK2(float k2) {
+		this.k2 = k2;
+	}
 
-		liste = new ArrayList<Stuetzstelle<Messwerte>>();
-		qKfz0 = qKfz.getStuetzstellen();
-		qLkw0 = qLkw.getStuetzstellen();
-		vPkw0 = vPkw.getStuetzstellen();
-		vLkw0 = vLkw.getStuetzstellen();
-		for (int i = 0; i < qKfz0.size(); i++) {
-			long zeitstempel;
+	/**
+	 * Legt die Anzahl der bisherigen Verschmelzungen fest.
+	 * <p>
+	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
+	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
+	 * 
+	 * @param letzteVerschmelzung
+	 *            die neue Anzahl der Verschmelzungen.
+	 */
+	public void setLetzteVerschmelzung(long letzteVerschmelzung) {
+		this.letzteVerschmelzung = letzteVerschmelzung;
+	}
 
-			zeitstempel = qKfz0.get(i).getZeitstempel();
-			if (prognoseZeitraum != null
-					&& !prognoseZeitraum.isEnthalten(zeitstempel)) {
-				continue;
-			}
-			liste
-					.add(new Stuetzstelle<Messwerte>(zeitstempel,
-							new Messwerte(qKfz0.get(i).getWert(), qLkw0.get(i)
-									.getWert(), vPkw0.get(i).getWert(), vLkw0
-									.get(i).getWert(), k1, k2)));
-		}
+	/**
+	 * Legt den Messquerschnitt fest, auf den sich die Ganglinie bezieht.
+	 * 
+	 * @param messQuerschnitt
+	 *            ein Messquerschnitt.
+	 */
+	public void setMessQuerschnitt(MessQuerschnittAllgemein messQuerschnitt) {
+		this.messQuerschnitt = messQuerschnitt;
+	}
 
-		return liste;
+	/**
+	 * Legt das Prognoseintervall fest. Die getter-Methoden für Stützstellen
+	 * liefern nur Stützstellen innerhalb dieses Intervalls. Ist das
+	 * Prognoseintervall gleich {@code null}, dann werden alle vorhanden
+	 * Stützstellen berücksichtigt.
+	 * 
+	 * @param prognoseZeitraum
+	 *            ein Intervall.
+	 */
+	public void setPrognoseZeitraum(Intervall prognoseZeitraum) {
+		this.prognoseZeitraum = prognoseZeitraum;
+	}
+
+	/**
+	 * Kennzeichnet die Ganglinie als Referenzganglinie.
+	 * <p>
+	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
+	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
+	 * 
+	 * @param referenz
+	 *            <code>true</code>, wenn diese Ganglinie eine
+	 *            Referenzganglinie sein soll, sonst <code>false</code>
+	 */
+	public void setReferenz(boolean referenz) {
+		this.referenz = referenz;
 	}
 
 	/**
@@ -943,125 +1077,16 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	}
 
 	/**
-	 * {@inheritDoc}
-	 */
-	public int anzahlStuetzstellen() {
-		return qKfz.anzahlStuetzstellen();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public boolean existsStuetzstelle(long zeitstempel) {
-		return qKfz.existsStuetzstelle(zeitstempel);
-	}
-
-	/**
-	 * {@inheritDoc}
+	 * Legt den Ganglinientyp fest.
+	 * <p>
+	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
+	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
 	 * 
-	 * @see #setPrognoseZeitraum(Intervall)
+	 * @param typ
+	 *            der Typ der Ganglinie.
 	 */
-	public List<Stuetzstelle<Messwerte>> getStuetzstellen(Intervall intervall) {
-		List<Stuetzstelle<Double>> qKfz0, qLkw0, vPkw0, vLkw0;
-		List<Stuetzstelle<Messwerte>> liste;
-
-		qKfz0 = qKfz.getStuetzstellen(intervall);
-		qLkw0 = qLkw.getStuetzstellen(intervall);
-		vPkw0 = vPkw.getStuetzstellen(intervall);
-		vLkw0 = vLkw.getStuetzstellen(intervall);
-
-		liste = new ArrayList<Stuetzstelle<Messwerte>>();
-		for (int i = 0; i < qKfz0.size(); i++) {
-			long zeitstempel;
-
-			zeitstempel = qKfz0.get(i).getZeitstempel();
-			if (prognoseZeitraum != null
-					&& !prognoseZeitraum.isEnthalten(zeitstempel)) {
-				continue;
-			}
-			liste
-					.add(new Stuetzstelle<Messwerte>(zeitstempel,
-							new Messwerte(qKfz0.get(i).getWert(), qLkw0.get(i)
-									.getWert(), vPkw0.get(i).getWert(), vLkw0
-									.get(i).getWert(), k1, k2)));
-		}
-
-		return liste;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public boolean isValid(long zeitstempel) {
-		return qKfz.isValid(zeitstempel);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public void remove(long zeitstempel) {
-		qKfz.remove(zeitstempel);
-		qLkw.remove(zeitstempel);
-		vPkw.remove(zeitstempel);
-		vLkw.remove(zeitstempel);
-	}
-
-	/**
-	 * Gibt stellvertretend die Approximation f&uuml;r QKfz zur&uuml;ck.
-	 * 
-	 * {@inheritDoc}
-	 */
-	public Approximation getApproximation() {
-		return qKfz.getApproximation();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public void setApproximation(Approximation approximation) {
-		if (approximation instanceof Polyline) {
-			approximationDaK = APPROX_POLYLINE;
-		} else if (approximation instanceof CubicSpline) {
-			approximationDaK = APPROX_CUBICSPLINE;
-		} else if (approximation instanceof BSpline) {
-			approximationDaK = APPROX_BSPLINE;
-			bSplineOrdnung = ((BSpline) approximation).getOrdnung();
-		} else {
-			approximationDaK = APPROX_UNBESTIMMT;
-		}
-		approximationAktuell = false;
-	}
-
-	/**
-	 * Kopiert die St&uumltzstellen, das Approximationsverfahren und alle
-	 * anderen Eigenschaften bis auf {@code approximationAktuell}. Der Wert
-	 * f&uuml;r {@code approximationAktuell} wird auf false gesetzt.
-	 * 
-	 * {@inheritDoc}
-	 */
-	@Override
-	public GanglinieMQ clone() {
-		GanglinieMQ g;
-
-		g = new GanglinieMQ();
-		g.qKfz = new Ganglinie(qKfz.getStuetzstellen());
-		g.qLkw = new Ganglinie(qLkw.getStuetzstellen());
-		g.vPkw = new Ganglinie(vPkw.getStuetzstellen());
-		g.vLkw = new Ganglinie(vLkw.getStuetzstellen());
-		g.setAnzahlVerschmelzungen(anzahlVerschmelzungen);
-		g.setApproximationDaK(approximationDaK);
-		g.setBSplineOrdnung(bSplineOrdnung);
-		g.setEreignisTyp(ereignisTyp);
-		g.setK1(k1);
-		g.setK2(k2);
-		g.setLetzteVerschmelzung(letzteVerschmelzung);
-		g.setMessQuerschnitt(messQuerschnitt);
-		g.setPrognoseZeitraum(prognoseZeitraum);
-		g.setReferenz(referenz);
-		g.setTyp(typ);
-		g.approximationAktuell = false;
-
-		return g;
+	public void setTyp(int typ) {
+		this.typ = typ;
 	}
 
 	/**
@@ -1084,28 +1109,6 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 		result += ", stuetzstellen=" + getStuetzstellen();
 		result += "]";
 		return result;
-	}
-
-	/**
-	 * Gibt das Prognoseintervall der Ganglinie zur&uuml;ck.
-	 * 
-	 * @return das Prognoseintervall.
-	 */
-	public Intervall getPrognoseIntervall() {
-		return prognoseZeitraum;
-	}
-
-	/**
-	 * Legt das Prognoseintervall fest. Die getter-Methoden für Stützstellen
-	 * liefern nur Stützstellen innerhalb dieses Intervalls. Ist das
-	 * Prognoseintervall gleich {@code null}, dann werden alle vorhanden
-	 * Stützstellen berücksichtigt.
-	 * 
-	 * @param prognoseZeitraum
-	 *            ein Intervall.
-	 */
-	public void setPrognoseZeitraum(Intervall prognoseZeitraum) {
-		this.prognoseZeitraum = prognoseZeitraum;
 	}
 
 }

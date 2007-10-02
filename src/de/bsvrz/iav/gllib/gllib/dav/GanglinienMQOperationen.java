@@ -2,19 +2,19 @@
  * Segment 5 Intelligente Analyseverfahren, SWE 5.5 Funktionen Ganglinie
  * Copyright (C) 2007 BitCtrl Systems GmbH 
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
+ * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
  * details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 51
- * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA.
  *
  * Contact Information:
  * BitCtrl Systems GmbH
@@ -47,13 +47,6 @@ import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
 public class GanglinienMQOperationen {
 
 	/**
-	 * Konstruktor verstecken.
-	 */
-	protected GanglinienMQOperationen() {
-		// nichts
-	}
-
-	/**
 	 * Addiert zwei Ganglinien, indem die Werte der vervollst&auml;ndigten
 	 * St&uuml;tzstellenmenge addiert werden. Die beiden Ganglinien werden dabei
 	 * nicht ver&auml;ndert.
@@ -82,59 +75,49 @@ public class GanglinienMQOperationen {
 	}
 
 	/**
-	 * Subtraktion zweier Ganglinien, indem die Werte der vervollst&auml;ndigten
-	 * St&uuml;tzstellenmenge subtrahiert werden. Die beiden Ganglinien werden
-	 * dabei nicht ver&auml;ndert.
+	 * Schneidet ein Intervall aus einer GanglinieMQ heraus. Existieren keine
+	 * St&uuml;tzstellen in den Intervallgrenzen, werden an diesen Stellen
+	 * mittels Approximation durch Polyline St&uuml;tzstellen hinzugef&uuml;gt.
+	 * <p>
+	 * <em>Hinweis:</em> Das Intervall wird aus der Ganglinie im Parameter
+	 * ausgeschnitten.
 	 * 
-	 * @param g1
-	 *            Erste Ganglinie
-	 * @param g2
-	 *            Zweite Ganglinie
-	 * @return Die "Differenz" der beiden Ganglinien
+	 * @param g
+	 *            Eine Ganglinie
+	 * @param i
+	 *            Auszuschneidendes Intervall
+	 * @return Der Intervallausschnitt
 	 */
-	public static GanglinieMQ subtrahiere(GanglinieMQ g1, GanglinieMQ g2) {
-		assert g1.getMessQuerschnitt().equals(g2.getMessQuerschnitt()) : "Die Ganglinien müssen zum gleichen Messquerschnitt gehören.";
-
-		GanglinieMQ g;
-
-		g = new GanglinieMQ();
-		g.setMessQuerschnitt(g1.getMessQuerschnitt());
-		g.setApproximation(g1.getApproximation());
-
-		g.qKfz = GanglinienOperationen.subtrahiere(g1.qKfz, g2.qKfz);
-		g.qLkw = GanglinienOperationen.subtrahiere(g1.qLkw, g2.qLkw);
-		g.vPkw = GanglinienOperationen.subtrahiere(g1.vPkw, g2.vPkw);
-		g.vLkw = GanglinienOperationen.subtrahiere(g1.vLkw, g2.vLkw);
+	public static GanglinieMQ auschneiden(GanglinieMQ g, Intervall i) {
+		g.qKfz = GanglinienOperationen.auschneiden(g.qKfz, i);
+		g.qLkw = GanglinienOperationen.auschneiden(g.qLkw, i);
+		g.vPkw = GanglinienOperationen.auschneiden(g.vPkw, i);
+		g.vLkw = GanglinienOperationen.auschneiden(g.vLkw, i);
 
 		return g;
 	}
 
 	/**
-	 * Multiplikation zweier Ganglinien, indem die Werte der
-	 * vervollst&auml;ndigten St&uuml;tzstellenmenge multipliziert werden. Die
-	 * beiden Ganglinien werden dabei nicht ver&auml;ndert.
+	 * Berechnet den Abstand zweier Ganglinien mit Hilfe des
+	 * Basisabstandsverfahren.
 	 * 
 	 * @param g1
 	 *            Erste Ganglinie
 	 * @param g2
 	 *            Zweite Ganglinie
-	 * @return Das "Produkt" der beiden Ganglinien
+	 * @return Abstand nach dem Basisabstandsverfahren
 	 */
-	public static GanglinieMQ multipliziere(GanglinieMQ g1, GanglinieMQ g2) {
+	public static int basisabstand(GanglinieMQ g1, GanglinieMQ g2) {
 		assert g1.getMessQuerschnitt().equals(g2.getMessQuerschnitt()) : "Die Ganglinien müssen zum gleichen Messquerschnitt gehören.";
 
-		GanglinieMQ g;
+		int fehlerQKfz, fehlerQLkw, fehlerVPkw, fehlerVLkw;
 
-		g = new GanglinieMQ();
-		g.setMessQuerschnitt(g1.getMessQuerschnitt());
-		g.setApproximation(g1.getApproximation());
+		fehlerQKfz = GanglinienOperationen.basisabstand(g1.qKfz, g2.qKfz);
+		fehlerQLkw = GanglinienOperationen.basisabstand(g1.qLkw, g2.qLkw);
+		fehlerVPkw = GanglinienOperationen.basisabstand(g1.vPkw, g2.vPkw);
+		fehlerVLkw = GanglinienOperationen.basisabstand(g1.vLkw, g2.vLkw);
 
-		g.qKfz = GanglinienOperationen.multipliziere(g1.qKfz, g2.qKfz);
-		g.qLkw = GanglinienOperationen.multipliziere(g1.qLkw, g2.qLkw);
-		g.vPkw = GanglinienOperationen.multipliziere(g1.vPkw, g2.vPkw);
-		g.vLkw = GanglinienOperationen.multipliziere(g1.vLkw, g2.vLkw);
-
-		return g;
+		return (fehlerQKfz + fehlerQLkw + fehlerVLkw + fehlerVPkw) / 4;
 	}
 
 	/**
@@ -163,103 +146,6 @@ public class GanglinienMQOperationen {
 		g.vLkw = GanglinienOperationen.dividiere(g1.vLkw, g2.vLkw);
 
 		return g;
-	}
-
-	/**
-	 * Verschiebt eine GanglinieMQ auf der Zeitachse.
-	 * <p>
-	 * <em>Hinweis:</em> Es wird die Ganglinie im Parameter verschoben.
-	 * 
-	 * @param g
-	 *            Zu verschiebende Ganglinie
-	 * @param offset
-	 *            Offset um den die GanglinieMQ verschoben werden soll
-	 * @return Die verschobene Ganglinie
-	 */
-	public static GanglinieMQ verschiebe(GanglinieMQ g, long offset) {
-		g.qKfz = GanglinienOperationen.verschiebe(g.qKfz, offset);
-		g.qLkw = GanglinienOperationen.verschiebe(g.qLkw, offset);
-		g.vPkw = GanglinienOperationen.verschiebe(g.vPkw, offset);
-		g.vLkw = GanglinienOperationen.verschiebe(g.vLkw, offset);
-
-		return g;
-	}
-
-	/**
-	 * Schneidet ein Intervall aus einer GanglinieMQ heraus. Existieren keine
-	 * St&uuml;tzstellen in den Intervallgrenzen, werden an diesen Stellen
-	 * mittels Approximation durch Polyline St&uuml;tzstellen hinzugef&uuml;gt.
-	 * <p>
-	 * <em>Hinweis:</em> Das Intervall wird aus der Ganglinie im Parameter
-	 * ausgeschnitten.
-	 * 
-	 * @param g
-	 *            Eine Ganglinie
-	 * @param i
-	 *            Auszuschneidendes Intervall
-	 * @return Der Intervallausschnitt
-	 */
-	public static GanglinieMQ auschneiden(GanglinieMQ g, Intervall i) {
-		g.qKfz = GanglinienOperationen.auschneiden(g.qKfz, i);
-		g.qLkw = GanglinienOperationen.auschneiden(g.qLkw, i);
-		g.vPkw = GanglinienOperationen.auschneiden(g.vPkw, i);
-		g.vLkw = GanglinienOperationen.auschneiden(g.vLkw, i);
-
-		return g;
-	}
-
-	/**
-	 * Verbindet zwei Ganglinien durch Konkatenation. Es werden die
-	 * St&uuml;tzstellen beider Ganglinien zu einer neuen Ganglinien
-	 * zusammengefasst. Dies ist nur m&ouml;glich, wenn sich die
-	 * St&uuml;tzstellenmengen nicht &uuml;berschneiden. Ber&uuml;hren sich die
-	 * beiden Ganglinien wird im Ber&uuml;hrungspunkt er Mittelwert der beiden
-	 * St&uuml;tzstellen gebildet.
-	 * 
-	 * @param g1
-	 *            Erste Ganglinie
-	 * @param g2
-	 *            Zweite Ganglinie
-	 * @return Konkatenation der beiden Ganglinien
-	 */
-	public static GanglinieMQ verbinde(GanglinieMQ g1, GanglinieMQ g2) {
-		assert g1.getMessQuerschnitt().equals(g2.getMessQuerschnitt()) : "Die Ganglinien müssen zum gleichen Messquerschnitt gehören.";
-
-		GanglinieMQ g;
-
-		g = new GanglinieMQ();
-		g.setMessQuerschnitt(g1.getMessQuerschnitt());
-		g.setApproximation(g1.getApproximation());
-
-		g.qKfz = GanglinienOperationen.verbinde(g1.qKfz, g2.qKfz);
-		g.qLkw = GanglinienOperationen.verbinde(g1.qLkw, g2.qLkw);
-		g.vPkw = GanglinienOperationen.verbinde(g1.vPkw, g2.vPkw);
-		g.vLkw = GanglinienOperationen.verbinde(g1.vLkw, g2.vLkw);
-
-		return g;
-	}
-
-	/**
-	 * Berechnet den Abstand zweier Ganglinien mit Hilfe des
-	 * Basisabstandsverfahren.
-	 * 
-	 * @param g1
-	 *            Erste Ganglinie
-	 * @param g2
-	 *            Zweite Ganglinie
-	 * @return Abstand nach dem Basisabstandsverfahren
-	 */
-	public static int basisabstand(GanglinieMQ g1, GanglinieMQ g2) {
-		assert g1.getMessQuerschnitt().equals(g2.getMessQuerschnitt()) : "Die Ganglinien müssen zum gleichen Messquerschnitt gehören.";
-
-		int fehlerQKfz, fehlerQLkw, fehlerVPkw, fehlerVLkw;
-
-		fehlerQKfz = GanglinienOperationen.basisabstand(g1.qKfz, g2.qKfz);
-		fehlerQLkw = GanglinienOperationen.basisabstand(g1.qLkw, g2.qLkw);
-		fehlerVPkw = GanglinienOperationen.basisabstand(g1.vPkw, g2.vPkw);
-		fehlerVLkw = GanglinienOperationen.basisabstand(g1.vLkw, g2.vLkw);
-
-		return (fehlerQKfz + fehlerQLkw + fehlerVLkw + fehlerVPkw) / 4;
 	}
 
 	/**
@@ -322,6 +208,34 @@ public class GanglinienMQOperationen {
 				intervallBreite);
 
 		return (fehlerQKfz + fehlerQLkw + fehlerVLkw + fehlerVPkw) / 4;
+	}
+
+	/**
+	 * Multiplikation zweier Ganglinien, indem die Werte der
+	 * vervollst&auml;ndigten St&uuml;tzstellenmenge multipliziert werden. Die
+	 * beiden Ganglinien werden dabei nicht ver&auml;ndert.
+	 * 
+	 * @param g1
+	 *            Erste Ganglinie
+	 * @param g2
+	 *            Zweite Ganglinie
+	 * @return Das "Produkt" der beiden Ganglinien
+	 */
+	public static GanglinieMQ multipliziere(GanglinieMQ g1, GanglinieMQ g2) {
+		assert g1.getMessQuerschnitt().equals(g2.getMessQuerschnitt()) : "Die Ganglinien müssen zum gleichen Messquerschnitt gehören.";
+
+		GanglinieMQ g;
+
+		g = new GanglinieMQ();
+		g.setMessQuerschnitt(g1.getMessQuerschnitt());
+		g.setApproximation(g1.getApproximation());
+
+		g.qKfz = GanglinienOperationen.multipliziere(g1.qKfz, g2.qKfz);
+		g.qLkw = GanglinienOperationen.multipliziere(g1.qLkw, g2.qLkw);
+		g.vPkw = GanglinienOperationen.multipliziere(g1.vPkw, g2.vPkw);
+		g.vLkw = GanglinienOperationen.multipliziere(g1.vLkw, g2.vLkw);
+
+		return g;
 	}
 
 	/**
@@ -389,6 +303,85 @@ public class GanglinienMQOperationen {
 	}
 
 	/**
+	 * Subtraktion zweier Ganglinien, indem die Werte der vervollst&auml;ndigten
+	 * St&uuml;tzstellenmenge subtrahiert werden. Die beiden Ganglinien werden
+	 * dabei nicht ver&auml;ndert.
+	 * 
+	 * @param g1
+	 *            Erste Ganglinie
+	 * @param g2
+	 *            Zweite Ganglinie
+	 * @return Die "Differenz" der beiden Ganglinien
+	 */
+	public static GanglinieMQ subtrahiere(GanglinieMQ g1, GanglinieMQ g2) {
+		assert g1.getMessQuerschnitt().equals(g2.getMessQuerschnitt()) : "Die Ganglinien müssen zum gleichen Messquerschnitt gehören.";
+
+		GanglinieMQ g;
+
+		g = new GanglinieMQ();
+		g.setMessQuerschnitt(g1.getMessQuerschnitt());
+		g.setApproximation(g1.getApproximation());
+
+		g.qKfz = GanglinienOperationen.subtrahiere(g1.qKfz, g2.qKfz);
+		g.qLkw = GanglinienOperationen.subtrahiere(g1.qLkw, g2.qLkw);
+		g.vPkw = GanglinienOperationen.subtrahiere(g1.vPkw, g2.vPkw);
+		g.vLkw = GanglinienOperationen.subtrahiere(g1.vLkw, g2.vLkw);
+
+		return g;
+	}
+
+	/**
+	 * Verbindet zwei Ganglinien durch Konkatenation. Es werden die
+	 * St&uuml;tzstellen beider Ganglinien zu einer neuen Ganglinien
+	 * zusammengefasst. Dies ist nur m&ouml;glich, wenn sich die
+	 * St&uuml;tzstellenmengen nicht &uuml;berschneiden. Ber&uuml;hren sich die
+	 * beiden Ganglinien wird im Ber&uuml;hrungspunkt er Mittelwert der beiden
+	 * St&uuml;tzstellen gebildet.
+	 * 
+	 * @param g1
+	 *            Erste Ganglinie
+	 * @param g2
+	 *            Zweite Ganglinie
+	 * @return Konkatenation der beiden Ganglinien
+	 */
+	public static GanglinieMQ verbinde(GanglinieMQ g1, GanglinieMQ g2) {
+		assert g1.getMessQuerschnitt().equals(g2.getMessQuerschnitt()) : "Die Ganglinien müssen zum gleichen Messquerschnitt gehören.";
+
+		GanglinieMQ g;
+
+		g = new GanglinieMQ();
+		g.setMessQuerschnitt(g1.getMessQuerschnitt());
+		g.setApproximation(g1.getApproximation());
+
+		g.qKfz = GanglinienOperationen.verbinde(g1.qKfz, g2.qKfz);
+		g.qLkw = GanglinienOperationen.verbinde(g1.qLkw, g2.qLkw);
+		g.vPkw = GanglinienOperationen.verbinde(g1.vPkw, g2.vPkw);
+		g.vLkw = GanglinienOperationen.verbinde(g1.vLkw, g2.vLkw);
+
+		return g;
+	}
+
+	/**
+	 * Verschiebt eine GanglinieMQ auf der Zeitachse.
+	 * <p>
+	 * <em>Hinweis:</em> Es wird die Ganglinie im Parameter verschoben.
+	 * 
+	 * @param g
+	 *            Zu verschiebende Ganglinie
+	 * @param offset
+	 *            Offset um den die GanglinieMQ verschoben werden soll
+	 * @return Die verschobene Ganglinie
+	 */
+	public static GanglinieMQ verschiebe(GanglinieMQ g, long offset) {
+		g.qKfz = GanglinienOperationen.verschiebe(g.qKfz, offset);
+		g.qLkw = GanglinienOperationen.verschiebe(g.qLkw, offset);
+		g.vPkw = GanglinienOperationen.verschiebe(g.vPkw, offset);
+		g.vLkw = GanglinienOperationen.verschiebe(g.vLkw, offset);
+
+		return g;
+	}
+
+	/**
 	 * Verschmilzt eine Ganglinie mit einer anderen. Dabei wird das gewichtete
 	 * arithmetische Mittel der vervollst&auml;ndigten St&uuml;tzstellen
 	 * gebildet. Die zweite Ganglinie hat immer das Gewicht 1. Die beiden
@@ -430,6 +423,13 @@ public class GanglinienMQOperationen {
 		g.setLetzteVerschmelzung(System.currentTimeMillis());
 
 		return g;
+	}
+
+	/**
+	 * Konstruktor verstecken.
+	 */
+	protected GanglinienMQOperationen() {
+		// nichts
 	}
 
 }

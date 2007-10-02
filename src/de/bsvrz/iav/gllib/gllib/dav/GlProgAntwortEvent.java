@@ -2,19 +2,19 @@
  * Segment 5 Intelligente Analyseverfahren, SWE 5.5 Funktionen Ganglinie
  * Copyright (C) 2007 BitCtrl Systems GmbH 
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
+ * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
  * details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 51
- * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA.
  *
  * Contact Information:
  * BitCtrl Systems GmbH
@@ -75,12 +75,16 @@ public class GlProgAntwortEvent extends EventObject {
 	}
 
 	/**
-	 * Gibt die anfragende Applikation zur&uuml;ck.
+	 * F&uuml;gt der Antwort eine Prognoseganglinie hinzu.
+	 * <p>
+	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
+	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
 	 * 
-	 * @return Referenz auf die anfragende Applikation.
+	 * @param ganglinie
+	 *            eine Prognoseganglinie.
 	 */
-	public ClientApplication getAnfrager() {
-		return anfrager;
+	public void addGanglinie(GanglinieMQ ganglinie) {
+		prognosen.put(ganglinie.getMessQuerschnitt(), ganglinie);
 	}
 
 	/**
@@ -93,6 +97,38 @@ public class GlProgAntwortEvent extends EventObject {
 	 */
 	public String getAbsenderZeichen() {
 		return absenderZeichen;
+	}
+
+	/**
+	 * Gibt die anfragende Applikation zur&uuml;ck.
+	 * 
+	 * @return Referenz auf die anfragende Applikation.
+	 */
+	public ClientApplication getAnfrager() {
+		return anfrager;
+	}
+
+	/**
+	 * Baut aus den Informationen der Antwort einen Datensatz. Das Ergebnis wird
+	 * im Parameter abgelegt!
+	 * <p>
+	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
+	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
+	 * 
+	 * @param daten
+	 *            ein Datum, welches eine Antwortnachricht darstellt.
+	 */
+	public void getDaten(Data daten) {
+		Array feld;
+		int i;
+
+		daten.getTextValue("AbsenderZeichen").setText(absenderZeichen);
+		feld = daten.getArray("PrognoseGanglinie");
+		feld.setLength(prognosen.size());
+		i = 0;
+		for (GanglinieMQ g : prognosen.values()) {
+			g.getDatenFuerPrognoseGanglinie(feld.getItem(i));
+		}
 	}
 
 	/**
@@ -124,6 +160,20 @@ public class GlProgAntwortEvent extends EventObject {
 	}
 
 	/**
+	 * Setzt das Absenderzeichen. In der Regel wird dieses lediglich aus der
+	 * Anfrage in die Antwort kopiert.
+	 * <p>
+	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
+	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
+	 * 
+	 * @param absenderZeichen
+	 *            ein beliebiger Text.
+	 */
+	public void setAbsenderZeichen(String absenderZeichen) {
+		this.absenderZeichen = absenderZeichen;
+	}
+
+	/**
 	 * Extrahiert die enthaltenen Informationen aus den &uuml;bergebenen Daten.
 	 * <p>
 	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
@@ -145,56 +195,6 @@ public class GlProgAntwortEvent extends EventObject {
 			g = new GanglinieMQ();
 			g.setDatenVonPrognoseGanglinie(feld.getItem(i));
 			prognosen.put(g.getMessQuerschnitt(), g);
-		}
-	}
-
-	/**
-	 * Setzt das Absenderzeichen. In der Regel wird dieses lediglich aus der
-	 * Anfrage in die Antwort kopiert.
-	 * <p>
-	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
-	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
-	 * 
-	 * @param absenderZeichen
-	 *            ein beliebiger Text.
-	 */
-	public void setAbsenderZeichen(String absenderZeichen) {
-		this.absenderZeichen = absenderZeichen;
-	}
-
-	/**
-	 * F&uuml;gt der Antwort eine Prognoseganglinie hinzu.
-	 * <p>
-	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
-	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
-	 * 
-	 * @param ganglinie
-	 *            eine Prognoseganglinie.
-	 */
-	public void addGanglinie(GanglinieMQ ganglinie) {
-		prognosen.put(ganglinie.getMessQuerschnitt(), ganglinie);
-	}
-
-	/**
-	 * Baut aus den Informationen der Antwort einen Datensatz. Das Ergebnis wird
-	 * im Parameter abgelegt!
-	 * <p>
-	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
-	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
-	 * 
-	 * @param daten
-	 *            ein Datum, welches eine Antwortnachricht darstellt.
-	 */
-	public void getDaten(Data daten) {
-		Array feld;
-		int i;
-
-		daten.getTextValue("AbsenderZeichen").setText(absenderZeichen);
-		feld = daten.getArray("PrognoseGanglinie");
-		feld.setLength(prognosen.size());
-		i = 0;
-		for (GanglinieMQ g : prognosen.values()) {
-			g.getDatenFuerPrognoseGanglinie(feld.getItem(i));
 		}
 	}
 

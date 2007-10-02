@@ -2,19 +2,19 @@
  * Segment 5 Intelligente Analyseverfahren, SWE 5.5 Funktionen Ganglinie
  * Copyright (C) 2007 BitCtrl Systems GmbH 
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
+ * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
  * details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 51
- * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA.
  *
  * Contact Information:
  * BitCtrl Systems GmbH
@@ -48,13 +48,6 @@ import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
  * @version $Id$
  */
 public class GanglinienOperationen {
-
-	/**
-	 * Konstruktor verstecken.
-	 */
-	protected GanglinienOperationen() {
-		// nichts
-	}
 
 	/**
 	 * Addiert zwei Ganglinien, indem die Werte der vervollst&auml;ndigten
@@ -93,150 +86,6 @@ public class GanglinienOperationen {
 			}
 		}
 
-		return g;
-	}
-
-	/**
-	 * Subtraktion zweier Ganglinien, indem die Werte der vervollst&auml;ndigten
-	 * St&uuml;tzstellenmenge subtrahiert werden. Die beiden Ganglinien werden
-	 * dabei nicht ver&auml;ndert.
-	 * 
-	 * @param g1
-	 *            Erste Ganglinie
-	 * @param g2
-	 *            Zweite Ganglinie
-	 * @return Die "Differenz" der beiden Ganglinien
-	 */
-	public static Ganglinie subtrahiere(Ganglinie g1, Ganglinie g2) {
-		Ganglinie g;
-		Polyline p1, p2;
-		Queue<Long> zeitstempel;
-
-		p1 = new Polyline();
-		p1.setStuetzstellen(g1.getStuetzstellen());
-		p1.initialisiere();
-		p2 = new Polyline();
-		p2.setStuetzstellen(g2.getStuetzstellen());
-		p2.initialisiere();
-		g = new Ganglinie();
-		zeitstempel = vervollstaendigeStuetzstellen(g1, g2);
-
-		while (!zeitstempel.isEmpty()) {
-			long z;
-
-			z = zeitstempel.poll();
-
-			if (p1.get(z).getWert() == null || p2.get(z).getWert() == null) {
-				g.setStuetzstelle(z, null);
-			} else {
-				g.setStuetzstelle(z, p1.get(z).getWert() - p2.get(z).getWert());
-			}
-		}
-
-		return g;
-	}
-
-	/**
-	 * Multiplikation zweier Ganglinien, indem die Werte der
-	 * vervollst&auml;ndigten St&uuml;tzstellenmenge multipliziert werden. Die
-	 * beiden Ganglinien werden dabei nicht ver&auml;ndert.
-	 * 
-	 * @param g1
-	 *            Erste Ganglinie
-	 * @param g2
-	 *            Zweite Ganglinie
-	 * @return Das "Produkt" der beiden Ganglinien
-	 */
-	public static Ganglinie multipliziere(Ganglinie g1, Ganglinie g2) {
-		Ganglinie g;
-		Polyline p1, p2;
-		Queue<Long> zeitstempel;
-
-		p1 = new Polyline();
-		p1.setStuetzstellen(g1.getStuetzstellen());
-		p1.initialisiere();
-		p2 = new Polyline();
-		p2.setStuetzstellen(g2.getStuetzstellen());
-		p2.initialisiere();
-		g = new Ganglinie();
-		zeitstempel = vervollstaendigeStuetzstellen(g1, g2);
-
-		while (!zeitstempel.isEmpty()) {
-			long z;
-
-			z = zeitstempel.poll();
-
-			if (p1.get(z).getWert() == null || p2.get(z).getWert() == null) {
-				g.setStuetzstelle(z, null);
-			} else {
-				g.setStuetzstelle(z, p1.get(z).getWert() * p2.get(z).getWert());
-			}
-		}
-
-		return g;
-	}
-
-	/**
-	 * Division zweier Ganglinien, indem die Werte der vervollst&auml;ndigten
-	 * St&uuml;tzstellenmenge dividiert werden. Die beiden Ganglinien werden
-	 * dabei nicht ver&auml;ndert.
-	 * 
-	 * @param g1
-	 *            Erste Ganglinie
-	 * @param g2
-	 *            Zweite Ganglinie
-	 * @return Das "Produkt" der beiden Ganglinien
-	 */
-	public static Ganglinie dividiere(Ganglinie g1, Ganglinie g2) {
-		Ganglinie g;
-		Polyline p1, p2;
-		Queue<Long> zeitstempel;
-
-		p1 = new Polyline();
-		p1.setStuetzstellen(g1.getStuetzstellen());
-		p1.initialisiere();
-		p2 = new Polyline();
-		p2.setStuetzstellen(g2.getStuetzstellen());
-		p2.initialisiere();
-		g = new Ganglinie();
-		zeitstempel = vervollstaendigeStuetzstellen(g1, g2);
-
-		while (!zeitstempel.isEmpty()) {
-			long z;
-
-			z = zeitstempel.poll();
-
-			if (p1.get(z).getWert() == null || p2.get(z).getWert() == null
-					|| p2.get(z).getWert() == 0) {
-				// Einer der Werte ist undefiniert oder der Divisor ist 0
-				g.setStuetzstelle(z, null);
-			} else {
-				g.setStuetzstelle(z, p1.get(z).getWert() / p2.get(z).getWert());
-			}
-		}
-
-		return g;
-	}
-
-	/**
-	 * Verschiebt eine Ganglinie auf der Zeitachse.
-	 * <p>
-	 * <em>Hinweis:</em> Es wird die Ganglinie im Parameter verschoben.
-	 * 
-	 * @param g
-	 *            Zu verschiebende Ganglinie
-	 * @param offset
-	 *            Offset um den die Ganglinie verschoben werden soll
-	 * @return Die verschobene Ganglinie
-	 */
-	public static Ganglinie verschiebe(Ganglinie g, long offset) {
-		SortedMap<Long, Double> stuetzstellen;
-
-		stuetzstellen = new TreeMap<Long, Double>();
-		for (long t : g.stuetzstellen.keySet()) {
-			stuetzstellen.put(t + offset, g.stuetzstellen.get(t));
-		}
-		g.stuetzstellen = stuetzstellen;
 		return g;
 	}
 
@@ -283,47 +132,6 @@ public class GanglinienOperationen {
 
 		return g;
 
-	}
-
-	/**
-	 * Verbindet zwei Ganglinien durch Konkatenation. Es werden die
-	 * St&uuml;tzstellen beider Ganglinien zu einer neuen Ganglinien
-	 * zusammengefasst. Dies ist nur m&ouml;glich, wenn sich die
-	 * St&uuml;tzstellenmengen nicht &uuml;berschneiden. Ber&uuml;hren sich die
-	 * beiden Ganglinien wird im Ber&uuml;hrungspunkt er Mittelwert der beiden
-	 * St&uuml;tzstellen gebildet.
-	 * 
-	 * @param g1
-	 *            Erste Ganglinie
-	 * @param g2
-	 *            Zweite Ganglinie
-	 * @return Konkatenation der beiden Ganglinien
-	 */
-	public static Ganglinie verbinde(Ganglinie g1, Ganglinie g2) {
-		if (g1.getIntervall().schneidet(g2.getIntervall())) {
-			throw new IllegalArgumentException();
-		}
-
-		Ganglinie g;
-
-		g = new Ganglinie(g1.stuetzstellen);
-		for (long t : g2.stuetzstellen.keySet()) {
-			if (g.existsStuetzstelle(t)) {
-				Double d1, d2;
-
-				d1 = g.getStuetzstelle(t).getWert();
-				d2 = g2.getStuetzstelle(t).getWert();
-				if (d1 != null && d2 != null) {
-					g.setStuetzstelle(t, (d1 + d2) / 2);
-				} else {
-					g.setStuetzstelle(t, null);
-				}
-			} else {
-				g.setStuetzstelle(g2.getStuetzstelle(t));
-			}
-		}
-
-		return g;
 	}
 
 	/**
@@ -387,6 +195,48 @@ public class GanglinienOperationen {
 				/ (Math.sqrt(summe / (zeitstempel.size() - undefinierte)));
 
 		return (int) Math.round(fehler);
+	}
+
+	/**
+	 * Division zweier Ganglinien, indem die Werte der vervollst&auml;ndigten
+	 * St&uuml;tzstellenmenge dividiert werden. Die beiden Ganglinien werden
+	 * dabei nicht ver&auml;ndert.
+	 * 
+	 * @param g1
+	 *            Erste Ganglinie
+	 * @param g2
+	 *            Zweite Ganglinie
+	 * @return Das "Produkt" der beiden Ganglinien
+	 */
+	public static Ganglinie dividiere(Ganglinie g1, Ganglinie g2) {
+		Ganglinie g;
+		Polyline p1, p2;
+		Queue<Long> zeitstempel;
+
+		p1 = new Polyline();
+		p1.setStuetzstellen(g1.getStuetzstellen());
+		p1.initialisiere();
+		p2 = new Polyline();
+		p2.setStuetzstellen(g2.getStuetzstellen());
+		p2.initialisiere();
+		g = new Ganglinie();
+		zeitstempel = vervollstaendigeStuetzstellen(g1, g2);
+
+		while (!zeitstempel.isEmpty()) {
+			long z;
+
+			z = zeitstempel.poll();
+
+			if (p1.get(z).getWert() == null || p2.get(z).getWert() == null
+					|| p2.get(z).getWert() == 0) {
+				// Einer der Werte ist undefiniert oder der Divisor ist 0
+				g.setStuetzstelle(z, null);
+			} else {
+				g.setStuetzstelle(z, p1.get(z).getWert() / p2.get(z).getWert());
+			}
+		}
+
+		return g;
 	}
 
 	/**
@@ -504,6 +354,46 @@ public class GanglinienOperationen {
 	}
 
 	/**
+	 * Multiplikation zweier Ganglinien, indem die Werte der
+	 * vervollst&auml;ndigten St&uuml;tzstellenmenge multipliziert werden. Die
+	 * beiden Ganglinien werden dabei nicht ver&auml;ndert.
+	 * 
+	 * @param g1
+	 *            Erste Ganglinie
+	 * @param g2
+	 *            Zweite Ganglinie
+	 * @return Das "Produkt" der beiden Ganglinien
+	 */
+	public static Ganglinie multipliziere(Ganglinie g1, Ganglinie g2) {
+		Ganglinie g;
+		Polyline p1, p2;
+		Queue<Long> zeitstempel;
+
+		p1 = new Polyline();
+		p1.setStuetzstellen(g1.getStuetzstellen());
+		p1.initialisiere();
+		p2 = new Polyline();
+		p2.setStuetzstellen(g2.getStuetzstellen());
+		p2.initialisiere();
+		g = new Ganglinie();
+		zeitstempel = vervollstaendigeStuetzstellen(g1, g2);
+
+		while (!zeitstempel.isEmpty()) {
+			long z;
+
+			z = zeitstempel.poll();
+
+			if (p1.get(z).getWert() == null || p2.get(z).getWert() == null) {
+				g.setStuetzstelle(z, null);
+			} else {
+				g.setStuetzstelle(z, p1.get(z).getWert() * p2.get(z).getWert());
+			}
+		}
+
+		return g;
+	}
+
+	/**
 	 * Führt das Pattern-Matching einer Menge von Ganglinien mit einer
 	 * Referenzganglinie aus. Ergebnis ist die Ganglinie aus der Menge mit dem
 	 * geringsten Abstand zur Referenzganglinie.
@@ -565,6 +455,109 @@ public class GanglinienOperationen {
 			}
 		}
 		return index;
+	}
+
+	/**
+	 * Subtraktion zweier Ganglinien, indem die Werte der vervollst&auml;ndigten
+	 * St&uuml;tzstellenmenge subtrahiert werden. Die beiden Ganglinien werden
+	 * dabei nicht ver&auml;ndert.
+	 * 
+	 * @param g1
+	 *            Erste Ganglinie
+	 * @param g2
+	 *            Zweite Ganglinie
+	 * @return Die "Differenz" der beiden Ganglinien
+	 */
+	public static Ganglinie subtrahiere(Ganglinie g1, Ganglinie g2) {
+		Ganglinie g;
+		Polyline p1, p2;
+		Queue<Long> zeitstempel;
+
+		p1 = new Polyline();
+		p1.setStuetzstellen(g1.getStuetzstellen());
+		p1.initialisiere();
+		p2 = new Polyline();
+		p2.setStuetzstellen(g2.getStuetzstellen());
+		p2.initialisiere();
+		g = new Ganglinie();
+		zeitstempel = vervollstaendigeStuetzstellen(g1, g2);
+
+		while (!zeitstempel.isEmpty()) {
+			long z;
+
+			z = zeitstempel.poll();
+
+			if (p1.get(z).getWert() == null || p2.get(z).getWert() == null) {
+				g.setStuetzstelle(z, null);
+			} else {
+				g.setStuetzstelle(z, p1.get(z).getWert() - p2.get(z).getWert());
+			}
+		}
+
+		return g;
+	}
+
+	/**
+	 * Verbindet zwei Ganglinien durch Konkatenation. Es werden die
+	 * St&uuml;tzstellen beider Ganglinien zu einer neuen Ganglinien
+	 * zusammengefasst. Dies ist nur m&ouml;glich, wenn sich die
+	 * St&uuml;tzstellenmengen nicht &uuml;berschneiden. Ber&uuml;hren sich die
+	 * beiden Ganglinien wird im Ber&uuml;hrungspunkt er Mittelwert der beiden
+	 * St&uuml;tzstellen gebildet.
+	 * 
+	 * @param g1
+	 *            Erste Ganglinie
+	 * @param g2
+	 *            Zweite Ganglinie
+	 * @return Konkatenation der beiden Ganglinien
+	 */
+	public static Ganglinie verbinde(Ganglinie g1, Ganglinie g2) {
+		if (g1.getIntervall().schneidet(g2.getIntervall())) {
+			throw new IllegalArgumentException();
+		}
+
+		Ganglinie g;
+
+		g = new Ganglinie(g1.stuetzstellen);
+		for (long t : g2.stuetzstellen.keySet()) {
+			if (g.existsStuetzstelle(t)) {
+				Double d1, d2;
+
+				d1 = g.getStuetzstelle(t).getWert();
+				d2 = g2.getStuetzstelle(t).getWert();
+				if (d1 != null && d2 != null) {
+					g.setStuetzstelle(t, (d1 + d2) / 2);
+				} else {
+					g.setStuetzstelle(t, null);
+				}
+			} else {
+				g.setStuetzstelle(g2.getStuetzstelle(t));
+			}
+		}
+
+		return g;
+	}
+
+	/**
+	 * Verschiebt eine Ganglinie auf der Zeitachse.
+	 * <p>
+	 * <em>Hinweis:</em> Es wird die Ganglinie im Parameter verschoben.
+	 * 
+	 * @param g
+	 *            Zu verschiebende Ganglinie
+	 * @param offset
+	 *            Offset um den die Ganglinie verschoben werden soll
+	 * @return Die verschobene Ganglinie
+	 */
+	public static Ganglinie verschiebe(Ganglinie g, long offset) {
+		SortedMap<Long, Double> stuetzstellen;
+
+		stuetzstellen = new TreeMap<Long, Double>();
+		for (long t : g.stuetzstellen.keySet()) {
+			stuetzstellen.put(t + offset, g.stuetzstellen.get(t));
+		}
+		g.stuetzstellen = stuetzstellen;
+		return g;
 	}
 
 	/**
@@ -631,6 +624,13 @@ public class GanglinienOperationen {
 		zeitstempel.addAll(g2.stuetzstellen.keySet());
 
 		return new LinkedList<Long>(zeitstempel);
+	}
+
+	/**
+	 * Konstruktor verstecken.
+	 */
+	protected GanglinienOperationen() {
+		// nichts
 	}
 
 }

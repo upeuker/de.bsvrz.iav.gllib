@@ -2,19 +2,19 @@
  * Segment 5 Intelligente Analyseverfahren, SWE 5.5 Funktionen Ganglinie
  * Copyright (C) 2007 BitCtrl Systems GmbH 
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
+ * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
  * details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 51
- * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA.
  *
  * Contact Information:
  * BitCtrl Systems GmbH
@@ -33,12 +33,18 @@ import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
 /**
  * Definiert eine gemeinsame Schnittstelle für Ganglinien.
  * 
- * @author BitrCtrl, Schumann
+ * @author BitCtrl Systems GmbH, Schumann
  * @version $Id$
  * @param <T>
  *            der Typ des Wertes eines St&uuml;tzstelle.
  */
 public interface IGanglinie<T> {
+
+	/**
+	 * Aktualisiert die Approximation. Muss bei &Auml;nderung an den
+	 * St&uuml;tzstellen der Ganglinie aufgerufen werden.
+	 */
+	void aktualisiereApproximation();
 
 	/**
 	 * Gibt die Anzahl der St&uuml;tzstellen der Ganglinie zur&uuml;ck.
@@ -59,15 +65,27 @@ public interface IGanglinie<T> {
 	boolean existsStuetzstelle(long zeitstempel);
 
 	/**
-	 * Pr&uuml;ft ob ein Zeitstempel im Definitionsbereich der Ganglinie liegt.
+	 * Die Ganglinie als Approximation zu&uuml;ck.
 	 * 
-	 * @param zeitstempel
-	 *            zu pr&uuml;fender Zeitstempel
-	 * @return <code>true</code>, wenn <code>zeitstempel</code> im
-	 *         definierten Bereich der Ganglinie liegt
-	 * @see #getIntervalle()
+	 * @return die Approximation der Ganglinie oder {@code null}, wenn keine
+	 *         Approximation festgelegt wurde.
 	 */
-	boolean isValid(long zeitstempel);
+	Approximation getApproximation();
+
+	/**
+	 * Gibt das Zeitintervall der Ganglinie zur&uuml;ck.
+	 * 
+	 * @return Ein {@link Intervall} oder {@code null}, wenn keine
+	 *         St&uuml;tzstellen vorhanden sind
+	 */
+	Intervall getIntervall();
+
+	/**
+	 * Bestimmt die Intervalle in denen die Ganglinie definiert ist.
+	 * 
+	 * @return Liste von Intervallen
+	 */
+	List<Intervall> getIntervalle();
 
 	/**
 	 * Gibt die St&uuml;tzstelle zu einem bestimmten Zeitpunkt zur&uuml;ck. Es
@@ -103,6 +121,47 @@ public interface IGanglinie<T> {
 	List<Stuetzstelle<T>> getStuetzstellen(Intervall intervall);
 
 	/**
+	 * Gibt {@code false} zur&uuml;ck, wenn die Approximation aktuallisiert
+	 * werden muss, weil sich die Ganglinie ge&auml;ndert hat.
+	 * 
+	 * @return {@code true}, wenn Ganglinie und Approximation konform gehen und
+	 *         {@code false}, wenn die Approximation aktualisiert werden muss.
+	 */
+	boolean isApproximationAktuell();
+
+	/**
+	 * Pr&uuml;ft ob ein Zeitstempel im Definitionsbereich der Ganglinie liegt.
+	 * 
+	 * @param zeitstempel
+	 *            zu pr&uuml;fender Zeitstempel
+	 * @return <code>true</code>, wenn <code>zeitstempel</code> im
+	 *         definierten Bereich der Ganglinie liegt
+	 * @see #getIntervalle()
+	 */
+	boolean isValid(long zeitstempel);
+
+	/**
+	 * Entfernt eine St&uuml;tzstelle.
+	 * 
+	 * @param zeitstempel
+	 *            Zeitstempel der St&uuml;tzstelle, die entfernt werden soll
+	 */
+	void remove(long zeitstempel);
+
+	/**
+	 * Legt das Approximationsverfahren fest, mit dem die Werte zwischen den
+	 * St&uuml;tzstellen bestimmt werden soll.
+	 * 
+	 * @param approximation
+	 *            Klasse eines Approximationsverfahrens. Die Klasse m&uuml;ss
+	 *            einen parameterlosen Konstruktor besitzen.
+	 * @throws IllegalArgumentException
+	 *             Wenn die Klassen keinen &ouml;ffentlichen parameterlosen
+	 *             Konstruktor besitzt
+	 */
+	void setApproximation(Approximation approximation);
+
+	/**
 	 * Nimmt eine St&uuml;tzstelle in die Ganglinie auf. Existiert zu dem
 	 * Zeitpunkt bereits eine, wird diese &uuml;berschrieben.
 	 * 
@@ -127,64 +186,5 @@ public interface IGanglinie<T> {
 	 *         wurde.
 	 */
 	boolean setStuetzstelle(Stuetzstelle<T> s);
-
-	/**
-	 * Entfernt eine St&uuml;tzstelle.
-	 * 
-	 * @param zeitstempel
-	 *            Zeitstempel der St&uuml;tzstelle, die entfernt werden soll
-	 */
-	void remove(long zeitstempel);
-
-	/**
-	 * Gibt das Zeitintervall der Ganglinie zur&uuml;ck.
-	 * 
-	 * @return Ein {@link Intervall} oder {@code null}, wenn keine
-	 *         St&uuml;tzstellen vorhanden sind
-	 */
-	Intervall getIntervall();
-
-	/**
-	 * Bestimmt die Intervalle in denen die Ganglinie definiert ist.
-	 * 
-	 * @return Liste von Intervallen
-	 */
-	List<Intervall> getIntervalle();
-
-	/**
-	 * Gibt {@code false} zur&uuml;ck, wenn die Approximation aktuallisiert
-	 * werden muss, weil sich die Ganglinie ge&auml;ndert hat.
-	 * 
-	 * @return {@code true}, wenn Ganglinie und Approximation konform gehen und
-	 *         {@code false}, wenn die Approximation aktualisiert werden muss.
-	 */
-	boolean isApproximationAktuell();
-
-	/**
-	 * Aktualisiert die Approximation. Muss bei &Auml;nderung an den
-	 * St&uuml;tzstellen der Ganglinie aufgerufen werden.
-	 */
-	void aktualisiereApproximation();
-
-	/**
-	 * Die Ganglinie als Approximation zu&uuml;ck.
-	 * 
-	 * @return die Approximation der Ganglinie oder {@code null}, wenn keine
-	 *         Approximation festgelegt wurde.
-	 */
-	Approximation getApproximation();
-
-	/**
-	 * Legt das Approximationsverfahren fest, mit dem die Werte zwischen den
-	 * St&uuml;tzstellen bestimmt werden soll.
-	 * 
-	 * @param approximation
-	 *            Klasse eines Approximationsverfahrens. Die Klasse m&uuml;ss
-	 *            einen parameterlosen Konstruktor besitzen.
-	 * @throws IllegalArgumentException
-	 *             Wenn die Klassen keinen &ouml;ffentlichen parameterlosen
-	 *             Konstruktor besitzt
-	 */
-	void setApproximation(Approximation approximation);
 
 }

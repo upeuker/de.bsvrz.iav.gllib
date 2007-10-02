@@ -2,19 +2,19 @@
  * Segment 5 Intelligente Analyseverfahren, SWE 5.5 Funktionen Ganglinie
  * Copyright (C) 2007 BitCtrl Systems GmbH 
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
+ * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
  * details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 51
- * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA.
  *
  * Contact Information:
  * BitCtrl Systems GmbH
@@ -60,63 +60,6 @@ public class GlEreignisTyp extends EreignisTyp implements EreignisTypParameter,
 	 */
 	public GlEreignisTyp(SystemObject obj) {
 		super(obj);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public long getPrioritaet() {
-		return parameter.getPrioritaet();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public void setPrioritaet(long prioritaet) {
-		parameter.setPrioritaet(prioritaet);
-	}
-
-	/**
-	 * Setzt den inneren Zustand anhand des angegebenen Datums.
-	 * 
-	 * @param daten
-	 *            ein g&uuml;ltiges Datum.
-	 */
-	public void setDaten(Data daten) {
-		if (daten.getName().equals("atg.ereignisTypParameter")) {
-			if (parameter == null) {
-				parameter = new EreignisTypParameterImpl();
-			}
-			parameter.setDaten(daten);
-		} else if (daten.getName().equals(
-				"atg.ganglinienModellAutomatischesLernenEreignis")) {
-			if (lernParameter == null) {
-				lernParameter = new GanglinienModellAutomatischesLernenEreignisParameterImpl();
-			}
-			lernParameter.setDaten(daten);
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String toString() {
-		return getClass().getSimpleName()
-				+ "[name="
-				+ getSystemObject().getName()
-				+ ", pid="
-				+ getSystemObject().getPid()
-				+ ", prioritaet="
-				+ (parameter != null ? parameter.getPrioritaet() : null)
-				+ ", ganglinienTyp="
-				+ (lernParameter != null ? lernParameter.getGanglinienTyp()
-						: null)
-				+ ", maxAbstand="
-				+ (lernParameter != null ? lernParameter.getMaxAbstand() : null)
-				+ ", maxMatchingFehler="
-				+ (lernParameter != null ? lernParameter.getMaxMatchingFehler()
-						: null) + "]";
 	}
 
 	/**
@@ -220,6 +163,13 @@ public class GlEreignisTyp extends EreignisTyp implements EreignisTypParameter,
 
 	/**
 	 * {@inheritDoc}
+	 */
+	public long getPrioritaet() {
+		return parameter.getPrioritaet();
+	}
+
+	/**
+	 * {@inheritDoc}
 	 * 
 	 * @see de.bsvrz.iav.gllib.gllib.intern.GanglinienModellAutomatischesLernenEreignisParameter#getVergleichsSchrittweite()
 	 */
@@ -227,4 +177,67 @@ public class GlEreignisTyp extends EreignisTyp implements EreignisTypParameter,
 		return lernParameter.getVergleichsSchrittweite();
 	}
 
+	/**
+	 * Setzt den inneren Zustand anhand des angegebenen Datums.
+	 * 
+	 * @param daten
+	 *            ein g&uuml;ltiges Datum.
+	 */
+	public void setDaten(Data daten) {
+		if (daten.getName().equals("atg.ereignisTypParameter")) {
+			if (parameter == null) {
+				parameter = new EreignisTypParameterImpl();
+			}
+			parameter.setDaten(daten);
+		} else if (daten.getName().equals(
+				"atg.ganglinienModellAutomatischesLernenEreignis")) {
+			if (lernParameter == null) {
+				lernParameter = new GanglinienModellAutomatischesLernenEreignisParameterImpl();
+			}
+			lernParameter.setDaten(daten);
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void setPrioritaet(long prioritaet) {
+		parameter.setPrioritaet(prioritaet);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String s;
+
+		s = getClass().getSimpleName() + "[name=" + getSystemObject().getName()
+				+ ", pid=" + getSystemObject().getPid() + ", prioritaet=";
+		if (parameter != null) {
+			s += parameter.getPrioritaet();
+		} else {
+			s += null;
+		}
+		s += ", ganglinienTyp=";
+		if (lernParameter != null) {
+			s += lernParameter.getGanglinienTyp();
+		} else {
+			s += null;
+		}
+		s += ", maxAbstand=";
+		if (lernParameter != null) {
+			s += lernParameter.getMaxAbstand();
+		} else {
+			s += null;
+		}
+		s += ", maxMatchingFehler=";
+		if (lernParameter != null) {
+			s += lernParameter.getMaxMatchingFehler();
+		} else {
+			s += null;
+		}
+		s += "]";
+		return s;
+	}
 }

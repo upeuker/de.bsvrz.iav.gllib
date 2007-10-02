@@ -2,19 +2,19 @@
  * Segment 5 Intelligente Analyseverfahren, SWE 5.5 Funktionen Ganglinie
  * Copyright (C) 2007 BitCtrl Systems GmbH 
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
+ * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
  * details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 51
- * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA.
  *
  * Contact Information:
  * BitCtrl Systems GmbH
@@ -68,34 +68,35 @@ public class TestBSpline {
 		}
 	}
 
-//	/**
-//	 * Pr&uuml;ft ob bei Anfrage einer St&uuml;tzstelle auch der richtige
-//	 * Zeitstempel kommt. Beim B-Spline ist dies nicht trivial. Dieser Test
-//	 * arbeitet mit einer zuf&auml;lligen Ganglinie.
-//	 */
-//	@Test
-//	public void testGetB() {
-//		Ganglinie g;
-//		BSpline spline;
-//
-//		g = new Ganglinie();
-//		for (int i = 0; i < 100; i++) {
-//			long x = (long) (Math.random() * 1000);
-//			double y = (int) (Math.random() * 1000);
-//			g.setStuetzstelle(x, y);
-//		}
-//
-//		spline = new BSpline();
-//		spline.setStuetzstellen(g.getStuetzstellen());
-//		spline.initialisiere();
-//
-//		// Rechnen
-//		for (byte k = 1; k < 10; k++) {
-//			spline.setOrdnung(k);
-//			for (long t = g.getIntervall().start; t <= g.getIntervall().ende; t += 1) {
-//				assertEquals(t, spline.get(t).getZeitstempel());
-//			}
-//		}
-//	}
+	// /**
+	// * Pr&uuml;ft ob bei Anfrage einer St&uuml;tzstelle auch der richtige
+	// * Zeitstempel kommt. Beim B-Spline ist dies nicht trivial. Dieser Test
+	// * arbeitet mit einer zuf&auml;lligen Ganglinie.
+	// */
+	// @Test
+	// public void testGetB() {
+	// Ganglinie g;
+	// BSpline spline;
+	//
+	// g = new Ganglinie();
+	// for (int i = 0; i < 100; i++) {
+	// long x = (long) (Math.random() * 1000);
+	// double y = (int) (Math.random() * 1000);
+	// g.setStuetzstelle(x, y);
+	// }
+	//
+	// spline = new BSpline();
+	// spline.setStuetzstellen(g.getStuetzstellen());
+	// spline.initialisiere();
+	//
+	// // Rechnen
+	// for (byte k = 1; k < 10; k++) {
+	// spline.setOrdnung(k);
+	// for (long t = g.getIntervall().start; t <= g.getIntervall().ende; t += 1)
+	// {
+	// assertEquals(t, spline.get(t).getZeitstempel());
+	// }
+	// }
+	// }
 
 }

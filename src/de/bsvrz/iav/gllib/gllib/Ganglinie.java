@@ -2,19 +2,19 @@
  * Segment 5 Intelligente Analyseverfahren, SWE 5.5 Funktionen Ganglinie
  * Copyright (C) 2007 BitCtrl Systems GmbH 
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
+ * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
  * details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 51
- * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA.
  *
  * Contact Information:
  * BitCtrl Systems GmbH
@@ -46,7 +46,7 @@ import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
  * neue Ganglinien, die bei den Operationen (z. B. Addition) entstehen, das
  * Standardverfahren festgelegt (B-Spline mit Ordnung 5).
  * 
- * @author BitrCtrl, Schumann
+ * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
  */
 public class Ganglinie implements IGanglinie<Double> {
@@ -99,8 +99,32 @@ public class Ganglinie implements IGanglinie<Double> {
 	/**
 	 * {@inheritDoc}
 	 */
+	public void aktualisiereApproximation() {
+		approximation.setStuetzstellen(getStuetzstellen());
+		approximation.initialisiere();
+		approximationAktuell = true;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public int anzahlStuetzstellen() {
 		return stuetzstellen.size();
+	}
+
+	/**
+	 * Kopiert die St&uumltzstellen und das Approximationsverfahren. Der Wert
+	 * f&uuml;r {@code approximationAktuell} wird auf false gesetzt.
+	 * 
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Ganglinie clone() {
+		Ganglinie g;
+
+		g = new Ganglinie(stuetzstellen);
+		g.setApproximation(approximation);
+		return g;
 	}
 
 	/**
@@ -113,18 +137,57 @@ public class Ganglinie implements IGanglinie<Double> {
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean isValid(long zeitstempel) {
-		boolean ok;
+	public Approximation getApproximation() {
+		return approximation;
+	}
 
-		ok = false;
-		for (Intervall i : getIntervalle()) {
-			if (i.isEnthalten(zeitstempel)) {
-				ok = true;
-				break;
+	/**
+	 * {@inheritDoc}
+	 */
+	public Intervall getIntervall() {
+		if (stuetzstellen.size() == 0) {
+			return null;
+		}
+
+		return new Intervall(stuetzstellen.firstKey(), stuetzstellen.lastKey());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public List<Intervall> getIntervalle() {
+		List<Intervall> intervalle;
+		Long start, ende;
+
+		intervalle = new ArrayList<Intervall>();
+		start = null;
+		ende = null;
+
+		for (long t : stuetzstellen.keySet()) {
+			if (start == null && stuetzstellen.get(t) != null) {
+				start = t;
+			}
+
+			if (stuetzstellen.get(t) == null) {
+				// Definitionslücke gefunden
+				if (start != null && ende != null) {
+					intervalle.add(new Intervall(start, ende));
+					start = null;
+					ende = null;
+				}
+			} else {
+				// Intervall verlängern
+				if (stuetzstellen.get(t) != null) {
+					ende = t;
+				}
+			}
+
+			if (t == stuetzstellen.lastKey()) {
+				intervalle.add(new Intervall(start, ende));
 			}
 		}
 
-		return ok;
+		return intervalle;
 	}
 
 	/**
@@ -180,6 +243,46 @@ public class Ganglinie implements IGanglinie<Double> {
 	/**
 	 * {@inheritDoc}
 	 */
+	public boolean isApproximationAktuell() {
+		return approximationAktuell;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean isValid(long zeitstempel) {
+		boolean ok;
+
+		ok = false;
+		for (Intervall i : getIntervalle()) {
+			if (i.isEnthalten(zeitstempel)) {
+				ok = true;
+				break;
+			}
+		}
+
+		return ok;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void remove(long zeitstempel) {
+		stuetzstellen.remove(zeitstempel);
+		approximationAktuell = false;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void setApproximation(Approximation approximation) {
+		this.approximation = approximation;
+		approximationAktuell = false;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean setStuetzstelle(long zeitstempel, Double wert) {
 		boolean neu;
 
@@ -197,109 +300,6 @@ public class Ganglinie implements IGanglinie<Double> {
 		neu = setStuetzstelle(s.getZeitstempel(), s.getWert());
 		approximationAktuell = false;
 		return neu;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public void remove(long zeitstempel) {
-		stuetzstellen.remove(zeitstempel);
-		approximationAktuell = false;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public Intervall getIntervall() {
-		if (stuetzstellen.size() == 0) {
-			return null;
-		}
-
-		return new Intervall(stuetzstellen.firstKey(), stuetzstellen.lastKey());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public List<Intervall> getIntervalle() {
-		List<Intervall> intervalle;
-		Long start, ende;
-
-		intervalle = new ArrayList<Intervall>();
-		start = null;
-		ende = null;
-
-		for (long t : stuetzstellen.keySet()) {
-			if (start == null && stuetzstellen.get(t) != null) {
-				start = t;
-			}
-
-			if (stuetzstellen.get(t) == null) {
-				// Definitionslücke gefunden
-				if (start != null && ende != null) {
-					intervalle.add(new Intervall(start, ende));
-					start = null;
-					ende = null;
-				}
-			} else {
-				// Intervall verlängern
-				if (stuetzstellen.get(t) != null) {
-					ende = t;
-				}
-			}
-
-			if (t == stuetzstellen.lastKey()) {
-				intervalle.add(new Intervall(start, ende));
-			}
-		}
-
-		return intervalle;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public Approximation getApproximation() {
-		return approximation;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public void setApproximation(Approximation approximation) {
-		this.approximation = approximation;
-		approximationAktuell = false;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public boolean isApproximationAktuell() {
-		return approximationAktuell;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public void aktualisiereApproximation() {
-		approximation.setStuetzstellen(getStuetzstellen());
-		approximation.initialisiere();
-		approximationAktuell = true;
-	}
-
-	/**
-	 * Kopiert die St&uumltzstellen und das Approximationsverfahren. Der Wert
-	 * f&uuml;r {@code approximationAktuell} wird auf false gesetzt.
-	 * 
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Ganglinie clone() {
-		Ganglinie g;
-
-		g = new Ganglinie(stuetzstellen);
-		g.setApproximation(approximation);
-		return g;
 	}
 
 	/**
