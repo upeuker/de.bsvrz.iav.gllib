@@ -38,8 +38,7 @@ import de.bsvrz.sys.funclib.bitctrl.modell.kalender.EreignisTyp;
  * Standardimplementierung der Schnittstelle.
  * 
  * @author BitCtrl Systems GmbH, Schumann
- * @version $Id: GanglinienModellAutomatischesLernenEreignisParameterImpl.java
- *          3962 2007-10-01 13:09:43Z Schumann $
+ * @version $Id$
  */
 public class GanglinienModellAutomatischesLernenEreignisParameterImpl implements
 		GanglinienModellAutomatischesLernenEreignisParameter {
