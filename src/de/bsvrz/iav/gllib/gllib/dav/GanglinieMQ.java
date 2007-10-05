@@ -827,8 +827,8 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	public void setDatenVonGanglinie(Data daten) {
 		Array feld;
 
-		ereignisTyp = (EreignisTyp) ObjektFactory.getModellobjekt(daten
-				.getReferenceValue("EreignisTyp").getSystemObject());
+		ereignisTyp = (EreignisTyp) ObjektFactory.getInstanz().getModellobjekt(
+				daten.getReferenceValue("EreignisTyp").getSystemObject());
 		anzahlVerschmelzungen = daten.getUnscaledValue("AnzahlVerschmelzungen")
 				.longValue();
 		letzteVerschmelzung = daten.getTimeValue("LetzteVerschmelzung")
@@ -899,9 +899,10 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	public void setDatenVonPrognoseGanglinie(Data daten) {
 		Array feld;
 
-		messQuerschnitt = (MessQuerschnittAllgemein) ObjektFactory
-				.getModellobjekt(daten.getReferenceValue("Messquerschnitt")
-						.getSystemObject());
+		messQuerschnitt = (MessQuerschnittAllgemein) ObjektFactory.getInstanz()
+				.getModellobjekt(
+						daten.getReferenceValue("Messquerschnitt")
+								.getSystemObject());
 
 		// Verfahren
 		switch (daten.getUnscaledValue("GanglinienVerfahren").intValue()) {

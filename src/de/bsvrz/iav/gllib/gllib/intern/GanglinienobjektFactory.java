@@ -26,17 +26,10 @@
 
 package de.bsvrz.iav.gllib.gllib.intern;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import de.bsvrz.dav.daf.main.config.SystemObject;
-import de.bsvrz.sys.funclib.bitctrl.modell.ModellObjektFactory;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjekt;
-import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjektTyp;
-import de.bsvrz.sys.funclib.bitctrl.modell.kalender.Ereignis;
 import de.bsvrz.sys.funclib.bitctrl.modell.kalender.KalenderModellTypen;
+import de.bsvrz.sys.funclib.bitctrl.modell.kalender.KalenderobjektFactory;
 
 /**
  * Fabrikmethode f&uuml;r gekapselte Systemobjekte aus dem Verkehrsmodell. Jedes
@@ -48,55 +41,25 @@ import de.bsvrz.sys.funclib.bitctrl.modell.kalender.KalenderModellTypen;
  * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
  */
-public final class GanglinienobjektFactory implements ModellObjektFactory {
-
-	/** Globaler Cache f&uuml;r Systemobjekte des Verkehrmodells. */
-	private static Map<SystemObject, SystemObjekt> objekte;
+public final class GanglinienobjektFactory extends KalenderobjektFactory {
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public SystemObjekt getInstanz(SystemObject objekt) {
+	@Override
+	public SystemObjekt getModellobjekt(SystemObject objekt) {
 		if (objekt == null) {
-			return null;
+			throw new IllegalArgumentException("Argument darf nicht null sein.");
 		}
 
-		if (objekte == null) {
-			objekte = new HashMap<SystemObject, SystemObjekt>();
-		}
-
-		// Gesuchtes Objekt im Cache?
-		if (objekte.containsKey(objekt)) {
-			return objekte.get(objekt);
-		}
-
-		// Objekt neu anlegen
-		SystemObjekt obj = null;
+		SystemObjekt so = null;
 		if (objekt.isOfType(KalenderModellTypen.EREIGNISTYP.getPid())) {
-			obj = new GlEreignisTyp(objekt);
-		} else if (objekt.isOfType(KalenderModellTypen.EREIGNIS.getPid())) {
-			obj = new Ereignis(objekt);
+			so = new GlEreignisTyp(objekt);
+		} else {
+			so = super.getModellobjekt(objekt);
 		}
 
-		if (obj != null) {
-			// Nur konkrete Objekte dürfen in den Cache
-			objekte.put(objekt, obj);
-		}
-
-		return obj;
+		return so;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public List<SystemObjekt> getInstanzen() {
-		return new ArrayList<SystemObjekt>(objekte.values());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public SystemObjektTyp[] getTypen() {
-		return KalenderModellTypen.values();
-	}
 }

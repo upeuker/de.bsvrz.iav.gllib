@@ -335,9 +335,10 @@ public class GlProgAnfrage {
 	public void setDaten(Data daten) {
 		Array feld;
 
-		messQuerschnitt = (MessQuerschnittAllgemein) ObjektFactory
-				.getModellobjekt(daten.getReferenceValue("Messquerschnitt")
-						.getSystemObject());
+		messQuerschnitt = (MessQuerschnittAllgemein) ObjektFactory.getInstanz()
+				.getModellobjekt(
+						daten.getReferenceValue("Messquerschnitt")
+								.getSystemObject());
 		prognoseZeitraum = new Intervall(daten.getTimeValue(
 				"ZeitpunktPrognoseBeginn").getMillis(), daten.getTimeValue(
 				"ZeitpunktPrognoseEnde").getMillis());

@@ -75,9 +75,9 @@ public class GanglinienprognoseTest implements StandardApplication,
 		GlProgAnfrageNachricht anfrage;
 		MessQuerschnittAllgemein mq;
 
-		mq = (MessQuerschnittAllgemein) ObjektFactory
-				.getModellobjekt(connection.getDataModel().getObject(
-						"mq.a14.0001"));
+		mq = (MessQuerschnittAllgemein) ObjektFactory.getInstanz()
+				.getModellobjekt(
+						connection.getDataModel().getObject("mq.a14.0001"));
 		prognose = new Ganglinienprognose(connection);
 		prognose.addAntwortListener(this);
 		anfrage = new GlProgAnfrageNachricht(connection

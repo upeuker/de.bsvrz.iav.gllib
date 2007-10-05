@@ -220,14 +220,14 @@ public class GanglinienModellAutomatischesLernenEreignisParameterImpl implements
 		ausschlussliste.clear();
 		feld = daten.getReferenceArray("AlgAusschlussliste");
 		for (int i = 0; i < feld.getLength(); i++) {
-			ausschlussliste.add((EreignisTyp) ObjektFactory
+			ausschlussliste.add((EreignisTyp) ObjektFactory.getInstanz()
 					.getModellobjekt(feld.getSystemObject(i)));
 		}
 
 		bezugsereignistypen.clear();
 		feld = daten.getReferenceArray("AlgBezugsereignistypen");
 		for (int i = 0; i < feld.getLength(); i++) {
-			bezugsereignistypen.add((EreignisTyp) ObjektFactory
+			bezugsereignistypen.add((EreignisTyp) ObjektFactory.getInstanz()
 					.getModellobjekt(feld.getSystemObject(i)));
 		}
 
