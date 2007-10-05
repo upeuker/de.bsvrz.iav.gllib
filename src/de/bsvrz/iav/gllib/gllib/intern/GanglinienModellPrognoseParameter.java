@@ -86,7 +86,7 @@ public interface GanglinienModellPrognoseParameter {
 	int getMaxMatchingFehler();
 
 	/**
-	 * Gibtdas Ende des mittelfristigen Prognosehorizont nach dem aktuellen
+	 * Gibt das Ende des mittelfristigen Prognosehorizont nach dem aktuellen
 	 * Zeitpunkt zur&uuml;ck.
 	 * 
 	 * @return der mittelfristige Prognosehorizont in Millisekunden.

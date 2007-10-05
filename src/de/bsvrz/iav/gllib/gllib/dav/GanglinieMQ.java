@@ -58,6 +58,9 @@ import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
  */
 public class GanglinieMQ implements IGanglinie<Messwerte> {
 
+	/** Die Attributgruppe, in der historische Ganglinien gesichert werden. */
+	public static final String ATG_GANGLINIE = "atg.ganglinie";
+
 	/** Datenkatalogkonstante f&uuml;r die unbestimmte Approximation. */
 	public static final int APPROX_UNBESTIMMT = 0;
 

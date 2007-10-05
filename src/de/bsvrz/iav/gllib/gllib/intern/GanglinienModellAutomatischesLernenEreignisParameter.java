@@ -40,6 +40,9 @@ import de.bsvrz.sys.funclib.bitctrl.modell.kalender.EreignisTyp;
  */
 public interface GanglinienModellAutomatischesLernenEreignisParameter {
 
+	/** Die PID der Parameterattributgruppe. */
+	String ATG_PARAMETER = "atg.ganglinienModellAutomatischesLernenEreignis";
+
 	/**
 	 * Gibt eine Liste von Ereignistypen zur&uuml;ck, die beim Lernen nicht
 	 * gleichzeitig anstehen dürfen.

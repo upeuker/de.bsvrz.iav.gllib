@@ -64,8 +64,6 @@ public class GlEreignisTyp extends EreignisTyp implements EreignisTypParameter,
 
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @see de.bsvrz.iav.gllib.gllib.intern.GanglinienModellAutomatischesLernenEreignisParameter#getAusschlussliste()
 	 */
 	public List<EreignisTyp> getAusschlussliste() {
 		return lernParameter.getAusschlussliste();
@@ -73,8 +71,6 @@ public class GlEreignisTyp extends EreignisTyp implements EreignisTypParameter,
 
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @see de.bsvrz.iav.gllib.gllib.intern.GanglinienModellAutomatischesLernenEreignisParameter#getBezugsereignistypen()
 	 */
 	public List<EreignisTyp> getBezugsereignistypen() {
 		return lernParameter.getBezugsereignistypen();
@@ -82,8 +78,6 @@ public class GlEreignisTyp extends EreignisTyp implements EreignisTypParameter,
 
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @see de.bsvrz.iav.gllib.gllib.intern.GanglinienModellAutomatischesLernenEreignisParameter#getDarstellungsverfahren()
 	 */
 	public int getDarstellungsverfahren() {
 		return lernParameter.getDarstellungsverfahren();
@@ -91,8 +85,6 @@ public class GlEreignisTyp extends EreignisTyp implements EreignisTypParameter,
 
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @see de.bsvrz.iav.gllib.gllib.intern.GanglinienModellAutomatischesLernenEreignisParameter#getGanglinienTyp()
 	 */
 	public int getGanglinienTyp() {
 		return lernParameter.getGanglinienTyp();
@@ -100,8 +92,6 @@ public class GlEreignisTyp extends EreignisTyp implements EreignisTypParameter,
 
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @see de.bsvrz.iav.gllib.gllib.intern.GanglinienModellAutomatischesLernenEreignisParameter#getMatchingIntervallNach()
 	 */
 	public long getMatchingIntervallNach() {
 		return lernParameter.getMatchingIntervallNach();
@@ -109,8 +99,6 @@ public class GlEreignisTyp extends EreignisTyp implements EreignisTypParameter,
 
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @see de.bsvrz.iav.gllib.gllib.intern.GanglinienModellAutomatischesLernenEreignisParameter#getMatchingIntervallVor()
 	 */
 	public long getMatchingIntervallVor() {
 		return lernParameter.getMatchingIntervallVor();
@@ -118,8 +106,6 @@ public class GlEreignisTyp extends EreignisTyp implements EreignisTypParameter,
 
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @see de.bsvrz.iav.gllib.gllib.intern.GanglinienModellAutomatischesLernenEreignisParameter#getMatchingSchrittweite()
 	 */
 	public long getMatchingSchrittweite() {
 		return lernParameter.getMatchingSchrittweite();
@@ -127,8 +113,6 @@ public class GlEreignisTyp extends EreignisTyp implements EreignisTypParameter,
 
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @see de.bsvrz.iav.gllib.gllib.intern.GanglinienModellAutomatischesLernenEreignisParameter#getMaxAbstand()
 	 */
 	public int getMaxAbstand() {
 		return lernParameter.getMaxAbstand();
@@ -136,8 +120,6 @@ public class GlEreignisTyp extends EreignisTyp implements EreignisTypParameter,
 
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @see de.bsvrz.iav.gllib.gllib.intern.GanglinienModellAutomatischesLernenEreignisParameter#getMaxGanglinien()
 	 */
 	public long getMaxGanglinien() {
 		return lernParameter.getMaxGanglinien();
@@ -145,8 +127,6 @@ public class GlEreignisTyp extends EreignisTyp implements EreignisTypParameter,
 
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @see de.bsvrz.iav.gllib.gllib.intern.GanglinienModellAutomatischesLernenEreignisParameter#getMaxMatchingFehler()
 	 */
 	public int getMaxMatchingFehler() {
 		return lernParameter.getMaxMatchingFehler();
@@ -154,8 +134,6 @@ public class GlEreignisTyp extends EreignisTyp implements EreignisTypParameter,
 
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @see de.bsvrz.iav.gllib.gllib.intern.GanglinienModellAutomatischesLernenEreignisParameter#getMaxWichtungsfaktor()
 	 */
 	public int getMaxWichtungsfaktor() {
 		return lernParameter.getMaxWichtungsfaktor();
@@ -163,6 +141,8 @@ public class GlEreignisTyp extends EreignisTyp implements EreignisTypParameter,
 
 	/**
 	 * {@inheritDoc}
+	 * 
+	 * @see EreignisTypParameter#getPrioritaet()
 	 */
 	public long getPrioritaet() {
 		return parameter.getPrioritaet();
@@ -170,8 +150,6 @@ public class GlEreignisTyp extends EreignisTyp implements EreignisTypParameter,
 
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @see de.bsvrz.iav.gllib.gllib.intern.GanglinienModellAutomatischesLernenEreignisParameter#getVergleichsSchrittweite()
 	 */
 	public long getVergleichsSchrittweite() {
 		return lernParameter.getVergleichsSchrittweite();
@@ -184,13 +162,15 @@ public class GlEreignisTyp extends EreignisTyp implements EreignisTypParameter,
 	 *            ein g&uuml;ltiges Datum.
 	 */
 	public void setDaten(Data daten) {
-		if (daten.getName().equals("atg.ereignisTypParameter")) {
+		if (daten.getName().equals(EreignisTypParameter.ATG_PARAMETER)) {
 			if (parameter == null) {
 				parameter = new EreignisTypParameterImpl();
 			}
 			parameter.setDaten(daten);
-		} else if (daten.getName().equals(
-				"atg.ganglinienModellAutomatischesLernenEreignis")) {
+		} else if (daten
+				.getName()
+				.equals(
+						GanglinienModellAutomatischesLernenEreignisParameter.ATG_PARAMETER)) {
 			if (lernParameter == null) {
 				lernParameter = new GanglinienModellAutomatischesLernenEreignisParameterImpl();
 			}

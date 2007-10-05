@@ -26,6 +26,7 @@
 
 package de.bsvrz.iav.gllib.gllib.intern;
 
+import static de.bsvrz.iav.gllib.gllib.intern.GLKonstanten.MILLIS_PER_SEKUNDE;
 import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.config.SystemObject;
 import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnittAllgemein;
@@ -39,6 +40,24 @@ import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnittAllgemein;
  */
 public class GlMessQuerschnittAllgemein extends MessQuerschnittAllgemein
 		implements GanglinienModellPrognoseParameter {
+
+	/** Die Auswahlmethode, wenn Pattern-Matching nicht geht. */
+	private int auswahlMethode;
+
+	/** Intervall in die Vergangenheit, was ber&uuml;cksichtigt wird. */
+	private long matchingIntervall;
+
+	/** Maximale Dauer einer zyklischen Prognose. */
+	private long maxDauerZyklischePrognose;
+
+	/** Maximaler Fehler beim Pattern-Matching. */
+	private int maxMatchingFehler;
+
+	/** Der Zeitraum der mittelfristigen Prognose. */
+	private long patternMatchingHorizont;
+
+	/** Offset um den beim Pattern-Matching verschoben wird. */
+	private long patternMatchingOffset;
 
 	/**
 	 * Ruft den Superkonstroktur auf.
@@ -55,16 +74,14 @@ public class GlMessQuerschnittAllgemein extends MessQuerschnittAllgemein
 	 * {@inheritDoc}
 	 */
 	public int getAuswahlMethode() {
-		// TODO Auto-generated method stub
-		return 0;
+		return auswahlMethode;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public long getMatchingIntervall() {
-		// TODO Auto-generated method stub
-		return 0;
+		return matchingIntervall;
 	}
 
 	/**
@@ -72,32 +89,28 @@ public class GlMessQuerschnittAllgemein extends MessQuerschnittAllgemein
 	 */
 
 	public long getMaxDauerZyklischePrognose() {
-		// TODO Auto-generated method stub
-		return 0;
+		return maxDauerZyklischePrognose;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public int getMaxMatchingFehler() {
-		// TODO Auto-generated method stub
-		return 0;
+		return maxMatchingFehler;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public long getPatternMatchingHorizont() {
-		// TODO Auto-generated method stub
-		return 0;
+		return patternMatchingHorizont;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public long getPatternMatchingOffset() {
-		// TODO Auto-generated method stub
-		return 0;
+		return patternMatchingOffset;
 	}
 
 	/**
@@ -109,6 +122,21 @@ public class GlMessQuerschnittAllgemein extends MessQuerschnittAllgemein
 					"Das Datum hat den falschen Typ.");
 		}
 
+		auswahlMethode = daten.getUnscaledValue("GLAuswahlMethode").intValue();
+		patternMatchingHorizont = daten.getUnscaledValue(
+				"GLPatternMatchingHorizont").longValue()
+				* MILLIS_PER_SEKUNDE;
+		matchingIntervall = daten.getUnscaledValue("GLMatchingIntervall")
+				.longValue()
+				* MILLIS_PER_SEKUNDE;
+		patternMatchingOffset = daten.getUnscaledValue(
+				"GLPatternMatchingOffset").longValue()
+				* MILLIS_PER_SEKUNDE;
+		maxMatchingFehler = daten.getUnscaledValue("GLMaxMatchingFehler")
+				.intValue();
+		maxDauerZyklischePrognose = daten.getUnscaledValue(
+				"GLMaxDauerZyklischePrognose").longValue()
+				* MILLIS_PER_SEKUNDE;
 	}
 
 }

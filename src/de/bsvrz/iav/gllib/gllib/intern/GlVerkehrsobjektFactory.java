@@ -28,8 +28,8 @@ package de.bsvrz.iav.gllib.gllib.intern;
 
 import de.bsvrz.dav.daf.main.config.SystemObject;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjekt;
-import de.bsvrz.sys.funclib.bitctrl.modell.kalender.KalenderModellTypen;
-import de.bsvrz.sys.funclib.bitctrl.modell.kalender.KalenderobjektFactory;
+import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.VerkehrsModellTypen;
+import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.VerkehrsobjektFactory;
 
 /**
  * Fabrikmethode f&uuml;r gekapselte Systemobjekte aus dem Verkehrsmodell. Jedes
@@ -41,7 +41,7 @@ import de.bsvrz.sys.funclib.bitctrl.modell.kalender.KalenderobjektFactory;
  * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
  */
-public final class GanglinienobjektFactory extends KalenderobjektFactory {
+public class GlVerkehrsobjektFactory extends VerkehrsobjektFactory {
 
 	/**
 	 * {@inheritDoc}
@@ -53,8 +53,9 @@ public final class GanglinienobjektFactory extends KalenderobjektFactory {
 		}
 
 		SystemObjekt so = null;
-		if (objekt.isOfType(KalenderModellTypen.EREIGNISTYP.getPid())) {
-			so = new GlEreignisTyp(objekt);
+		if (objekt.isOfType(VerkehrsModellTypen.MESSQUERSCHNITTALLGEMEIN
+				.getPid())) {
+			so = new GlMessQuerschnittAllgemein(objekt);
 		} else {
 			so = super.getModellobjekt(objekt);
 		}
