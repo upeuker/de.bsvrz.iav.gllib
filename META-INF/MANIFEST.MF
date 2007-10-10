@@ -1,11 +1,11 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Funktionen Ganglinie (SWE 5.5)
-Bundle-SymbolicName: de.bitctrl.iav.gllib
+Bundle-SymbolicName: de.bsvrz.iav.gllib
 Bundle-Version: 1.0.0
 Bundle-Vendor: BitCtrl Systems GmbH
-Require-Bundle: de.bitctrl.sys.funclib,
- de.bitctrl.dav.daf
+Require-Bundle: de.bsvrz.sys.funclib.bitctrl,
+ de.bsvrz.dav.daf
 Export-Package: de.bsvrz.iav.gllib.gllib,
  de.bsvrz.iav.gllib.gllib.dav,
  de.bsvrz.iav.gllib.gllib.intern
