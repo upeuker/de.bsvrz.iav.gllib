@@ -26,7 +26,7 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
-import static de.bsvrz.iav.gllib.gllib.intern.GLKonstanten.MILLIS_PER_MINUTE;
+import static de.bsvrz.sys.funclib.bitctrl.util.Konstanten.MILLIS_PER_MINUTE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
