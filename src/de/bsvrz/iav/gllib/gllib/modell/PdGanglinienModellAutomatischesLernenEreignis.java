@@ -48,8 +48,8 @@ import de.bsvrz.sys.funclib.bitctrl.modell.kalender.EreignisTyp;
  * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
  */
-public class PdEreignisTypParameter extends
-		AbstractParameterDatensatz<PdEreignisTypParameter.Daten> {
+public class PdGanglinienModellAutomatischesLernenEreignis extends
+		AbstractParameterDatensatz<PdGanglinienModellAutomatischesLernenEreignis.Daten> {
 
 	/**
 	 * Kapselt die Daten des Datensatzes.
@@ -411,7 +411,7 @@ public class PdEreignisTypParameter extends
 	 * @param ereignisTyp
 	 *            ein Ereignistyp.
 	 */
-	public PdEreignisTypParameter(EreignisTyp ereignisTyp) {
+	public PdGanglinienModellAutomatischesLernenEreignis(EreignisTyp ereignisTyp) {
 		super(ereignisTyp);
 
 		if (atg == null) {
