@@ -24,12 +24,13 @@
  * mailto: info@bitctrl.de
  */
 
-package de.bsvrz.iav.gllib.gllib.modell;
+package de.bsvrz.iav.gllib.gllib.modell.parameter;
 
 import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dav.daf.main.config.AttributeGroup;
 import de.bsvrz.dav.daf.main.config.DataModel;
+import de.bsvrz.iav.gllib.gllib.modell.ApplikationGanglinienPrognose;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatum;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractParameterDatensatz;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;

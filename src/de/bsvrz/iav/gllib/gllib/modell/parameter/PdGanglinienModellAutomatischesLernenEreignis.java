@@ -24,7 +24,7 @@
  * mailto: info@bitctrl.de
  */
 
-package de.bsvrz.iav.gllib.gllib.modell;
+package de.bsvrz.iav.gllib.gllib.modell.parameter;
 
 import static de.bsvrz.sys.funclib.bitctrl.util.Konstanten.MILLIS_PER_SEKUNDE;
 
