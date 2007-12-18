@@ -33,7 +33,6 @@ import de.bsvrz.dav.daf.main.config.DataModel;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatum;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractParameterDatensatz;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
-import de.bsvrz.sys.funclib.bitctrl.modell.kalender.EreignisTyp;
 
 /**
  * Kapselt die Parameterattributgruppe
@@ -42,8 +41,7 @@ import de.bsvrz.sys.funclib.bitctrl.modell.kalender.EreignisTyp;
  * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
  */
-public class PdGanglinienModellAutomatischesLernen
-		extends
+public class PdGanglinienModellAutomatischesLernen extends
 		AbstractParameterDatensatz<PdGanglinienModellAutomatischesLernen.Daten> {
 
 	/**
@@ -79,90 +77,6 @@ public class PdGanglinienModellAutomatischesLernen
 		private int maxVergleichsAbstand;
 
 		/**
-		 * Gibt an, in welchen Zeitabständen der Lernvorgang gestartet werden
-		 * soll.
-		 * 
-		 * @return das aktuelle Aktualisierungsintervall.
-		 */
-		public long getAktualisierungsintervall() {
-			return aktualisierungsintervall;
-		}
-
-		/**
-		 * Gibt an, in welchen Zeitabständen der Lernvorgang gestartet werden
-		 * soll.
-		 * 
-		 * @param aktualisierungsintervall
-		 *            das neue Aktualisierungsintervall.
-		 */
-		public void setAktualisierungsintervall(long aktualisierungsintervall) {
-			this.aktualisierungsintervall = aktualisierungsintervall;
-		}
-
-		/**
-		 * Mindestalter der Analysewerte, die im automatischen Lernen
-		 * verarbeitet werden.
-		 * 
-		 * @return das aktuelle Datenmindestalter.
-		 */
-		public long getDatenMindestalter() {
-			return datenMindestalter;
-		}
-
-		/**
-		 * Mindestalter der Analysewerte, die im automatischen Lernen
-		 * verarbeitet werden.
-		 * 
-		 * @param datenMindestalter
-		 *            das neue Datenmindestalter.
-		 */
-		public void setDatenMindestalter(long datenMindestalter) {
-			this.datenMindestalter = datenMindestalter;
-		}
-
-		/**
-		 * Maximaler Wichtungsfaktor der historischen Ganglinien bei der
-		 * Verschmelzung mit Analyseganglinien.
-		 * 
-		 * @return die aktuelle maximale Wichtung.
-		 */
-		public int getMaximalWichtung() {
-			return maximalWichtung;
-		}
-
-		/**
-		 * Maximaler Wichtungsfaktor der historischen Ganglinien bei der
-		 * Verschmelzung mit Analyseganglinien.
-		 * 
-		 * @param maximalWichtung
-		 *            die neue maximale Wichtung.
-		 */
-		public void setMaximalWichtung(int maximalWichtung) {
-			this.maximalWichtung = maximalWichtung;
-		}
-
-		/**
-		 * Wenn dieses Abstandsmaß beim zyklischen Archivieren und Vergleichen
-		 * von Ganglinien überschritten wird, wird eine Meldung erzeugt.
-		 * 
-		 * @return der aktuelle maximale Vergleichsabstand.
-		 */
-		public int getMaxVergleichsAbstand() {
-			return maxVergleichsAbstand;
-		}
-
-		/**
-		 * Wenn dieses Abstandsmaß beim zyklischen Archivieren und Vergleichen
-		 * von Ganglinien überschritten wird, wird eine Meldung erzeugt.
-		 * 
-		 * @param maxVergleichsAbstand
-		 *            der neue maximale Vergleichsabstand.
-		 */
-		public void setMaxVergleichsAbstand(int maxVergleichsAbstand) {
-			this.maxVergleichsAbstand = maxVergleichsAbstand;
-		}
-
-		/**
 		 * {@inheritDoc}
 		 * 
 		 * @see de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatum#clone()
@@ -182,6 +96,46 @@ public class PdGanglinienModellAutomatischesLernen
 		}
 
 		/**
+		 * Gibt an, in welchen Zeitabständen der Lernvorgang gestartet werden
+		 * soll.
+		 * 
+		 * @return das aktuelle Aktualisierungsintervall.
+		 */
+		public long getAktualisierungsintervall() {
+			return aktualisierungsintervall;
+		}
+
+		/**
+		 * Mindestalter der Analysewerte, die im automatischen Lernen
+		 * verarbeitet werden.
+		 * 
+		 * @return das aktuelle Datenmindestalter.
+		 */
+		public long getDatenMindestalter() {
+			return datenMindestalter;
+		}
+
+		/**
+		 * Maximaler Wichtungsfaktor der historischen Ganglinien bei der
+		 * Verschmelzung mit Analyseganglinien.
+		 * 
+		 * @return die aktuelle maximale Wichtung.
+		 */
+		public int getMaximalWichtung() {
+			return maximalWichtung;
+		}
+
+		/**
+		 * Wenn dieses Abstandsmaß beim zyklischen Archivieren und Vergleichen
+		 * von Ganglinien überschritten wird, wird eine Meldung erzeugt.
+		 * 
+		 * @return der aktuelle maximale Vergleichsabstand.
+		 */
+		public int getMaxVergleichsAbstand() {
+			return maxVergleichsAbstand;
+		}
+
+		/**
 		 * {@inheritDoc}
 		 * 
 		 * @see de.bsvrz.sys.funclib.bitctrl.modell.Datum#isValid()
@@ -191,15 +145,54 @@ public class PdGanglinienModellAutomatischesLernen
 		}
 
 		/**
-		 * Setzt das Flag {@code valid} des Datum.
+		 * Gibt an, in welchen Zeitabständen der Lernvorgang gestartet werden
+		 * soll.
 		 * 
-		 * @param valid
-		 *            der neue Wert des Flags.
+		 * @param aktualisierungsintervall
+		 *            das neue Aktualisierungsintervall.
 		 */
-		protected void setValid(boolean valid) {
-			this.valid = valid;
+		public void setAktualisierungsintervall(long aktualisierungsintervall) {
+			this.aktualisierungsintervall = aktualisierungsintervall;
 		}
 
+		/**
+		 * Mindestalter der Analysewerte, die im automatischen Lernen
+		 * verarbeitet werden.
+		 * 
+		 * @param datenMindestalter
+		 *            das neue Datenmindestalter.
+		 */
+		public void setDatenMindestalter(long datenMindestalter) {
+			this.datenMindestalter = datenMindestalter;
+		}
+
+		/**
+		 * Maximaler Wichtungsfaktor der historischen Ganglinien bei der
+		 * Verschmelzung mit Analyseganglinien.
+		 * 
+		 * @param maximalWichtung
+		 *            die neue maximale Wichtung.
+		 */
+		public void setMaximalWichtung(int maximalWichtung) {
+			this.maximalWichtung = maximalWichtung;
+		}
+
+		/**
+		 * Wenn dieses Abstandsmaß beim zyklischen Archivieren und Vergleichen
+		 * von Ganglinien überschritten wird, wird eine Meldung erzeugt.
+		 * 
+		 * @param maxVergleichsAbstand
+		 *            der neue maximale Vergleichsabstand.
+		 */
+		public void setMaxVergleichsAbstand(int maxVergleichsAbstand) {
+			this.maxVergleichsAbstand = maxVergleichsAbstand;
+		}
+
+		/**
+		 * {@inheritDoc}
+		 * 
+		 * @see java.lang.Object#toString()
+		 */
 		@Override
 		public String toString() {
 			String s = getClass().getSimpleName() + "[";
@@ -213,6 +206,16 @@ public class PdGanglinienModellAutomatischesLernen
 			return s + "]";
 		}
 
+		/**
+		 * Setzt das Flag {@code valid} des Datum.
+		 * 
+		 * @param valid
+		 *            der neue Wert des Flags.
+		 */
+		protected void setValid(boolean valid) {
+			this.valid = valid;
+		}
+
 	}
 
 	/** Die PID der Attributgruppe. */
@@ -224,11 +227,13 @@ public class PdGanglinienModellAutomatischesLernen
 	/**
 	 * Initialisiert den Parameter.
 	 * 
-	 * @param ereignisTyp
-	 *            ein Ereignistyp.
+	 * @param appGanglinie
+	 *            die Ganglinienapplikation, in der Regel die autarke
+	 *            Organisationseinheit.
 	 */
-	public PdGanglinienModellAutomatischesLernen(EreignisTyp ereignisTyp) {
-		super(ereignisTyp);
+	public PdGanglinienModellAutomatischesLernen(
+			ApplikationGanglinienPrognose appGanglinie) {
+		super(appGanglinie);
 
 		if (atg == null) {
 			DataModel modell = ObjektFactory.getInstanz().getVerbindung()
