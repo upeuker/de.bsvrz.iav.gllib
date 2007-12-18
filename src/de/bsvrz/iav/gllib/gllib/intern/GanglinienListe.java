@@ -131,6 +131,25 @@ public class GanglinienListe extends ArrayList<GanglinieMQ> {
 	}
 
 	/**
+	 * F&uuml;hrt ein tiefes Klonen der Liste durch. Das bedeutet, das die
+	 * geklonte Ganglinienliste geklonte Ganglinien beinhaltet.
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see java.util.ArrayList#clone()
+	 */
+	@Override
+	public GanglinienListe clone() {
+		GanglinienListe klon = new GanglinienListe(messQuerschnitt);
+
+		for (GanglinieMQ g : this) {
+			klon.add(g.clone());
+		}
+
+		return klon;
+	}
+
+	/**
 	 * Baut aus den Informationen der Ganglinienliste einen Datensatz. Das
 	 * Ergebnis wird im Parameter abgelegt!
 	 * <p>

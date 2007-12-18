@@ -8,5 +8,7 @@ Require-Bundle: de.bsvrz.sys.funclib.bitctrl,
  de.bsvrz.dav.daf
 Export-Package: de.bsvrz.iav.gllib.gllib,
  de.bsvrz.iav.gllib.gllib.dav,
- de.bsvrz.iav.gllib.gllib.intern
+ de.bsvrz.iav.gllib.gllib.intern,
+ de.bsvrz.iav.gllib.gllib.modell,
+ de.bsvrz.iav.gllib.gllib.modell.parameter
 Bundle-ClassPath: de.bsvrz.iav.gllib.jar
