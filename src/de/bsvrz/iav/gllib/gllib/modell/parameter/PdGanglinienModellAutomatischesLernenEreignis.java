@@ -48,7 +48,8 @@ import de.bsvrz.sys.funclib.bitctrl.modell.kalender.EreignisTyp;
  * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
  */
-public class PdGanglinienModellAutomatischesLernenEreignis extends
+public class PdGanglinienModellAutomatischesLernenEreignis
+		extends
 		AbstractParameterDatensatz<PdGanglinienModellAutomatischesLernenEreignis.Daten> {
 
 	/**
@@ -119,7 +120,7 @@ public class PdGanglinienModellAutomatischesLernenEreignis extends
 
 		/**
 		 * Die Schrittweite beim Vergleichen mittels komplexer
-		 * Abstandsberechnugn.
+		 * Abstandsberechnung.
 		 */
 		private long vergleichsSchrittweite;
 
@@ -152,20 +153,23 @@ public class PdGanglinienModellAutomatischesLernenEreignis extends
 		}
 
 		/**
-		 * Gibt den Wert der Eigenschaft {@code ausschlussliste} wieder.
+		 * Gibt die Liste der Ausschlussereignistypen wieder.
 		 * 
 		 * @return {@code ausschlussliste}.
 		 */
 		public List<EreignisTyp> getAusschlussliste() {
+			assert ausschlussliste != null;
 			return ausschlussliste;
 		}
 
 		/**
-		 * Gibt den Wert der Eigenschaft {@code bezugsereignistypen} wieder.
+		 * Gibt die Liste der Bezugsereignistypen (nur f&uuml;r relative
+		 * Ganglinien) wieder.
 		 * 
 		 * @return {@code bezugsereignistypen}.
 		 */
 		public List<EreignisTyp> getBezugsereignistypen() {
+			assert bezugsereignistypen != null;
 			return bezugsereignistypen;
 		}
 
@@ -188,83 +192,99 @@ public class PdGanglinienModellAutomatischesLernenEreignis extends
 		}
 
 		/**
-		 * Gibt den Wert der Eigenschaft {@code matchingIntervallNach} wieder.
+		 * Gibt das Intervall nach der Ganglinie, welches beim Pattern-Matching
+		 * einbezogen wird wieder.
 		 * 
-		 * @return {@code matchingIntervallNach}.
+		 * @return {@code matchingIntervallNach} in Sekunden.
 		 */
 		public long getMatchingIntervallNach() {
+			assert matchingIntervallNach >= 0;
 			return matchingIntervallNach;
 		}
 
 		/**
-		 * Gibt den Wert der Eigenschaft {@code matchingIntervallVor} wieder.
+		 * Gibt das Intervall vor der Ganglinie, welches beim Pattern-Matching
+		 * einbezogen wird wieder.
 		 * 
-		 * @return {@code matchingIntervallVor}.
+		 * @return {@code matchingIntervallVor} in Sekunden.
 		 */
 		public long getMatchingIntervallVor() {
+			assert matchingIntervallVor >= 0;
 			return matchingIntervallVor;
 		}
 
 		/**
 		 * Gibt den Wert der Eigenschaft {@code matchingSchrittweite} wieder.
 		 * 
-		 * @return {@code matchingSchrittweite}.
+		 * @return {@code matchingSchrittweite} in Sekunden.
 		 */
 		public long getMatchingSchrittweite() {
+			assert matchingSchrittweite > 0;
 			return matchingSchrittweite;
 		}
 
 		/**
-		 * Gibt den Wert der Eigenschaft {@code maxAbstand} wieder.
+		 * Gibt den maximalen Abstand, bei dem Ganglinien verschmolzen werden,
+		 * wieder.
 		 * 
-		 * @return {@code maxAbstand}.
+		 * @return {@code maxAbstand} in Prozent.
 		 */
 		public int getMaxAbstand() {
+			assert maxAbstand > 0;
 			return maxAbstand;
 		}
 
 		/**
-		 * Gibt den Wert der Eigenschaft {@code maxGanglinien} wieder.
+		 * Gibt die maximale Anzahl von Ganglinien f&uuml;r den Ereignistyp
+		 * wieder.
 		 * 
 		 * @return {@code maxGanglinien}.
 		 */
 		public long getMaxGanglinien() {
+			assert maxGanglinien > 0;
 			return maxGanglinien;
 		}
 
 		/**
-		 * Gibt den Wert der Eigenschaft {@code maxMatchingFehler} wieder.
+		 * Gibt den maximal erlaubten Fehler beim Pattern-Matching wieder.
 		 * 
-		 * @return {@code maxMatchingFehler}.
+		 * @return {@code maxMatchingFehler} in Prozent.
 		 */
 		public int getMaxMatchingFehler() {
+			assert maxMatchingFehler > 0;
 			return maxMatchingFehler;
 		}
 
 		/**
-		 * Gibt den Wert der Eigenschaft {@code maxWichtungsfaktor} wieder.
+		 * Gibt den maximalen Wichtungsfaktor der historischen Ganglinie beim
+		 * Verschmelzen wieder.
 		 * 
 		 * @return {@code maxWichtungsfaktor}.
 		 */
 		public int getMaxWichtungsfaktor() {
+			assert maxWichtungsfaktor > 0;
 			return maxWichtungsfaktor;
 		}
 
 		/**
-		 * Gibt den Wert der Eigenschaft {@code stuetzstellenAbstand} wieder.
+		 * Gibt den Abstand der St&uuml;tzstellen in generierten Ganglinien
+		 * wieder.
 		 * 
-		 * @return {@code stuetzstellenAbstand}.
+		 * @return {@code stuetzstellenAbstand} in Sekunden.
 		 */
 		public long getStuetzstellenAbstand() {
+			assert stuetzstellenAbstand > 0;
 			return stuetzstellenAbstand;
 		}
 
 		/**
-		 * Gibt den Wert der Eigenschaft {@code vergleichsSchrittweite} wieder.
+		 * Gibt die Schrittweite beim Vergleichen mittels komplexer
+		 * Abstandsberechnung wieder.
 		 * 
-		 * @return {@code vergleichsSchrittweite}.
+		 * @return {@code vergleichsSchrittweite} in Sekunden.
 		 */
 		public long getVergleichsSchrittweite() {
+			assert vergleichsSchrittweite > 0;
 			return vergleichsSchrittweite;
 		}
 

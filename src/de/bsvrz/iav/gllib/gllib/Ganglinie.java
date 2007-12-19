@@ -273,6 +273,14 @@ public class Ganglinie implements IGanglinie<Double> {
 	}
 
 	/**
+	 * Entfernt alle St&uuml;tzstellen.
+	 */
+	public void removeAll() {
+		stuetzstellen.clear();
+		approximationAktuell = false;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public void setApproximation(Approximation approximation) {

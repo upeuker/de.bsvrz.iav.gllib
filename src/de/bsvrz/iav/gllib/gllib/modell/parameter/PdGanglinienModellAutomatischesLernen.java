@@ -100,9 +100,10 @@ public class PdGanglinienModellAutomatischesLernen extends
 		 * Gibt an, in welchen Zeitabständen der Lernvorgang gestartet werden
 		 * soll.
 		 * 
-		 * @return das aktuelle Aktualisierungsintervall.
+		 * @return das aktuelle Aktualisierungsintervall in Tagen.
 		 */
 		public long getAktualisierungsintervall() {
+			assert aktualisierungsintervall > 0;
 			return aktualisierungsintervall;
 		}
 
@@ -110,9 +111,10 @@ public class PdGanglinienModellAutomatischesLernen extends
 		 * Mindestalter der Analysewerte, die im automatischen Lernen
 		 * verarbeitet werden.
 		 * 
-		 * @return das aktuelle Datenmindestalter.
+		 * @return das aktuelle Datenmindestalter in Tagen.
 		 */
 		public long getDatenMindestalter() {
+			assert aktualisierungsintervall > 0;
 			return datenMindestalter;
 		}
 
@@ -123,6 +125,7 @@ public class PdGanglinienModellAutomatischesLernen extends
 		 * @return die aktuelle maximale Wichtung.
 		 */
 		public int getMaximalWichtung() {
+			assert maximalWichtung > 0;
 			return maximalWichtung;
 		}
 
@@ -130,9 +133,10 @@ public class PdGanglinienModellAutomatischesLernen extends
 		 * Wenn dieses Abstandsmaß beim zyklischen Archivieren und Vergleichen
 		 * von Ganglinien überschritten wird, wird eine Meldung erzeugt.
 		 * 
-		 * @return der aktuelle maximale Vergleichsabstand.
+		 * @return der aktuelle maximale Vergleichsabstand in Prozent.
 		 */
 		public int getMaxVergleichsAbstand() {
+			assert maxVergleichsAbstand > 0;
 			return maxVergleichsAbstand;
 		}
 
@@ -150,7 +154,7 @@ public class PdGanglinienModellAutomatischesLernen extends
 		 * soll.
 		 * 
 		 * @param aktualisierungsintervall
-		 *            das neue Aktualisierungsintervall.
+		 *            das neue Aktualisierungsintervall in Tagen.
 		 */
 		public void setAktualisierungsintervall(long aktualisierungsintervall) {
 			this.aktualisierungsintervall = aktualisierungsintervall;
@@ -161,7 +165,7 @@ public class PdGanglinienModellAutomatischesLernen extends
 		 * verarbeitet werden.
 		 * 
 		 * @param datenMindestalter
-		 *            das neue Datenmindestalter.
+		 *            das neue Datenmindestalter in Tagen.
 		 */
 		public void setDatenMindestalter(long datenMindestalter) {
 			this.datenMindestalter = datenMindestalter;
@@ -169,7 +173,8 @@ public class PdGanglinienModellAutomatischesLernen extends
 
 		/**
 		 * Maximaler Wichtungsfaktor der historischen Ganglinien bei der
-		 * Verschmelzung mit Analyseganglinien.
+		 * Verschmelzung mit Analyseganglinien. Das Gewicht muss gr&ouml;ßer 0
+		 * sein.
 		 * 
 		 * @param maximalWichtung
 		 *            die neue maximale Wichtung.
@@ -180,10 +185,12 @@ public class PdGanglinienModellAutomatischesLernen extends
 
 		/**
 		 * Wenn dieses Abstandsmaß beim zyklischen Archivieren und Vergleichen
-		 * von Ganglinien überschritten wird, wird eine Meldung erzeugt.
+		 * von Ganglinien überschritten wird, wird eine Meldung erzeugt. Der
+		 * Wert muss gr&ouml;&szlig;er als 1 sein. Werte &uuml;ber 100 Prozent
+		 * sind erlaubt.
 		 * 
 		 * @param maxVergleichsAbstand
-		 *            der neue maximale Vergleichsabstand.
+		 *            der neue maximale Vergleichsabstand in Prozent.
 		 */
 		public void setMaxVergleichsAbstand(int maxVergleichsAbstand) {
 			this.maxVergleichsAbstand = maxVergleichsAbstand;
@@ -199,6 +206,7 @@ public class PdGanglinienModellAutomatischesLernen extends
 			String s = getClass().getSimpleName() + "[";
 
 			s += "zeitpunkt=" + getZeitpunkt();
+			s += "valid=" + valid;
 			s += ", aktualisierungsintervall=" + aktualisierungsintervall;
 			s += ", datenMindestalter=" + datenMindestalter;
 			s += ", maximalWichtung=" + maximalWichtung;

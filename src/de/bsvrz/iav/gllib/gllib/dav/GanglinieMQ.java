@@ -157,12 +157,7 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	 */
 	public GanglinieMQ(Collection<Stuetzstelle<Messwerte>> stuetzstellen) {
 		this();
-		for (Stuetzstelle<Messwerte> s : stuetzstellen) {
-			qKfz.setStuetzstelle(s.getZeitstempel(), s.getWert().getQKfz());
-			qLkw.setStuetzstelle(s.getZeitstempel(), s.getWert().getQLkw());
-			vPkw.setStuetzstelle(s.getZeitstempel(), s.getWert().getVPkw());
-			vLkw.setStuetzstelle(s.getZeitstempel(), s.getWert().getVLkw());
-		}
+		setStuetzstellen(stuetzstellen);
 	}
 
 	/**
@@ -1078,6 +1073,26 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 		neu = setStuetzstelle(s.getZeitstempel(), s.getWert());
 		approximationAktuell = false;
 		return neu;
+	}
+
+	/**
+	 * Ersetzt die St&uuml;tzstellen der Ganglinie durch neue.
+	 * 
+	 * @param stuetzstellen
+	 *            die neuen St&uuml;tzstellen der Ganglinie.
+	 */
+	public void setStuetzstellen(
+			Collection<Stuetzstelle<Messwerte>> stuetzstellen) {
+		qKfz.removeAll();
+		qLkw.removeAll();
+		vPkw.removeAll();
+		vLkw.removeAll();
+		for (Stuetzstelle<Messwerte> s : stuetzstellen) {
+			qKfz.setStuetzstelle(s.getZeitstempel(), s.getWert().getQKfz());
+			qLkw.setStuetzstelle(s.getZeitstempel(), s.getWert().getQLkw());
+			vPkw.setStuetzstelle(s.getZeitstempel(), s.getWert().getVPkw());
+			vLkw.setStuetzstelle(s.getZeitstempel(), s.getWert().getVLkw());
+		}
 	}
 
 	/**
