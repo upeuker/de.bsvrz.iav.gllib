@@ -5,7 +5,8 @@ Bundle-SymbolicName: de.bsvrz.iav.gllib
 Bundle-Version: 1.0.0
 Bundle-Vendor: BitCtrl Systems GmbH
 Require-Bundle: de.bsvrz.sys.funclib.bitctrl,
- de.bsvrz.dav.daf
+ de.bsvrz.dav.daf,
+ org.junit4
 Export-Package: de.bsvrz.iav.gllib.gllib,
  de.bsvrz.iav.gllib.gllib.dav,
  de.bsvrz.iav.gllib.gllib.intern,
