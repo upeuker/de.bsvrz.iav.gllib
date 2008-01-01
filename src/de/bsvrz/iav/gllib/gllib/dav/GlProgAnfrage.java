@@ -70,6 +70,13 @@ public class GlProgAnfrage {
 	private long sendeIntervall;
 
 	/**
+	 * Konstruktor f&uuml;r Vererbung.
+	 */
+	public GlProgAnfrage() {
+		ereignisTypen = new HashSet<EreignisTyp>();
+	}
+
+	/**
 	 * Generiert eine einmalige Anfrage. Die Option "zyklische Anfrage" wird auf
 	 * {@code false} gesetzt und die davon abh&auml;ngigen Parameter mit
 	 * Defaultwerten belegt.
@@ -139,13 +146,6 @@ public class GlProgAnfrage {
 		this.pruefIntervall = pruefIntervall;
 		this.schwelle = schwelle;
 		this.sendeIntervall = sendeIntervall;
-	}
-
-	/**
-	 * Konstruktor f&uuml;r Vererbung.
-	 */
-	protected GlProgAnfrage() {
-		ereignisTypen = new HashSet<EreignisTyp>();
 	}
 
 	/**
@@ -330,7 +330,7 @@ public class GlProgAnfrage {
 	 * sollte nicht auﬂerhalb der Ganglinie-API verwendet werden.
 	 * 
 	 * @param daten
-	 *            ein Datum, welches eine Anfrage darstellt.
+	 *            ein Datum, welches <strong>eine</strong> Anfrage darstellt.
 	 */
 	public void setDaten(Data daten) {
 		Array feld;
@@ -374,13 +374,17 @@ public class GlProgAnfrage {
 	 */
 	@Override
 	public String toString() {
-		return getClass().getSimpleName() + "[messQuerschnitt="
-				+ messQuerschnitt + ", prognoseZeitraum=" + prognoseZeitraum
-				+ ", nurLangfristigeAuswahl=" + nurLangfristigeAuswahl
-				+ ", ereignisTypen=" + ereignisTypen + ", zyklischePrognose="
-				+ zyklischePrognose + ", pruefIntervall=" + pruefIntervall
-				+ ", schwelle=" + schwelle + ", sendeIntervall="
-				+ sendeIntervall + "]";
-	}
+		String s = getClass().getSimpleName() + "[";
 
+		s += "messQuerschnitt=" + messQuerschnitt;
+		s += ", prognoseZeitraum=" + prognoseZeitraum;
+		s += ", nurLangfristigeAuswahl=" + nurLangfristigeAuswahl;
+		s += ", ereignisTypen=" + ereignisTypen;
+		s += ", zyklischePrognose=" + zyklischePrognose;
+		s += ", pruefIntervall=" + pruefIntervall;
+		s += ", schwelle=" + schwelle;
+		s += ", sendeIntervall=" + sendeIntervall;
+
+		return s + "]";
+	}
 }
