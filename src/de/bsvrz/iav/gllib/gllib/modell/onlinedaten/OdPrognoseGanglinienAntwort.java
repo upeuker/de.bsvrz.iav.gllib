@@ -1,6 +1,29 @@
-/**
+/*
+ * Segment 5 Intelligente Analyseverfahren, SWE 5.5 Funktionen Ganglinie
+ * Copyright (C) 2007 BitCtrl Systems GmbH 
  * 
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA.
+ *
+ * Contact Information:
+ * BitCtrl Systems GmbH
+ * Weiﬂenfelser Straﬂe 67
+ * 04229 Leipzig
+ * Phone: +49 341-490670
+ * mailto: info@bitctrl.de
  */
+
 package de.bsvrz.iav.gllib.gllib.modell.onlinedaten;
 
 import java.util.ArrayList;
@@ -24,8 +47,10 @@ import de.bsvrz.sys.funclib.bitctrl.modell.Aspekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
 
 /**
- * @author Falko
+ * Kapselt die Onlineattributgruppe {@code atg.prognoseGanglinienAntwort}.
  * 
+ * @author BitCtrl Systems GmbH, Falko Schumann
+ * @version $Id$
  */
 public class OdPrognoseGanglinienAntwort extends
 		AbstractOnlineDatensatz<OdPrognoseGanglinienAntwort.Daten> {
@@ -90,9 +115,8 @@ public class OdPrognoseGanglinienAntwort extends
 		private boolean valid;
 
 		/**
-		 * @param o
-		 *            eine Anfrage.
-		 * @return {@code true}, wenn die Anfrage hinzugef&uuml;gt wurde.
+		 * {@inheritDoc}
+		 * 
 		 * @see java.util.Collection#add(java.lang.Object)
 		 */
 		public boolean add(GanglinieMQ o) {
@@ -100,6 +124,8 @@ public class OdPrognoseGanglinienAntwort extends
 		}
 
 		/**
+		 * {@inheritDoc}
+		 * 
 		 * @see java.util.Collection#addAll(java.util.Collection)
 		 */
 		public boolean addAll(Collection<? extends GanglinieMQ> c) {
@@ -107,6 +133,8 @@ public class OdPrognoseGanglinienAntwort extends
 		}
 
 		/**
+		 * {@inheritDoc}
+		 * 
 		 * @see java.util.Collection#clear()
 		 */
 		public void clear() {
@@ -134,6 +162,8 @@ public class OdPrognoseGanglinienAntwort extends
 		}
 
 		/**
+		 * {@inheritDoc}
+		 * 
 		 * @see java.util.Collection#contains(java.lang.Object)
 		 */
 		public boolean contains(Object o) {
@@ -141,6 +171,8 @@ public class OdPrognoseGanglinienAntwort extends
 		}
 
 		/**
+		 * {@inheritDoc}
+		 * 
 		 * @see java.util.Collection#containsAll(java.util.Collection)
 		 */
 		public boolean containsAll(Collection<?> c) {
@@ -160,6 +192,8 @@ public class OdPrognoseGanglinienAntwort extends
 		}
 
 		/**
+		 * {@inheritDoc}
+		 * 
 		 * @see java.util.Collection#isEmpty()
 		 */
 		public boolean isEmpty() {
@@ -168,12 +202,16 @@ public class OdPrognoseGanglinienAntwort extends
 
 		/**
 		 * {@inheritDoc}
+		 * 
+		 * @see de.bsvrz.sys.funclib.bitctrl.modell.Datum#isValid()
 		 */
 		public boolean isValid() {
 			return valid;
 		}
 
 		/**
+		 * {@inheritDoc}
+		 * 
 		 * @see java.util.Collection#iterator()
 		 */
 		public Iterator<GanglinieMQ> iterator() {
@@ -181,6 +219,8 @@ public class OdPrognoseGanglinienAntwort extends
 		}
 
 		/**
+		 * {@inheritDoc}
+		 * 
 		 * @see java.util.Collection#remove(java.lang.Object)
 		 */
 		public boolean remove(Object o) {
@@ -188,6 +228,8 @@ public class OdPrognoseGanglinienAntwort extends
 		}
 
 		/**
+		 * {@inheritDoc}
+		 * 
 		 * @see java.util.Collection#removeAll(java.util.Collection)
 		 */
 		public boolean removeAll(Collection<?> c) {
@@ -195,6 +237,8 @@ public class OdPrognoseGanglinienAntwort extends
 		}
 
 		/**
+		 * {@inheritDoc}
+		 * 
 		 * @see java.util.Collection#retainAll(java.util.Collection)
 		 */
 		public boolean retainAll(Collection<?> c) {
@@ -216,16 +260,8 @@ public class OdPrognoseGanglinienAntwort extends
 		}
 
 		/**
-		 * Setzt das Flag {@code valid} des Datum.
+		 * {@inheritDoc}
 		 * 
-		 * @param valid
-		 *            der neue Wert des Flags.
-		 */
-		protected void setValid(boolean valid) {
-			this.valid = valid;
-		}
-
-		/**
 		 * @see java.util.Collection#size()
 		 */
 		public int size() {
@@ -233,6 +269,8 @@ public class OdPrognoseGanglinienAntwort extends
 		}
 
 		/**
+		 * {@inheritDoc}
+		 * 
 		 * @see java.util.Collection#toArray()
 		 */
 		public Object[] toArray() {
@@ -240,6 +278,8 @@ public class OdPrognoseGanglinienAntwort extends
 		}
 
 		/**
+		 * {@inheritDoc}
+		 * 
 		 * @see java.util.Collection#toArray(T[])
 		 */
 		public <T> T[] toArray(T[] a) {
@@ -261,6 +301,16 @@ public class OdPrognoseGanglinienAntwort extends
 			s += ", ganglinien=" + ganglinien;
 
 			return s + "]";
+		}
+
+		/**
+		 * Setzt das Flag {@code valid} des Datum.
+		 * 
+		 * @param valid
+		 *            der neue Wert des Flags.
+		 */
+		protected void setValid(boolean valid) {
+			this.valid = valid;
 		}
 
 	}
@@ -290,7 +340,7 @@ public class OdPrognoseGanglinienAntwort extends
 	}
 
 	/**
-	 * (non-Javadoc)
+	 * {@inheritDoc}
 	 * 
 	 * @see de.bsvrz.sys.funclib.bitctrl.modell.Datensatz#erzeugeDatum()
 	 */
@@ -299,6 +349,8 @@ public class OdPrognoseGanglinienAntwort extends
 	}
 
 	/**
+	 * {@inheritDoc}
+	 * 
 	 * @see de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatensatz#getAspekte()
 	 */
 	@Override
@@ -311,6 +363,8 @@ public class OdPrognoseGanglinienAntwort extends
 	}
 
 	/**
+	 * {@inheritDoc}
+	 * 
 	 * @see de.bsvrz.sys.funclib.bitctrl.modell.Datensatz#getAttributGruppe()
 	 */
 	public AttributeGroup getAttributGruppe() {
@@ -318,29 +372,8 @@ public class OdPrognoseGanglinienAntwort extends
 	}
 
 	/**
-	 * @see de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatensatz#konvertiere(de.bsvrz.sys.funclib.bitctrl.modell.Datum)
-	 */
-	@Override
-	protected Data konvertiere(Daten datum) {
-		Data daten = erzeugeSendeCache();
-
-		Array feld;
-		int i;
-
-		daten.getTextValue("AbsenderZeichen").setText(
-				datum.getAbsenderZeichen());
-
-		feld = daten.getArray("PrognoseGanglinienAnfrage");
-		feld.setLength(datum.size());
-		i = 0;
-		for (GanglinieMQ g : datum) {
-			g.getDatenFuerPrognoseGanglinie(feld.getItem(i));
-		}
-
-		return daten;
-	}
-
-	/**
+	 * {@inheritDoc}
+	 * 
 	 * @see de.bsvrz.sys.funclib.bitctrl.modell.Datensatz#setDaten(de.bsvrz.dav.daf.main.ResultData)
 	 */
 	public void setDaten(ResultData result) {
@@ -373,6 +406,31 @@ public class OdPrognoseGanglinienAntwort extends
 		setDatum(result.getDataDescription().getAspect(), datum);
 		fireDatensatzAktualisiert(result.getDataDescription().getAspect(),
 				datum.clone());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatensatz#konvertiere(de.bsvrz.sys.funclib.bitctrl.modell.Datum)
+	 */
+	@Override
+	protected Data konvertiere(Daten datum) {
+		Data daten = erzeugeSendeCache();
+
+		Array feld;
+		int i;
+
+		daten.getTextValue("AbsenderZeichen").setText(
+				datum.getAbsenderZeichen());
+
+		feld = daten.getArray("PrognoseGanglinienAnfrage");
+		feld.setLength(datum.size());
+		i = 0;
+		for (GanglinieMQ g : datum) {
+			g.getDatenFuerPrognoseGanglinie(feld.getItem(i));
+		}
+
+		return daten;
 	}
 
 }
