@@ -40,7 +40,6 @@ import de.bsvrz.dav.daf.main.config.Aspect;
 import de.bsvrz.dav.daf.main.config.AttributeGroup;
 import de.bsvrz.dav.daf.main.config.DataModel;
 import de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ;
-import de.bsvrz.iav.gllib.gllib.modell.ApplikationGanglinienPrognose;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatum;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractOnlineDatensatz;
 import de.bsvrz.sys.funclib.bitctrl.modell.Aspekt;
@@ -261,16 +260,6 @@ public class OdPrognoseGanglinienAntwort extends
 		}
 
 		/**
-		 * Setzt das Flag {@code valid} des Datum.
-		 * 
-		 * @param valid
-		 *            der neue Wert des Flags.
-		 */
-		protected void setValid(final boolean valid) {
-			this.valid = valid;
-		}
-
-		/**
 		 * {@inheritDoc}
 		 * 
 		 * @see java.util.Collection#size()
@@ -312,6 +301,16 @@ public class OdPrognoseGanglinienAntwort extends
 			s += ", ganglinien=" + ganglinien;
 
 			return s + "]";
+		}
+
+		/**
+		 * Setzt das Flag {@code valid} des Datum.
+		 * 
+		 * @param valid
+		 *            der neue Wert des Flags.
+		 */
+		protected void setValid(final boolean valid) {
+			this.valid = valid;
 		}
 
 	}
@@ -375,31 +374,6 @@ public class OdPrognoseGanglinienAntwort extends
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatensatz#konvertiere(de.bsvrz.sys.funclib.bitctrl.modell.Datum)
-	 */
-	@Override
-	protected Data konvertiere(final Daten datum) {
-		Data daten = erzeugeSendeCache();
-
-		Array feld;
-		int i;
-
-		daten.getTextValue("AbsenderZeichen").setText(
-				datum.getAbsenderZeichen());
-
-		feld = daten.getArray("PrognoseGanglinienAnfrage");
-		feld.setLength(datum.size());
-		i = 0;
-		for (GanglinieMQ g : datum) {
-			g.getDatenFuerPrognoseGanglinie(feld.getItem(i));
-		}
-
-		return daten;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
 	 * @see de.bsvrz.sys.funclib.bitctrl.modell.Datensatz#setDaten(de.bsvrz.dav.daf.main.ResultData)
 	 */
 	public void setDaten(final ResultData result) {
@@ -432,6 +406,31 @@ public class OdPrognoseGanglinienAntwort extends
 		setDatum(result.getDataDescription().getAspect(), datum);
 		fireDatensatzAktualisiert(result.getDataDescription().getAspect(),
 				datum.clone());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatensatz#konvertiere(de.bsvrz.sys.funclib.bitctrl.modell.Datum)
+	 */
+	@Override
+	protected Data konvertiere(final Daten datum) {
+		Data daten = erzeugeSendeCache();
+
+		Array feld;
+		int i;
+
+		daten.getTextValue("AbsenderZeichen").setText(
+				datum.getAbsenderZeichen());
+
+		feld = daten.getArray("PrognoseGanglinienAnfrage");
+		feld.setLength(datum.size());
+		i = 0;
+		for (GanglinieMQ g : datum) {
+			g.getDatenFuerPrognoseGanglinie(feld.getItem(i));
+		}
+
+		return daten;
 	}
 
 }
