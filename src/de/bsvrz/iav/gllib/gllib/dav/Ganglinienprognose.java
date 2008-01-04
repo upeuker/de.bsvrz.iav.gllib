@@ -31,6 +31,7 @@ import java.util.Collection;
 import javax.swing.event.EventListenerList;
 
 import de.bsvrz.dav.daf.main.config.Aspect;
+import de.bsvrz.dav.daf.main.config.ClientApplication;
 import de.bsvrz.iav.gllib.gllib.modell.ApplikationGanglinienPrognose;
 import de.bsvrz.iav.gllib.gllib.modell.GanglinienobjektFactory;
 import de.bsvrz.iav.gllib.gllib.modell.onlinedaten.OdPrognoseGanglinienAnfrage;
@@ -41,6 +42,7 @@ import de.bsvrz.sys.funclib.bitctrl.modell.DatensatzUpdateListener;
 import de.bsvrz.sys.funclib.bitctrl.modell.DatensendeException;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
 import de.bsvrz.sys.funclib.bitctrl.modell.Datensatz.Status;
+import de.bsvrz.sys.funclib.bitctrl.modell.kalender.KalenderobjektFactory;
 import de.bsvrz.sys.funclib.bitctrl.modell.systemmodellglobal.Applikation;
 import de.bsvrz.sys.funclib.bitctrl.modell.systemmodellglobal.SystemModellGlobalObjektFactory;
 import de.bsvrz.sys.funclib.debug.Debug;
@@ -115,8 +117,8 @@ public final class Ganglinienprognose implements DatensatzUpdateListener {
 		log = Debug.getLogger();
 
 		factory = ObjektFactory.getInstanz();
-		factory.registerFactory(new GanglinienobjektFactory());
-		factory.registerFactory(new SystemModellGlobalObjektFactory());
+		factory.registerFactory(new GanglinienobjektFactory(),
+				new SystemModellGlobalObjektFactory());
 
 		glProg = (ApplikationGanglinienPrognose) factory
 				.getModellobjekt(factory.getVerbindung()
@@ -170,24 +172,6 @@ public final class Ganglinienprognose implements DatensatzUpdateListener {
 	}
 
 	/**
-	 * Informiert alle registrierten Listener &uuml;ber eine Antwort.
-	 * 
-	 * @param datum
-	 *            ein Datum mit der Antwort auf eine Prognoseanfrage.
-	 */
-	protected synchronized void fireAntwort(
-			final OdPrognoseGanglinienAntwort.Daten datum) {
-		GlProgAntwortEvent e = new GlProgAntwortEvent(this, datum);
-
-		for (GlProgAntwortListener l : listeners
-				.getListeners(GlProgAntwortListener.class)) {
-			l.antwortEingetroffen(e);
-		}
-
-		log.fine("Prognoseantwort wurde verteilt: " + e);
-	}
-
-	/**
 	 * Entfernt einen Listener wieder aus der Liste registrierter Listener.
 	 * 
 	 * @param listener
@@ -210,19 +194,48 @@ public final class Ganglinienprognose implements DatensatzUpdateListener {
 	 *             wenn beim Senden ein Fehler passiert ist.
 	 */
 	public void sendeAnfrage(final String absenderZeichen,
-			final Collection<GlProgAnfrage> anfragen) throws DatensendeException {
+			final Collection<GlProgAnfrage> anfragen)
+			throws DatensendeException {
 		OdPrognoseGanglinienAnfrage.Daten datum;
+		ObjektFactory factory;
+		ClientApplication klient;
 
 		if (odAnfrage.getStatusSendesteuerung(aspAnfrage) != Status.START) {
 			throw new DatensendeException(
 					"Ganglinienprognose (noch) nicht bereit.");
 		}
 
+		factory = ObjektFactory.getInstanz();
+		factory.registerFactory(new KalenderobjektFactory(),
+				new SystemModellGlobalObjektFactory());
+		factory.registerFactory(new KalenderobjektFactory());
+		klient = factory.getVerbindung().getLocalApplicationObject();
+
 		datum = odAnfrage.erzeugeDatum();
+		datum.setAbsender((Applikation) factory.getModellobjekt(klient));
+		datum.setAbsenderZeichen(absenderZeichen);
 		datum.addAll(anfragen);
 		odAnfrage.sendeDaten(aspAnfrage, datum);
 
 		log.fine("Anfrage \"" + absenderZeichen + "\" wurde gesendet");
+	}
+
+	/**
+	 * Informiert alle registrierten Listener &uuml;ber eine Antwort.
+	 * 
+	 * @param datum
+	 *            ein Datum mit der Antwort auf eine Prognoseanfrage.
+	 */
+	protected synchronized void fireAntwort(
+			final OdPrognoseGanglinienAntwort.Daten datum) {
+		GlProgAntwortEvent e = new GlProgAntwortEvent(this, datum);
+
+		for (GlProgAntwortListener l : listeners
+				.getListeners(GlProgAntwortListener.class)) {
+			l.antwortEingetroffen(e);
+		}
+
+		log.fine("Prognoseantwort wurde verteilt: " + e);
 	}
 
 }
