@@ -32,7 +32,7 @@ import java.util.Set;
 import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.Data.Array;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
-import de.bsvrz.sys.funclib.bitctrl.modell.kalender.EreignisTyp;
+import de.bsvrz.sys.funclib.bitctrl.modell.kalender.objekte.EreignisTyp;
 import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnittAllgemein;
 import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
 

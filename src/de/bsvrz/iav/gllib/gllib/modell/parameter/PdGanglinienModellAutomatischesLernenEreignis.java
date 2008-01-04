@@ -39,7 +39,7 @@ import de.bsvrz.dav.daf.main.config.DataModel;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatum;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractParameterDatensatz;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
-import de.bsvrz.sys.funclib.bitctrl.modell.kalender.EreignisTyp;
+import de.bsvrz.sys.funclib.bitctrl.modell.kalender.objekte.EreignisTyp;
 
 /**
  * Kapselt die Parameterattributgruppe

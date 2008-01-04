@@ -43,7 +43,7 @@ import de.bsvrz.iav.gllib.gllib.IGanglinie;
 import de.bsvrz.iav.gllib.gllib.Polyline;
 import de.bsvrz.iav.gllib.gllib.Stuetzstelle;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
-import de.bsvrz.sys.funclib.bitctrl.modell.kalender.EreignisTyp;
+import de.bsvrz.sys.funclib.bitctrl.modell.kalender.objekte.EreignisTyp;
 import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnittAllgemein;
 import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
 
