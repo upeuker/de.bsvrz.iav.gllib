@@ -45,6 +45,7 @@ import de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatum;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractOnlineDatensatz;
 import de.bsvrz.sys.funclib.bitctrl.modell.Aspekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
+import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjekt;
 
 /**
  * Kapselt die Onlineattributgruppe {@code atg.prognoseGanglinienAntwort}.
@@ -72,7 +73,7 @@ public class OdPrognoseGanglinienAntwort extends
 		 * @param pid
 		 *            die PID eines Aspekts.
 		 */
-		private Aspekte(String pid) {
+		private Aspekte(final String pid) {
 			DataModel modell = ObjektFactory.getInstanz().getVerbindung()
 					.getDataModel();
 			aspekt = modell.getAspect(pid);
@@ -119,7 +120,7 @@ public class OdPrognoseGanglinienAntwort extends
 		 * 
 		 * @see java.util.Collection#add(java.lang.Object)
 		 */
-		public boolean add(GanglinieMQ o) {
+		public boolean add(final GanglinieMQ o) {
 			return ganglinien.add(o);
 		}
 
@@ -128,7 +129,7 @@ public class OdPrognoseGanglinienAntwort extends
 		 * 
 		 * @see java.util.Collection#addAll(java.util.Collection)
 		 */
-		public boolean addAll(Collection<? extends GanglinieMQ> c) {
+		public boolean addAll(final Collection<? extends GanglinieMQ> c) {
 			return ganglinien.addAll(c);
 		}
 
@@ -166,7 +167,7 @@ public class OdPrognoseGanglinienAntwort extends
 		 * 
 		 * @see java.util.Collection#contains(java.lang.Object)
 		 */
-		public boolean contains(Object o) {
+		public boolean contains(final Object o) {
 			return ganglinien.contains(o);
 		}
 
@@ -175,7 +176,7 @@ public class OdPrognoseGanglinienAntwort extends
 		 * 
 		 * @see java.util.Collection#containsAll(java.util.Collection)
 		 */
-		public boolean containsAll(Collection<?> c) {
+		public boolean containsAll(final Collection<?> c) {
 			return ganglinien.containsAll(c);
 		}
 
@@ -223,7 +224,7 @@ public class OdPrognoseGanglinienAntwort extends
 		 * 
 		 * @see java.util.Collection#remove(java.lang.Object)
 		 */
-		public boolean remove(Object o) {
+		public boolean remove(final Object o) {
 			return ganglinien.remove(o);
 		}
 
@@ -232,7 +233,7 @@ public class OdPrognoseGanglinienAntwort extends
 		 * 
 		 * @see java.util.Collection#removeAll(java.util.Collection)
 		 */
-		public boolean removeAll(Collection<?> c) {
+		public boolean removeAll(final Collection<?> c) {
 			return ganglinien.removeAll(c);
 		}
 
@@ -241,7 +242,7 @@ public class OdPrognoseGanglinienAntwort extends
 		 * 
 		 * @see java.util.Collection#retainAll(java.util.Collection)
 		 */
-		public boolean retainAll(Collection<?> c) {
+		public boolean retainAll(final Collection<?> c) {
 			return ganglinien.retainAll(c);
 		}
 
@@ -255,8 +256,18 @@ public class OdPrognoseGanglinienAntwort extends
 		 * @param absenderZeichen
 		 *            ein beliebiger Text.
 		 */
-		public void setAbsenderZeichen(String absenderZeichen) {
+		public void setAbsenderZeichen(final String absenderZeichen) {
 			this.absenderZeichen = absenderZeichen;
+		}
+
+		/**
+		 * Setzt das Flag {@code valid} des Datum.
+		 * 
+		 * @param valid
+		 *            der neue Wert des Flags.
+		 */
+		protected void setValid(final boolean valid) {
+			this.valid = valid;
 		}
 
 		/**
@@ -282,7 +293,7 @@ public class OdPrognoseGanglinienAntwort extends
 		 * 
 		 * @see java.util.Collection#toArray(T[])
 		 */
-		public <T> T[] toArray(T[] a) {
+		public <T> T[] toArray(final T[] a) {
 			return ganglinien.toArray(a);
 		}
 
@@ -303,16 +314,6 @@ public class OdPrognoseGanglinienAntwort extends
 			return s + "]";
 		}
 
-		/**
-		 * Setzt das Flag {@code valid} des Datum.
-		 * 
-		 * @param valid
-		 *            der neue Wert des Flags.
-		 */
-		protected void setValid(boolean valid) {
-			this.valid = valid;
-		}
-
 	}
 
 	/** Die PID der Attributgruppe. */
@@ -328,7 +329,7 @@ public class OdPrognoseGanglinienAntwort extends
 	 *            die Applikation <em>Ganglinienprognose</em> an die die
 	 *            Anfrage gestellt wird.
 	 */
-	public OdPrognoseGanglinienAntwort(ApplikationGanglinienPrognose app) {
+	public OdPrognoseGanglinienAntwort(final SystemObjekt app) {
 		super(app);
 
 		if (atg == null) {
@@ -374,9 +375,34 @@ public class OdPrognoseGanglinienAntwort extends
 	/**
 	 * {@inheritDoc}
 	 * 
+	 * @see de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatensatz#konvertiere(de.bsvrz.sys.funclib.bitctrl.modell.Datum)
+	 */
+	@Override
+	protected Data konvertiere(final Daten datum) {
+		Data daten = erzeugeSendeCache();
+
+		Array feld;
+		int i;
+
+		daten.getTextValue("AbsenderZeichen").setText(
+				datum.getAbsenderZeichen());
+
+		feld = daten.getArray("PrognoseGanglinienAnfrage");
+		feld.setLength(datum.size());
+		i = 0;
+		for (GanglinieMQ g : datum) {
+			g.getDatenFuerPrognoseGanglinie(feld.getItem(i));
+		}
+
+		return daten;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
 	 * @see de.bsvrz.sys.funclib.bitctrl.modell.Datensatz#setDaten(de.bsvrz.dav.daf.main.ResultData)
 	 */
-	public void setDaten(ResultData result) {
+	public void setDaten(final ResultData result) {
 		check(result);
 
 		Daten datum = new Daten();
@@ -406,31 +432,6 @@ public class OdPrognoseGanglinienAntwort extends
 		setDatum(result.getDataDescription().getAspect(), datum);
 		fireDatensatzAktualisiert(result.getDataDescription().getAspect(),
 				datum.clone());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatensatz#konvertiere(de.bsvrz.sys.funclib.bitctrl.modell.Datum)
-	 */
-	@Override
-	protected Data konvertiere(Daten datum) {
-		Data daten = erzeugeSendeCache();
-
-		Array feld;
-		int i;
-
-		daten.getTextValue("AbsenderZeichen").setText(
-				datum.getAbsenderZeichen());
-
-		feld = daten.getArray("PrognoseGanglinienAnfrage");
-		feld.setLength(datum.size());
-		i = 0;
-		for (GanglinieMQ g : datum) {
-			g.getDatenFuerPrognoseGanglinie(feld.getItem(i));
-		}
-
-		return daten;
 	}
 
 }

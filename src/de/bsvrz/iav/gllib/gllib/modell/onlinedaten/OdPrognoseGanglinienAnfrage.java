@@ -45,6 +45,7 @@ import de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatum;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractOnlineDatensatz;
 import de.bsvrz.sys.funclib.bitctrl.modell.Aspekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
+import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.systemmodellglobal.Applikation;
 
 /**
@@ -73,7 +74,7 @@ public class OdPrognoseGanglinienAnfrage extends
 		 * @param pid
 		 *            die PID eines Aspekts.
 		 */
-		private Aspekte(String pid) {
+		private Aspekte(final String pid) {
 			DataModel modell = ObjektFactory.getInstanz().getVerbindung()
 					.getDataModel();
 			aspekt = modell.getAspect(pid);
@@ -123,7 +124,7 @@ public class OdPrognoseGanglinienAnfrage extends
 		 * 
 		 * @see java.util.Collection#add(java.lang.Object)
 		 */
-		public boolean add(GlProgAnfrage o) {
+		public boolean add(final GlProgAnfrage o) {
 			return anfragen.add(o);
 		}
 
@@ -132,7 +133,7 @@ public class OdPrognoseGanglinienAnfrage extends
 		 * 
 		 * @see java.util.Collection#addAll(java.util.Collection)
 		 */
-		public boolean addAll(Collection<? extends GlProgAnfrage> c) {
+		public boolean addAll(final Collection<? extends GlProgAnfrage> c) {
 			return anfragen.addAll(c);
 		}
 
@@ -171,7 +172,7 @@ public class OdPrognoseGanglinienAnfrage extends
 		 * 
 		 * @see java.util.Collection#contains(java.lang.Object)
 		 */
-		public boolean contains(Object o) {
+		public boolean contains(final Object o) {
 			return anfragen.contains(o);
 		}
 
@@ -180,7 +181,7 @@ public class OdPrognoseGanglinienAnfrage extends
 		 * 
 		 * @see java.util.Collection#containsAll(java.util.Collection)
 		 */
-		public boolean containsAll(Collection<?> c) {
+		public boolean containsAll(final Collection<?> c) {
 			return anfragen.containsAll(c);
 		}
 
@@ -235,7 +236,7 @@ public class OdPrognoseGanglinienAnfrage extends
 		 * 
 		 * @see java.util.Collection#remove(java.lang.Object)
 		 */
-		public boolean remove(Object o) {
+		public boolean remove(final Object o) {
 			return anfragen.remove(o);
 		}
 
@@ -244,7 +245,7 @@ public class OdPrognoseGanglinienAnfrage extends
 		 * 
 		 * @see java.util.Collection#removeAll(java.util.Collection)
 		 */
-		public boolean removeAll(Collection<?> c) {
+		public boolean removeAll(final Collection<?> c) {
 			return anfragen.removeAll(c);
 		}
 
@@ -253,7 +254,7 @@ public class OdPrognoseGanglinienAnfrage extends
 		 * 
 		 * @see java.util.Collection#retainAll(java.util.Collection)
 		 */
-		public boolean retainAll(Collection<?> c) {
+		public boolean retainAll(final Collection<?> c) {
 			return anfragen.retainAll(c);
 		}
 
@@ -263,7 +264,7 @@ public class OdPrognoseGanglinienAnfrage extends
 		 * @param absender
 		 *            die anfragende Applikation.
 		 */
-		public void setAbsender(Applikation absender) {
+		public void setAbsender(final Applikation absender) {
 			this.absender = absender;
 		}
 
@@ -274,8 +275,18 @@ public class OdPrognoseGanglinienAnfrage extends
 		 * @param absenderZeichen
 		 *            die Zeichenkette.
 		 */
-		public void setAbsenderZeichen(String absenderZeichen) {
+		public void setAbsenderZeichen(final String absenderZeichen) {
 			this.absenderZeichen = absenderZeichen;
+		}
+
+		/**
+		 * Setzt das Flag {@code valid} des Datum.
+		 * 
+		 * @param valid
+		 *            der neue Wert des Flags.
+		 */
+		protected void setValid(final boolean valid) {
+			this.valid = valid;
 		}
 
 		/**
@@ -301,7 +312,7 @@ public class OdPrognoseGanglinienAnfrage extends
 		 * 
 		 * @see java.util.Collection#toArray(T[])
 		 */
-		public <T> T[] toArray(T[] a) {
+		public <T> T[] toArray(final T[] a) {
 			return anfragen.toArray(a);
 		}
 
@@ -323,16 +334,6 @@ public class OdPrognoseGanglinienAnfrage extends
 			return s + "]";
 		}
 
-		/**
-		 * Setzt das Flag {@code valid} des Datum.
-		 * 
-		 * @param valid
-		 *            der neue Wert des Flags.
-		 */
-		protected void setValid(boolean valid) {
-			this.valid = valid;
-		}
-
 	}
 
 	/** Die PID der Attributgruppe. */
@@ -348,7 +349,7 @@ public class OdPrognoseGanglinienAnfrage extends
 	 *            die Applikation <em>Ganglinienprognose</em> an die die
 	 *            Anfrage gestellt wird.
 	 */
-	public OdPrognoseGanglinienAnfrage(ApplikationGanglinienPrognose app) {
+	public OdPrognoseGanglinienAnfrage(final SystemObjekt app) {
 		super(app);
 
 		if (atg == null) {
@@ -394,9 +395,36 @@ public class OdPrognoseGanglinienAnfrage extends
 	/**
 	 * {@inheritDoc}
 	 * 
+	 * @see de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatensatz#konvertiere(de.bsvrz.sys.funclib.bitctrl.modell.Datum)
+	 */
+	@Override
+	protected Data konvertiere(final Daten datum) {
+		Data daten = erzeugeSendeCache();
+
+		Array feld;
+		int i;
+
+		daten.getReferenceValue("absenderId").setSystemObject(
+				datum.getAbsender().getSystemObject());
+		daten.getTextValue("AbsenderZeichen").setText(
+				datum.getAbsenderZeichen());
+
+		feld = daten.getArray("PrognoseGanglinienAnfrage");
+		feld.setLength(datum.size());
+		i = 0;
+		for (GlProgAnfrage anfrage : datum) {
+			anfrage.getDaten(feld.getItem(i));
+		}
+
+		return daten;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
 	 * @see de.bsvrz.sys.funclib.bitctrl.modell.Datensatz#setDaten(de.bsvrz.dav.daf.main.ResultData)
 	 */
-	public void setDaten(ResultData result) {
+	public void setDaten(final ResultData result) {
 		check(result);
 
 		Daten datum = new Daten();
@@ -428,33 +456,6 @@ public class OdPrognoseGanglinienAnfrage extends
 		setDatum(result.getDataDescription().getAspect(), datum);
 		fireDatensatzAktualisiert(result.getDataDescription().getAspect(),
 				datum.clone());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatensatz#konvertiere(de.bsvrz.sys.funclib.bitctrl.modell.Datum)
-	 */
-	@Override
-	protected Data konvertiere(Daten datum) {
-		Data daten = erzeugeSendeCache();
-
-		Array feld;
-		int i;
-
-		daten.getReferenceValue("absenderId").setSystemObject(
-				datum.getAbsender().getSystemObject());
-		daten.getTextValue("AbsenderZeichen").setText(
-				datum.getAbsenderZeichen());
-
-		feld = daten.getArray("PrognoseGanglinienAnfrage");
-		feld.setLength(datum.size());
-		i = 0;
-		for (GlProgAnfrage anfrage : datum) {
-			anfrage.getDaten(feld.getItem(i));
-		}
-
-		return daten;
 	}
 
 }
