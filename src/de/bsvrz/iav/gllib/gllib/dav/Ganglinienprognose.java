@@ -26,269 +26,120 @@
 
 package de.bsvrz.iav.gllib.gllib.dav;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
+import java.util.Collection;
 
 import javax.swing.event.EventListenerList;
 
-import de.bsvrz.dav.daf.main.ClientDavInterface;
-import de.bsvrz.dav.daf.main.ClientReceiverInterface;
-import de.bsvrz.dav.daf.main.ClientSenderInterface;
-import de.bsvrz.dav.daf.main.Data;
-import de.bsvrz.dav.daf.main.DataDescription;
-import de.bsvrz.dav.daf.main.DataNotSubscribedException;
-import de.bsvrz.dav.daf.main.OneSubscriptionPerSendData;
-import de.bsvrz.dav.daf.main.ReceiveOptions;
-import de.bsvrz.dav.daf.main.ReceiverRole;
-import de.bsvrz.dav.daf.main.ResultData;
-import de.bsvrz.dav.daf.main.SendSubscriptionNotConfirmed;
-import de.bsvrz.dav.daf.main.SenderRole;
 import de.bsvrz.dav.daf.main.config.Aspect;
-import de.bsvrz.dav.daf.main.config.AttributeGroup;
-import de.bsvrz.dav.daf.main.config.ClientApplication;
-import de.bsvrz.dav.daf.main.config.DataModel;
-import de.bsvrz.dav.daf.main.config.SystemObject;
+import de.bsvrz.iav.gllib.gllib.modell.ApplikationGanglinienPrognose;
+import de.bsvrz.iav.gllib.gllib.modell.GanglinienobjektFactory;
+import de.bsvrz.iav.gllib.gllib.modell.onlinedaten.OdPrognoseGanglinienAnfrage;
+import de.bsvrz.iav.gllib.gllib.modell.onlinedaten.OdPrognoseGanglinienAntwort;
+import de.bsvrz.sys.funclib.bitctrl.modell.AnmeldeException;
+import de.bsvrz.sys.funclib.bitctrl.modell.DatensatzUpdateEvent;
+import de.bsvrz.sys.funclib.bitctrl.modell.DatensatzUpdateListener;
+import de.bsvrz.sys.funclib.bitctrl.modell.DatensendeException;
+import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
+import de.bsvrz.sys.funclib.bitctrl.modell.Datensatz.Status;
+import de.bsvrz.sys.funclib.bitctrl.modell.systemmodellglobal.Applikation;
 import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
  * Mit dieser Klasse k&ouml;nnen Applikation bequem Anfragen an die
  * Ganglinienprognose stellen, ohne sich mit dem Datenkatalog
  * auseinanderzusetzen m&uuml;ssen.
+ * <p>
+ * <em>Hinweis:</em> Die Ganglinienprognose benutzt die
+ * {@link de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory}. Die Factory muss
+ * mit der Datenverteilerverbindung initialisiert sein.
+ * <p>
+ * Ein vereinfachtes Beispiel der Anwendung:
  * 
+ * <pre><code>
+ * ObjektFactory.getInstanz().setVerbindung(vernindung);
+ * prognose = Ganglinienprognose.getInstanz();
+ * prognose.addAntwortListener(this);
+ * anfragen = new ArrayList&lt;GlProgAnfrage&gt;();
+ * anfragen.add(new GlProgAnfrage(mq, intervall, false));
+ * prognose.sendeAnfrage(&quot;Meine Anfrage&quot;, anfragen);
+ * </code></pre>
+ * 
+ * Die anfragende Klasse muss die Schnittstelle {@link GlProgAntwortListener}
+ * implementieren, mit der die Antwort auf die Anfrage empfangen wird.
+ * 
+ * @see de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory#setVerbindung(de.bsvrz.dav.daf.main.ClientDavInterface)
  * @author BitCtrl Systems GmbH, Schumann
  * @version $Id$
  */
-public class Ganglinienprognose {
+public final class Ganglinienprognose implements DatensatzUpdateListener {
+
+	/** Das Singleton. */
+	private static Ganglinienprognose singleton;
 
 	/**
-	 * Wickelt die Kommunikation mit dem Datenverteiler ab. L&auml;ft als
-	 * eigenst&auml;ndiger Thread.
+	 * Gibt eine Ganglinienprognose als Singleton zur&uuml;ck.
 	 * 
-	 * @author BitCtrl Systems GmbH, Schumann
-	 * @version $Id$
-	 */
-	private class Kommunikation implements ClientSenderInterface,
-			ClientReceiverInterface {
-
-		/** Der Logger. */
-		private final Debug kommLogger;
-
-		/** Die zu verwendende Datenverteilerverbindung. */
-		private final ClientDavInterface verbindung;
-
-		/** Cached die gestellte Anfragen. */
-		private final List<GlProgAnfrageNachricht> anfragen;
-
-		/** Das Systemobjekt, an dass die Anfragen geschickt werden. */
-		private final SystemObject soPrognose;
-
-		/** Datenbeschreibung, mit der Anfragen gestellt werden. */
-		private final DataDescription dbsAnfrage;
-
-		/** Datenbeschreibung, mit der Antworten empfangen werden. */
-		private final DataDescription dbsAntwort;
-
-		/** Verwaltet die Anmeldungen als Senke der Antworten. */
-		private final List<SystemObject> anmeldungen = new ArrayList<SystemObject>();
-
-		/** D&uuml;rfen Anfragen gesendet werden? */
-		private boolean sendenErlaubt;
-
-		/**
-		 * Initialisiert die Kommunikationsverbindung.
-		 * 
-		 * @param verbindung
-		 *            die f&uuml;r Anfragen zu verwendende
-		 *            Datenverteilerverbindung.
-		 */
-		Kommunikation(ClientDavInterface verbindung) {
-			DataModel modell;
-			AttributeGroup atg;
-			Aspect asp;
-
-			this.verbindung = verbindung;
-			anfragen = new ArrayList<GlProgAnfrageNachricht>();
-			kommLogger = Debug.getLogger();
-
-			modell = verbindung.getDataModel();
-
-			soPrognose = modell.getConfigurationAuthority();
-			atg = modell.getAttributeGroup("atg.prognoseGanglinienAnfrage");
-			asp = modell.getAspect("asp.anfrage");
-			dbsAnfrage = new DataDescription(atg, asp);
-
-			atg = modell.getAttributeGroup("atg.prognoseGanglinienAntwort");
-			asp = modell.getAspect("asp.antwort");
-			dbsAntwort = new DataDescription(atg, asp);
-
-			try {
-				verbindung.subscribeSender(this, soPrognose, dbsAnfrage,
-						SenderRole.sender());
-			} catch (OneSubscriptionPerSendData ex) {
-				throw new IllegalStateException(ex.getLocalizedMessage());
-			}
-
-			kommLogger.config("Kommunikationschnittstelle bereit.");
-		}
-
-		/**
-		 * {@inheritDoc}
-		 */
-		public void dataRequest(SystemObject object,
-				DataDescription dataDescription, byte state) {
-			if (object.equals(soPrognose) && dataDescription.equals(dbsAnfrage)
-					&& state == ClientSenderInterface.START_SENDING) {
-				sendenErlaubt = true;
-				sendeAnfragen();
-			} else {
-				sendenErlaubt = false;
-			}
-		}
-
-		/**
-		 * Sendesteuerung wird verwendet.
-		 * <p>
-		 * {@inheritDoc}
-		 */
-		public boolean isRequestSupported(SystemObject object,
-				DataDescription dataDescription) {
-			if (object.equals(soPrognose) && dataDescription.equals(dbsAnfrage)) {
-				return true;
-			}
-			return false;
-		}
-
-		/**
-		 * Sendet eine Anfrage an die Ganglinienprognose.
-		 * 
-		 * @param anfrage
-		 *            die Nachricht mit den Anfragen.
-		 */
-		public void sendeAnfrage(GlProgAnfrageNachricht anfrage) {
-			anfragen.add(anfrage);
-			sendeAnfragen();
-		}
-
-		/**
-		 * {@inheritDoc}
-		 */
-		public void update(ResultData[] results) {
-			for (ResultData datensatz : results) {
-				if (datensatz.getDataDescription().equals(dbsAntwort)
-						&& datensatz.hasData()) {
-					SystemObject so;
-
-					so = datensatz.getObject();
-					kommLogger.finer("Prognoseantwort erhalten für die "
-							+ "Anfrage von", so);
-					fireAntwort((ClientApplication) so, datensatz.getData());
-					synchronized (anmeldungen) {
-						anmeldungen.remove(so);
-						if (!anmeldungen.contains(so)) {
-							verbindung
-									.unsubscribeReceiver(this, so, dbsAntwort);
-						}
-					}
-				}
-			}
-		}
-
-		/**
-		 * Sendet alle gecachten Anfragen, solange es erlaubt. Erfolgreich
-		 * gesendete Anfragen werden aus dem Cache entfernt.
-		 */
-		private void sendeAnfragen() {
-			ListIterator<GlProgAnfrageNachricht> iterator;
-
-			iterator = anfragen.listIterator();
-			while (sendenErlaubt && iterator.hasNext()) {
-				Data daten;
-				ResultData datensatz;
-				SystemObject so;
-				GlProgAnfrageNachricht anfrage;
-
-				anfrage = iterator.next();
-
-				// Als Empfänger der Antwort anmelden
-				so = anfrage.getAbsender();
-				synchronized (anmeldungen) {
-					if (!anmeldungen.contains(so)) {
-						verbindung.subscribeReceiver(this, so, dbsAntwort,
-								ReceiveOptions.normal(), ReceiverRole.drain());
-					}
-					anmeldungen.add(so);
-				}
-
-				kommLogger.finer("Als Empfänger der Antwort angemeldet für "
-						+ "die Anfrage von", so);
-
-				// Anfrage senden
-				daten = verbindung.createData(dbsAnfrage.getAttributeGroup());
-				anfrage.getDaten(daten);
-				datensatz = new ResultData(soPrognose, dbsAnfrage, System
-						.currentTimeMillis(), daten);
-				try {
-					verbindung.sendData(datensatz);
-					iterator.remove(); // Anfrage erfolgreich gesendet
-				} catch (DataNotSubscribedException e) {
-					sendenErlaubt = false;
-					continue;
-				} catch (SendSubscriptionNotConfirmed e) {
-					sendenErlaubt = false;
-					continue;
-				}
-
-				kommLogger.finer("Anfrage wurde gesendet", anfrage);
-			}
-		}
-
-	}
-
-	/** Sichert die Liste des Singletons pro Datenverteilerverbindung. */
-	private static Map<ClientDavInterface, Ganglinienprognose> singleton;
-
-	/**
-	 * Gibt eine Ganglinienprognose als Singleton pro Datenverteilerverbindung
-	 * zur&uuml;ck.
-	 * 
-	 * @param verbindung
-	 *            eine Datenverteilerverbindung.
 	 * @return die Ganglinienprognose als Singleton.
 	 */
-	public static Ganglinienprognose getInstanz(ClientDavInterface verbindung) {
+	public static Ganglinienprognose getInstanz() {
 		if (singleton == null) {
-			singleton = new HashMap<ClientDavInterface, Ganglinienprognose>();
+			singleton = new Ganglinienprognose();
 		}
-		if (!singleton.containsKey(verbindung)) {
-			singleton.put(verbindung, new Ganglinienprognose(verbindung));
-		}
-		return singleton.get(verbindung);
+		return singleton;
 	}
 
 	/** Der Logger. */
-	private final Debug logger;
+	private final Debug log;
 
 	/** Angemeldete Listener. */
 	private final EventListenerList listeners;
 
-	/** Die Kommunikationsinstanz. */
-	private final Kommunikation kommunikation;
+	/** Der Anfragedatensatz. */
+	private final OdPrognoseGanglinienAnfrage odAnfrage;
+
+	/** Der Aspekt zum Senden der Anfrage. */
+	private final Aspect aspAnfrage;
 
 	/**
 	 * Initialisiert den inneren Zustand.
-	 * 
-	 * @param verbindung
-	 *            die f&uuml;r Anfragen zu verwendende Datenverteilerverbindung.
 	 */
-	protected Ganglinienprognose(ClientDavInterface verbindung) {
-		kommunikation = new Kommunikation(verbindung);
-		listeners = new EventListenerList();
-		logger = Debug.getLogger();
+	private Ganglinienprognose() {
+		ObjektFactory factory;
+		OdPrognoseGanglinienAntwort odAntwort;
+		Aspect aspAntwort;
+		ApplikationGanglinienPrognose glProg;
+		Applikation klient;
 
-		logger.info("Schnittstelle zur Ganglinienprognose bereit.");
+		listeners = new EventListenerList();
+		log = Debug.getLogger();
+
+		factory = ObjektFactory.getInstanz();
+		factory.registerFactory(new GanglinienobjektFactory());
+
+		glProg = (ApplikationGanglinienPrognose) factory
+				.getModellobjekt(factory.getVerbindung()
+						.getLocalConfigurationAuthority());
+		aspAnfrage = OdPrognoseGanglinienAnfrage.Aspekte.Anfrage.getAspekt();
+		odAnfrage = glProg
+				.getOnlineDatensatz(OdPrognoseGanglinienAnfrage.class);
+
+		klient = (Applikation) factory.getModellobjekt(factory.getVerbindung()
+				.getLocalApplicationObject());
+		odAntwort = klient
+				.getOnlineDatensatz(OdPrognoseGanglinienAntwort.class);
+		aspAntwort = OdPrognoseGanglinienAntwort.Aspekte.Antwort.getAspekt();
+		odAntwort.addUpdateListener(aspAntwort, this);
+
+		try {
+			odAnfrage.anmeldenSender(aspAnfrage);
+		} catch (AnmeldeException ex) {
+			log
+					.error(
+							"Anmeldung zum Senden von Anfragen an die Ganglinienprognose konnte nicht durchgeführt werden",
+							ex);
+		}
+
+		log.info("Schnittstelle zur Ganglinienprognose bereit.");
 	}
 
 	/**
@@ -299,9 +150,21 @@ public class Ganglinienprognose {
 	 */
 	public void addAntwortListener(GlProgAntwortListener listener) {
 		listeners.add(GlProgAntwortListener.class, listener);
-		logger
-				.fine("Neuer Listener für Prognoseantworten angemeldet",
-						listener);
+		log.fine("Neuer Listener für Prognoseantworten angemeldet", listener);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see de.bsvrz.sys.funclib.bitctrl.modell.DatensatzUpdateListener#datensatzAktualisiert(de.bsvrz.sys.funclib.bitctrl.modell.DatensatzUpdateEvent)
+	 */
+	public void datensatzAktualisiert(DatensatzUpdateEvent event) {
+		assert event.getDatum() instanceof OdPrognoseGanglinienAntwort.Daten;
+
+		OdPrognoseGanglinienAntwort.Daten datum;
+
+		datum = (OdPrognoseGanglinienAntwort.Daten) event.getDatum();
+		fireAntwort(datum);
 	}
 
 	/**
@@ -312,40 +175,52 @@ public class Ganglinienprognose {
 	 */
 	public void removeAntwortListener(GlProgAntwortListener listener) {
 		listeners.remove(GlProgAntwortListener.class, listener);
-		logger.fine("Listener für Prognoseantworten abgemeldet", listener);
+		log.fine("Listener für Prognoseantworten abgemeldet", listener);
 	}
 
 	/**
 	 * Sendet eine Anfrage an die Ganglinienprognose. Die anfragende Applikation
 	 * wird &uuml;ber ein Event &uuml;ber die eingetroffene Antwort informiert.
 	 * 
-	 * @param anfrage
-	 *            die Nachricht mit den Anfragen.
+	 * @param absenderZeichen
+	 *            ein beliebiger Text.
+	 * @param anfragen
+	 *            die Anfragen.
+	 * @throws DatensendeException
+	 *             wenn beim Senden ein Fehler passiert ist.
 	 */
-	public void sendeAnfrage(GlProgAnfrageNachricht anfrage) {
-		kommunikation.sendeAnfrage(anfrage);
-		logger.fine("Neue Anfrage entgegengenommen", anfrage);
+	public void sendeAnfrage(String absenderZeichen,
+			Collection<GlProgAnfrage> anfragen) throws DatensendeException {
+		OdPrognoseGanglinienAnfrage.Daten datum;
+
+		if (odAnfrage.getStatusSendesteuerung(aspAnfrage) != Status.START) {
+			throw new DatensendeException(
+					"Ganglinienprognose (noch) nicht bereit.");
+		}
+
+		datum = odAnfrage.erzeugeDatum();
+		datum.addAll(anfragen);
+		odAnfrage.sendeDaten(aspAnfrage, datum);
+
+		log.fine("Anfrage \"" + absenderZeichen + "\" wurde gesendet");
 	}
 
 	/**
 	 * Informiert alle registrierten Listener &uuml;ber eine Antwort.
 	 * 
-	 * @param anfrager
-	 *            die anfragende Applikation.
-	 * @param daten
+	 * @param datum
 	 *            ein Datum mit der Antwort auf eine Prognoseanfrage.
 	 */
-	protected synchronized void fireAntwort(ClientApplication anfrager,
-			Data daten) {
-		GlProgAntwortEvent e = new GlProgAntwortEvent(this, anfrager);
-		e.setDaten(daten);
+	protected synchronized void fireAntwort(
+			OdPrognoseGanglinienAntwort.Daten datum) {
+		GlProgAntwortEvent e = new GlProgAntwortEvent(this, datum);
 
 		for (GlProgAntwortListener l : listeners
 				.getListeners(GlProgAntwortListener.class)) {
 			l.antwortEingetroffen(e);
 		}
 
-		logger.fine("Prognoseantwort wurde verteilt: " + e);
+		log.fine("Prognoseantwort wurde verteilt: " + e);
 	}
 
 }

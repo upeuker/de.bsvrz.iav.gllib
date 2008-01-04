@@ -26,6 +26,9 @@
 
 package de.bsvrz.iav.gllib.gllib.dav;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.bsvrz.dav.daf.main.ClientDavInterface;
 import de.bsvrz.sys.funclib.application.StandardApplication;
 import de.bsvrz.sys.funclib.application.StandardApplicationRunner;
@@ -59,8 +62,8 @@ public class GanglinienprognoseTest implements StandardApplication,
 	 * {@inheritDoc}
 	 */
 	public void antwortEingetroffen(GlProgAntwortEvent e) {
-		for (MessQuerschnittAllgemein mq : e.getMessquerschnitte()) {
-			System.out.println(e.getPrognose(mq));
+		for (GanglinieMQ g : e.getGanglinien()) {
+			System.out.println(g);
 		}
 		System.exit(0);
 	}
@@ -72,19 +75,20 @@ public class GanglinienprognoseTest implements StandardApplication,
 	 */
 	public void initialize(ClientDavInterface connection) throws Exception {
 		Ganglinienprognose prognose;
-		GlProgAnfrageNachricht anfrage;
+		List<GlProgAnfrage> anfragen;
 		MessQuerschnittAllgemein mq;
+
+		ObjektFactory.getInstanz().setVerbindung(connection);
 
 		mq = (MessQuerschnittAllgemein) ObjektFactory.getInstanz()
 				.getModellobjekt(
 						connection.getDataModel().getObject("mq.a14.0001"));
-		prognose = new Ganglinienprognose(connection);
+		prognose = Ganglinienprognose.getInstanz();
 		prognose.addAntwortListener(this);
-		anfrage = new GlProgAnfrageNachricht(connection
-				.getLocalApplicationObject(), "Mein Test");
-		anfrage.add(new GlProgAnfrage(mq, new Intervall(1, 2 * 24 * 60 * 60
+		anfragen = new ArrayList<GlProgAnfrage>();
+		anfragen.add(new GlProgAnfrage(mq, new Intervall(1, 2 * 24 * 60 * 60
 				* 1000), false));
-		prognose.sendeAnfrage(anfrage);
+		prognose.sendeAnfrage("Meine Anfrage", anfragen);
 	}
 
 	/**
@@ -92,10 +96,8 @@ public class GanglinienprognoseTest implements StandardApplication,
 	 * <p>
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unused")
 	public void parseArguments(ArgumentList argumentList) throws Exception {
-		// TODO Auto-generated method stub
-
+		// nichts
 	}
 
 }

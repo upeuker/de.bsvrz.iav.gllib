@@ -26,15 +26,14 @@
 
 package de.bsvrz.iav.gllib.gllib.dav;
 
+import java.util.Collection;
 import java.util.EventObject;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import de.bsvrz.dav.daf.main.Data;
-import de.bsvrz.dav.daf.main.Data.Array;
-import de.bsvrz.dav.daf.main.config.ClientApplication;
+import de.bsvrz.iav.gllib.gllib.modell.onlinedaten.OdPrognoseGanglinienAntwort;
 import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnittAllgemein;
 
 /**
@@ -48,11 +47,10 @@ import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnittAllgemein;
  * @author BitCtrl Systems GmbH, Schumann
  * @version $Id$
  */
-@SuppressWarnings("serial")
 public class GlProgAntwortEvent extends EventObject {
 
-	/** Die anfragende Applikation. */
-	private final ClientApplication anfrager;
+	/** Die Eigenschaft {@code serialVersionUID}. */
+	private static final long serialVersionUID = 1L;
 
 	/** Eine beliebige Zeichenkette die der Absender frei eingetragen kann. */
 	private String absenderZeichen;
@@ -65,26 +63,16 @@ public class GlProgAntwortEvent extends EventObject {
 	 * 
 	 * @param quelle
 	 *            die Quelle des Events.
-	 * @param anfrager
+	 * @param datum
 	 *            die anfragende Applikation.
 	 */
-	public GlProgAntwortEvent(Object quelle, ClientApplication anfrager) {
+	GlProgAntwortEvent(Object quelle, OdPrognoseGanglinienAntwort.Daten datum) {
 		super(quelle);
-		this.anfrager = anfrager;
+		absenderZeichen = datum.getAbsenderZeichen();
 		prognosen = new HashMap<MessQuerschnittAllgemein, GanglinieMQ>();
-	}
-
-	/**
-	 * F&uuml;gt der Antwort eine Prognoseganglinie hinzu.
-	 * <p>
-	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
-	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
-	 * 
-	 * @param ganglinie
-	 *            eine Prognoseganglinie.
-	 */
-	public void addGanglinie(GanglinieMQ ganglinie) {
-		prognosen.put(ganglinie.getMessQuerschnitt(), ganglinie);
+		for (GanglinieMQ g : datum) {
+			prognosen.put(g.getMessQuerschnitt(), g);
+		}
 	}
 
 	/**
@@ -100,35 +88,12 @@ public class GlProgAntwortEvent extends EventObject {
 	}
 
 	/**
-	 * Gibt die anfragende Applikation zur&uuml;ck.
+	 * Gibt die Menge der prognostizierten Ganglinien zur&uuml;ck.
 	 * 
-	 * @return Referenz auf die anfragende Applikation.
+	 * @return eine Menge von Ganglinien.
 	 */
-	public ClientApplication getAnfrager() {
-		return anfrager;
-	}
-
-	/**
-	 * Baut aus den Informationen der Antwort einen Datensatz. Das Ergebnis wird
-	 * im Parameter abgelegt!
-	 * <p>
-	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
-	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
-	 * 
-	 * @param daten
-	 *            ein Datum, welches eine Antwortnachricht darstellt.
-	 */
-	public void getDaten(Data daten) {
-		Array feld;
-		int i;
-
-		daten.getTextValue("AbsenderZeichen").setText(absenderZeichen);
-		feld = daten.getArray("PrognoseGanglinie");
-		feld.setLength(prognosen.size());
-		i = 0;
-		for (GanglinieMQ g : prognosen.values()) {
-			g.getDatenFuerPrognoseGanglinie(feld.getItem(i));
-		}
+	public Collection<GanglinieMQ> getGanglinien() {
+		return prognosen.values();
 	}
 
 	/**
@@ -160,52 +125,17 @@ public class GlProgAntwortEvent extends EventObject {
 	}
 
 	/**
-	 * Setzt das Absenderzeichen. In der Regel wird dieses lediglich aus der
-	 * Anfrage in die Antwort kopiert.
-	 * <p>
-	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
-	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
-	 * 
-	 * @param absenderZeichen
-	 *            ein beliebiger Text.
-	 */
-	public void setAbsenderZeichen(String absenderZeichen) {
-		this.absenderZeichen = absenderZeichen;
-	}
-
-	/**
-	 * Extrahiert die enthaltenen Informationen aus den &uuml;bergebenen Daten.
-	 * <p>
-	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
-	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
-	 * 
-	 * @param daten
-	 *            die auszulesenden Daten.
-	 */
-	public void setDaten(Data daten) {
-		Array feld;
-
-		absenderZeichen = daten.getTextValue("AbsenderZeichen").getText();
-
-		prognosen.clear();
-		feld = daten.getArray("PrognoseGanglinie");
-		for (int i = 0; i < feld.getLength(); i++) {
-			GanglinieMQ g;
-
-			g = new GanglinieMQ();
-			g.setDatenVonPrognoseGanglinie(feld.getItem(i));
-			prognosen.put(g.getMessQuerschnitt(), g);
-		}
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public String toString() {
-		return getClass().getName() + "[source=" + source + ", anfrager="
-				+ anfrager + ", absenderZeichen" + absenderZeichen
-				+ ", prognosen=" + prognosen;
+		String s = getClass().getName() + "[";
+
+		s += "source=" + source;
+		s += ", absenderZeichen" + absenderZeichen;
+		s += ", prognosen=" + prognosen;
+
+		return s + "]";
 	}
 
 }
