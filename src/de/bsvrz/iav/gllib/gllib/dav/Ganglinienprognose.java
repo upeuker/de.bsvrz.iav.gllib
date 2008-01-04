@@ -42,6 +42,7 @@ import de.bsvrz.sys.funclib.bitctrl.modell.DatensendeException;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
 import de.bsvrz.sys.funclib.bitctrl.modell.Datensatz.Status;
 import de.bsvrz.sys.funclib.bitctrl.modell.systemmodellglobal.Applikation;
+import de.bsvrz.sys.funclib.bitctrl.modell.systemmodellglobal.SystemModellGlobalObjektFactory;
 import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
@@ -115,6 +116,7 @@ public final class Ganglinienprognose implements DatensatzUpdateListener {
 
 		factory = ObjektFactory.getInstanz();
 		factory.registerFactory(new GanglinienobjektFactory());
+		factory.registerFactory(new SystemModellGlobalObjektFactory());
 
 		glProg = (ApplikationGanglinienPrognose) factory
 				.getModellobjekt(factory.getVerbindung()
@@ -148,7 +150,7 @@ public final class Ganglinienprognose implements DatensatzUpdateListener {
 	 * @param listener
 	 *            Der neue Listener
 	 */
-	public void addAntwortListener(GlProgAntwortListener listener) {
+	public void addAntwortListener(final GlProgAntwortListener listener) {
 		listeners.add(GlProgAntwortListener.class, listener);
 		log.fine("Neuer Listener für Prognoseantworten angemeldet", listener);
 	}
@@ -158,7 +160,7 @@ public final class Ganglinienprognose implements DatensatzUpdateListener {
 	 * 
 	 * @see de.bsvrz.sys.funclib.bitctrl.modell.DatensatzUpdateListener#datensatzAktualisiert(de.bsvrz.sys.funclib.bitctrl.modell.DatensatzUpdateEvent)
 	 */
-	public void datensatzAktualisiert(DatensatzUpdateEvent event) {
+	public void datensatzAktualisiert(final DatensatzUpdateEvent event) {
 		assert event.getDatum() instanceof OdPrognoseGanglinienAntwort.Daten;
 
 		OdPrognoseGanglinienAntwort.Daten datum;
@@ -168,12 +170,30 @@ public final class Ganglinienprognose implements DatensatzUpdateListener {
 	}
 
 	/**
+	 * Informiert alle registrierten Listener &uuml;ber eine Antwort.
+	 * 
+	 * @param datum
+	 *            ein Datum mit der Antwort auf eine Prognoseanfrage.
+	 */
+	protected synchronized void fireAntwort(
+			final OdPrognoseGanglinienAntwort.Daten datum) {
+		GlProgAntwortEvent e = new GlProgAntwortEvent(this, datum);
+
+		for (GlProgAntwortListener l : listeners
+				.getListeners(GlProgAntwortListener.class)) {
+			l.antwortEingetroffen(e);
+		}
+
+		log.fine("Prognoseantwort wurde verteilt: " + e);
+	}
+
+	/**
 	 * Entfernt einen Listener wieder aus der Liste registrierter Listener.
 	 * 
 	 * @param listener
 	 *            Listener der abgemeldet werden soll
 	 */
-	public void removeAntwortListener(GlProgAntwortListener listener) {
+	public void removeAntwortListener(final GlProgAntwortListener listener) {
 		listeners.remove(GlProgAntwortListener.class, listener);
 		log.fine("Listener für Prognoseantworten abgemeldet", listener);
 	}
@@ -189,8 +209,8 @@ public final class Ganglinienprognose implements DatensatzUpdateListener {
 	 * @throws DatensendeException
 	 *             wenn beim Senden ein Fehler passiert ist.
 	 */
-	public void sendeAnfrage(String absenderZeichen,
-			Collection<GlProgAnfrage> anfragen) throws DatensendeException {
+	public void sendeAnfrage(final String absenderZeichen,
+			final Collection<GlProgAnfrage> anfragen) throws DatensendeException {
 		OdPrognoseGanglinienAnfrage.Daten datum;
 
 		if (odAnfrage.getStatusSendesteuerung(aspAnfrage) != Status.START) {
@@ -203,24 +223,6 @@ public final class Ganglinienprognose implements DatensatzUpdateListener {
 		odAnfrage.sendeDaten(aspAnfrage, datum);
 
 		log.fine("Anfrage \"" + absenderZeichen + "\" wurde gesendet");
-	}
-
-	/**
-	 * Informiert alle registrierten Listener &uuml;ber eine Antwort.
-	 * 
-	 * @param datum
-	 *            ein Datum mit der Antwort auf eine Prognoseanfrage.
-	 */
-	protected synchronized void fireAntwort(
-			OdPrognoseGanglinienAntwort.Daten datum) {
-		GlProgAntwortEvent e = new GlProgAntwortEvent(this, datum);
-
-		for (GlProgAntwortListener l : listeners
-				.getListeners(GlProgAntwortListener.class)) {
-			l.antwortEingetroffen(e);
-		}
-
-		log.fine("Prognoseantwort wurde verteilt: " + e);
 	}
 
 }
