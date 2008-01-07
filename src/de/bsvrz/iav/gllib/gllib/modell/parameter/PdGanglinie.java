@@ -26,11 +26,15 @@
 
 package de.bsvrz.iav.gllib.gllib.modell.parameter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.ResultData;
+import de.bsvrz.dav.daf.main.Data.Array;
 import de.bsvrz.dav.daf.main.config.AttributeGroup;
 import de.bsvrz.dav.daf.main.config.DataModel;
-import de.bsvrz.iav.gllib.gllib.intern.GanglinienListe;
+import de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatum;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractParameterDatensatz;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
@@ -53,9 +57,11 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 		private boolean valid;
 
 		/** Die Eigenschaft {@code ganglinien}. */
-		private GanglinienListe ganglinien;
+		private List<GanglinieMQ> ganglinien;
 
 		/**
+		 * Erzeugt eine flache Kopie.
+		 * 
 		 * {@inheritDoc}
 		 * 
 		 * @see de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatum#clone()
@@ -65,7 +71,7 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 			Daten klon = new Daten();
 
 			klon.valid = valid;
-			klon.ganglinien = ganglinien.clone();
+			klon.ganglinien.addAll(ganglinien);
 			klon.setZeitstempel(getZeitstempel());
 
 			return klon;
@@ -76,7 +82,7 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 		 * 
 		 * @return {@code ganglinien}.
 		 */
-		public GanglinienListe getGanglinien() {
+		public List<GanglinieMQ> getGanglinien() {
 			return ganglinien;
 		}
 
@@ -95,7 +101,7 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 		 * @param ganglinien
 		 *            der neue Wert von {@code ganglinien}.
 		 */
-		public void setGanglinien(GanglinienListe ganglinien) {
+		public void setGanglinien(List<GanglinieMQ> ganglinien) {
 			this.ganglinien = ganglinien;
 		}
 
@@ -162,12 +168,18 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 
 		Daten datum = new Daten();
 		if (result.hasData()) {
-			MessQuerschnittAllgemein mq;
-			GanglinienListe ganglinien;
+			List<GanglinieMQ> ganglinien;
+			Array feld;
 
-			mq = (MessQuerschnittAllgemein) getObjekt();
-			ganglinien = new GanglinienListe(mq);
-			ganglinien.setDaten(result.getData());
+			ganglinien = new ArrayList<GanglinieMQ>();
+			feld = result.getData().getArray("Ganglinie");
+			for (int i = 0; i < feld.getLength(); i++) {
+				GanglinieMQ g;
+
+				g = new GanglinieMQ();
+				g.setDatenVonGanglinie(feld.getItem(i));
+				ganglinien.add(g);
+			}
 
 			datum.setGanglinien(ganglinien);
 			datum.setValid(true);
@@ -189,9 +201,17 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 	@Override
 	protected Data konvertiere(Daten datum) {
 		Data daten;
+		Array feld;
+		int i;
 
 		daten = erzeugeSendeCache();
-		datum.getGanglinien().getDaten(daten);
+
+		feld = daten.getArray("Ganglinie");
+		feld.setLength(datum.getGanglinien().size());
+		i = 0;
+		for (GanglinieMQ g : datum.getGanglinien()) {
+			g.getDatenFuerGanglinie(feld.getItem(i++));
+		}
 
 		return daten;
 	}
