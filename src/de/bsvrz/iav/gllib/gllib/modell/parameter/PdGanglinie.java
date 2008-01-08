@@ -26,8 +26,10 @@
 
 package de.bsvrz.iav.gllib.gllib.modell.parameter;
 
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.ResultData;
@@ -51,13 +53,58 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 	/**
 	 * Kapselt die Daten des Datensatzes.
 	 */
-	public class Daten extends AbstractDatum {
+	public class Daten extends AbstractDatum implements List<GanglinieMQ> {
 
 		/** Das Flag f&uuml;r die G&uuml;ltigkeit des Datensatzes. */
 		private boolean valid;
 
 		/** Die Eigenschaft {@code ganglinien}. */
 		private List<GanglinieMQ> ganglinien;
+
+		/**
+		 * {@inheritDoc}
+		 * 
+		 * @see java.util.List#add(java.lang.Object)
+		 */
+		public boolean add(GanglinieMQ o) {
+			return ganglinien.add(o);
+		}
+
+		/**
+		 * {@inheritDoc}
+		 * 
+		 * @see java.util.List#add(int, java.lang.Object)
+		 */
+		public void add(int index, GanglinieMQ element) {
+			ganglinien.add(index, element);
+		}
+
+		/**
+		 * {@inheritDoc}
+		 * 
+		 * @see java.util.List#addAll(java.util.Collection)
+		 */
+		public boolean addAll(Collection<? extends GanglinieMQ> c) {
+			return ganglinien.addAll(c);
+		}
+
+		/**
+		 * {@inheritDoc}
+		 * 
+		 * @see java.util.List#addAll(int, java.util.Collection)
+		 */
+		public boolean addAll(int index, Collection<? extends GanglinieMQ> c) {
+			return ganglinien.addAll(index, c);
+		}
+
+		/**
+		 * {@inheritDoc}
+		 * 
+		 * @see java.util.List#clear()
+		 */
+		public void clear() {
+			ganglinien.clear();
+		}
 
 		/**
 		 * Erzeugt eine flache Kopie.
@@ -78,12 +125,48 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 		}
 
 		/**
-		 * Gibt den Wert der Eigenschaft {@code ganglinien} wieder.
+		 * {@inheritDoc}
 		 * 
-		 * @return {@code ganglinien}.
+		 * @see java.util.List#contains(java.lang.Object)
 		 */
-		public List<GanglinieMQ> getGanglinien() {
-			return ganglinien;
+		public boolean contains(Object o) {
+			return ganglinien.contains(o);
+		}
+
+		/**
+		 * {@inheritDoc}
+		 * 
+		 * @see java.util.List#containsAll(java.util.Collection)
+		 */
+		public boolean containsAll(Collection<?> c) {
+			return ganglinien.containsAll(c);
+		}
+
+		/**
+		 * {@inheritDoc}
+		 * 
+		 * @see java.util.List#get(int)
+		 */
+		public GanglinieMQ get(int index) {
+			return ganglinien.get(index);
+		}
+
+		/**
+		 * {@inheritDoc}
+		 * 
+		 * @see java.util.List#indexOf(java.lang.Object)
+		 */
+		public int indexOf(Object o) {
+			return ganglinien.indexOf(o);
+		}
+
+		/**
+		 * {@inheritDoc}
+		 * 
+		 * @see java.util.List#isEmpty()
+		 */
+		public boolean isEmpty() {
+			return ganglinien.isEmpty();
 		}
 
 		/**
@@ -96,13 +179,120 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 		}
 
 		/**
-		 * Legt den Wert der Eigenschaft {@code ganglinien} fest.
+		 * {@inheritDoc}
 		 * 
-		 * @param ganglinien
-		 *            der neue Wert von {@code ganglinien}.
+		 * @see java.util.List#iterator()
 		 */
-		public void setGanglinien(List<GanglinieMQ> ganglinien) {
-			this.ganglinien = ganglinien;
+		public Iterator<GanglinieMQ> iterator() {
+			return ganglinien.iterator();
+		}
+
+		/**
+		 * {@inheritDoc}
+		 * 
+		 * @see java.util.List#lastIndexOf(java.lang.Object)
+		 */
+		public int lastIndexOf(Object o) {
+			return ganglinien.lastIndexOf(o);
+		}
+
+		/**
+		 * {@inheritDoc}
+		 * 
+		 * @see java.util.List#listIterator()
+		 */
+		public ListIterator<GanglinieMQ> listIterator() {
+			return ganglinien.listIterator();
+		}
+
+		/**
+		 * {@inheritDoc}
+		 * 
+		 * @see java.util.List#listIterator(int)
+		 */
+		public ListIterator<GanglinieMQ> listIterator(int index) {
+			return ganglinien.listIterator(index);
+		}
+
+		/**
+		 * {@inheritDoc}
+		 * 
+		 * @see java.util.List#remove(int)
+		 */
+		public GanglinieMQ remove(int index) {
+			return ganglinien.remove(index);
+		}
+
+		/**
+		 * {@inheritDoc}
+		 * 
+		 * @see java.util.List#remove(java.lang.Object)
+		 */
+		public boolean remove(Object o) {
+			return ganglinien.remove(o);
+		}
+
+		/**
+		 * {@inheritDoc}
+		 * 
+		 * @see java.util.List#removeAll(java.util.Collection)
+		 */
+		public boolean removeAll(Collection<?> c) {
+			return ganglinien.removeAll(c);
+		}
+
+		/**
+		 * {@inheritDoc}
+		 * 
+		 * @see java.util.List#retainAll(java.util.Collection)
+		 */
+		public boolean retainAll(Collection<?> c) {
+			return ganglinien.retainAll(c);
+		}
+
+		/**
+		 * {@inheritDoc}
+		 * 
+		 * @see java.util.List#set(int, java.lang.Object)
+		 */
+		public GanglinieMQ set(int index, GanglinieMQ element) {
+			return ganglinien.set(index, element);
+		}
+
+		/**
+		 * {@inheritDoc}
+		 * 
+		 * @see java.util.List#size()
+		 */
+		public int size() {
+			return ganglinien.size();
+		}
+
+		/**
+		 * {@inheritDoc}
+		 * 
+		 * @see java.util.List#subList(int, int)
+		 */
+		public List<GanglinieMQ> subList(int fromIndex, int toIndex) {
+			return ganglinien.subList(fromIndex, toIndex);
+		}
+
+		/**
+		 * {@inheritDoc}
+		 * 
+		 * @see java.util.List#toArray()
+		 */
+		public Object[] toArray() {
+			return ganglinien.toArray();
+		}
+
+		/**
+		 * {@inheritDoc}
+		 * 
+		 * @see java.util.List#toArray(T[])
+		 */
+		public <T> T[] toArray(T[] a) {
+			return ganglinien.toArray(a);
 		}
 
 		/**
@@ -168,20 +358,17 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 
 		Daten datum = new Daten();
 		if (result.hasData()) {
-			List<GanglinieMQ> ganglinien;
 			Array feld;
 
-			ganglinien = new ArrayList<GanglinieMQ>();
 			feld = result.getData().getArray("Ganglinie");
 			for (int i = 0; i < feld.getLength(); i++) {
 				GanglinieMQ g;
 
 				g = new GanglinieMQ();
 				g.setDatenVonGanglinie(feld.getItem(i));
-				ganglinien.add(g);
+				datum.add(g);
 			}
 
-			datum.setGanglinien(ganglinien);
 			datum.setValid(true);
 		} else {
 			datum.setValid(false);
@@ -207,9 +394,9 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 		daten = erzeugeSendeCache();
 
 		feld = daten.getArray("Ganglinie");
-		feld.setLength(datum.getGanglinien().size());
+		feld.setLength(datum.size());
 		i = 0;
-		for (GanglinieMQ g : datum.getGanglinien()) {
+		for (GanglinieMQ g : datum) {
 			g.getDatenFuerGanglinie(feld.getItem(i++));
 		}
 
