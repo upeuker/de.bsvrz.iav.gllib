@@ -129,9 +129,10 @@ public final class Ganglinienprognose implements DatensatzUpdateListener {
 
 		klient = (Applikation) factory.getModellobjekt(factory.getVerbindung()
 				.getLocalApplicationObject());
+		aspAntwort = OdPrognoseGanglinienAntwort.Aspekte.Antwort.getAspekt();
 		odAntwort = klient
 				.getOnlineDatensatz(OdPrognoseGanglinienAntwort.class);
-		aspAntwort = OdPrognoseGanglinienAntwort.Aspekte.Antwort.getAspekt();
+		odAntwort.setSenke(aspAntwort, true);
 		odAntwort.addUpdateListener(aspAntwort, this);
 
 		try {
@@ -168,7 +169,9 @@ public final class Ganglinienprognose implements DatensatzUpdateListener {
 		OdPrognoseGanglinienAntwort.Daten datum;
 
 		datum = (OdPrognoseGanglinienAntwort.Daten) event.getDatum();
-		fireAntwort(datum);
+		if (datum.isValid()) {
+			fireAntwort(datum);
+		}
 	}
 
 	/**

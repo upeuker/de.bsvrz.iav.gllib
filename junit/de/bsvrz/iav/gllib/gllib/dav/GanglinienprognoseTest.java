@@ -32,8 +32,10 @@ import java.util.List;
 import de.bsvrz.dav.daf.main.ClientDavInterface;
 import de.bsvrz.sys.funclib.application.StandardApplication;
 import de.bsvrz.sys.funclib.application.StandardApplicationRunner;
+import de.bsvrz.sys.funclib.bitctrl.modell.DatensendeException;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
 import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnittAllgemein;
+import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.VerkehrsobjektFactory;
 import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
 import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
 
@@ -46,11 +48,15 @@ import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
 public class GanglinienprognoseTest implements StandardApplication,
 		GlProgAntwortListener {
 
+	/** Die PID des Messquerschnitts der für den Test verwendet wird. */
+	private static String pidMQ;
+
 	/**
 	 * Startet die Applikation.
 	 * 
 	 * @param args
-	 *            die notwenidgen Datenverteilraufrufparameter.
+	 *            die notwendigen Datenverteilraufrufparameter und {@code -mq}
+	 *            womit der Testmessquerschnitt festgelegt wird.
 	 */
 	public static void main(String[] args) {
 		StandardApplicationRunner.run(new GanglinienprognoseTest(), args);
@@ -58,7 +64,7 @@ public class GanglinienprognoseTest implements StandardApplication,
 
 	/**
 	 * Gibt die empfange Antwort aus.
-	 * <p>
+	 * 
 	 * {@inheritDoc}
 	 */
 	public void antwortEingetroffen(GlProgAntwortEvent e) {
@@ -70,34 +76,41 @@ public class GanglinienprognoseTest implements StandardApplication,
 
 	/**
 	 * Stellt eine einzelne Anfrage f&uuml;r eine Prognoseganglinie.
-	 * <p>
+	 * 
 	 * {@inheritDoc}
+	 * 
+	 * @see de.bsvrz.sys.funclib.application.StandardApplication#initialize(de.bsvrz.dav.daf.main.ClientDavInterface)
 	 */
-	public void initialize(ClientDavInterface connection) throws Exception {
+	public void initialize(ClientDavInterface connection) {
 		Ganglinienprognose prognose;
 		List<GlProgAnfrage> anfragen;
 		MessQuerschnittAllgemein mq;
 
+		ObjektFactory.getInstanz().registerFactory(new VerkehrsobjektFactory());
 		ObjektFactory.getInstanz().setVerbindung(connection);
 
 		mq = (MessQuerschnittAllgemein) ObjektFactory.getInstanz()
-				.getModellobjekt(
-						connection.getDataModel().getObject("mq.a14.0001"));
+				.getModellobjekt(connection.getDataModel().getObject(pidMQ));
 		prognose = Ganglinienprognose.getInstanz();
 		prognose.addAntwortListener(this);
 		anfragen = new ArrayList<GlProgAnfrage>();
 		anfragen.add(new GlProgAnfrage(mq, new Intervall(1, 2 * 24 * 60 * 60
 				* 1000), false));
-		prognose.sendeAnfrage("Meine Anfrage", anfragen);
+		try {
+			prognose.sendeAnfrage("Test GlLib", anfragen);
+		} catch (DatensendeException ex) {
+			System.err.println("Anfrage konnte gesendet werden: "
+					+ ex.getLocalizedMessage());
+		}
 	}
 
 	/**
-	 * Tut nichts.
-	 * <p>
 	 * {@inheritDoc}
+	 * 
+	 * @see de.bsvrz.sys.funclib.application.StandardApplication#parseArguments(de.bsvrz.sys.funclib.commandLineArgs.ArgumentList)
 	 */
-	public void parseArguments(ArgumentList argumentList) throws Exception {
-		// nichts
+	public void parseArguments(ArgumentList argumentList) {
+		pidMQ = argumentList.fetchArgument("-mq=").asNonEmptyString();
 	}
 
 }
