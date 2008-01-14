@@ -50,6 +50,12 @@ public class PdGanglinienModellPrognose extends
 	 */
 	public class Daten extends AbstractDatum {
 
+		/** Auswahlmethode: Auswahl der Referenzganglinie. */
+		public static final int REFERENZGANGLINIE = 1;
+
+		/** Auswahlmethode: Auswahl der wahrscheinlichsten Ganglinie. */
+		public static final int WAHRSCHEINLICHSTE_GANGLINIE = 2;
+
 		/** Das Flag f&uuml;r die G&uuml;ltigkeit des Datensatzes. */
 		private boolean valid;
 

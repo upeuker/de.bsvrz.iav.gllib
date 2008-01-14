@@ -483,7 +483,7 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 			ganglinien.getItem(i).getUnscaledValue("GanglinienTyp").set(
 					g.getTyp());
 
-			if (g.getReferenz()) {
+			if (g.isReferenz()) {
 				ganglinien.getItem(i).getUnscaledValue("Referenzganglinie")
 						.setText("Ja");
 			} else {

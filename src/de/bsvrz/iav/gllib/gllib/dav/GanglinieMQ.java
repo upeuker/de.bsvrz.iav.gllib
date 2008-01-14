@@ -469,7 +469,7 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	 * @return <code>true</code>, wenn diese Ganglinie eine Referenzganglinie
 	 *         ist, sonst <code>false</code>
 	 */
-	public boolean getReferenz() {
+	public boolean isReferenz() {
 		return referenz;
 	}
 
