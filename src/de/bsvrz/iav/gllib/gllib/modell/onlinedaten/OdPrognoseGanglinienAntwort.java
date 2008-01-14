@@ -39,12 +39,19 @@ import de.bsvrz.dav.daf.main.Data.Array;
 import de.bsvrz.dav.daf.main.config.Aspect;
 import de.bsvrz.dav.daf.main.config.AttributeGroup;
 import de.bsvrz.dav.daf.main.config.DataModel;
+import de.bsvrz.iav.gllib.gllib.BSpline;
+import de.bsvrz.iav.gllib.gllib.CubicSpline;
+import de.bsvrz.iav.gllib.gllib.Polyline;
+import de.bsvrz.iav.gllib.gllib.Stuetzstelle;
 import de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ;
+import de.bsvrz.iav.gllib.gllib.dav.Messwerte;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatum;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractOnlineDatensatz;
 import de.bsvrz.sys.funclib.bitctrl.modell.Aspekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjekt;
+import de.bsvrz.sys.funclib.bitctrl.modell.kalender.objekte.EreignisTyp;
+import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnittAllgemein;
 
 /**
  * Kapselt die Onlineattributgruppe {@code atg.prognoseGanglinienAntwort}.
@@ -381,19 +388,96 @@ public class OdPrognoseGanglinienAntwort extends
 
 		Daten datum = new Daten();
 		if (result.hasData()) {
-			Array feld;
+			Array ganglinien;
 			Data daten = result.getData();
 
 			datum.setAbsenderZeichen(daten.getTextValue("AbsenderZeichen")
 					.getText());
 
 			datum.clear();
-			feld = daten.getArray("PrognoseGanglinie");
-			for (int i = 0; i < feld.getLength(); i++) {
+			ganglinien = daten.getArray("PrognoseGanglinie");
+			for (int i = 0; i < ganglinien.getLength(); i++) {
 				GanglinieMQ g;
+				Array feld;
 
 				g = new GanglinieMQ();
-				g.setDatenVonPrognoseGanglinie(feld.getItem(i));
+				// g.setDatenVonPrognoseGanglinie(feld.getItem(i));
+
+				g.setMessQuerschnitt((MessQuerschnittAllgemein) ObjektFactory
+						.getInstanz().getModellobjekt(
+								ganglinien.getItem(i).getReferenceValue(
+										"Messquerschnitt").getSystemObject()));
+
+				// Verfahren
+				switch (ganglinien.getItem(i).getUnscaledValue(
+						"GanglinienVerfahren").intValue()) {
+				case GanglinieMQ.APPROX_BSPLINE:
+					g.setApproximation(new BSpline());
+					g.setBSplineOrdnung((byte) ganglinien.getItem(i)
+							.getUnscaledValue("Ordnung").longValue());
+					break;
+				case GanglinieMQ.APPROX_CUBICSPLINE:
+					g.setApproximation(new CubicSpline());
+					break;
+				case GanglinieMQ.APPROX_POLYLINE:
+					g.setApproximation(new Polyline());
+					break;
+				default:
+					break;
+				}
+
+				// Stützstellen
+				feld = ganglinien.getItem(i).getArray("Stützstelle");
+				for (int j = 0; j < feld.getLength(); j++) {
+					long zeitstempel;
+					Double qKfz0, qLkw0, vPkw0, vLkw0;
+
+					zeitstempel = feld.getItem(j).getTimeValue("Zeit")
+							.getMillis();
+					if (feld.getItem(j).getScaledValue("QKfz").intValue() == Messwerte.UNDEFINIERT) {
+						qKfz0 = null;
+					} else {
+						qKfz0 = feld.getItem(j).getScaledValue("QKfz")
+								.doubleValue();
+					}
+					if (feld.getItem(j).getScaledValue("QLkw").intValue() == Messwerte.UNDEFINIERT) {
+						qLkw0 = null;
+					} else {
+						qLkw0 = feld.getItem(j).getScaledValue("QLkw")
+								.doubleValue();
+					}
+					if (feld.getItem(j).getScaledValue("VPkw").intValue() == Messwerte.UNDEFINIERT) {
+						vPkw0 = null;
+					} else {
+						vPkw0 = feld.getItem(j).getScaledValue("VPkw")
+								.doubleValue();
+					}
+					if (feld.getItem(j).getScaledValue("VLkw").intValue() == Messwerte.UNDEFINIERT) {
+						vLkw0 = null;
+					} else {
+						vLkw0 = feld.getItem(j).getScaledValue("VLkw")
+								.doubleValue();
+					}
+					g.setStuetzstelle(zeitstempel, new Messwerte(qKfz0, qLkw0,
+							vPkw0, vLkw0));
+				}
+
+				// Meta-Daten
+				g.setTyp(ganglinien.getItem(i)
+						.getUnscaledValue("GanglinienTyp").intValue());
+				if (ganglinien.getItem(i).getUnscaledValue("Referenzganglinie")
+						.intValue() == 1) {
+					g.setReferenz(true);
+				} else {
+					g.setReferenz(false);
+				}
+				g.setAnzahlVerschmelzungen(ganglinien.getItem(i)
+						.getUnscaledValue("AnzahlVerschmelzungen").longValue());
+				g.setLetzteVerschmelzung(ganglinien.getItem(i).getTimeValue(
+						"LetzteVerschmelzung").getMillis());
+				g.setEreignisTyp(new EreignisTyp(ganglinien.getItem(i)
+						.getReferenceValue("EreignisTyp").getSystemObject()));
+
 				datum.add(g);
 			}
 
@@ -417,17 +501,91 @@ public class OdPrognoseGanglinienAntwort extends
 	protected Data konvertiere(final Daten datum) {
 		Data daten = erzeugeSendeCache();
 
-		Array feld;
+		Array ganglinien;
 		int i;
 
 		daten.getTextValue("AbsenderZeichen").setText(
 				datum.getAbsenderZeichen());
 
-		feld = daten.getArray("PrognoseGanglinienAnfrage");
-		feld.setLength(datum.size());
+		ganglinien = daten.getArray("PrognoseGanglinienAnfrage");
+		ganglinien.setLength(datum.size());
 		i = 0;
 		for (GanglinieMQ g : datum) {
-			g.getDatenFuerPrognoseGanglinie(feld.getItem(i));
+			Array stuetzstellen;
+			List<Stuetzstelle<Messwerte>> liste;
+
+			ganglinien.getItem(i).getReferenceValue("Messquerschnitt")
+					.setSystemObject(g.getMessQuerschnitt().getSystemObject());
+			ganglinien.getItem(i).getTimeValue("ZeitpunktPrognoseBeginn")
+					.setMillis(g.getIntervall().getStart());
+			ganglinien.getItem(i).getTimeValue("ZeitpunktPrognoseEnde")
+					.setMillis(g.getIntervall().getEnde());
+
+			// Verfahren
+			if (g.getApproximation() instanceof BSpline) {
+				BSpline spline;
+
+				spline = (BSpline) g.getApproximation();
+				ganglinien.getItem(i).getUnscaledValue("GanglinienVerfahren")
+						.set(GanglinieMQ.APPROX_BSPLINE);
+				ganglinien.getItem(i).getUnscaledValue("Ordnung").set(
+						spline.getOrdnung());
+			} else if (g.getApproximation() instanceof CubicSpline) {
+				ganglinien.getItem(i).getUnscaledValue("GanglinienVerfahren")
+						.set(GanglinieMQ.APPROX_CUBICSPLINE);
+				ganglinien.getItem(i).getUnscaledValue("Ordnung").set(0);
+			} else if (g.getApproximation() instanceof Polyline) {
+				ganglinien.getItem(i).getUnscaledValue("GanglinienVerfahren")
+						.set(GanglinieMQ.APPROX_POLYLINE);
+				ganglinien.getItem(i).getUnscaledValue("Ordnung").set(0);
+			} else {
+				// Wenn Approximation nicht zuordenbar, dann Rückfallebene auf
+				// einen
+				// B-Spline der Ordnung 5
+				ganglinien.getItem(i).getUnscaledValue("GanglinienVerfahren")
+						.set(GanglinieMQ.APPROX_BSPLINE);
+				ganglinien.getItem(i).getUnscaledValue("Ordnung").set(5);
+			}
+
+			// Stützstellen
+			liste = g.getStuetzstellen();
+			stuetzstellen = ganglinien.getItem(i).getArray("Stützstelle");
+			stuetzstellen.setLength(liste.size());
+			for (int j = 0; j < liste.size(); j++) {
+				Stuetzstelle<Messwerte> s;
+
+				s = liste.get(j);
+				stuetzstellen.getItem(j).getTimeValue("Zeit").setMillis(
+						s.getZeitstempel());
+				if (s.getWert().getQKfz() != null) {
+					stuetzstellen.getItem(j).getScaledValue("QKfz").set(
+							s.getWert().getQKfz());
+				} else {
+					stuetzstellen.getItem(j).getScaledValue("QKfz").set(
+							Messwerte.UNDEFINIERT);
+				}
+				if (s.getWert().getQLkw() != null) {
+					stuetzstellen.getItem(j).getScaledValue("QLkw").set(
+							s.getWert().getQLkw());
+				} else {
+					stuetzstellen.getItem(j).getScaledValue("QLkw").set(
+							Messwerte.UNDEFINIERT);
+				}
+				if (s.getWert().getVPkw() != null) {
+					stuetzstellen.getItem(j).getScaledValue("VPkw").set(
+							s.getWert().getVPkw());
+				} else {
+					stuetzstellen.getItem(j).getScaledValue("VPkw").set(
+							Messwerte.UNDEFINIERT);
+				}
+				if (s.getWert().getVLkw() != null) {
+					stuetzstellen.getItem(j).getScaledValue("VLkw").set(
+							s.getWert().getVLkw());
+				} else {
+					stuetzstellen.getItem(j).getScaledValue("VLkw").set(
+							Messwerte.UNDEFINIERT);
+				}
+			}
 		}
 
 		return daten;

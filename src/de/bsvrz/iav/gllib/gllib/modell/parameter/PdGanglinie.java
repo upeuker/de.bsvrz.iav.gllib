@@ -36,10 +36,16 @@ import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dav.daf.main.Data.Array;
 import de.bsvrz.dav.daf.main.config.AttributeGroup;
 import de.bsvrz.dav.daf.main.config.DataModel;
+import de.bsvrz.iav.gllib.gllib.BSpline;
+import de.bsvrz.iav.gllib.gllib.CubicSpline;
+import de.bsvrz.iav.gllib.gllib.Polyline;
+import de.bsvrz.iav.gllib.gllib.Stuetzstelle;
 import de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ;
+import de.bsvrz.iav.gllib.gllib.dav.Messwerte;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatum;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractParameterDatensatz;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
+import de.bsvrz.sys.funclib.bitctrl.modell.kalender.objekte.EreignisTyp;
 import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnittAllgemein;
 
 /**
@@ -358,14 +364,83 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 
 		Daten datum = new Daten();
 		if (result.hasData()) {
-			Array feld;
+			Array ganglinien;
 
-			feld = result.getData().getArray("Ganglinie");
-			for (int i = 0; i < feld.getLength(); i++) {
+			ganglinien = result.getData().getArray("Ganglinie");
+			for (int i = 0; i < ganglinien.getLength(); i++) {
 				GanglinieMQ g;
+				Array stuetzstellen;
+				Data daten;
 
 				g = new GanglinieMQ();
-				g.setDatenVonGanglinie(feld.getItem(i));
+				daten = ganglinien.getItem(i);
+
+				g.setEreignisTyp((EreignisTyp) ObjektFactory.getInstanz()
+						.getModellobjekt(
+								daten.getReferenceValue("EreignisTyp")
+										.getSystemObject()));
+				g.setAnzahlVerschmelzungen(daten.getUnscaledValue(
+						"AnzahlVerschmelzungen").longValue());
+				g.setLetzteVerschmelzung(daten.getTimeValue(
+						"LetzteVerschmelzung").getMillis());
+				g.setTyp(daten.getUnscaledValue("GanglinienTyp").intValue());
+
+				if (daten.getUnscaledValue("Referenzganglinie").getText()
+						.equals("Ja")) {
+					g.setReferenz(true);
+				} else {
+					g.setReferenz(false);
+				}
+
+				switch (daten.getUnscaledValue("GanglinienVerfahren")
+						.intValue()) {
+				case GanglinieMQ.APPROX_BSPLINE:
+					g.setApproximation(new BSpline());
+					g.setBSplineOrdnung((byte) daten
+							.getUnscaledValue("Ordnung").longValue());
+					break;
+				case GanglinieMQ.APPROX_CUBICSPLINE:
+					g.setApproximation(new CubicSpline());
+					break;
+				case GanglinieMQ.APPROX_POLYLINE:
+					g.setApproximation(new Polyline());
+					break;
+				default:
+					g.setApproximation(new BSpline());
+					g.setBSplineOrdnung((byte) 5);
+				}
+
+				stuetzstellen = daten.getArray("Stützstelle");
+				for (int j = 0; j < stuetzstellen.getLength(); j++) {
+					long zeitstempel;
+					Double qKfz0, qLkw0, vPkw0, vLkw0;
+
+					zeitstempel = stuetzstellen.getItem(j).getTimeValue("Zeit")
+							.getMillis();
+					qKfz0 = stuetzstellen.getItem(j).getScaledValue("QKfz")
+							.doubleValue();
+					if (qKfz0 == Messwerte.UNDEFINIERT) {
+						qKfz0 = null;
+					}
+					qLkw0 = stuetzstellen.getItem(j).getScaledValue("QLkw")
+							.doubleValue();
+					if (qLkw0 == Messwerte.UNDEFINIERT) {
+						qLkw0 = null;
+					}
+					vPkw0 = stuetzstellen.getItem(j).getScaledValue("VPkw")
+							.doubleValue();
+					if (vPkw0 == Messwerte.UNDEFINIERT) {
+						vPkw0 = null;
+					}
+					vLkw0 = stuetzstellen.getItem(j).getScaledValue("VLkw")
+							.doubleValue();
+					if (vLkw0 == Messwerte.UNDEFINIERT) {
+						vLkw0 = null;
+					}
+					g.setStuetzstelle(zeitstempel, new Messwerte(qKfz0, qLkw0,
+							vPkw0, vLkw0));
+				}
+
 				datum.add(g);
 			}
 
@@ -388,16 +463,83 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 	@Override
 	protected Data konvertiere(Daten datum) {
 		Data daten;
-		Array feld;
+		Array ganglinien;
 		int i;
 
 		daten = erzeugeSendeCache();
 
-		feld = daten.getArray("Ganglinie");
-		feld.setLength(datum.size());
+		ganglinien = daten.getArray("Ganglinie");
+		ganglinien.setLength(datum.size());
 		i = 0;
 		for (GanglinieMQ g : datum) {
-			g.getDatenFuerGanglinie(feld.getItem(i++));
+			Array stuetzstellen;
+
+			ganglinien.getItem(i).getReferenceValue("EreignisTyp")
+					.setSystemObject(g.getEreignisTyp().getSystemObject());
+			ganglinien.getItem(i).getUnscaledValue("AnzahlVerschmelzungen")
+					.set(g.getAnzahlVerschmelzungen());
+			ganglinien.getItem(i).getTimeValue("LetzteVerschmelzung")
+					.setMillis(g.getLetzteVerschmelzung());
+			ganglinien.getItem(i).getUnscaledValue("GanglinienTyp").set(
+					g.getTyp());
+
+			if (g.getReferenz()) {
+				ganglinien.getItem(i).getUnscaledValue("Referenzganglinie")
+						.setText("Ja");
+			} else {
+				ganglinien.getItem(i).getUnscaledValue("Referenzganglinie")
+						.setText("Nein");
+			}
+
+			ganglinien.getItem(i).getUnscaledValue("GanglinienVerfahren").set(
+					g.getApproximationDaK());
+			ganglinien.getItem(i).getUnscaledValue("Ordnung").set(
+					g.getBSplineOrdnung());
+
+			stuetzstellen = ganglinien.getItem(i).getArray("Stützstelle");
+			List<Stuetzstelle<Messwerte>> liste = g.getStuetzstellen();
+			int j = 0;
+			stuetzstellen.setLength(liste.size());
+			for (Stuetzstelle<Messwerte> s : liste) {
+				stuetzstellen.getItem(j).getTimeValue("Zeit").setMillis(
+						s.getZeitstempel());
+
+				if (s.getWert().getQKfz() != null) {
+					stuetzstellen.getItem(j).getScaledValue("QKfz").set(
+							s.getWert().getQKfz());
+				} else {
+					stuetzstellen.getItem(j).getScaledValue("QKfz").set(
+							Messwerte.UNDEFINIERT);
+				}
+
+				if (s.getWert().getQLkw() != null) {
+					stuetzstellen.getItem(j).getScaledValue("QLkw").set(
+							s.getWert().getQLkw());
+				} else {
+					stuetzstellen.getItem(j).getScaledValue("QLkw").set(
+							Messwerte.UNDEFINIERT);
+				}
+
+				if (s.getWert().getVLkw() != null) {
+					stuetzstellen.getItem(j).getScaledValue("VLkw").set(
+							s.getWert().getVLkw());
+				} else {
+					stuetzstellen.getItem(j).getScaledValue("VLkw").set(
+							Messwerte.UNDEFINIERT);
+				}
+
+				if (s.getWert().getVPkw() != null) {
+					stuetzstellen.getItem(j).getScaledValue("VPkw").set(
+							s.getWert().getVPkw());
+				} else {
+					stuetzstellen.getItem(j).getScaledValue("VPkw").set(
+							Messwerte.UNDEFINIERT);
+				}
+
+				j++;
+			}
+
+			i++;
 		}
 
 		return daten;
