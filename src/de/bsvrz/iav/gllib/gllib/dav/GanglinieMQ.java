@@ -730,6 +730,16 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	}
 
 	/**
+	 * Bestimmt, ob die Ganglinie absolut oder relativ ist. Für eine relative
+	 * Ganglinie wird nicht zwischen additiv und multiplikativ unterschieden.
+	 * 
+	 * @return {@code true}, wenn die Ganglinie absolut ist.
+	 */
+	public boolean isAbsolut() {
+		return typ == TYP_ABSOLUT;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public boolean isApproximationAktuell() {
