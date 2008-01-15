@@ -296,13 +296,14 @@ public class PdGanglinienModellPrognose extends
 					"GLMatchingIntervall").longValue()
 					* MILLIS_PER_SEKUNDE);
 			datum.setPatternMatchingOffset(daten.getUnscaledValue(
-					"GLPatternMatchingOffset").longValue()
+					"GLPatterMatchingOffset").longValue()
 					* MILLIS_PER_SEKUNDE);
 			datum.setMaxMatchingFehler(daten.getUnscaledValue(
-					"GLMaxMatchingFehler").intValue());
-			datum.setMaxDauerZyklischePrognose(daten.getUnscaledValue(
-					"GLMaxDauerZyklischePrognose").longValue()
-					* MILLIS_PER_SEKUNDE);
+					"GLMaximalerMatchingFehler").intValue());
+			// TODO fehlendes Attribut GLMaximaleDauerZyklischePrognose im DaK
+			// datum.setMaxDauerZyklischePrognose(daten.getUnscaledValue(
+			// "GLMaximaleDauerZyklischePrognose").longValue()
+			// MILLIS_PER_SEKUNDE);
 
 			datum.setValid(true);
 		} else {
@@ -330,7 +331,7 @@ public class PdGanglinienModellPrognose extends
 				datum.getPatternMatchingHorizont() / MILLIS_PER_SEKUNDE);
 		daten.getUnscaledValue("GLMatchingIntervall").set(
 				datum.getMatchingIntervall() / MILLIS_PER_SEKUNDE);
-		daten.getUnscaledValue("GLPatternMatchingOffset").set(
+		daten.getUnscaledValue("GLPatterMatchingOffset").set(
 				datum.getPatternMatchingOffset() / MILLIS_PER_SEKUNDE);
 		daten.getUnscaledValue("GLMaximalerMatchingFehler").set(
 				datum.getMaxMatchingFehler());

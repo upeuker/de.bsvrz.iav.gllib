@@ -507,7 +507,7 @@ public class OdPrognoseGanglinienAntwort extends
 		daten.getTextValue("AbsenderZeichen").setText(
 				datum.getAbsenderZeichen());
 
-		ganglinien = daten.getArray("PrognoseGanglinienAnfrage");
+		ganglinien = daten.getArray("PrognoseGanglinie");
 		ganglinien.setLength(datum.size());
 		i = 0;
 		for (GanglinieMQ g : datum) {

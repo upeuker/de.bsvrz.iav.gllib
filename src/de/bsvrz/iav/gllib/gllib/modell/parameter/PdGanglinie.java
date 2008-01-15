@@ -26,6 +26,7 @@
 
 package de.bsvrz.iav.gllib.gllib.modell.parameter;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -65,7 +66,7 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 		private boolean valid;
 
 		/** Die Eigenschaft {@code ganglinien}. */
-		private List<GanglinieMQ> ganglinien;
+		private final List<GanglinieMQ> ganglinien = new ArrayList<GanglinieMQ>();
 
 		/**
 		 * {@inheritDoc}
