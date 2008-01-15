@@ -26,40 +26,16 @@
 
 package de.bsvrz.iav.gllib.gllib.modell;
 
-import de.bsvrz.dav.daf.main.config.SystemObject;
-import de.bsvrz.sys.funclib.bitctrl.modell.AbstractSystemObjekt;
-import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjektTyp;
+import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjekt;
 
 /**
- * Repr&auml;ssentiert die Ganglinienprognose und das automatische
- * Ganglinienlernen.
+ * Repräsentiert die Ganglinienprognose und das automatische Ganglinienlernen.
  * 
  * @author BitCtrl Systems GmbH, Falko Schumann, Peuker
  * @version $Id$
  */
-public class ApplikationGanglinienPrognose extends AbstractSystemObjekt {
+public interface ApplikationGanglinienPrognose extends SystemObjekt {
 
-	/**
-	 * Erzeugt die Ganglinienprognose aus einem Systemobjekt.
-	 * 
-	 * @param obj
-	 *            Ein Systemobjekt, welches die Ganglinienprognose sein muss, in
-	 *            der Regel handelt es um die autarke Organisationseinheit.
-	 */
-	ApplikationGanglinienPrognose(final SystemObject obj) {
-		super(obj);
-
-		if (!obj.isOfType(getTyp().getPid())) {
-			throw new IllegalArgumentException(
-					"Systemobjekt ist keine Ganglinienprognose.");
-		}
-	}
-
-	/**
-	 * {@inheritDoc}.
-	 */
-	public SystemObjektTyp getTyp() {
-		return GanglinienModellTypen.APPLIKATION_GANGLINIEN_PROGNOSE;
-	}
+	// Momentan nur ein "tagging interface".
 
 }

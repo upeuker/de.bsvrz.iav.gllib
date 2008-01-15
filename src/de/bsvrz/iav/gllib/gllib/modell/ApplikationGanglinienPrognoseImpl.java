@@ -26,45 +26,39 @@
 
 package de.bsvrz.iav.gllib.gllib.modell;
 
-import java.util.Arrays;
-import java.util.Collection;
-
 import de.bsvrz.dav.daf.main.config.SystemObject;
-import de.bsvrz.sys.funclib.bitctrl.modell.ModellObjektFactory;
-import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjekt;
+import de.bsvrz.sys.funclib.bitctrl.modell.AbstractSystemObjekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjektTyp;
 
 /**
- * Fabrikmethode f&uuml;r gekapselte Systemobjekte aus dem Ganglinienmodell.
- * Jedes gekapselte Objekt wird als Singleton behandelt und zwischengespeichert.
+ * Implementiert die Ganglinienprognose und das automatische Ganglinienlernen.
  * 
- * @author BitCtrl Systems GmbH, Falko Schumann
+ * @author BitCtrl Systems GmbH, Falko Schumann, Peuker
  * @version $Id$
  */
-public class GanglinienobjektFactory implements ModellObjektFactory {
+public class ApplikationGanglinienPrognoseImpl extends AbstractSystemObjekt {
 
 	/**
-	 * {@inheritDoc}
+	 * Erzeugt die Ganglinienprognose aus einem Systemobjekt.
+	 * 
+	 * @param obj
+	 *            Ein Systemobjekt, welches die Ganglinienprognose sein muss, in
+	 *            der Regel handelt es um die autarke Organisationseinheit.
 	 */
-	public SystemObjekt getModellobjekt(final SystemObject objekt) {
-		if (objekt == null) {
-			throw new IllegalArgumentException("Argument darf nicht null sein.");
-		}
+	ApplikationGanglinienPrognoseImpl(final SystemObject obj) {
+		super(obj);
 
-		SystemObjekt obj = null;
-		if (objekt
-				.isOfType(GanglinienModellTypen.APPLIKATION_GANGLINIEN_PROGNOSE
-						.getPid())) {
-			obj = new ApplikationGanglinienPrognoseImpl(objekt);
+		if (!obj.isOfType(getTyp().getPid())) {
+			throw new IllegalArgumentException(
+					"Systemobjekt ist keine Ganglinienprognose.");
 		}
-
-		return obj;
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * {@inheritDoc}.
 	 */
-	public Collection<? extends SystemObjektTyp> getTypen() {
-		return Arrays.asList(GanglinienModellTypen.values());
+	public SystemObjektTyp getTyp() {
+		return GanglinienModellTypen.APPLIKATION_GANGLINIEN_PROGNOSE;
 	}
+
 }
