@@ -32,7 +32,6 @@ import javax.swing.event.EventListenerList;
 
 import de.bsvrz.dav.daf.main.config.Aspect;
 import de.bsvrz.dav.daf.main.config.ClientApplication;
-import de.bsvrz.iav.gllib.gllib.modell.ApplikationGanglinienPrognose;
 import de.bsvrz.iav.gllib.gllib.modell.GanglinienobjektFactory;
 import de.bsvrz.iav.gllib.gllib.modell.onlinedaten.OdPrognoseGanglinienAnfrage;
 import de.bsvrz.iav.gllib.gllib.modell.onlinedaten.OdPrognoseGanglinienAntwort;
@@ -42,6 +41,7 @@ import de.bsvrz.sys.funclib.bitctrl.modell.DatensatzUpdateListener;
 import de.bsvrz.sys.funclib.bitctrl.modell.DatensendeException;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
 import de.bsvrz.sys.funclib.bitctrl.modell.Datensatz.Status;
+import de.bsvrz.sys.funclib.bitctrl.modell.ganglinien.objekte.ApplikationGanglinienPrognose;
 import de.bsvrz.sys.funclib.bitctrl.modell.kalender.KalenderobjektFactory;
 import de.bsvrz.sys.funclib.bitctrl.modell.systemmodellglobal.Applikation;
 import de.bsvrz.sys.funclib.bitctrl.modell.systemmodellglobal.SystemModellGlobalObjektFactory;

@@ -28,6 +28,7 @@ package de.bsvrz.iav.gllib.gllib.modell;
 
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjektTyp;
+import de.bsvrz.sys.funclib.bitctrl.modell.ganglinien.objekte.ApplikationGanglinienPrognose;
 
 /**
  * Fasst alle Objekttypen im Ganglinienmodell zusammen.

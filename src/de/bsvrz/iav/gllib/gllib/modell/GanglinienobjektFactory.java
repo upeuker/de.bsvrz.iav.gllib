@@ -30,6 +30,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import de.bsvrz.dav.daf.main.config.SystemObject;
+import de.bsvrz.iav.gllib.gllib.modell.objekte.ApplikationGanglinienPrognoseImpl;
 import de.bsvrz.sys.funclib.bitctrl.modell.ModellObjektFactory;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjektTyp;

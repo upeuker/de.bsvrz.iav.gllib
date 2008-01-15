@@ -24,9 +24,10 @@
  * mailto: info@bitctrl.de
  */
 
-package de.bsvrz.iav.gllib.gllib.modell;
+package de.bsvrz.iav.gllib.gllib.modell.objekte;
 
 import de.bsvrz.dav.daf.main.config.SystemObject;
+import de.bsvrz.iav.gllib.gllib.modell.GanglinienModellTypen;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractSystemObjekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjektTyp;
 
@@ -45,7 +46,7 @@ public class ApplikationGanglinienPrognoseImpl extends AbstractSystemObjekt {
 	 *            Ein Systemobjekt, welches die Ganglinienprognose sein muss, in
 	 *            der Regel handelt es um die autarke Organisationseinheit.
 	 */
-	ApplikationGanglinienPrognoseImpl(final SystemObject obj) {
+	public ApplikationGanglinienPrognoseImpl(final SystemObject obj) {
 		super(obj);
 
 		if (!obj.isOfType(getTyp().getPid())) {
