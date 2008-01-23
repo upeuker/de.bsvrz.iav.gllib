@@ -46,7 +46,7 @@ import de.bsvrz.sys.funclib.bitctrl.util.dav.Umrechung;
 public class Messwerte {
 
 	/** Konstante f&uuml;r einen undefinierten Wert. */
-	public static final double UNDEFINIERT = (double) Integer.MIN_VALUE / 1000;
+	public static final double UNDEFINIERT = -2147483.648;
 
 	/** Wert f&uuml;r die Verkehrsst&auml;rke der Lkw. */
 	private final Double qLkw;

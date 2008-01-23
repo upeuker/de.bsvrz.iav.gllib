@@ -50,8 +50,8 @@ import de.bsvrz.sys.funclib.bitctrl.modell.AbstractOnlineDatensatz;
 import de.bsvrz.sys.funclib.bitctrl.modell.Aspekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjekt;
-import de.bsvrz.sys.funclib.bitctrl.modell.kalender.objekte.EreignisTyp;
 import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnittAllgemein;
+import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
 
 /**
  * Kapselt die Onlineattributgruppe {@code atg.prognoseGanglinienAntwort}.
@@ -390,6 +390,7 @@ public class OdPrognoseGanglinienAntwort extends
 		if (result.hasData()) {
 			Array ganglinien;
 			Data daten = result.getData();
+			Intervall prognoseZeitraum;
 
 			datum.setAbsenderZeichen(daten.getTextValue("AbsenderZeichen")
 					.getText());
@@ -401,7 +402,6 @@ public class OdPrognoseGanglinienAntwort extends
 				Array feld;
 
 				g = new GanglinieMQ();
-				// g.setDatenVonPrognoseGanglinie(feld.getItem(i));
 
 				g.setMessQuerschnitt((MessQuerschnittAllgemein) ObjektFactory
 						.getInstanz().getModellobjekt(
@@ -426,6 +426,13 @@ public class OdPrognoseGanglinienAntwort extends
 					break;
 				}
 
+				// Prognosezeitraum
+				prognoseZeitraum = new Intervall(ganglinien.getItem(i)
+						.getTimeValue("ZeitpunktPrognoseBeginn").getMillis(),
+						ganglinien.getItem(i).getTimeValue(
+								"ZeitpunktPrognoseEnde").getMillis());
+				g.setPrognoseZeitraum(prognoseZeitraum);
+
 				// Stützstellen
 				feld = ganglinien.getItem(i).getArray("Stützstelle");
 				for (int j = 0; j < feld.getLength(); j++) {
@@ -434,25 +441,25 @@ public class OdPrognoseGanglinienAntwort extends
 
 					zeitstempel = feld.getItem(j).getTimeValue("Zeit")
 							.getMillis();
-					if (feld.getItem(j).getScaledValue("QKfz").intValue() == Messwerte.UNDEFINIERT) {
+					if (feld.getItem(j).getScaledValue("QKfz").doubleValue() == Messwerte.UNDEFINIERT) {
 						qKfz0 = null;
 					} else {
 						qKfz0 = feld.getItem(j).getScaledValue("QKfz")
 								.doubleValue();
 					}
-					if (feld.getItem(j).getScaledValue("QLkw").intValue() == Messwerte.UNDEFINIERT) {
+					if (feld.getItem(j).getScaledValue("QLkw").doubleValue() == Messwerte.UNDEFINIERT) {
 						qLkw0 = null;
 					} else {
 						qLkw0 = feld.getItem(j).getScaledValue("QLkw")
 								.doubleValue();
 					}
-					if (feld.getItem(j).getScaledValue("VPkw").intValue() == Messwerte.UNDEFINIERT) {
+					if (feld.getItem(j).getScaledValue("VPkw").doubleValue() == Messwerte.UNDEFINIERT) {
 						vPkw0 = null;
 					} else {
 						vPkw0 = feld.getItem(j).getScaledValue("VPkw")
 								.doubleValue();
 					}
-					if (feld.getItem(j).getScaledValue("VLkw").intValue() == Messwerte.UNDEFINIERT) {
+					if (feld.getItem(j).getScaledValue("VLkw").doubleValue() == Messwerte.UNDEFINIERT) {
 						vLkw0 = null;
 					} else {
 						vLkw0 = feld.getItem(j).getScaledValue("VLkw")
@@ -461,22 +468,6 @@ public class OdPrognoseGanglinienAntwort extends
 					g.setStuetzstelle(zeitstempel, new Messwerte(qKfz0, qLkw0,
 							vPkw0, vLkw0));
 				}
-
-				// Meta-Daten
-				g.setTyp(ganglinien.getItem(i)
-						.getUnscaledValue("GanglinienTyp").intValue());
-				if (ganglinien.getItem(i).getUnscaledValue("Referenzganglinie")
-						.intValue() == 1) {
-					g.setReferenz(true);
-				} else {
-					g.setReferenz(false);
-				}
-				g.setAnzahlVerschmelzungen(ganglinien.getItem(i)
-						.getUnscaledValue("AnzahlVerschmelzungen").longValue());
-				g.setLetzteVerschmelzung(ganglinien.getItem(i).getTimeValue(
-						"LetzteVerschmelzung").getMillis());
-				g.setEreignisTyp(new EreignisTyp(ganglinien.getItem(i)
-						.getReferenceValue("EreignisTyp").getSystemObject()));
 
 				datum.add(g);
 			}
@@ -540,8 +531,7 @@ public class OdPrognoseGanglinienAntwort extends
 				ganglinien.getItem(i).getUnscaledValue("Ordnung").set(0);
 			} else {
 				// Wenn Approximation nicht zuordenbar, dann Rückfallebene auf
-				// einen
-				// B-Spline der Ordnung 5
+				// einen B-Spline der Ordnung 5
 				ganglinien.getItem(i).getUnscaledValue("GanglinienVerfahren")
 						.set(GanglinieMQ.APPROX_BSPLINE);
 				ganglinien.getItem(i).getUnscaledValue("Ordnung").set(5);

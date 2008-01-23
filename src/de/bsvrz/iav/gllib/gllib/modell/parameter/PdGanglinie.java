@@ -374,6 +374,7 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 				Data daten;
 
 				g = new GanglinieMQ();
+				g.setMessQuerschnitt((MessQuerschnittAllgemein) getObjekt());
 				daten = ganglinien.getItem(i);
 
 				g.setEreignisTyp((EreignisTyp) ObjektFactory.getInstanz()
@@ -386,8 +387,7 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 						"LetzteVerschmelzung").getMillis());
 				g.setTyp(daten.getUnscaledValue("GanglinienTyp").intValue());
 
-				if (daten.getUnscaledValue("Referenzganglinie").getText()
-						.equals("Ja")) {
+				if (daten.getUnscaledValue("Referenzganglinie").intValue() == 1) {
 					g.setReferenz(true);
 				} else {
 					g.setReferenz(false);

@@ -464,16 +464,6 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	}
 
 	/**
-	 * Besitzt die Ganglinie die Auszeichnung als Referenz?
-	 * 
-	 * @return <code>true</code>, wenn diese Ganglinie eine Referenzganglinie
-	 *         ist, sonst <code>false</code>
-	 */
-	public boolean isReferenz() {
-		return referenz;
-	}
-
-	/**
 	 * {@inheritDoc}
 	 * 
 	 * @see #setPrognoseZeitraum(Intervall)
@@ -586,6 +576,16 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	 */
 	public boolean isApproximationAktuell() {
 		return approximationAktuell;
+	}
+
+	/**
+	 * Besitzt die Ganglinie die Auszeichnung als Referenz?
+	 * 
+	 * @return <code>true</code>, wenn diese Ganglinie eine Referenzganglinie
+	 *         ist, sonst <code>false</code>
+	 */
+	public boolean isReferenz() {
+		return referenz;
 	}
 
 	/**
@@ -819,7 +819,7 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 						new Date(letzteVerschmelzung));
 		result += ", typ=" + typ;
 		result += ", approximation=" + getApproximation();
-		result += ", stuetzstellen=" + getStuetzstellen();
+		result += ", Anzahl Stützstellen=" + anzahlStuetzstellen();
 		result += "]";
 		return result;
 	}

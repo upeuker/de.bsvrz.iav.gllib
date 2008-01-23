@@ -241,9 +241,12 @@ public class GlProgAnfrage {
 	}
 
 	/**
-	 * Gibt den Prognosezeitraum zur&uuml;ck.
+	 * Gibt den Prognosezeitraum zurück.
 	 * 
-	 * @return der Zeitraum f&uuml;r den die Ganglinie bestimmt wird.
+	 * @return der Zeitraum für den die Ganglinie bestimmt wird oder
+	 *         {@code null}, wenn kein Intervall gesetzt ist bzw. das Intervall
+	 *         ungültig ist. Bei einem ungültigen Intervall liegt der
+	 *         Startzeitpunkt <em>hinter</em> dem Endzeitpunkt.
 	 */
 	public Intervall getPrognoseZeitraum() {
 		return prognoseZeitraum;
@@ -334,19 +337,23 @@ public class GlProgAnfrage {
 	 */
 	public void setDaten(Data daten) {
 		Array feld;
+		long start, ende;
 
 		messQuerschnitt = (MessQuerschnittAllgemein) ObjektFactory.getInstanz()
 				.getModellobjekt(
 						daten.getReferenceValue("Messquerschnitt")
 								.getSystemObject());
-		prognoseZeitraum = new Intervall(daten.getTimeValue(
-				"ZeitpunktPrognoseBeginn").getMillis(), daten.getTimeValue(
-				"ZeitpunktPrognoseEnde").getMillis());
 		pruefIntervall = daten.getScaledValue("Überprüfungsintervall")
 				.longValue();
 		schwelle = daten.getScaledValue("Aktualisierungsschwelle").floatValue();
 		sendeIntervall = daten.getScaledValue("Aktualisierungsintervall")
 				.longValue();
+
+		start = daten.getTimeValue("ZeitpunktPrognoseBeginn").getMillis();
+		ende = daten.getTimeValue("ZeitpunktPrognoseEnde").getMillis();
+		if (start < ende) {
+			prognoseZeitraum = new Intervall(start, ende);
+		} // Wenn Intervall ungültig, dann bleibt es null
 
 		if (daten.getUnscaledValue("NurLangfristigeAuswahl").getText().equals(
 				"Ja")) {

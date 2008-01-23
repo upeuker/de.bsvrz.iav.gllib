@@ -1,14 +1,19 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Funktionen Ganglinie (SWE 5.5)
-Bundle-SymbolicName: de.bsvrz.iav.gllib
+Bundle-SymbolicName: de.bsvrz.iav.gllib;singleton:=true
 Bundle-Version: 1.0.0
 Bundle-Vendor: BitCtrl Systems GmbH
 Require-Bundle: de.bsvrz.sys.funclib.bitctrl,
- de.bsvrz.dav.daf
+ de.bsvrz.dav.daf,
+ org.eclipse.core.runtime,
+ org.eclipse.ui,
+ de.bsvrz.sys.funclib.bitctrl.visukern
 Export-Package: de.bsvrz.iav.gllib.gllib,
  de.bsvrz.iav.gllib.gllib.dav,
  de.bsvrz.iav.gllib.gllib.modell,
  de.bsvrz.iav.gllib.gllib.modell.onlinedaten,
  de.bsvrz.iav.gllib.gllib.modell.parameter
 Bundle-ClassPath: de.bsvrz.iav.gllib.jar
+Eclipse-LazyStart: true
+Bundle-Activator: de.bsvrz.iav.gllib.eclipse.GanglinienprognosePlugin

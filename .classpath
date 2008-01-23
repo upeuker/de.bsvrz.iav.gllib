@@ -2,6 +2,7 @@
 <classpath>
 	<classpathentry excluding="**/doc-files/*|overview.html" kind="src" path="src"/>
 	<classpathentry excluding="**/doc-files/*|overview.html" kind="src" path="junit"/>
+	<classpathentry kind="src" path="plugin"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>

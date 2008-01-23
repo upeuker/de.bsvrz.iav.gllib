@@ -318,7 +318,7 @@ public class OdPrognoseGanglinienAnfrage extends
 			s += ", valid=" + isValid();
 			s += ", absender=" + absender;
 			s += ", absenderZeichen=" + absenderZeichen;
-			s += ", anfragen=" + anfragen;
+			s += ", Anzahl der Teilanfragen=" + anfragen.size();
 
 			return s + "]";
 		}

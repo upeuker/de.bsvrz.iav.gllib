@@ -42,9 +42,7 @@ import de.bsvrz.sys.funclib.bitctrl.modell.DatensendeException;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
 import de.bsvrz.sys.funclib.bitctrl.modell.Datensatz.Status;
 import de.bsvrz.sys.funclib.bitctrl.modell.ganglinien.objekte.ApplikationGanglinienPrognose;
-import de.bsvrz.sys.funclib.bitctrl.modell.kalender.KalenderobjektFactory;
 import de.bsvrz.sys.funclib.bitctrl.modell.systemmodellglobal.Applikation;
-import de.bsvrz.sys.funclib.bitctrl.modell.systemmodellglobal.SystemModellGlobalObjektFactory;
 import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
@@ -117,8 +115,8 @@ public final class Ganglinienprognose implements DatensatzUpdateListener {
 		log = Debug.getLogger();
 
 		factory = ObjektFactory.getInstanz();
-		factory.registerFactory(new GanglinienobjektFactory(),
-				new SystemModellGlobalObjektFactory());
+		factory.registerStandardFactories();
+		factory.registerFactory(new GanglinienobjektFactory());
 
 		glProg = (ApplikationGanglinienPrognose) factory
 				.getModellobjekt(factory.getVerbindung()
@@ -209,9 +207,6 @@ public final class Ganglinienprognose implements DatensatzUpdateListener {
 		}
 
 		factory = ObjektFactory.getInstanz();
-		factory.registerFactory(new KalenderobjektFactory(),
-				new SystemModellGlobalObjektFactory());
-		factory.registerFactory(new KalenderobjektFactory());
 		klient = factory.getVerbindung().getLocalApplicationObject();
 
 		datum = odAnfrage.erzeugeDatum();
