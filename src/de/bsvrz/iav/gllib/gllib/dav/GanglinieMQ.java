@@ -819,6 +819,7 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 						new Date(letzteVerschmelzung));
 		result += ", typ=" + typ;
 		result += ", approximation=" + getApproximation();
+		result += ", prognoseZeitraum=" + prognoseZeitraum;
 		result += ", Anzahl Stützstellen=" + anzahlStuetzstellen();
 		result += "]";
 		return result;
