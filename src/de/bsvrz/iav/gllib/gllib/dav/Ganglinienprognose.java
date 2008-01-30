@@ -40,7 +40,6 @@ import de.bsvrz.sys.funclib.bitctrl.modell.DatensatzUpdateEvent;
 import de.bsvrz.sys.funclib.bitctrl.modell.DatensatzUpdateListener;
 import de.bsvrz.sys.funclib.bitctrl.modell.DatensendeException;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
-import de.bsvrz.sys.funclib.bitctrl.modell.Datensatz.Status;
 import de.bsvrz.sys.funclib.bitctrl.modell.ganglinien.objekte.ApplikationGanglinienPrognose;
 import de.bsvrz.sys.funclib.bitctrl.modell.systemmodellglobal.Applikation;
 import de.bsvrz.sys.funclib.debug.Debug;
@@ -73,6 +72,9 @@ import de.bsvrz.sys.funclib.debug.Debug;
  * @version $Id$
  */
 public final class Ganglinienprognose implements DatensatzUpdateListener {
+
+	/** Timeout von 60 Sekunden für das Senden der Prognoseanfrage. */
+	private static final long TIMEOUT = 60 * 1000;
 
 	/** Das Singleton. */
 	private static Ganglinienprognose singleton;
@@ -201,11 +203,6 @@ public final class Ganglinienprognose implements DatensatzUpdateListener {
 		ObjektFactory factory;
 		ClientApplication klient;
 
-		if (odAnfrage.getStatusSendesteuerung(aspAnfrage) != Status.START) {
-			throw new DatensendeException(
-					"Ganglinienprognose (noch) nicht bereit.");
-		}
-
 		factory = ObjektFactory.getInstanz();
 		klient = factory.getVerbindung().getLocalApplicationObject();
 
@@ -213,7 +210,7 @@ public final class Ganglinienprognose implements DatensatzUpdateListener {
 		datum.setAbsender((Applikation) factory.getModellobjekt(klient));
 		datum.setAbsenderZeichen(absenderZeichen);
 		datum.addAll(anfragen);
-		odAnfrage.sendeDaten(aspAnfrage, datum);
+		odAnfrage.sendeDaten(aspAnfrage, datum, TIMEOUT);
 
 		log.fine("Anfrage \"" + absenderZeichen + "\" wurde gesendet");
 	}
