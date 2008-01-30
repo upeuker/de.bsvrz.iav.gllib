@@ -62,7 +62,11 @@ public class PdGanglinienModellPrognose extends
 		/** Die Auswahlmethode, wenn Pattern-Matching nicht geht. */
 		private int auswahlMethode;
 
-		/** Intervall in die Vergangenheit, was ber&uuml;cksichtigt wird. */
+		/**
+		 * Intervall in die Vergangenheit, was ber&uuml;cksichtigt wird.
+		 * 
+		 * @todo überlappt sich mit {@link #patternMatchingOffset}
+		 */
 		private long matchingIntervall;
 
 		/** Maximale Dauer einer zyklischen Prognose. */
@@ -76,6 +80,19 @@ public class PdGanglinienModellPrognose extends
 
 		/** Offset um den beim Pattern-Matching verschoben wird. */
 		private long patternMatchingOffset;
+
+		/**
+		 * Initialisiert das Datum mit Standardwerten.
+		 */
+		public Daten() {
+			valid = true;
+			auswahlMethode = WAHRSCHEINLICHSTE_GANGLINIE;
+			matchingIntervall = 60 * 60 * 1000; // 1 Stunde
+			maxDauerZyklischePrognose = 30 * 24 * 60 * 60 * 1000; // 1 Monat
+			maxMatchingFehler = 25;
+			patternMatchingHorizont = 2 * 60 * 60 * 1000; // 2 Stunden
+			patternMatchingOffset = 15 * 60 * 1000; // 15 Minuten
+		}
 
 		/**
 		 * {@inheritDoc}
@@ -335,8 +352,9 @@ public class PdGanglinienModellPrognose extends
 				datum.getPatternMatchingOffset() / MILLIS_PER_SEKUNDE);
 		daten.getUnscaledValue("GLMaximalerMatchingFehler").set(
 				datum.getMaxMatchingFehler());
-		daten.getUnscaledValue("GLMaximaleDauerZyklischePrognose").set(
-				datum.getMaxDauerZyklischePrognose() / MILLIS_PER_SEKUNDE);
+		// TODO fehlendes Attribut GLMaximaleDauerZyklischePrognose im DaK
+		// daten.getUnscaledValue("GLMaximaleDauerZyklischePrognose").set(
+		// datum.getMaxDauerZyklischePrognose() / MILLIS_PER_SEKUNDE);
 
 		return daten;
 	}
