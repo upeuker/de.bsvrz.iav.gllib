@@ -821,6 +821,13 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 		result += ", approximation=" + getApproximation();
 		result += ", prognoseZeitraum=" + prognoseZeitraum;
 		result += ", Anzahl Stützstellen=" + anzahlStuetzstellen();
+		if (anzahlStuetzstellen() > 0) {
+			List<Stuetzstelle<Double>> liste;
+
+			liste = qKfz.getStuetzstellen();
+			result += ", erste Stützstelle=" + liste.get(0);
+			result += ", letzte Stützstelle=" + liste.get(liste.size() - 1);
+		}
 		result += "]";
 		return result;
 	}

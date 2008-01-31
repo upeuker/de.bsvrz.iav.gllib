@@ -174,6 +174,8 @@ public class GanglinienprognoseView extends ViewPart implements
 		lbl = new Label(grp, SWT.NONE);
 		lbl.setText("Zeitraum bis");
 		datumBis = new DateTime(grp, SWT.DATE | SWT.MEDIUM);
+		// TODO Wenn Tag der letzte des Monats ist, dann geht es nicht!
+		// In dem Fall wird er Monat nicht hochgezählt.
 		datumBis.setDay(datumBis.getDay() + 1);
 		zeitBis = new DateTime(grp, SWT.TIME | SWT.LONG);
 		zeitBis.setHours(0);
