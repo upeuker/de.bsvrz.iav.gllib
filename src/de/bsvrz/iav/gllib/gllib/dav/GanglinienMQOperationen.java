@@ -44,7 +44,7 @@ import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
  * @author BitCtrl Systems GmbH, Schumann
  * @version $Id$
  */
-public class GanglinienMQOperationen {
+public final class GanglinienMQOperationen {
 
 	/**
 	 * Addiert zwei Ganglinien, indem die Werte der vervollst&auml;ndigten
@@ -428,7 +428,7 @@ public class GanglinienMQOperationen {
 	/**
 	 * Konstruktor verstecken.
 	 */
-	protected GanglinienMQOperationen() {
+	private GanglinienMQOperationen() {
 		// nichts
 	}
 

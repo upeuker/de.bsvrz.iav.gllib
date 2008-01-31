@@ -47,7 +47,7 @@ import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
  * @author BitCtrl Systems GmbH, Schumann
  * @version $Id$
  */
-public class GanglinienOperationen {
+public final class GanglinienOperationen {
 
 	/**
 	 * Addiert zwei Ganglinien, indem die Werte der vervollst&auml;ndigten
@@ -64,6 +64,14 @@ public class GanglinienOperationen {
 		Ganglinie g;
 		Polyline p1, p2;
 		Queue<Long> zeitstempel;
+
+		if (!(g1.getApproximation() == null && g2.getApproximation() == null)) {
+			if (!g1.getApproximation().getClass().equals(
+					g2.getApproximation().getClass())) {
+				throw new IllegalArgumentException(
+						"Die Addition kann nicht durchgeführt werden, da die beiden Ganglinien unterschiedle Approximationsverfahren verwenden.");
+			}
+		}
 
 		p1 = new Polyline();
 		p1.setStuetzstellen(g1.getStuetzstellen());
@@ -212,6 +220,14 @@ public class GanglinienOperationen {
 		Ganglinie g;
 		Polyline p1, p2;
 		Queue<Long> zeitstempel;
+
+		if (!(g1.getApproximation() == null && g2.getApproximation() == null)) {
+			if (!g1.getApproximation().getClass().equals(
+					g2.getApproximation().getClass())) {
+				throw new IllegalArgumentException(
+						"Die Division kann nicht durchgeführt werden, da die beiden Ganglinien unterschiedle Approximationsverfahren verwenden.");
+			}
+		}
 
 		p1 = new Polyline();
 		p1.setStuetzstellen(g1.getStuetzstellen());
@@ -369,6 +385,14 @@ public class GanglinienOperationen {
 		Polyline p1, p2;
 		Queue<Long> zeitstempel;
 
+		if (!(g1.getApproximation() == null && g2.getApproximation() == null)) {
+			if (!g1.getApproximation().getClass().equals(
+					g2.getApproximation().getClass())) {
+				throw new IllegalArgumentException(
+						"Die Multiplikation kann nicht durchgeführt werden, da die beiden Ganglinien unterschiedle Approximationsverfahren verwenden.");
+			}
+		}
+
 		p1 = new Polyline();
 		p1.setStuetzstellen(g1.getStuetzstellen());
 		p1.initialisiere();
@@ -473,6 +497,14 @@ public class GanglinienOperationen {
 		Polyline p1, p2;
 		Queue<Long> zeitstempel;
 
+		if (!(g1.getApproximation() == null && g2.getApproximation() == null)) {
+			if (!g1.getApproximation().getClass().equals(
+					g2.getApproximation().getClass())) {
+				throw new IllegalArgumentException(
+						"Die Subtraktion kann nicht durchgeführt werden, da die beiden Ganglinien unterschiedle Approximationsverfahren verwenden.");
+			}
+		}
+
 		p1 = new Polyline();
 		p1.setStuetzstellen(g1.getStuetzstellen());
 		p1.initialisiere();
@@ -520,18 +552,18 @@ public class GanglinienOperationen {
 
 		g = new Ganglinie(g1.stuetzstellen);
 		for (long t : g2.stuetzstellen.keySet()) {
-			if (g.existsStuetzstelle(t)) {
+			if (g.stuetzstellen.containsKey(t)) {
 				Double d1, d2;
 
-				d1 = g.getStuetzstelle(t).getWert();
-				d2 = g2.getStuetzstelle(t).getWert();
+				d1 = g.stuetzstellen.get(t);
+				d2 = g2.stuetzstellen.get(t);
 				if (d1 != null && d2 != null) {
-					g.setStuetzstelle(t, (d1 + d2) / 2);
+					g.stuetzstellen.put(t, (d1 + d2) / 2);
 				} else {
-					g.setStuetzstelle(t, null);
+					g.stuetzstellen.put(t, null);
 				}
 			} else {
-				g.setStuetzstelle(g2.getStuetzstelle(t));
+				g.stuetzstellen.put(t, g2.stuetzstellen.get(t));
 			}
 		}
 
@@ -629,7 +661,7 @@ public class GanglinienOperationen {
 	/**
 	 * Konstruktor verstecken.
 	 */
-	protected GanglinienOperationen() {
+	private GanglinienOperationen() {
 		// nichts
 	}
 
