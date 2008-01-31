@@ -64,11 +64,19 @@ public class BSpline extends AbstractApproximation {
 		double t0, f;
 		Stuetzstelle<Double> s;
 
-		if (anzahl() == 0 || get(0).getZeitstempel() < zeitstempel
-				|| zeitstempel > get(anzahl() - 1).getZeitstempel()) {
+		if (anzahl() == 0
+				|| (get(0).getZeitstempel() < zeitstempel && zeitstempel > get(
+						anzahl() - 1).getZeitstempel())) {
 			// Zeitstempel liegt außerhalb der Ganglinie
 			return new Stuetzstelle<Double>(zeitstempel, null);
 		}
+
+		// TODO Wird dieses IF-ELSE benötigt?
+		// if (get(0).getZeitstempel() == zeitstempel) {
+		// return get(0);
+		// } else if (get(anzahl() - 1).getZeitstempel() == zeitstempel) {
+		// return get(anzahl() - 1);
+		// }
 
 		// Sonderfall
 		if (ordnung == 1) {

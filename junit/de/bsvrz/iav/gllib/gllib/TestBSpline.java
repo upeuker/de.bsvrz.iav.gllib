@@ -57,11 +57,12 @@ public class TestBSpline {
 
 		spline = new BSpline();
 		spline.setStuetzstellen(g.getStuetzstellen());
-		spline.initialisiere();
 
 		// Rechnen
 		for (byte k = 1; k <= g.anzahlStuetzstellen() && k <= 10; k++) {
 			spline.setOrdnung(k);
+			spline.initialisiere();
+
 			for (long t = g.getIntervall().start; t <= g.getIntervall().ende; t += 1) {
 				assertEquals(t, spline.get(t).getZeitstempel());
 			}
