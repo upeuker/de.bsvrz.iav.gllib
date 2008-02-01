@@ -149,29 +149,6 @@ public class GlProgAnfrage {
 	}
 
 	/**
-	 * F&uuml;gt einen Ereignistyp der Filterliste hinzu.
-	 * 
-	 * @param typ
-	 *            ein Ereignistyp der bei der Ganglinienprognose ignoriert
-	 *            werden soll.
-	 * @return {@code true}, wenn der Typ hinzugef&uuml;gt wurde und
-	 *         {@code false}, wenn er bereits enthalten war.
-	 */
-	public boolean addEreignisTyp(EreignisTyp typ) {
-		return ereignisTypen.add(typ);
-	}
-
-	/**
-	 * Gibt die Anzahl der ausgeschlossenen Ereignistypen dieser Anfrage
-	 * zur&uuml;ck.
-	 * 
-	 * @return Anzahl der Ereignistypen
-	 */
-	public int getAnzahlEreignisTypen() {
-		return ereignisTypen.size();
-	}
-
-	/**
 	 * Baut aus den Informationen der Anfrage ein Datum.
 	 * <p>
 	 * Hinweis: Das Ergebnis wird auch im Parameter abgelegt!
@@ -221,8 +198,7 @@ public class GlProgAnfrage {
 	}
 
 	/**
-	 * Gibt einen Iterator &uuml;ber die ausgeschlossenen Ereignistypen
-	 * zur&uuml;ck.
+	 * Gibt die Menge der ausgeschlossenen Ereignistypen zur&uuml;ck.
 	 * 
 	 * @return Ereignistypeniterator
 	 */
