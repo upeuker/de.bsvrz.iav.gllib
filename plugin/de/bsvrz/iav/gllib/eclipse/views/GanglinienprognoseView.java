@@ -91,6 +91,9 @@ public class GanglinienprognoseView extends ViewPart implements
 				GanglinieMQ g;
 
 				g = e.getGanglinien().iterator().next();
+				if (!g.isApproximationAktuell()) {
+					g.aktualisiereApproximation();
+				}
 				txtAntwort.setText(g.toString());
 				ganglinienListe.setInput(g.getStuetzstellen());
 			}

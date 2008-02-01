@@ -64,7 +64,7 @@ public final class GanglinienMQOperationen {
 
 		g = new GanglinieMQ();
 		g.setMessQuerschnitt(g1.getMessQuerschnitt());
-		g.setApproximation(g1.getApproximation());
+		g.setApproximationDaK(g1.getApproximationDaK());
 
 		g.qKfz = GanglinienOperationen.addiere(g1.qKfz, g2.qKfz);
 		g.qLkw = GanglinienOperationen.addiere(g1.qLkw, g2.qLkw);
@@ -138,7 +138,7 @@ public final class GanglinienMQOperationen {
 
 		g = new GanglinieMQ();
 		g.setMessQuerschnitt(g1.getMessQuerschnitt());
-		g.setApproximation(g1.getApproximation());
+		g.setApproximationDaK(g1.getApproximationDaK());
 
 		g.qKfz = GanglinienOperationen.dividiere(g1.qKfz, g2.qKfz);
 		g.qLkw = GanglinienOperationen.dividiere(g1.qLkw, g2.qLkw);
@@ -228,7 +228,7 @@ public final class GanglinienMQOperationen {
 
 		g = new GanglinieMQ();
 		g.setMessQuerschnitt(g1.getMessQuerschnitt());
-		g.setApproximation(g1.getApproximation());
+		g.setApproximationDaK(g1.getApproximationDaK());
 
 		g.qKfz = GanglinienOperationen.multipliziere(g1.qKfz, g2.qKfz);
 		g.qLkw = GanglinienOperationen.multipliziere(g1.qLkw, g2.qLkw);
@@ -320,7 +320,7 @@ public final class GanglinienMQOperationen {
 
 		g = new GanglinieMQ();
 		g.setMessQuerschnitt(g1.getMessQuerschnitt());
-		g.setApproximation(g1.getApproximation());
+		g.setApproximationDaK(g1.getApproximationDaK());
 
 		g.qKfz = GanglinienOperationen.subtrahiere(g1.qKfz, g2.qKfz);
 		g.qLkw = GanglinienOperationen.subtrahiere(g1.qLkw, g2.qLkw);
@@ -351,7 +351,7 @@ public final class GanglinienMQOperationen {
 
 		g = new GanglinieMQ();
 		g.setMessQuerschnitt(g1.getMessQuerschnitt());
-		g.setApproximation(g1.getApproximation());
+		g.setApproximationDaK(g1.getApproximationDaK());
 
 		g.qKfz = GanglinienOperationen.verbinde(g1.qKfz, g2.qKfz);
 		g.qLkw = GanglinienOperationen.verbinde(g1.qLkw, g2.qLkw);
@@ -408,7 +408,7 @@ public final class GanglinienMQOperationen {
 
 		g = new GanglinieMQ();
 		g.setMessQuerschnitt(ganglinie.getMessQuerschnitt());
-		g.setApproximation(ganglinie.getApproximation());
+		g.setApproximationDaK(ganglinie.getApproximationDaK());
 
 		g.qKfz = GanglinienOperationen.verschmelze(ganglinie.qKfz,
 				historGl.qKfz, gewicht);

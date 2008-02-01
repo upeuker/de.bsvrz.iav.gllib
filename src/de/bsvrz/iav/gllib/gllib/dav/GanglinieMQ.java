@@ -471,16 +471,16 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	public Stuetzstelle<Messwerte> getStuetzstelle(long zeitstempel) {
 		Double qKfz0, qLkw0, vPkw0, vLkw0;
 
-		if (prognoseZeitraum != null
-				&& !prognoseZeitraum.isEnthalten(zeitstempel)) {
-			// Zeitstempel liegt nicht innerhalb der Prognoseganglinie
-			return null;
-		} else {
-			qKfz0 = qKfz.getStuetzstelle(zeitstempel).getWert();
-			qLkw0 = qLkw.getStuetzstelle(zeitstempel).getWert();
-			vPkw0 = vPkw.getStuetzstelle(zeitstempel).getWert();
-			vLkw0 = vLkw.getStuetzstelle(zeitstempel).getWert();
+		if (!isValid(zeitstempel)) {
+			return new Stuetzstelle<Messwerte>(zeitstempel, new Messwerte(null,
+					null, null, null, k1, k2));
 		}
+
+		qKfz0 = qKfz.getStuetzstelle(zeitstempel).getWert();
+		qLkw0 = qLkw.getStuetzstelle(zeitstempel).getWert();
+		vPkw0 = vPkw.getStuetzstelle(zeitstempel).getWert();
+		vLkw0 = vLkw.getStuetzstelle(zeitstempel).getWert();
+
 		return new Stuetzstelle<Messwerte>(zeitstempel, new Messwerte(qKfz0,
 				qLkw0, vPkw0, vLkw0, k1, k2));
 	}
@@ -590,6 +590,11 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	 * {@inheritDoc}
 	 */
 	public boolean isValid(long zeitstempel) {
+		if (prognoseZeitraum != null
+				&& !prognoseZeitraum.isEnthalten(zeitstempel)) {
+			// Zeitstempel liegt nicht innerhalb der Prognoseganglinie
+			return false;
+		}
 		return qKfz.isValid(zeitstempel);
 	}
 
@@ -816,6 +821,8 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 				+ DateFormat.getDateInstance().format(
 						new Date(letzteVerschmelzung));
 		result += ", typ=" + typ;
+		result += ", approximationAktuell=" + isApproximationAktuell();
+		result += ", approximationDaK=" + getApproximationDaK();
 		result += ", approximation=" + getApproximation();
 		result += ", prognoseZeitraum=" + prognoseZeitraum;
 		result += ", Anzahl Stützstellen=" + anzahlStuetzstellen();

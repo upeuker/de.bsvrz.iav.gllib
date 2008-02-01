@@ -100,6 +100,10 @@ public class Ganglinie implements IGanglinie<Double> {
 	 * {@inheritDoc}
 	 */
 	public void aktualisiereApproximation() {
+		if (approximation == null) {
+			throw new IllegalStateException(
+					"Es wurde keine Approximation festgelegt.");
+		}
 		approximation.setStuetzstellen(getStuetzstellen());
 		approximation.initialisiere();
 		approximationAktuell = true;
@@ -200,6 +204,9 @@ public class Ganglinie implements IGanglinie<Double> {
 		}
 
 		if (approximation != null) {
+			if (!isApproximationAktuell()) {
+				aktualisiereApproximation();
+			}
 			return approximation.get(zeitstempel);
 		}
 

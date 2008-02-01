@@ -39,9 +39,6 @@ import de.bsvrz.dav.daf.main.Data.Array;
 import de.bsvrz.dav.daf.main.config.Aspect;
 import de.bsvrz.dav.daf.main.config.AttributeGroup;
 import de.bsvrz.dav.daf.main.config.DataModel;
-import de.bsvrz.iav.gllib.gllib.BSpline;
-import de.bsvrz.iav.gllib.gllib.CubicSpline;
-import de.bsvrz.iav.gllib.gllib.Polyline;
 import de.bsvrz.iav.gllib.gllib.Stuetzstelle;
 import de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ;
 import de.bsvrz.iav.gllib.gllib.dav.Messwerte;
@@ -409,22 +406,10 @@ public class OdPrognoseGanglinienAntwort extends
 										"Messquerschnitt").getSystemObject()));
 
 				// Verfahren
-				switch (ganglinien.getItem(i).getUnscaledValue(
-						"GanglinienVerfahren").intValue()) {
-				case GanglinieMQ.APPROX_BSPLINE:
-					g.setApproximation(new BSpline());
-					g.setBSplineOrdnung((byte) ganglinien.getItem(i)
-							.getUnscaledValue("Ordnung").longValue());
-					break;
-				case GanglinieMQ.APPROX_CUBICSPLINE:
-					g.setApproximation(new CubicSpline());
-					break;
-				case GanglinieMQ.APPROX_POLYLINE:
-					g.setApproximation(new Polyline());
-					break;
-				default:
-					break;
-				}
+				g.setApproximationDaK(ganglinien.getItem(i).getUnscaledValue(
+						"GanglinienVerfahren").intValue());
+				g.setBSplineOrdnung((byte) ganglinien.getItem(i)
+						.getUnscaledValue("Ordnung").longValue());
 
 				// Prognosezeitraum
 				prognoseZeitraum = new Intervall(ganglinien.getItem(i)
@@ -505,6 +490,7 @@ public class OdPrognoseGanglinienAntwort extends
 			Array stuetzstellen;
 			List<Stuetzstelle<Messwerte>> liste;
 
+			// Allgemeines
 			ganglinien.getItem(i).getReferenceValue("Messquerschnitt")
 					.setSystemObject(g.getMessQuerschnitt().getSystemObject());
 			ganglinien.getItem(i).getTimeValue("ZeitpunktPrognoseBeginn")
@@ -513,29 +499,10 @@ public class OdPrognoseGanglinienAntwort extends
 					.setMillis(g.getIntervall().getEnde());
 
 			// Verfahren
-			if (g.getApproximation() instanceof BSpline) {
-				BSpline spline;
-
-				spline = (BSpline) g.getApproximation();
-				ganglinien.getItem(i).getUnscaledValue("GanglinienVerfahren")
-						.set(GanglinieMQ.APPROX_BSPLINE);
-				ganglinien.getItem(i).getUnscaledValue("Ordnung").set(
-						spline.getOrdnung());
-			} else if (g.getApproximation() instanceof CubicSpline) {
-				ganglinien.getItem(i).getUnscaledValue("GanglinienVerfahren")
-						.set(GanglinieMQ.APPROX_CUBICSPLINE);
-				ganglinien.getItem(i).getUnscaledValue("Ordnung").set(0);
-			} else if (g.getApproximation() instanceof Polyline) {
-				ganglinien.getItem(i).getUnscaledValue("GanglinienVerfahren")
-						.set(GanglinieMQ.APPROX_POLYLINE);
-				ganglinien.getItem(i).getUnscaledValue("Ordnung").set(0);
-			} else {
-				// Wenn Approximation nicht zuordenbar, dann Rückfallebene auf
-				// einen B-Spline der Ordnung 5
-				ganglinien.getItem(i).getUnscaledValue("GanglinienVerfahren")
-						.set(GanglinieMQ.APPROX_BSPLINE);
-				ganglinien.getItem(i).getUnscaledValue("Ordnung").set(5);
-			}
+			ganglinien.getItem(i).getUnscaledValue("GanglinienVerfahren").set(
+					g.getApproximationDaK());
+			ganglinien.getItem(i).getUnscaledValue("Ordnung").set(
+					g.getBSplineOrdnung());
 
 			// Stützstellen
 			liste = g.getStuetzstellen();
