@@ -473,10 +473,8 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 
 		if (prognoseZeitraum != null
 				&& !prognoseZeitraum.isEnthalten(zeitstempel)) {
-			qKfz0 = null;
-			qLkw0 = null;
-			vPkw0 = null;
-			vLkw0 = null;
+			// Zeitstempel liegt nicht innerhalb der Prognoseganglinie
+			return null;
 		} else {
 			qKfz0 = qKfz.getStuetzstelle(zeitstempel).getWert();
 			qLkw0 = qLkw.getStuetzstelle(zeitstempel).getWert();

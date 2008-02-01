@@ -194,19 +194,17 @@ public class Ganglinie implements IGanglinie<Double> {
 	 * {@inheritDoc}
 	 */
 	public Stuetzstelle<Double> getStuetzstelle(long zeitstempel) {
+		if (!isValid(zeitstempel)) {
+			// Zeitstempel liegt in einem undefinierten Teilintervall
+			return new Stuetzstelle<Double>(zeitstempel, null);
+		}
+
 		if (approximation != null) {
 			return approximation.get(zeitstempel);
 		}
 
-		// Rückfallebene, wenn keine Approximation festgelegt, wird falls
-		// vorhanden eine existierende Stützstelle zurückgegeben.
-		if (stuetzstellen.containsKey(zeitstempel)) {
-			return new Stuetzstelle<Double>(zeitstempel, stuetzstellen
-					.get(zeitstempel));
-		}
-
-		// Mehr geht nicht, dann gibt es eben keine Stützstelle
-		return null;
+		throw new IllegalStateException(
+				"Es wurde keine Approximation festgelegt.");
 	}
 
 	/**
