@@ -29,7 +29,6 @@ package de.bsvrz.iav.gllib.gllib;
 import static de.bsvrz.sys.funclib.bitctrl.util.Konstanten.MILLIS_PER_MINUTE;
 import static org.junit.Assert.assertEquals;
 
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,7 +42,7 @@ import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
  * @author BitCtrl Systems GmbH, Schumann
  * @version $Id$
  */
-public class PrSpezIAV {
+public class Prueffall6 {
 
 	/** Protokolllogger. */
 	private final Logger logger;
@@ -51,7 +50,7 @@ public class PrSpezIAV {
 	/**
 	 * Protokollierung initialisieren.
 	 */
-	public PrSpezIAV() {
+	public Prueffall6() {
 		logger = Logger.getLogger(getClass().getCanonicalName());
 		logger.setLevel(Level.ALL);
 	}
@@ -90,49 +89,6 @@ public class PrSpezIAV {
 		erg.setStuetzstelle(70 * MILLIS_PER_MINUTE, 25.0);
 
 		assertEquals(erg.getStuetzstellen(), g.getStuetzstellen());
-		logger.info("Testfall bestanden.");
-	}
-
-	/**
-	 * F&uuml;hrt Teile des Testfalls 8 "Automatisches Lernen" aus.
-	 * <p>
-	 * Getestet wird das Verschmelzen zweier Ganglinien. Da das Verschmelzen von
-	 * Messquerschnittsganglinien auf dem Verschmelzen von einfachen Ganglinien
-	 * beruht, wird nur letzteres getestet.
-	 */
-	@Test
-	public void testfall8() {
-		Ganglinie g1, g2, g;
-		List<Stuetzstelle<Double>> stuetzstellen;
-		final int gewicht;
-
-		logger.config("Tesfall 8: Automatisches Lernen (Verschmelzen)");
-
-		g1 = new Ganglinie();
-		g1.setStuetzstelle(10 * MILLIS_PER_MINUTE, 10.0);
-		g1.setStuetzstelle(20 * MILLIS_PER_MINUTE, 40.0);
-		g1.setStuetzstelle(30 * MILLIS_PER_MINUTE, 10.0);
-		g1.setStuetzstelle(40 * MILLIS_PER_MINUTE, 60.0);
-		g1.setStuetzstelle(50 * MILLIS_PER_MINUTE, 20.0);
-		logger.info("Ganglinie zum Verschmelzen: " + g1);
-
-		g2 = new Ganglinie();
-		g2.setStuetzstelle(10 * MILLIS_PER_MINUTE, 30.0);
-		g2.setStuetzstelle(20 * MILLIS_PER_MINUTE, 10.0);
-		g2.setStuetzstelle(30 * MILLIS_PER_MINUTE, 20.0);
-		g2.setStuetzstelle(40 * MILLIS_PER_MINUTE, 20.0);
-		g2.setStuetzstelle(50 * MILLIS_PER_MINUTE, 40.0);
-		gewicht = 3;
-		logger.info("Ursprungsganglinie mit Gewicht " + gewicht + ": " + g2);
-
-		g = GanglinienOperationen.verschmelze(g1, g2, gewicht);
-		logger.info("Neue Ganglinie: " + g);
-		stuetzstellen = g.getStuetzstellen();
-		assertEquals(25, stuetzstellen.get(0).getWert());
-		assertEquals(17.5, stuetzstellen.get(1).getWert());
-		assertEquals(17.5, stuetzstellen.get(2).getWert());
-		assertEquals(30, stuetzstellen.get(3).getWert());
-		assertEquals(35, stuetzstellen.get(4).getWert());
 		logger.info("Testfall bestanden.");
 	}
 }

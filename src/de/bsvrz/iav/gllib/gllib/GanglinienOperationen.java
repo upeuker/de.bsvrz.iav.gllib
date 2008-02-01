@@ -65,12 +65,12 @@ public final class GanglinienOperationen {
 		Polyline p1, p2;
 		Queue<Long> zeitstempel;
 
-		if (!(g1.getApproximation() == null && g2.getApproximation() == null)) {
-			if (!g1.getApproximation().getClass().equals(
-					g2.getApproximation().getClass())) {
-				throw new IllegalArgumentException(
-						"Die Addition kann nicht durchgeführt werden, da die beiden Ganglinien unterschiedle Approximationsverfahren verwenden.");
-			}
+		if ((g1.getApproximation() != null && g2.getApproximation() != null)
+				&& !g1.getApproximation().getClass().equals(
+						g2.getApproximation().getClass())
+				|| (g1.getApproximation() == null ^ g2.getApproximation() == null)) {
+			throw new IllegalArgumentException(
+					"Die Addition kann nicht durchgeführt werden, da die beiden Ganglinien unterschiedle Approximationsverfahren verwenden.");
 		}
 
 		p1 = new Polyline();
@@ -221,12 +221,12 @@ public final class GanglinienOperationen {
 		Polyline p1, p2;
 		Queue<Long> zeitstempel;
 
-		if (!(g1.getApproximation() == null && g2.getApproximation() == null)) {
-			if (!g1.getApproximation().getClass().equals(
-					g2.getApproximation().getClass())) {
-				throw new IllegalArgumentException(
-						"Die Division kann nicht durchgeführt werden, da die beiden Ganglinien unterschiedle Approximationsverfahren verwenden.");
-			}
+		if ((g1.getApproximation() != null && g2.getApproximation() != null)
+				&& !g1.getApproximation().getClass().equals(
+						g2.getApproximation().getClass())
+				|| (g1.getApproximation() == null ^ g2.getApproximation() == null)) {
+			throw new IllegalArgumentException(
+					"Die Division kann nicht durchgeführt werden, da die beiden Ganglinien unterschiedle Approximationsverfahren verwenden.");
 		}
 
 		p1 = new Polyline();
@@ -385,12 +385,12 @@ public final class GanglinienOperationen {
 		Polyline p1, p2;
 		Queue<Long> zeitstempel;
 
-		if (!(g1.getApproximation() == null && g2.getApproximation() == null)) {
-			if (!g1.getApproximation().getClass().equals(
-					g2.getApproximation().getClass())) {
-				throw new IllegalArgumentException(
-						"Die Multiplikation kann nicht durchgeführt werden, da die beiden Ganglinien unterschiedle Approximationsverfahren verwenden.");
-			}
+		if ((g1.getApproximation() != null && g2.getApproximation() != null)
+				&& !g1.getApproximation().getClass().equals(
+						g2.getApproximation().getClass())
+				|| (g1.getApproximation() == null ^ g2.getApproximation() == null)) {
+			throw new IllegalArgumentException(
+					"Die Multiplikation kann nicht durchgeführt werden, da die beiden Ganglinien unterschiedle Approximationsverfahren verwenden.");
 		}
 
 		p1 = new Polyline();
@@ -497,12 +497,12 @@ public final class GanglinienOperationen {
 		Polyline p1, p2;
 		Queue<Long> zeitstempel;
 
-		if (!(g1.getApproximation() == null && g2.getApproximation() == null)) {
-			if (!g1.getApproximation().getClass().equals(
-					g2.getApproximation().getClass())) {
-				throw new IllegalArgumentException(
-						"Die Subtraktion kann nicht durchgeführt werden, da die beiden Ganglinien unterschiedle Approximationsverfahren verwenden.");
-			}
+		if ((g1.getApproximation() != null && g2.getApproximation() != null)
+				&& !g1.getApproximation().getClass().equals(
+						g2.getApproximation().getClass())
+				|| (g1.getApproximation() == null ^ g2.getApproximation() == null)) {
+			throw new IllegalArgumentException(
+					"Die Subtraktion kann nicht durchgeführt werden, da die beiden Ganglinien unterschiedle Approximationsverfahren verwenden.");
 		}
 
 		p1 = new Polyline();
