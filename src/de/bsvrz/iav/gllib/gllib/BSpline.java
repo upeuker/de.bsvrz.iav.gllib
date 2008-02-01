@@ -72,11 +72,11 @@ public class BSpline extends AbstractApproximation {
 		}
 
 		// TODO Wird dieses IF-ELSE benötigt?
-		// if (get(0).getZeitstempel() == zeitstempel) {
-		// return get(0);
-		// } else if (get(anzahl() - 1).getZeitstempel() == zeitstempel) {
-		// return get(anzahl() - 1);
-		// }
+		if (get(0).getZeitstempel() == zeitstempel) {
+			return get(0);
+		} else if (get(anzahl() - 1).getZeitstempel() == zeitstempel) {
+			return get(anzahl() - 1);
+		}
 
 		// Sonderfall
 		if (ordnung == 1) {
