@@ -69,19 +69,19 @@ public class PolylineTest {
 
 		// Die existierenden Stützstellen
 		t = 0;
-		assertEquals(ganglinie.getStuetzstelle(t), polyline.get(t));
+		assertEquals(ganglinie.getStuetzstellen().get(0), polyline.get(t));
 		System.out.println(polyline.get(t));
 		t = 30;
-		assertEquals(ganglinie.getStuetzstelle(t), polyline.get(t));
+		assertEquals(ganglinie.getStuetzstellen().get(1), polyline.get(t));
 		System.out.println(polyline.get(t));
 		t = 40;
-		assertEquals(ganglinie.getStuetzstelle(t), polyline.get(t));
+		assertEquals(ganglinie.getStuetzstellen().get(2), polyline.get(t));
 		System.out.println(polyline.get(t));
 		t = 60;
-		assertEquals(ganglinie.getStuetzstelle(t), polyline.get(t));
+		assertEquals(ganglinie.getStuetzstellen().get(3), polyline.get(t));
 		System.out.println(polyline.get(t));
 		t = 90;
-		assertEquals(ganglinie.getStuetzstelle(t), polyline.get(t));
+		assertEquals(ganglinie.getStuetzstellen().get(4), polyline.get(t));
 		System.out.println(polyline.get(t));
 
 		// Punkte zwischen den Stützstellen

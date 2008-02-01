@@ -53,6 +53,8 @@ public class TestCubicSpline {
 		ganglinie.setStuetzstelle(40, 20.0);
 		ganglinie.setStuetzstelle(60, 40.0);
 		ganglinie.setStuetzstelle(90, 10.0);
+		ganglinie.setApproximation(new Polyline());
+		ganglinie.aktualisiereApproximation();
 	}
 
 	/**

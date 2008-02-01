@@ -88,9 +88,12 @@ public class GanglinieTest {
 		assertFalse(g.isValid(9));
 		assertFalse(g.isValid(45));
 
-		assertEquals(new Stuetzstelle<Double>(10, 25.0), g.getStuetzstelle(10));
-		assertEquals(new Stuetzstelle<Double>(30, 40.0), g.getStuetzstelle(30));
-		assertEquals(new Stuetzstelle<Double>(40, 35.0), g.getStuetzstelle(40));
+		assertEquals(new Stuetzstelle<Double>(10, 25.0), g.getStuetzstellen()
+				.get(0));
+		assertEquals(new Stuetzstelle<Double>(30, 40.0), g.getStuetzstellen()
+				.get(1));
+		assertEquals(new Stuetzstelle<Double>(40, 35.0), g.getStuetzstellen()
+				.get(2));
 
 		assertEquals(3, g.anzahlStuetzstellen());
 	}
@@ -106,7 +109,7 @@ public class GanglinieTest {
 
 		g = new Ganglinie();
 
-		assertNull(g.getStuetzstelle(1));
+		assertNull(g.getStuetzstelle(1).getWert());
 
 		assertEquals(0, g.anzahlStuetzstellen());
 		assertEquals(0, g.getStuetzstellen().size());
