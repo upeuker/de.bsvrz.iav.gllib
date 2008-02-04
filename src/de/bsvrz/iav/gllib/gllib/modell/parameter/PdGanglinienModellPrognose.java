@@ -33,6 +33,7 @@ import de.bsvrz.dav.daf.main.config.AttributeGroup;
 import de.bsvrz.dav.daf.main.config.DataModel;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatum;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractParameterDatensatz;
+import de.bsvrz.sys.funclib.bitctrl.modell.Datum;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
 import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.objekte.MessQuerschnittAllgemein;
 
@@ -56,8 +57,8 @@ public class PdGanglinienModellPrognose extends
 		/** Auswahlmethode: Auswahl der wahrscheinlichsten Ganglinie. */
 		public static final int WAHRSCHEINLICHSTE_GANGLINIE = 2;
 
-		/** Das Flag f&uuml;r die G&uuml;ltigkeit des Datensatzes. */
-		private boolean valid;
+		/** Der aktuelle Datenstatus. */
+		private Status datenStatus = Datum.Status.UNDEFINIERT;
 
 		/** Die Auswahlmethode, wenn Pattern-Matching nicht geht. */
 		private int auswahlMethode;
@@ -85,7 +86,7 @@ public class PdGanglinienModellPrognose extends
 		 * Initialisiert das Datum mit Standardwerten.
 		 */
 		public Daten() {
-			valid = true;
+			datenStatus = Datum.Status.DATEN;
 			auswahlMethode = WAHRSCHEINLICHSTE_GANGLINIE;
 			matchingIntervall = 60 * 60 * 1000; // 1 Stunde
 			maxDauerZyklischePrognose = 30 * 24 * 60 * 60 * 1000; // 1 Monat
@@ -103,7 +104,7 @@ public class PdGanglinienModellPrognose extends
 		public Daten clone() {
 			Daten klon = new Daten();
 
-			klon.valid = valid;
+			klon.datenStatus = datenStatus;
 			klon.auswahlMethode = auswahlMethode;
 			klon.matchingIntervall = matchingIntervall;
 			klon.maxDauerZyklischePrognose = maxDauerZyklischePrognose;
@@ -122,6 +123,15 @@ public class PdGanglinienModellPrognose extends
 		 */
 		public int getAuswahlMethode() {
 			return auswahlMethode;
+		}
+
+		/**
+		 * {@inheritDoc}.<br>
+		 * 
+		 * @see de.bsvrz.sys.funclib.bitctrl.modell.Datum#getDatenStatus()
+		 */
+		public Status getDatenStatus() {
+			return datenStatus;
 		}
 
 		/**
@@ -171,15 +181,6 @@ public class PdGanglinienModellPrognose extends
 		}
 
 		/**
-		 * {@inheritDoc}
-		 * 
-		 * @see de.bsvrz.sys.funclib.bitctrl.modell.Datum#isValid()
-		 */
-		public boolean isValid() {
-			return valid;
-		}
-
-		/**
 		 * Legt den Wert der Eigenschaft {@code auswahlMethode} fest.
 		 * 
 		 * @param auswahlMethode
@@ -187,6 +188,16 @@ public class PdGanglinienModellPrognose extends
 		 */
 		public void setAuswahlMethode(int auswahlMethode) {
 			this.auswahlMethode = auswahlMethode;
+		}
+
+		/**
+		 * setzt den aktuellen Datenstatus.
+		 * 
+		 * @param datenStatus
+		 *            der neue Status
+		 */
+		protected void setDatenStatus(Status datenStatus) {
+			this.datenStatus = datenStatus;
 		}
 
 		/**
@@ -239,16 +250,6 @@ public class PdGanglinienModellPrognose extends
 			this.patternMatchingOffset = patternMatchingOffset;
 		}
 
-		/**
-		 * Setzt das Flag {@code valid} des Datum.
-		 * 
-		 * @param valid
-		 *            der neue Wert des Flags.
-		 */
-		protected void setValid(boolean valid) {
-			this.valid = valid;
-		}
-
 	}
 
 	/** Die PID der Attributgruppe. */
@@ -295,6 +296,32 @@ public class PdGanglinienModellPrognose extends
 	/**
 	 * {@inheritDoc}
 	 * 
+	 * @see de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatensatz#konvertiere(de.bsvrz.sys.funclib.bitctrl.modell.Datum)
+	 */
+	@Override
+	protected Data konvertiere(Daten datum) {
+		Data daten = erzeugeSendeCache();
+
+		daten.getUnscaledValue("GLAuswahlMethode").set(
+				datum.getAuswahlMethode());
+		daten.getUnscaledValue("GLPatternMatchingHorizont").set(
+				datum.getPatternMatchingHorizont() / MILLIS_PER_SEKUNDE);
+		daten.getUnscaledValue("GLMatchingIntervall").set(
+				datum.getMatchingIntervall() / MILLIS_PER_SEKUNDE);
+		daten.getUnscaledValue("GLPatterMatchingOffset").set(
+				datum.getPatternMatchingOffset() / MILLIS_PER_SEKUNDE);
+		daten.getUnscaledValue("GLMaximalerMatchingFehler").set(
+				datum.getMaxMatchingFehler());
+		// TODO fehlendes Attribut GLMaximaleDauerZyklischePrognose im DaK
+		// daten.getUnscaledValue("GLMaximaleDauerZyklischePrognose").set(
+		// datum.getMaxDauerZyklischePrognose() / MILLIS_PER_SEKUNDE);
+
+		return daten;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
 	 * @see de.bsvrz.sys.funclib.bitctrl.modell.Datensatz#setDaten(de.bsvrz.dav.daf.main.ResultData)
 	 */
 	public void setDaten(ResultData result) {
@@ -321,41 +348,13 @@ public class PdGanglinienModellPrognose extends
 			// datum.setMaxDauerZyklischePrognose(daten.getUnscaledValue(
 			// "GLMaximaleDauerZyklischePrognose").longValue()
 			// MILLIS_PER_SEKUNDE);
-
-			datum.setValid(true);
-		} else {
-			datum.setValid(false);
 		}
 
+		datum.setDatenStatus(Datum.Status.getStatus(result.getDataState()
+				.getCode()));
 		datum.setZeitstempel(result.getDataTime());
 		setDatum(result.getDataDescription().getAspect(), datum);
 		fireDatensatzAktualisiert(result.getDataDescription().getAspect(),
 				datum.clone());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatensatz#konvertiere(de.bsvrz.sys.funclib.bitctrl.modell.Datum)
-	 */
-	@Override
-	protected Data konvertiere(Daten datum) {
-		Data daten = erzeugeSendeCache();
-
-		daten.getUnscaledValue("GLAuswahlMethode").set(
-				datum.getAuswahlMethode());
-		daten.getUnscaledValue("GLPatternMatchingHorizont").set(
-				datum.getPatternMatchingHorizont() / MILLIS_PER_SEKUNDE);
-		daten.getUnscaledValue("GLMatchingIntervall").set(
-				datum.getMatchingIntervall() / MILLIS_PER_SEKUNDE);
-		daten.getUnscaledValue("GLPatterMatchingOffset").set(
-				datum.getPatternMatchingOffset() / MILLIS_PER_SEKUNDE);
-		daten.getUnscaledValue("GLMaximalerMatchingFehler").set(
-				datum.getMaxMatchingFehler());
-		// TODO fehlendes Attribut GLMaximaleDauerZyklischePrognose im DaK
-		// daten.getUnscaledValue("GLMaximaleDauerZyklischePrognose").set(
-		// datum.getMaxDauerZyklischePrognose() / MILLIS_PER_SEKUNDE);
-
-		return daten;
 	}
 }

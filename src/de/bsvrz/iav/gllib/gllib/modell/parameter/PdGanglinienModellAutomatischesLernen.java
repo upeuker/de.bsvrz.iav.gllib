@@ -32,6 +32,7 @@ import de.bsvrz.dav.daf.main.config.AttributeGroup;
 import de.bsvrz.dav.daf.main.config.DataModel;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatum;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractParameterDatensatz;
+import de.bsvrz.sys.funclib.bitctrl.modell.Datum;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
 import de.bsvrz.sys.funclib.bitctrl.modell.ganglinien.objekte.ApplikationGanglinienPrognose;
 
@@ -50,8 +51,8 @@ public class PdGanglinienModellAutomatischesLernen extends
 	 */
 	public class Daten extends AbstractDatum {
 
-		/** Das Flag f&uuml;r die G&uuml;ltigkeit des Datensatzes. */
-		private boolean valid;
+		/** Der aktuelle Datenstatus. */
+		private Status datenStatus = Datum.Status.UNDEFINIERT;
 
 		/**
 		 * Gibt an, in welchen Zeitabständen der Lernvorgang gestartet werden
@@ -90,7 +91,7 @@ public class PdGanglinienModellAutomatischesLernen extends
 			klon.datenMindestalter = datenMindestalter;
 			klon.maximalWichtung = maximalWichtung;
 			klon.maxVergleichsAbstand = maxVergleichsAbstand;
-			klon.valid = valid;
+			klon.datenStatus = datenStatus;
 			klon.setZeitstempel(getZeitstempel());
 
 			return klon;
@@ -119,6 +120,15 @@ public class PdGanglinienModellAutomatischesLernen extends
 		}
 
 		/**
+		 * {@inheritDoc}.<br>
+		 * 
+		 * @see de.bsvrz.sys.funclib.bitctrl.modell.Datum#getDatenStatus()
+		 */
+		public Status getDatenStatus() {
+			return datenStatus;
+		}
+
+		/**
 		 * Maximaler Wichtungsfaktor der historischen Ganglinien bei der
 		 * Verschmelzung mit Analyseganglinien.
 		 * 
@@ -141,15 +151,6 @@ public class PdGanglinienModellAutomatischesLernen extends
 		}
 
 		/**
-		 * {@inheritDoc}
-		 * 
-		 * @see de.bsvrz.sys.funclib.bitctrl.modell.Datum#isValid()
-		 */
-		public boolean isValid() {
-			return valid;
-		}
-
-		/**
 		 * Gibt an, in welchen Zeitabständen der Lernvorgang gestartet werden
 		 * soll.
 		 * 
@@ -169,6 +170,16 @@ public class PdGanglinienModellAutomatischesLernen extends
 		 */
 		public void setDatenMindestalter(long datenMindestalter) {
 			this.datenMindestalter = datenMindestalter;
+		}
+
+		/**
+		 * setzt den aktuellen Datenstatus.
+		 * 
+		 * @param datenStatus
+		 *            der neue Status
+		 */
+		protected void setDatenStatus(Status datenStatus) {
+			this.datenStatus = datenStatus;
 		}
 
 		/**
@@ -206,23 +217,13 @@ public class PdGanglinienModellAutomatischesLernen extends
 			String s = getClass().getSimpleName() + "[";
 
 			s += "zeitpunkt=" + getZeitpunkt();
-			s += "valid=" + valid;
+			s += "valid=" + isValid();
 			s += ", aktualisierungsintervall=" + aktualisierungsintervall;
 			s += ", datenMindestalter=" + datenMindestalter;
 			s += ", maximalWichtung=" + maximalWichtung;
 			s += ", maxVergleichsAbstand=" + maxVergleichsAbstand;
 
 			return s + "]";
-		}
-
-		/**
-		 * Setzt das Flag {@code valid} des Datum.
-		 * 
-		 * @param valid
-		 *            der neue Wert des Flags.
-		 */
-		protected void setValid(boolean valid) {
-			this.valid = valid;
 		}
 
 	}
@@ -274,6 +275,27 @@ public class PdGanglinienModellAutomatischesLernen extends
 	/**
 	 * {@inheritDoc}
 	 * 
+	 * @see de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatensatz#konvertiere(de.bsvrz.sys.funclib.bitctrl.modell.Datum)
+	 */
+	@Override
+	protected Data konvertiere(Daten datum) {
+		Data daten = erzeugeSendeCache();
+
+		daten.getUnscaledValue("AlgAktualisierungsintervall").set(
+				datum.getAktualisierungsintervall());
+		daten.getUnscaledValue("AlgDatenMindestalter").set(
+				datum.getDatenMindestalter());
+		daten.getUnscaledValue("AlgMaximalWichtung").set(
+				datum.getMaximalWichtung());
+		daten.getUnscaledValue("AlgMaxVergleichsAbstand").set(
+				datum.getMaxVergleichsAbstand());
+
+		return daten;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
 	 * @see de.bsvrz.sys.funclib.bitctrl.modell.Datensatz#setDaten(de.bsvrz.dav.daf.main.ResultData)
 	 */
 	public void setDaten(ResultData result) {
@@ -291,37 +313,14 @@ public class PdGanglinienModellAutomatischesLernen extends
 					"AlgMaximalWichtung").intValue());
 			datum.setMaxVergleichsAbstand(daten.getUnscaledValue(
 					"AlgMaxVergleichsAbstand").intValue());
-
-			datum.setValid(true);
-		} else {
-			datum.setValid(false);
 		}
 
+		datum.setDatenStatus(Datum.Status.getStatus(result.getDataState()
+				.getCode()));
 		datum.setZeitstempel(result.getDataTime());
 		setDatum(result.getDataDescription().getAspect(), datum);
 		fireDatensatzAktualisiert(result.getDataDescription().getAspect(),
 				datum.clone());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatensatz#konvertiere(de.bsvrz.sys.funclib.bitctrl.modell.Datum)
-	 */
-	@Override
-	protected Data konvertiere(Daten datum) {
-		Data daten = erzeugeSendeCache();
-
-		daten.getUnscaledValue("AlgAktualisierungsintervall").set(
-				datum.getAktualisierungsintervall());
-		daten.getUnscaledValue("AlgDatenMindestalter").set(
-				datum.getDatenMindestalter());
-		daten.getUnscaledValue("AlgMaximalWichtung").set(
-				datum.getMaximalWichtung());
-		daten.getUnscaledValue("AlgMaxVergleichsAbstand").set(
-				datum.getMaxVergleichsAbstand());
-
-		return daten;
 	}
 
 }

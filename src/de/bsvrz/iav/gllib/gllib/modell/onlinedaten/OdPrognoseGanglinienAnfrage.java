@@ -43,6 +43,7 @@ import de.bsvrz.iav.gllib.gllib.dav.GlProgAnfrage;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatum;
 import de.bsvrz.sys.funclib.bitctrl.modell.AbstractOnlineDatensatz;
 import de.bsvrz.sys.funclib.bitctrl.modell.Aspekt;
+import de.bsvrz.sys.funclib.bitctrl.modell.Datum;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.systemmodellglobal.objekte.Applikation;
@@ -115,8 +116,8 @@ public class OdPrognoseGanglinienAnfrage extends
 		/** Liste der Anfragen in dieser Nachricht. */
 		private final List<GlProgAnfrage> anfragen = new ArrayList<GlProgAnfrage>();
 
-		/** Das Flag f&uuml;r die G&uuml;ltigkeit des Datensatzes. */
-		private boolean valid;
+		/** Der aktuelle Datenstatus. */
+		private Status datenStatus = Datum.Status.UNDEFINIERT;
 
 		/**
 		 * {@inheritDoc}
@@ -158,7 +159,7 @@ public class OdPrognoseGanglinienAnfrage extends
 			Daten klon = new Daten();
 
 			klon.setZeitstempel(getZeitstempel());
-			klon.valid = valid;
+			klon.datenStatus = datenStatus;
 			klon.absender = absender;
 			klon.absenderZeichen = absenderZeichen;
 			klon.anfragen.addAll(anfragen);
@@ -204,21 +205,21 @@ public class OdPrognoseGanglinienAnfrage extends
 		}
 
 		/**
+		 * {@inheritDoc}.<br>
+		 * 
+		 * @see de.bsvrz.sys.funclib.bitctrl.modell.Datum#getDatenStatus()
+		 */
+		public Status getDatenStatus() {
+			return datenStatus;
+		}
+
+		/**
 		 * {@inheritDoc}
 		 * 
 		 * @see java.util.Collection#isEmpty()
 		 */
 		public boolean isEmpty() {
 			return anfragen.isEmpty();
-		}
-
-		/**
-		 * {@inheritDoc}
-		 * 
-		 * @see de.bsvrz.sys.funclib.bitctrl.modell.Datum#isValid()
-		 */
-		public boolean isValid() {
-			return valid;
 		}
 
 		/**
@@ -279,6 +280,16 @@ public class OdPrognoseGanglinienAnfrage extends
 		}
 
 		/**
+		 * setzt den aktuellen Datenstatus.
+		 * 
+		 * @param datenStatus
+		 *            der neue Status
+		 */
+		protected void setDatenStatus(Status datenStatus) {
+			this.datenStatus = datenStatus;
+		}
+
+		/**
 		 * {@inheritDoc}
 		 * 
 		 * @see java.util.Collection#size()
@@ -321,16 +332,6 @@ public class OdPrognoseGanglinienAnfrage extends
 			s += ", Anzahl der Teilanfragen=" + anfragen.size();
 
 			return s + "]";
-		}
-
-		/**
-		 * Setzt das Flag {@code valid} des Datum.
-		 * 
-		 * @param valid
-		 *            der neue Wert des Flags.
-		 */
-		protected void setValid(final boolean valid) {
-			this.valid = valid;
 		}
 
 	}
@@ -394,6 +395,33 @@ public class OdPrognoseGanglinienAnfrage extends
 	/**
 	 * {@inheritDoc}
 	 * 
+	 * @see de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatensatz#konvertiere(de.bsvrz.sys.funclib.bitctrl.modell.Datum)
+	 */
+	@Override
+	protected Data konvertiere(final Daten datum) {
+		Data daten = erzeugeSendeCache();
+
+		Array feld;
+		int i;
+
+		daten.getReferenceValue("absenderId").setSystemObject(
+				datum.getAbsender().getSystemObject());
+		daten.getTextValue("AbsenderZeichen").setText(
+				datum.getAbsenderZeichen());
+
+		feld = daten.getArray("PrognoseGanglinienAnfrage");
+		feld.setLength(datum.size());
+		i = 0;
+		for (GlProgAnfrage anfrage : datum) {
+			anfrage.getDaten(feld.getItem(i));
+		}
+
+		return daten;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
 	 * @see de.bsvrz.sys.funclib.bitctrl.modell.Datensatz#setDaten(de.bsvrz.dav.daf.main.ResultData)
 	 */
 	public void setDaten(final ResultData result) {
@@ -418,43 +446,14 @@ public class OdPrognoseGanglinienAnfrage extends
 				anfrage.setDaten(feld.getItem(i));
 				datum.add(anfrage);
 			}
-
-			datum.setValid(true);
-		} else {
-			datum.setValid(false);
 		}
 
+		datum.setDatenStatus(Datum.Status.getStatus(result.getDataState()
+				.getCode()));
 		datum.setZeitstempel(result.getDataTime());
 		setDatum(result.getDataDescription().getAspect(), datum);
 		fireDatensatzAktualisiert(result.getDataDescription().getAspect(),
 				datum.clone());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatensatz#konvertiere(de.bsvrz.sys.funclib.bitctrl.modell.Datum)
-	 */
-	@Override
-	protected Data konvertiere(final Daten datum) {
-		Data daten = erzeugeSendeCache();
-
-		Array feld;
-		int i;
-
-		daten.getReferenceValue("absenderId").setSystemObject(
-				datum.getAbsender().getSystemObject());
-		daten.getTextValue("AbsenderZeichen").setText(
-				datum.getAbsenderZeichen());
-
-		feld = daten.getArray("PrognoseGanglinienAnfrage");
-		feld.setLength(datum.size());
-		i = 0;
-		for (GlProgAnfrage anfrage : datum) {
-			anfrage.getDaten(feld.getItem(i));
-		}
-
-		return daten;
 	}
 
 }
