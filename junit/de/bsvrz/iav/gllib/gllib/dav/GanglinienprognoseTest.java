@@ -34,8 +34,8 @@ import de.bsvrz.sys.funclib.application.StandardApplication;
 import de.bsvrz.sys.funclib.application.StandardApplicationRunner;
 import de.bsvrz.sys.funclib.bitctrl.modell.DatensendeException;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
-import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnittAllgemein;
 import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.VerkehrsobjektFactory;
+import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.objekte.MessQuerschnittAllgemein;
 import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
 import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
 

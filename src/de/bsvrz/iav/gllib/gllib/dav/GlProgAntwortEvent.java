@@ -34,7 +34,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 import de.bsvrz.iav.gllib.gllib.modell.onlinedaten.OdPrognoseGanglinienAntwort;
-import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnittAllgemein;
+import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.objekte.MessQuerschnittAllgemein;
 
 /**
  * Repr&auml;sentiert eine Antwortnachricht der Ganglinienprognose. Enthalten

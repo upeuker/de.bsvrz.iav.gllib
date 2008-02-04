@@ -41,7 +41,7 @@ import de.bsvrz.sys.funclib.bitctrl.modell.DatensatzUpdateListener;
 import de.bsvrz.sys.funclib.bitctrl.modell.DatensendeException;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
 import de.bsvrz.sys.funclib.bitctrl.modell.ganglinien.objekte.ApplikationGanglinienPrognose;
-import de.bsvrz.sys.funclib.bitctrl.modell.systemmodellglobal.Applikation;
+import de.bsvrz.sys.funclib.bitctrl.modell.systemmodellglobal.objekte.Applikation;
 import de.bsvrz.sys.funclib.debug.Debug;
 
 /**

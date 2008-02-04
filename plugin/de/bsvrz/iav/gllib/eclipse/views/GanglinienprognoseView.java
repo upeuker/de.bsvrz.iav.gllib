@@ -60,7 +60,7 @@ import de.bsvrz.iav.gllib.gllib.dav.GlProgAntwortListener;
 import de.bsvrz.sys.funclib.bitctrl.modell.DatensendeException;
 import de.bsvrz.sys.funclib.bitctrl.modell.ModellTools;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
-import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.MessQuerschnittAllgemein;
+import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.objekte.MessQuerschnittAllgemein;
 import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
 
 /**
