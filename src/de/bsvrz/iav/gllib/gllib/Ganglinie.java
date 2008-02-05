@@ -179,15 +179,16 @@ public class Ganglinie implements IGanglinie<Double> {
 					start = null;
 					ende = null;
 				}
+			} else if (t == stuetzstellen.lastKey()) {
+				// letzte Stützstelle
+				if (start != null && ende != null) {
+					intervalle.add(new Intervall(start, ende));
+				}
 			} else {
 				// Intervall verlängern
 				if (stuetzstellen.get(t) != null) {
 					ende = t;
 				}
-			}
-
-			if (t == stuetzstellen.lastKey()) {
-				intervalle.add(new Intervall(start, ende));
 			}
 		}
 
