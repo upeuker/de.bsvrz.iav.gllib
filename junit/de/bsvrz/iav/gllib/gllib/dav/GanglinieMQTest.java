@@ -67,35 +67,35 @@ public class GanglinieMQTest {
 		g.setApproximation(null);
 		g.aktualisiereApproximation();
 
-		g.setStuetzstelle(10, new Messwerte(90.0, 10.0, 130.0, 80.0));
-		g.setStuetzstelle(30, new Messwerte(50.0, 5.0, 180.0, 90.0));
-		g.setStuetzstelle(40, new Messwerte(70.0, 20.0, 100.0, 70.0));
+		g.setStuetzstelle(1000, new Messwerte(90.0, 10.0, 130.0, 80.0));
+		g.setStuetzstelle(3000, new Messwerte(50.0, 5.0, 180.0, 90.0));
+		g.setStuetzstelle(4000, new Messwerte(70.0, 20.0, 100.0, 70.0));
 
 		assertEquals(3, g.anzahlStuetzstellen());
 		assertEquals(3, g.getStuetzstellen().size());
 
-		assertTrue(g.existsStuetzstelle(10));
-		assertTrue(g.existsStuetzstelle(30));
-		assertTrue(g.existsStuetzstelle(40));
-		assertFalse(g.existsStuetzstelle(5));
-		assertFalse(g.existsStuetzstelle(-10));
-		assertFalse(g.existsStuetzstelle(60));
+		assertTrue(g.existsStuetzstelle(1000));
+		assertTrue(g.existsStuetzstelle(3000));
+		assertTrue(g.existsStuetzstelle(4000));
+		assertFalse(g.existsStuetzstelle(500));
+		assertFalse(g.existsStuetzstelle(-1000));
+		assertFalse(g.existsStuetzstelle(6000));
 
-		assertEquals(new Intervall(10, 40), g.getIntervall());
+		assertEquals(new Intervall(1000, 4000), g.getIntervall());
 
-		assertTrue(g.isValid(15));
-		assertTrue(g.isValid(30));
-		assertTrue(g.isValid(35));
-		assertFalse(g.isValid(2));
-		assertFalse(g.isValid(9));
-		assertFalse(g.isValid(45));
+		assertTrue(g.isValid(1500));
+		assertTrue(g.isValid(3000));
+		assertTrue(g.isValid(3500));
+		assertFalse(g.isValid(200));
+		assertFalse(g.isValid(900));
+		assertFalse(g.isValid(4500));
 
-		assertEquals(new Stuetzstelle<Messwerte>(10, new Messwerte(90.0, 10.0,
-				130.0, 80.0)), g.getStuetzstellen().get(0));
-		assertEquals(new Stuetzstelle<Messwerte>(30, new Messwerte(50.0, 5.0,
+		assertEquals(new Stuetzstelle<Messwerte>(1000, new Messwerte(90.0,
+				10.0, 130.0, 80.0)), g.getStuetzstellen().get(0));
+		assertEquals(new Stuetzstelle<Messwerte>(3000, new Messwerte(50.0, 5.0,
 				180.0, 90.0)), g.getStuetzstellen().get(1));
-		assertEquals(new Stuetzstelle<Messwerte>(40, new Messwerte(70.0, 20.0,
-				100.0, 70.0)), g.getStuetzstellen().get(2));
+		assertEquals(new Stuetzstelle<Messwerte>(4000, new Messwerte(70.0,
+				20.0, 100.0, 70.0)), g.getStuetzstellen().get(2));
 	}
 
 	/**

@@ -67,7 +67,7 @@ public class StuetzstelleTest {
 	 */
 	@Test
 	public void testGleichheit() {
-		System.out.println("Gleicheit von Stützstellen ...");
+		System.out.println("Gleichheit von Stützstellen ...");
 		Stuetzstelle<Integer> s1, s2;
 
 		s1 = new Stuetzstelle<Integer>(15, 30);

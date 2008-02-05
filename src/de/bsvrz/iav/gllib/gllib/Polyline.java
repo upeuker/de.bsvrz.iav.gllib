@@ -26,6 +26,8 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
+import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
+
 /**
  * Approximation einer Ganglinie mit Hilfe von Polylines. Der Wert der
  * St&uuml;tzstelle zu einem Zeitstempel wird nach folgender Formel berechnet:
@@ -48,10 +50,10 @@ public class Polyline extends AbstractApproximation {
 		int index;
 
 		index = -1;
-		for (int i = 0; i < anzahl(); i++) {
-			if (get(i).getZeitstempel() == zeitstempel) {
-				return get(i);
-			} else if (get(i).getZeitstempel() > zeitstempel) {
+		for (int i = 0; i < getStuetzstellen().size(); i++) {
+			if (getStuetzstellen().get(i).getZeitstempel() == zeitstempel) {
+				return getStuetzstellen().get(i);
+			} else if (getStuetzstellen().get(i).getZeitstempel() > zeitstempel) {
 				index = i - 1;
 				break;
 			}
@@ -62,8 +64,8 @@ public class Polyline extends AbstractApproximation {
 			return new Stuetzstelle<Double>(zeitstempel, null);
 		}
 
-		s0 = get(index);
-		s1 = get(index + 1);
+		s0 = getStuetzstellen().get(index);
+		s1 = getStuetzstellen().get(index + 1);
 		x0 = s0.getZeitstempel();
 		y0 = s0.getWert().doubleValue();
 		x1 = s1.getZeitstempel();
@@ -79,6 +81,88 @@ public class Polyline extends AbstractApproximation {
 	 */
 	public void initialisiere() {
 		// nichts
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see de.bsvrz.iav.gllib.gllib.Approximation#integral(de.bsvrz.sys.funclib.bitctrl.util.Intervall)
+	 */
+	public double integral(Intervall intervall) {
+		final int start;
+		final int ende;
+		double flaeche = 0;
+
+		start = findeStuetzstelleVor(intervall.getStart());
+		ende = findeStuetzstelleNach(intervall.getEnde());
+
+		for (int i = start; i < ende; ++i) {
+			long breite;
+			int iRechteck, iDreieck;
+
+			breite = getStuetzstellen().get(i + 1).getZeitstempel()
+					- getStuetzstellen().get(i).getZeitstempel();
+			if (getStuetzstellen().get(i).getWert() < getStuetzstellen().get(
+					i + 1).getWert()) {
+				iRechteck = i;
+				iDreieck = i + 1;
+			} else {
+				iRechteck = i + 1;
+				iDreieck = i;
+			}
+
+			flaeche += getStuetzstellen().get(iRechteck).getWert() * breite;
+			flaeche += (getStuetzstellen().get(iDreieck).getWert() - getStuetzstellen()
+					.get(iRechteck).getWert())
+					* breite / 2;
+		}
+
+		if (getStuetzstellen().get(start).getZeitstempel() < intervall
+				.getStart()) {
+			// Erste Stützstelle liegt vor Intervall
+			long breite;
+			double hDreieck, hRechteck;
+
+			hRechteck = getStuetzstellen().get(start).getWert();
+			hDreieck = get(intervall.getStart()).getWert();
+			if (hRechteck > hDreieck) {
+				// Das Rechteck muss die kleinere Höhe haben.
+				double tmp;
+
+				tmp = hRechteck;
+				hRechteck = hDreieck;
+				hDreieck = tmp;
+			}
+
+			breite = intervall.getStart()
+					- getStuetzstellen().get(start).getZeitstempel();
+			flaeche -= hRechteck * breite;
+			flaeche -= (hDreieck - hRechteck) * breite / 2;
+		}
+
+		if (getStuetzstellen().get(ende).getZeitstempel() > intervall.getEnde()) {
+			// Letzte Stützstelle liegt vor Intervall
+			long breite;
+			double hDreieck, hRechteck;
+
+			hRechteck = getStuetzstellen().get(ende).getWert();
+			hDreieck = get(intervall.getEnde()).getWert();
+			if (hRechteck > hDreieck) {
+				// Das Rechteck muss die kleinere Höhe haben.
+				double tmp;
+
+				tmp = hRechteck;
+				hRechteck = hDreieck;
+				hDreieck = tmp;
+			}
+
+			breite = getStuetzstellen().get(ende).getZeitstempel()
+					- intervall.getEnde();
+			flaeche -= hRechteck * breite;
+			flaeche -= (hDreieck - hRechteck) * breite / 2;
+		}
+
+		return flaeche;
 	}
 
 	/**

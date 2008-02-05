@@ -27,13 +27,14 @@
 package de.bsvrz.iav.gllib.gllib;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.SortedSet;
+
+import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
 
 /**
  * Schnittstelle f&uuml;r alle Approximationsmethoden von Ganglinien.
  * Implementierende Klassen sollten einen parameterlosen Konstruktor besitzen.
- * <p>
- * TODO: Undefinierte Intervalle innerhalb der Ganglinie berücksichtigen
  * 
  * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
@@ -59,9 +60,33 @@ public interface Approximation {
 	Stuetzstelle<Double> get(long zeitstempel);
 
 	/**
+	 * Gibt das Intervall zurück, in dem die Approximation definiert ist.
+	 * 
+	 * @return das Intervall der Approximation.
+	 */
+	Intervall getIntervall();
+
+	/**
+	 * Gibt die Liste der Stützstellen zurück, die der Approximation zu Grunde
+	 * liegen.
+	 * 
+	 * @return die unveränderliche Liste der Stützstellen.
+	 */
+	List<Stuetzstelle<Double>> getStuetzstellen();
+
+	/**
 	 * F&uuml;hrt notwendige Initialisierungsarbeiten der Approximation aus.
 	 */
 	void initialisiere();
+
+	/**
+	 * Bestimmt das Integrall über ein Intervall der Approximation.
+	 * 
+	 * @param intervall
+	 *            ein Intervall.
+	 * @return das Integral bzw. der Flächeninhalt unter der Kurve im Intervall.
+	 */
+	double integral(Intervall intervall);
 
 	/**
 	 * Gibt eine Interpolation der Approximation zur&uuml;ck. N&uuml;tzlich
@@ -80,9 +105,9 @@ public interface Approximation {
 	/**
 	 * Legt die St&uuml;tzstellen der Approximation fest.
 	 * 
-	 * @param menge
+	 * @param stuetzstellen
 	 *            die Menge der bekannten St&uuml;tzstellen.
 	 */
-	void setStuetzstellen(Collection<Stuetzstelle<Double>> menge);
+	void setStuetzstellen(Collection<Stuetzstelle<Double>> stuetzstellen);
 
 }

@@ -34,12 +34,12 @@ import org.junit.Test;
 import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
 
 /**
- * Testet die Approximation einer Ganglinie mit Hilfe einer Polylinie.
+ * Testet die Approximation einer Ganglinie mit Hilfe einer Treppenfunktion.
  * 
  * @author BitCtrl Systems GmbH, Schumann
  * @version $Id$
  */
-public class PolylineTest {
+public class TreppenfunktionTest {
 
 	/** Die Testganglinie. */
 	private Ganglinie ganglinie;
@@ -62,46 +62,46 @@ public class PolylineTest {
 	 */
 	@Test
 	public void testGet() {
-		Polyline polyline;
+		Treppenfunktion treppe;
 		long t;
 
-		System.out.println("Polyline:");
-		polyline = new Polyline();
-		polyline.setStuetzstellen(ganglinie.getStuetzstellen());
+		System.out.println("Treppenfunktion:");
+		treppe = new Treppenfunktion();
+		treppe.setStuetzstellen(ganglinie.getStuetzstellen());
 
 		// Die existierenden Stützstellen
 		t = 0;
-		assertEquals(ganglinie.getStuetzstellen().get(0), polyline.get(t));
-		System.out.println(polyline.get(t));
+		assertEquals(ganglinie.getStuetzstellen().get(0), treppe.get(t));
+		System.out.println(treppe.get(t));
 		t = 3000;
-		assertEquals(ganglinie.getStuetzstellen().get(1), polyline.get(t));
-		System.out.println(polyline.get(t));
+		assertEquals(ganglinie.getStuetzstellen().get(1), treppe.get(t));
+		System.out.println(treppe.get(t));
 		t = 4000;
-		assertEquals(ganglinie.getStuetzstellen().get(2), polyline.get(t));
-		System.out.println(polyline.get(t));
+		assertEquals(ganglinie.getStuetzstellen().get(2), treppe.get(t));
+		System.out.println(treppe.get(t));
 		t = 6000;
-		assertEquals(ganglinie.getStuetzstellen().get(3), polyline.get(t));
-		System.out.println(polyline.get(t));
+		assertEquals(ganglinie.getStuetzstellen().get(3), treppe.get(t));
+		System.out.println(treppe.get(t));
 		t = 9000;
-		assertEquals(ganglinie.getStuetzstellen().get(4), polyline.get(t));
-		System.out.println(polyline.get(t));
+		assertEquals(ganglinie.getStuetzstellen().get(4), treppe.get(t));
+		System.out.println(treppe.get(t));
 
 		// Punkte zwischen den Stützstellen
 		t = 1000;
-		assertEquals(new Stuetzstelle<Double>(t, 10.0), polyline.get(t));
-		System.out.println(polyline.get(t));
+		assertEquals(new Stuetzstelle<Double>(t, 0.0), treppe.get(t));
+		System.out.println(treppe.get(t));
 		t = 2000;
-		assertEquals(new Stuetzstelle<Double>(t, 20.0), polyline.get(t));
-		System.out.println(polyline.get(t));
+		assertEquals(new Stuetzstelle<Double>(t, 0.0), treppe.get(t));
+		System.out.println(treppe.get(t));
 		t = 5000;
-		assertEquals(new Stuetzstelle<Double>(t, 30.0), polyline.get(t));
-		System.out.println(polyline.get(t));
+		assertEquals(new Stuetzstelle<Double>(t, 20.0), treppe.get(t));
+		System.out.println(treppe.get(t));
 		t = 7000;
-		assertEquals(new Stuetzstelle<Double>(t, 30.0), polyline.get(t));
-		System.out.println(polyline.get(t));
+		assertEquals(new Stuetzstelle<Double>(t, 40.0), treppe.get(t));
+		System.out.println(treppe.get(t));
 		t = 8000;
-		assertEquals(new Stuetzstelle<Double>(t, 20.0), polyline.get(t));
-		System.out.println(polyline.get(t));
+		assertEquals(new Stuetzstelle<Double>(t, 40.0), treppe.get(t));
+		System.out.println(treppe.get(t));
 	}
 
 	/**
@@ -109,20 +109,20 @@ public class PolylineTest {
 	 */
 	@Test
 	public void testIntegral() {
-		Polyline polyline;
+		Treppenfunktion treppe;
 		Intervall intervall;
 
-		System.out.println("Polyline: Methode integral()");
-		polyline = new Polyline();
-		polyline.setStuetzstellen(ganglinie.getStuetzstellen());
+		System.out.println("Treppenfunktion: Methode integral()");
+		treppe = new Treppenfunktion();
+		treppe.setStuetzstellen(ganglinie.getStuetzstellen());
 
 		// Intervallgrenzen liegen auf Stützstellen
 		intervall = new Intervall(0, 9000);
-		assertEquals(205000, polyline.integral(intervall));
+		assertEquals(190000, treppe.integral(intervall));
 
 		// Intervallgrenzen liegen nicht auf Stützstellen
-		intervall = new Intervall(2000, 8000);
-		assertEquals(170000, polyline.integral(intervall));
+		intervall = new Intervall(3500, 8500);
+		assertEquals(170000, treppe.integral(intervall));
 	}
 
 }

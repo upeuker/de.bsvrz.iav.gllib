@@ -30,13 +30,15 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
+
 /**
  * Testet die Approximation einer Ganglinie mit Hilfe eines B-Spline.
  * 
  * @author BitCtrl Systems GmbH, Schumann
  * @version $Id$
  */
-public class TestBSpline {
+public class BSplineTest {
 
 	/**
 	 * Pr&uuml;ft ob bei Anfrage einer St&uuml;tzstelle auch der richtige
@@ -50,10 +52,10 @@ public class TestBSpline {
 
 		g = new Ganglinie();
 		g.setStuetzstelle(0, 0.0);
-		g.setStuetzstelle(300, 300.0);
-		g.setStuetzstelle(400, 200.0);
-		g.setStuetzstelle(600, 400.0);
-		g.setStuetzstelle(900, 100.0);
+		g.setStuetzstelle(3 * 60 * 1000, 300.0);
+		g.setStuetzstelle(4 * 60 * 1000, 200.0);
+		g.setStuetzstelle(6 * 60 * 1000, 400.0);
+		g.setStuetzstelle(9 * 60 * 1000, 100.0);
 
 		spline = new BSpline();
 		spline.setStuetzstellen(g.getStuetzstellen());
@@ -63,10 +65,13 @@ public class TestBSpline {
 			spline.setOrdnung(k);
 			spline.initialisiere();
 
-			for (long t = g.getIntervall().start; t <= g.getIntervall().ende; t += 1) {
+			for (long t = g.getIntervall().start; t <= g.getIntervall().ende; t += 60 * 1000) {
 				assertEquals(t, spline.get(t).getZeitstempel());
 			}
 		}
+
+		System.err.println("Integral B-Spline: "
+				+ spline.integral(new Intervall(0, 900)));
 	}
 
 	// /**

@@ -38,7 +38,7 @@ import org.junit.Test;
  * @version $Id$
  */
 
-public class TestGanglinienOperationen {
+public class GanglinienOperationenTest {
 
 	/**
 	 * Ausgabe, welche Klasse gerade getestet wird.

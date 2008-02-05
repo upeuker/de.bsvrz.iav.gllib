@@ -33,8 +33,10 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
+
 /**
- * Implementiert nur die Property <code>Ganglinie</code> der Schnittstelle.
+ * Implementiert allgemeine Methoden der Schnittstelle.
  * 
  * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
@@ -61,6 +63,25 @@ public abstract class AbstractApproximation implements Approximation {
 	@Override
 	public Approximation clone() throws CloneNotSupportedException {
 		throw new CloneNotSupportedException();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see de.bsvrz.iav.gllib.gllib.Approximation#getIntervall()
+	 */
+	public Intervall getIntervall() {
+		return new Intervall(stuetzstellen.get(0).getZeitstempel(),
+				stuetzstellen.get(stuetzstellen.size()).getZeitstempel());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see de.bsvrz.iav.gllib.gllib.Approximation#getStuetzstellen()
+	 */
+	public List<Stuetzstelle<Double>> getStuetzstellen() {
+		return Collections.unmodifiableList(stuetzstellen);
 	}
 
 	/**
@@ -94,40 +115,129 @@ public abstract class AbstractApproximation implements Approximation {
 	}
 
 	/**
+	 * Prüft ob für den Zeitstempel eine Stützstelle berechnet werden kann. Für
+	 * stetige Funktionen bedeutet dies, dass der Zeitstempel im Intervall der
+	 * Stützstellen liegt. Für unstetige Funktionen muss diese Methode passende
+	 * überschrieben werden.
+	 * 
+	 * @param t
+	 *            ein Zeitstempel.
+	 * @return {@code true}, wenn der Wert der Approximation zum angegebenen
+	 *         Zeitpunkt definiert ist.
+	 */
+	public boolean isValid(long t) {
+		return stuetzstellen.get(0).getZeitstempel() <= t
+				&& t <= stuetzstellen.get(stuetzstellen.size() - 1)
+						.getZeitstempel();
+	}
+
+	/**
 	 * Bestimmt die Liste der verwendeten St&uuml;tzstellen. Die Liste
 	 * entspricht der Ganglinie, abz&uuml;glich der undefinierten
 	 * St&uuml;tzstellen.
 	 * <p>
 	 * {@inheritDoc}
 	 */
-	public void setStuetzstellen(Collection<Stuetzstelle<Double>> menge) {
-		stuetzstellen.clear();
-		for (Stuetzstelle<Double> s : menge) {
+	public void setStuetzstellen(Collection<Stuetzstelle<Double>> stuetzstellen) {
+		this.stuetzstellen.clear();
+		for (Stuetzstelle<Double> s : stuetzstellen) {
 			if (s.getWert() != null) {
-				stuetzstellen.add(s);
+				this.stuetzstellen.add(s);
 			}
 		}
-		Collections.sort(stuetzstellen);
+		Collections.sort(this.stuetzstellen);
 	}
 
 	/**
-	 * Gibt die Anzahl der St&uuml;tzstellen zur&uuml;ck.
+	 * Sucht nach der ersten Stützstelle nach einem Zeitstempel. Gibt es zu dem
+	 * Zeitstempel eine Stützstelle wird diese angenommen.
 	 * 
-	 * @return die St&uuml;tzstellenanzahl.
+	 * @param t
+	 *            ein Zeitstempel.
+	 * @return der Index der gefundenen Stützstelle oder {@code -1}, wenn es
+	 *         keine gibt.
 	 */
-	protected int anzahl() {
-		return stuetzstellen.size();
+	protected int findeStuetzstelleNach(long t) {
+		int index, start, ende;
+		int mitte = 0;
+
+		index = -1;
+		if (!isValid(t)) {
+			return index;
+		}
+
+		start = 0;
+		ende = stuetzstellen.size() - 1;
+		while (start <= ende && index < 0) {
+			mitte = start + (ende - start) / 2;
+			if (stuetzstellen.get(mitte).getZeitstempel() < t) {
+				// rechts weitersuchen
+				start = mitte + 1;
+			} else if (stuetzstellen.get(mitte).getZeitstempel() > t) {
+				// links weitersuchen
+				ende = mitte - 1;
+			} else {
+				// gefunden
+				index = mitte;
+				break;
+			}
+		}
+
+		if (index == -1) {
+			if (stuetzstellen.get(mitte).getZeitstempel() < t) {
+				index = mitte + 1;
+			} else {
+				index = mitte;
+			}
+		}
+
+		return index;
 	}
 
 	/**
-	 * Gibt die St&uuml;tzstelle mit dem angegebenen Index zur&uml;ck.
+	 * Sucht nach der ersten Stützstelle vor einem Zeitstempel. Gibt es zu dem
+	 * Zeitstempel eine Stützstelle wird diese angenommen.
 	 * 
-	 * @param index
-	 *            ein g&uuml;ltiger Index.
-	 * @return die St&uuml;tzstelle zum Index.
+	 * @param t
+	 *            ein Zeitstempel.
+	 * @return der Index der gefundenen Stützstelle oder {@code -1}, wenn es
+	 *         keine gibt.
 	 */
-	protected Stuetzstelle<Double> get(int index) {
-		return stuetzstellen.get(index);
+	protected int findeStuetzstelleVor(long t) {
+		int index, start, ende;
+		int mitte = 0;
+
+		index = -1;
+		if (!isValid(t)) {
+			return index;
+		}
+
+		start = 0;
+		ende = stuetzstellen.size() - 1;
+		while (start <= ende && index < 0) {
+			mitte = start + (ende - start) / 2;
+			if (stuetzstellen.get(mitte).getZeitstempel() < t) {
+				// rechts weitersuchen
+				start = mitte + 1;
+			} else if (stuetzstellen.get(mitte).getZeitstempel() > t) {
+				// links weitersuchen
+				ende = mitte - 1;
+			} else {
+				// gefunden
+				index = mitte;
+				break;
+			}
+		}
+
+		if (index == -1) {
+			if (stuetzstellen.get(mitte).getZeitstempel() > t) {
+				index = mitte - 1;
+			} else {
+				index = mitte;
+			}
+		}
+
+		return index;
 	}
 
 }

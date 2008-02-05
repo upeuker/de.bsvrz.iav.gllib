@@ -31,13 +31,15 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
+
 /**
  * Testet die Approximation einer Ganglinie mit Hilfe eines Cubic-Splines.
  * 
  * @author BitCtrl Systems GmbH, Schumann
  * @version $Id$
  */
-public class TestCubicSpline {
+public class CubicSplineTest {
 
 	/** Die Testganglinie. */
 	private Ganglinie ganglinie;
@@ -49,10 +51,10 @@ public class TestCubicSpline {
 	public void setUp() {
 		ganglinie = new Ganglinie();
 		ganglinie.setStuetzstelle(0, 0.0);
-		ganglinie.setStuetzstelle(30, 30.0);
-		ganglinie.setStuetzstelle(40, 20.0);
-		ganglinie.setStuetzstelle(60, 40.0);
-		ganglinie.setStuetzstelle(90, 10.0);
+		ganglinie.setStuetzstelle(3 * 60 * 1000, 30.0);
+		ganglinie.setStuetzstelle(4 * 60 * 1000, 20.0);
+		ganglinie.setStuetzstelle(6 * 60 * 1000, 40.0);
+		ganglinie.setStuetzstelle(9 * 60 * 1000, 10.0);
 		ganglinie.setApproximation(new Polyline());
 		ganglinie.aktualisiereApproximation();
 	}
@@ -74,6 +76,9 @@ public class TestCubicSpline {
 			}
 			System.out.println(spline.get(i));
 		}
+
+		System.err.println("Integral Cubic-Spline: "
+				+ spline.integral(new Intervall(0, 90)));
 	}
 
 }

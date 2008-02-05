@@ -35,6 +35,7 @@ import de.bsvrz.sys.funclib.bitctrl.math.RationaleZahl;
 import de.bsvrz.sys.funclib.bitctrl.math.algebra.Gauss;
 import de.bsvrz.sys.funclib.bitctrl.math.algebra.Matrix;
 import de.bsvrz.sys.funclib.bitctrl.math.algebra.Vektor;
+import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
 
 /**
  * Approximation einer Ganglinie mit Hilfe eines Cubic-Splines.
@@ -43,6 +44,9 @@ import de.bsvrz.sys.funclib.bitctrl.math.algebra.Vektor;
  * @version $Id$
  */
 public class CubicSpline extends AbstractApproximation {
+
+	/** Das Breite der Teilintervalle beim Integrieren: eine Minute. */
+	public static final long INTEGRATIONSINTERVALL = 60 * 1000;
 
 	/** Der erste Koeffizient des Polynoms. */
 	private RationaleZahl[] a;
@@ -63,17 +67,20 @@ public class CubicSpline extends AbstractApproximation {
 	 * {@inheritDoc}
 	 */
 	public Stuetzstelle<Double> get(long zeitstempel) {
-		if (anzahl() == 0 || zeitstempel < get(0).getZeitstempel()
-				|| zeitstempel > get(anzahl() - 1).getZeitstempel()) {
+		if (getStuetzstellen().size() == 0
+				|| zeitstempel < getStuetzstellen().get(0).getZeitstempel()
+				|| zeitstempel > getStuetzstellen().get(
+						getStuetzstellen().size() - 1).getZeitstempel()) {
 			// Zeitstempel liegt auﬂerhalb der Ganglinie
 			return new Stuetzstelle<Double>(zeitstempel, null);
 		}
 
 		// R‰nder der Ganglinie unver‰ndert ausliefern
-		if (get(0).getZeitstempel() == zeitstempel) {
-			return get(0);
-		} else if (get(anzahl() - 1).getZeitstempel() == zeitstempel) {
-			return get(anzahl() - 1);
+		if (getStuetzstellen().get(0).getZeitstempel() == zeitstempel) {
+			return getStuetzstellen().get(0);
+		} else if (getStuetzstellen().get(getStuetzstellen().size() - 1)
+				.getZeitstempel() == zeitstempel) {
+			return getStuetzstellen().get(getStuetzstellen().size() - 1);
 		}
 
 		return berechneStuetzstelle(zeitstempel);
@@ -87,7 +94,7 @@ public class CubicSpline extends AbstractApproximation {
 		Matrix m;
 		Vektor v;
 
-		n = anzahl();
+		n = getStuetzstellen().size();
 
 		a = new RationaleZahl[n];
 		b = new RationaleZahl[n];
@@ -97,13 +104,14 @@ public class CubicSpline extends AbstractApproximation {
 
 		for (int i = 0; i < n; i++) {
 			// Erster Koeffizent
-			a[i] = new RationaleZahl(get(i).getWert());
+			a[i] = new RationaleZahl(getStuetzstellen().get(i).getWert());
 
 			// Intervallbreite
 			if (i < n - 1) {
-				h[i] = RationaleZahl.subtrahiere(new RationaleZahl(get(i + 1)
-						.getZeitstempel()), new RationaleZahl(get(i)
-						.getZeitstempel()));
+				h[i] = RationaleZahl.subtrahiere(new RationaleZahl(
+						getStuetzstellen().get(i + 1).getZeitstempel()),
+						new RationaleZahl(getStuetzstellen().get(i)
+								.getZeitstempel()));
 			}
 		}
 
@@ -146,6 +154,24 @@ public class CubicSpline extends AbstractApproximation {
 	}
 
 	/**
+	 * Verwendet eine Polyline-Approximation des Splines zur n‰herungsweisen
+	 * Bestimmung des Integrals.
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see de.bsvrz.iav.gllib.gllib.Approximation#integral(de.bsvrz.sys.funclib.bitctrl.util.Intervall)
+	 * @see #INTEGRATIONSINTERVALL
+	 */
+	public double integral(Intervall intervall) {
+		Polyline polyline;
+
+		polyline = new Polyline();
+		polyline.setStuetzstellen(interpoliere(INTEGRATIONSINTERVALL));
+
+		return polyline.integral(intervall);
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -165,13 +191,13 @@ public class CubicSpline extends AbstractApproximation {
 		int index;
 
 		index = -1;
-		for (int i = 0; i < anzahl(); i++) {
-			if (get(i).getZeitstempel() > zeitstempel) {
+		for (int i = 0; i < getStuetzstellen().size(); i++) {
+			if (getStuetzstellen().get(i).getZeitstempel() > zeitstempel) {
 				index = i - 1;
 				break;
 			}
 		}
-		xi = new RationaleZahl(get(index).getZeitstempel());
+		xi = new RationaleZahl(getStuetzstellen().get(index).getZeitstempel());
 		x = new RationaleZahl(zeitstempel);
 
 		r = addiere(addiere(addiere(a[index], multipliziere(b[index],

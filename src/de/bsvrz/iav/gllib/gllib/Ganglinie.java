@@ -168,26 +168,36 @@ public class Ganglinie implements IGanglinie<Double> {
 		ende = null;
 
 		for (long t : stuetzstellen.keySet()) {
-			if (start == null && stuetzstellen.get(t) != null) {
-				start = t;
-			}
-
-			if (stuetzstellen.get(t) == null) {
-				// Definitionslücke gefunden
-				if (start != null && ende != null) {
-					intervalle.add(new Intervall(start, ende));
-					start = null;
-					ende = null;
-				}
-			} else if (t == stuetzstellen.lastKey()) {
-				// letzte Stützstelle
-				if (start != null && ende != null) {
-					intervalle.add(new Intervall(start, ende));
+			if (start == null) {
+				// Beginn eines neuen Intervalls
+				if (stuetzstellen.get(t) != null) {
+					if (t == stuetzstellen.lastKey()) {
+						// Die letzte Stützstelle ist das letzte Intervall
+						intervalle.add(new Intervall(t, t));
+					} else {
+						start = t;
+					}
 				}
 			} else {
-				// Intervall verlängern
-				if (stuetzstellen.get(t) != null) {
-					ende = t;
+				if (stuetzstellen.get(t) == null) {
+					// Definitionslücke gefunden
+					if (ende != null) {
+						intervalle.add(new Intervall(start, ende));
+						start = null;
+						ende = null;
+					} else {
+						intervalle.add(new Intervall(start, start));
+						start = null;
+					}
+				} else {
+					// Intervall verlängern
+					if (stuetzstellen.get(t) != null) {
+						ende = t;
+					}
+					if (t == stuetzstellen.lastKey()) {
+						// Die letzte Stützstelle ist das letzte Intervall
+						intervalle.add(new Intervall(start, ende));
+					}
 				}
 			}
 		}

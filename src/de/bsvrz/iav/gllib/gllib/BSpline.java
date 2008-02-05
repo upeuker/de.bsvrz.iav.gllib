@@ -26,6 +26,8 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
+import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
+
 /**
  * Approximation einer Ganglinie mit Hilfe eines B-Splines beliebiger Ordung.
  * 
@@ -33,6 +35,9 @@ package de.bsvrz.iav.gllib.gllib;
  * @version $Id$
  */
 public class BSpline extends AbstractApproximation {
+
+	/** Das Breite der Teilintervalle beim Integrieren: eine Minute. */
+	public static final long INTEGRATIONSINTERVALL = 60 * 1000;
 
 	/** Die Ordnung des B-Splines. */
 	private byte ordnung;
@@ -64,18 +69,19 @@ public class BSpline extends AbstractApproximation {
 		double t0, f;
 		Stuetzstelle<Double> s;
 
-		if (anzahl() == 0
-				|| (get(0).getZeitstempel() < zeitstempel && zeitstempel > get(
-						anzahl() - 1).getZeitstempel())) {
+		if (getStuetzstellen().size() == 0
+				|| (getStuetzstellen().get(0).getZeitstempel() < zeitstempel && zeitstempel > getStuetzstellen()
+						.get(getStuetzstellen().size() - 1).getZeitstempel())) {
 			// Zeitstempel liegt außerhalb der Ganglinie
 			return new Stuetzstelle<Double>(zeitstempel, null);
 		}
 
 		// TODO Wird dieses IF-ELSE benötigt?
-		if (get(0).getZeitstempel() == zeitstempel) {
-			return get(0);
-		} else if (get(anzahl() - 1).getZeitstempel() == zeitstempel) {
-			return get(anzahl() - 1);
+		if (getStuetzstellen().get(0).getZeitstempel() == zeitstempel) {
+			return getStuetzstellen().get(0);
+		} else if (getStuetzstellen().get(getStuetzstellen().size() - 1)
+				.getZeitstempel() == zeitstempel) {
+			return getStuetzstellen().get(getStuetzstellen().size() - 1);
 		}
 
 		// Sonderfall
@@ -123,18 +129,36 @@ public class BSpline extends AbstractApproximation {
 	 * {@inheritDoc}
 	 */
 	public void initialisiere() {
-		t = new int[anzahl() + ordnung];
+		t = new int[getStuetzstellen().size() + ordnung];
 		for (int j = 0; j < t.length; j++) {
 			if (j < ordnung) {
 				t[j] = 0;
-			} else if (ordnung <= j && j <= anzahl() - 1) {
+			} else if (ordnung <= j && j <= getStuetzstellen().size() - 1) {
 				t[j] = j - ordnung + 1;
-			} else if (j > anzahl() - 1) {
-				t[j] = anzahl() - 1 - ordnung + 2;
+			} else if (j > getStuetzstellen().size() - 1) {
+				t[j] = getStuetzstellen().size() - 1 - ordnung + 2;
 			} else {
 				throw new IllegalStateException();
 			}
 		}
+	}
+
+	/**
+	 * Verwendet eine Polyline-Approximation des Splines zur näherungsweisen
+	 * Bestimmung des Integrals.
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see de.bsvrz.iav.gllib.gllib.Approximation#integral(de.bsvrz.sys.funclib.bitctrl.util.Intervall)
+	 * @see #INTEGRATIONSINTERVALL
+	 */
+	public double integral(Intervall intervall) {
+		Polyline polyline;
+
+		polyline = new Polyline();
+		polyline.setStuetzstellen(interpoliere(INTEGRATIONSINTERVALL));
+
+		return polyline.integral(intervall);
 	}
 
 	/**
@@ -144,7 +168,7 @@ public class BSpline extends AbstractApproximation {
 	 *            Ordnung
 	 */
 	public void setOrdnung(byte ordnung) {
-		if (ordnung < 1 || ordnung > anzahl()) {
+		if (ordnung < 1 || ordnung > getStuetzstellen().size()) {
 			throw new IllegalArgumentException(
 					"Die Ordnung muss zwischen 1 und der Anzahl der definierten Stützstellen liegen.");
 		}
@@ -173,9 +197,9 @@ public class BSpline extends AbstractApproximation {
 
 		// Ränder der Ganglinie werden 1:1 übernommen
 		if (t0 <= t[0]) {
-			return get(0);
+			return getStuetzstellen().get(0);
 		} else if (t0 >= t[t.length - 1]) {
-			return get(anzahl() - 1);
+			return getStuetzstellen().get(getStuetzstellen().size() - 1);
 		}
 
 		bx = by = 0;
@@ -186,8 +210,8 @@ public class BSpline extends AbstractApproximation {
 			double n;
 
 			n = n(j, ordnung, t0);
-			bx += get(j).getZeitstempel() * n;
-			by += get(j).getWert().doubleValue() * n;
+			bx += getStuetzstellen().get(j).getZeitstempel() * n;
+			by += getStuetzstellen().get(j).getWert().doubleValue() * n;
 
 		}
 
@@ -254,7 +278,9 @@ public class BSpline extends AbstractApproximation {
 		double t0;
 
 		t0 = zeitstempel;
-		t0 /= get(anzahl() - 1).getZeitstempel() - get(0).getZeitstempel();
+		t0 /= getStuetzstellen().get(getStuetzstellen().size() - 1)
+				.getZeitstempel()
+				- getStuetzstellen().get(0).getZeitstempel();
 		t0 *= t[t.length - 1];
 
 		return t0;
