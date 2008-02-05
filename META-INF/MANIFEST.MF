@@ -8,7 +8,8 @@ Require-Bundle: de.bsvrz.sys.funclib.bitctrl,
  de.bsvrz.dav.daf,
  org.eclipse.core.runtime,
  org.eclipse.ui,
- de.bsvrz.sys.funclib.bitctrl.visukern
+ de.bsvrz.sys.funclib.bitctrl.visukern,
+ org.eclipse.draw2d
 Export-Package: de.bsvrz.iav.gllib.gllib,
  de.bsvrz.iav.gllib.gllib.dav,
  de.bsvrz.iav.gllib.gllib.modell,

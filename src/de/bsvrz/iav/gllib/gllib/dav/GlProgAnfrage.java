@@ -327,7 +327,7 @@ public class GlProgAnfrage {
 
 		start = daten.getTimeValue("ZeitpunktPrognoseBeginn").getMillis();
 		ende = daten.getTimeValue("ZeitpunktPrognoseEnde").getMillis();
-		if (start < ende) {
+		if (start <= ende) {
 			prognoseZeitraum = new Intervall(start, ende);
 		} // Wenn Intervall ungültig, dann bleibt es null
 

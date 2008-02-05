@@ -41,8 +41,7 @@ import de.bsvrz.sys.funclib.bitctrl.modell.ganglinien.objekte.ApplikationGanglin
  * {@code atg.ganglinienModellAutomatischesLernenEreignis}.
  * 
  * @author BitCtrl Systems GmbH, Falko Schumann
- * @version $Id: PdGanglinienModellAutomatischesLernen.java 6200 2008-02-04
- *          17:06:59Z peuker $
+ * @version $Id$
  */
 public class PdGanglinienModellAutomatischesLernen extends
 		AbstractParameterDatensatz<PdGanglinienModellAutomatischesLernen.Daten> {
@@ -174,16 +173,6 @@ public class PdGanglinienModellAutomatischesLernen extends
 		}
 
 		/**
-		 * setzt den aktuellen Datenstatus.
-		 * 
-		 * @param datenStatus
-		 *            der neue Status
-		 */
-		protected void setDatenStatus(Status datenStatus) {
-			this.datenStatus = datenStatus;
-		}
-
-		/**
 		 * Maximaler Wichtungsfaktor der historischen Ganglinien bei der
 		 * Verschmelzung mit Analyseganglinien. Das Gewicht muss gr&ouml;ßer 0
 		 * sein.
@@ -225,6 +214,16 @@ public class PdGanglinienModellAutomatischesLernen extends
 			s += ", maxVergleichsAbstand=" + maxVergleichsAbstand;
 
 			return s + "]";
+		}
+
+		/**
+		 * setzt den aktuellen Datenstatus.
+		 * 
+		 * @param datenStatus
+		 *            der neue Status
+		 */
+		protected void setDatenStatus(Status datenStatus) {
+			this.datenStatus = datenStatus;
 		}
 
 	}
@@ -276,27 +275,6 @@ public class PdGanglinienModellAutomatischesLernen extends
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatensatz#konvertiere(de.bsvrz.sys.funclib.bitctrl.modell.Datum)
-	 */
-	@Override
-	protected Data konvertiere(Daten datum) {
-		Data daten = erzeugeSendeCache();
-
-		daten.getUnscaledValue("AlgAktualisierungsintervall").set(
-				datum.getAktualisierungsintervall());
-		daten.getUnscaledValue("AlgDatenMindestalter").set(
-				datum.getDatenMindestalter());
-		daten.getUnscaledValue("AlgMaximalWichtung").set(
-				datum.getMaximalWichtung());
-		daten.getUnscaledValue("AlgMaxVergleichsAbstand").set(
-				datum.getMaxVergleichsAbstand());
-
-		return daten;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
 	 * @see de.bsvrz.sys.funclib.bitctrl.modell.Datensatz#setDaten(de.bsvrz.dav.daf.main.ResultData)
 	 */
 	public void setDaten(ResultData result) {
@@ -321,6 +299,27 @@ public class PdGanglinienModellAutomatischesLernen extends
 		setDatum(result.getDataDescription().getAspect(), datum);
 		fireDatensatzAktualisiert(result.getDataDescription().getAspect(),
 				datum.clone());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatensatz#konvertiere(de.bsvrz.sys.funclib.bitctrl.modell.Datum)
+	 */
+	@Override
+	protected Data konvertiere(Daten datum) {
+		Data daten = erzeugeSendeCache();
+
+		daten.getUnscaledValue("AlgAktualisierungsintervall").set(
+				datum.getAktualisierungsintervall());
+		daten.getUnscaledValue("AlgDatenMindestalter").set(
+				datum.getDatenMindestalter());
+		daten.getUnscaledValue("AlgMaximalWichtung").set(
+				datum.getMaximalWichtung());
+		daten.getUnscaledValue("AlgMaxVergleichsAbstand").set(
+				datum.getMaxVergleichsAbstand());
+
+		return daten;
 	}
 
 }
