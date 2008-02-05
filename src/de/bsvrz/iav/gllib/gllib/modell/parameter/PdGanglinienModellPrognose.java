@@ -41,7 +41,8 @@ import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.objekte.MessQuerschnittAllgem
  * Kapselt die Parameterattributgruppe {@code atg.ganglinienModellPrognose}.
  * 
  * @author BitCtrl Systems GmbH, Falko Schumann
- * @version $Id$
+ * @version $Id: PdGanglinienModellPrognose.java 6200 2008-02-04 17:06:59Z
+ *          peuker $
  */
 public class PdGanglinienModellPrognose extends
 		AbstractParameterDatensatz<PdGanglinienModellPrognose.Daten> {
@@ -350,8 +351,7 @@ public class PdGanglinienModellPrognose extends
 			// MILLIS_PER_SEKUNDE);
 		}
 
-		datum.setDatenStatus(Datum.Status.getStatus(result.getDataState()
-				.getCode()));
+		datum.setDatenStatus(Datum.Status.getStatus(result.getDataState()));
 		datum.setZeitstempel(result.getDataTime());
 		setDatum(result.getDataDescription().getAspect(), datum);
 		fireDatensatzAktualisiert(result.getDataDescription().getAspect(),

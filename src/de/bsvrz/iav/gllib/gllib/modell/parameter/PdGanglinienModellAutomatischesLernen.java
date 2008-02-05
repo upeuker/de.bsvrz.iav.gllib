@@ -41,7 +41,8 @@ import de.bsvrz.sys.funclib.bitctrl.modell.ganglinien.objekte.ApplikationGanglin
  * {@code atg.ganglinienModellAutomatischesLernenEreignis}.
  * 
  * @author BitCtrl Systems GmbH, Falko Schumann
- * @version $Id$
+ * @version $Id: PdGanglinienModellAutomatischesLernen.java 6200 2008-02-04
+ *          17:06:59Z peuker $
  */
 public class PdGanglinienModellAutomatischesLernen extends
 		AbstractParameterDatensatz<PdGanglinienModellAutomatischesLernen.Daten> {
@@ -315,8 +316,7 @@ public class PdGanglinienModellAutomatischesLernen extends
 					"AlgMaxVergleichsAbstand").intValue());
 		}
 
-		datum.setDatenStatus(Datum.Status.getStatus(result.getDataState()
-				.getCode()));
+		datum.setDatenStatus(Datum.Status.getStatus(result.getDataState()));
 		datum.setZeitstempel(result.getDataTime());
 		setDatum(result.getDataDescription().getAspect(), datum);
 		fireDatensatzAktualisiert(result.getDataDescription().getAspect(),
