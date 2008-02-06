@@ -270,7 +270,11 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	 * Gibt stellvertretend die Approximation f&uuml;r QKfz zur&uuml;ck.
 	 * 
 	 * {@inheritDoc}
+	 * 
+	 * @deprecated Die Approximation der einzelnen Größen kann
+	 *             {@code getGanglinie*.getApproximation()} abgerufen werden.
 	 */
+	@Deprecated
 	public Approximation getApproximation() {
 		return qKfz.getApproximation();
 	}
