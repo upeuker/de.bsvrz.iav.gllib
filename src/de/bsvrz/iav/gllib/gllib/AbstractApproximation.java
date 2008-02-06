@@ -105,7 +105,7 @@ public abstract class AbstractApproximation implements Approximation {
 
 		// Stützstellen an den Intervallgrenzen bestimmen
 		zeitstempel = stuetzstellen.get(0).getZeitstempel();
-		while (zeitstempel < stuetzstellen.get(stuetzstellen.size() - 1)
+		while (zeitstempel <= stuetzstellen.get(stuetzstellen.size() - 1)
 				.getZeitstempel()) {
 			interpolation.add(get(zeitstempel));
 			zeitstempel += intervallBreite;
