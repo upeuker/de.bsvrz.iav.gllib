@@ -100,9 +100,9 @@ public class CubicSpline extends AbstractApproximation {
 		}
 
 		a = new RationaleZahl[n];
-		b = new RationaleZahl[n];
+		b = new RationaleZahl[n - 1];
 		c = new RationaleZahl[n];
-		d = new RationaleZahl[n];
+		d = new RationaleZahl[n - 1];
 		h = new RationaleZahl[n - 1];
 
 		for (int i = 0; i < n; i++) {
