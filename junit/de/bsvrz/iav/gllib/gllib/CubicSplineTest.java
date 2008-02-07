@@ -26,12 +26,14 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
+import static de.bsvrz.sys.funclib.bitctrl.util.Konstanten.MILLIS_PER_STUNDE;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
+import de.bsvrz.sys.funclib.bitctrl.math.RationaleZahl;
 
 /**
  * Testet die Approximation einer Ganglinie mit Hilfe eines Cubic-Splines.
@@ -40,6 +42,18 @@ import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
  * @version $Id$
  */
 public class CubicSplineTest {
+
+	/**
+	 * Kennzeichnet de Beginn dieses JUnit-Testfalls.
+	 */
+	@BeforeClass
+	public static void beforeClass() {
+		System.out.println();
+		System.out.println();
+		System.out.println("Teste Klasse CubicSpline");
+		System.out.println("========================");
+		System.out.println();
+	}
 
 	/** Die Testganglinie. */
 	private Ganglinie ganglinie;
@@ -51,34 +65,105 @@ public class CubicSplineTest {
 	public void setUp() {
 		ganglinie = new Ganglinie();
 		ganglinie.setStuetzstelle(0, 0.0);
-		ganglinie.setStuetzstelle(3 * 60 * 1000, 30.0);
-		ganglinie.setStuetzstelle(4 * 60 * 1000, 20.0);
-		ganglinie.setStuetzstelle(6 * 60 * 1000, 40.0);
-		ganglinie.setStuetzstelle(9 * 60 * 1000, 10.0);
+		ganglinie.setStuetzstelle(3 * MILLIS_PER_STUNDE, 3000.0);
+		ganglinie.setStuetzstelle(4 * MILLIS_PER_STUNDE, 2000.0);
+		ganglinie.setStuetzstelle(6 * MILLIS_PER_STUNDE, 4000.0);
+		ganglinie.setStuetzstelle(9 * MILLIS_PER_STUNDE, 1000.0);
 		ganglinie.setApproximation(new Polyline());
 		ganglinie.aktualisiereApproximation();
 	}
 
 	/**
-	 * Testet ob der Spline durch alle St&uuml;tzstellen durchgeht.
+	 * Testet ob der Spline durch ausgewählte vorher berechnete Punkte
+	 * durchgeht.
 	 */
 	@Test
 	public void testGet() {
 		CubicSpline spline;
+		long t;
 
-		System.out.println("Cubic Spline:");
+		System.out
+				.print("Prüfe ob Cubic-Spline durch vorher berechnete Punkte läuft ... ");
+
 		spline = new CubicSpline();
 		spline.setStuetzstellen(ganglinie.getStuetzstellen());
 		spline.initialisiere();
-		for (long i = 10; i < 100; i += 10) {
-			if (ganglinie.existsStuetzstelle(i)) {
-				assertEquals(ganglinie.getStuetzstelle(i), spline.get(i));
-			}
-			System.out.println(spline.get(i));
-		}
 
-		System.err.println("Integral Cubic-Spline: "
-				+ spline.integral(new Intervall(0, 90)));
+		t = 0;
+		System.out.println(t + ". Stunde : " + spline.get(t));
+		assertEquals(ganglinie.getStuetzstelle(t), spline.get(t));
+
+		t = 1 * MILLIS_PER_STUNDE;
+		System.out.println(t + ". Stunde : " + spline.get(t));
+		assertEquals(new RationaleZahl(1201000, 657).doubleValue(), spline.get(
+				t).getWert());
+
+		t = 2 * MILLIS_PER_STUNDE;
+		System.out.println(t + ". Stunde : " + spline.get(t));
+		assertEquals(new RationaleZahl(1994000, 657).doubleValue(), spline.get(
+				t).getWert());
+
+		t = 3 * MILLIS_PER_STUNDE;
+		System.out.println(t + ". Stunde : " + spline.get(t));
+		assertEquals(ganglinie.getStuetzstelle(t), spline.get(t));
+
+		t = 4 * MILLIS_PER_STUNDE;
+		System.out.println(t + ". Stunde : " + spline.get(t));
+		assertEquals(ganglinie.getStuetzstelle(t), spline.get(t));
+
+		t = 5 * MILLIS_PER_STUNDE;
+		System.out.println(t + ". Stunde : " + spline.get(t));
+		assertEquals(new RationaleZahl(198500, 73).doubleValue(), spline.get(t)
+				.getWert());
+
+		t = 6 * MILLIS_PER_STUNDE;
+		System.out.println(t + ". Stunde : " + spline.get(t));
+		assertEquals(ganglinie.getStuetzstelle(t), spline.get(t));
+
+		t = 7 * MILLIS_PER_STUNDE;
+		System.out.println(t + ". Stunde : " + spline.get(t));
+		assertEquals(new RationaleZahl(2621000, 657).doubleValue(), spline.get(
+				t).getWert());
+
+		t = 8 * MILLIS_PER_STUNDE;
+		System.out.println(t + ". Stunde : " + spline.get(t));
+		assertEquals(new RationaleZahl(1834000, 657).doubleValue(), spline.get(
+				t).getWert());
+
+		t = 9 * MILLIS_PER_STUNDE;
+		System.out.println(t + ". Stunde : " + spline.get(t));
+		assertEquals(ganglinie.getStuetzstelle(t), spline.get(t));
+
+		System.out.println("O.k.");
+	}
+
+	/**
+	 * Testet ob der Spline durch alle Stützstellen durchgeht.
+	 */
+	@Test
+	public void testGetStuetzstellen() {
+		CubicSpline spline;
+		long t;
+
+		System.out
+				.print("Prüfe ob Cubic-Spline durch alle Stützstellen läuft ... ");
+
+		spline = new CubicSpline();
+		spline.setStuetzstellen(ganglinie.getStuetzstellen());
+		spline.initialisiere();
+
+		t = 0;
+		assertEquals(ganglinie.getStuetzstelle(t), spline.get(t));
+		t = 3 * MILLIS_PER_STUNDE;
+		assertEquals(ganglinie.getStuetzstelle(t), spline.get(t));
+		t = 4 * MILLIS_PER_STUNDE;
+		assertEquals(ganglinie.getStuetzstelle(t), spline.get(t));
+		t = 6 * MILLIS_PER_STUNDE;
+		assertEquals(ganglinie.getStuetzstelle(t), spline.get(t));
+		t = 9 * MILLIS_PER_STUNDE;
+		assertEquals(ganglinie.getStuetzstelle(t), spline.get(t));
+
+		System.out.println("O.k.");
 	}
 
 }

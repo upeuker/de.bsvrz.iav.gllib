@@ -48,6 +48,12 @@ public class CubicSpline extends AbstractApproximation {
 	/** Das Breite der Teilintervalle beim Integrieren: eine Minute. */
 	public static final long INTEGRATIONSINTERVALL = 60 * 1000;
 
+	/**
+	 * Faktor mit dem der Zeitstempel für das Rechnen verkleinert wird, um
+	 * numerische Fehler zu verkleinern: eine Minute.
+	 */
+	private static final long FAKTOR = 60 * 1000;
+
 	/** Der erste Koeffizient des Polynoms. */
 	private RationaleZahl[] a;
 
@@ -111,10 +117,12 @@ public class CubicSpline extends AbstractApproximation {
 
 			// Intervallbreite
 			if (i < n - 1) {
-				h[i] = RationaleZahl.subtrahiere(new RationaleZahl(
-						getStuetzstellen().get(i + 1).getZeitstempel()),
-						new RationaleZahl(getStuetzstellen().get(i)
-								.getZeitstempel()));
+				h[i] = RationaleZahl.subtrahiere(
+						new RationaleZahl(getStuetzstellen().get(i + 1)
+								.getZeitstempel()
+								/ FAKTOR), new RationaleZahl(getStuetzstellen()
+								.get(i).getZeitstempel()
+								/ FAKTOR));
 			}
 		}
 
@@ -200,14 +208,16 @@ public class CubicSpline extends AbstractApproximation {
 				break;
 			}
 		}
-		xi = new RationaleZahl(getStuetzstellen().get(index).getZeitstempel());
-		x = new RationaleZahl(zeitstempel);
+		xi = new RationaleZahl(getStuetzstellen().get(index).getZeitstempel()
+				/ FAKTOR);
+		x = new RationaleZahl(zeitstempel / FAKTOR);
 
 		r = a[index];
 		r = addiere(r, multipliziere(b[index], subtrahiere(x, xi)));
 		r = addiere(r, multipliziere(c[index], potenz(subtrahiere(x, xi), 2)));
 		r = addiere(r, multipliziere(d[index], potenz(subtrahiere(x, xi), 3)));
 
+		System.out.println("Berechnet: " + r);
 		return new Stuetzstelle<Double>(zeitstempel, r.doubleValue());
 	}
 
