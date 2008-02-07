@@ -49,6 +49,13 @@ public class Polyline extends AbstractApproximation {
 		double x0, x1, y0, y1;
 		int index;
 
+		if (getStuetzstellen().size() == 0
+				|| (getStuetzstellen().get(0).getZeitstempel() < zeitstempel && zeitstempel > getStuetzstellen()
+						.get(getStuetzstellen().size() - 1).getZeitstempel())) {
+			// Zeitstempel liegt auﬂerhalb der Ganglinie
+			return new Stuetzstelle<Double>(zeitstempel, null);
+		}
+
 		index = -1;
 		for (int i = 0; i < getStuetzstellen().size(); i++) {
 			if (getStuetzstellen().get(i).getZeitstempel() == zeitstempel) {

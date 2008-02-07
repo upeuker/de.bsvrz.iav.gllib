@@ -593,6 +593,18 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	/**
 	 * {@inheritDoc}
 	 */
+	public boolean isValid(Intervall intervall) {
+		if (prognoseZeitraum != null
+				&& !prognoseZeitraum.isEnthalten(intervall)) {
+			// Teilintervall liegt nicht innerhalb der Prognoseganglinie
+			return false;
+		}
+		return qKfz.isValid(intervall);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean isValid(long zeitstempel) {
 		if (prognoseZeitraum != null
 				&& !prognoseZeitraum.isEnthalten(zeitstempel)) {

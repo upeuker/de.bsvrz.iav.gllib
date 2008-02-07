@@ -95,6 +95,9 @@ public class CubicSpline extends AbstractApproximation {
 		Vektor v;
 
 		n = getStuetzstellen().size();
+		if (n == 0) {
+			return;
+		}
 
 		a = new RationaleZahl[n];
 		b = new RationaleZahl[n];
@@ -148,7 +151,7 @@ public class CubicSpline extends AbstractApproximation {
 			d[i - 1] = dividiere(subtrahiere(c[i], c[i - 1]), multipliziere(
 					h[i - 1], 3));
 			b[i - 1] = subtrahiere(dividiere(subtrahiere(a[i], a[i - 1]),
-					(h[i - 1])), multipliziere(dividiere(addiere(multipliziere(
+					h[i - 1]), multipliziere(dividiere(addiere(multipliziere(
 					c[i - 1], 2), c[i]), 3), h[i - 1]));
 		}
 	}
@@ -191,7 +194,7 @@ public class CubicSpline extends AbstractApproximation {
 		int index;
 
 		index = -1;
-		for (int i = 0; i < getStuetzstellen().size(); i++) {
+		for (int i = 0; i < getStuetzstellen().size(); ++i) {
 			if (getStuetzstellen().get(i).getZeitstempel() > zeitstempel) {
 				index = i - 1;
 				break;
@@ -200,10 +203,10 @@ public class CubicSpline extends AbstractApproximation {
 		xi = new RationaleZahl(getStuetzstellen().get(index).getZeitstempel());
 		x = new RationaleZahl(zeitstempel);
 
-		r = addiere(addiere(addiere(a[index], multipliziere(b[index],
-				subtrahiere(x, xi))), multipliziere(c[index], potenz(
-				subtrahiere(x, xi), 2))), multipliziere(d[index], potenz(
-				subtrahiere(x, xi), 3)));
+		r = a[index];
+		r = addiere(r, multipliziere(b[index], subtrahiere(x, xi)));
+		r = addiere(r, multipliziere(c[index], potenz(subtrahiere(x, xi), 2)));
+		r = addiere(r, multipliziere(d[index], potenz(subtrahiere(x, xi), 3)));
 
 		return new Stuetzstelle<Double>(zeitstempel, r.doubleValue());
 	}

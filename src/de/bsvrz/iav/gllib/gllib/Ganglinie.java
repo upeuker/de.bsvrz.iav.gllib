@@ -265,6 +265,25 @@ public class Ganglinie implements IGanglinie<Double> {
 
 	/**
 	 * {@inheritDoc}
+	 * 
+	 * @see de.bsvrz.iav.gllib.gllib.IGanglinie#isValid(de.bsvrz.sys.funclib.bitctrl.util.Intervall)
+	 */
+	public boolean isValid(Intervall intervall) {
+		boolean ok;
+
+		ok = false;
+		for (Intervall i : getIntervalle()) {
+			if (i.isEnthalten(intervall)) {
+				ok = true;
+				break;
+			}
+		}
+
+		return ok;
+	}
+
+	/**
+	 * {@inheritDoc}
 	 */
 	public boolean isValid(long zeitstempel) {
 		boolean ok;

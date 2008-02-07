@@ -130,6 +130,18 @@ public interface IGanglinie<T> {
 	boolean isApproximationAktuell();
 
 	/**
+	 * Prüft ob ein Teilintervall der Ganglinie vollständig definiert ist, also
+	 * keine undefinierten Berreiche enthält..
+	 * 
+	 * @param intervall
+	 *            das zu prüfende Intervall
+	 * @return <code>true</code>, wenn das Teilintervall der Ganglinie keine
+	 *         undefinierten Bereiche enthält.
+	 * @see #getIntervalle()
+	 */
+	boolean isValid(Intervall intervall);
+
+	/**
 	 * Pr&uuml;ft ob ein Zeitstempel im Definitionsbereich der Ganglinie liegt.
 	 * 
 	 * @param zeitstempel

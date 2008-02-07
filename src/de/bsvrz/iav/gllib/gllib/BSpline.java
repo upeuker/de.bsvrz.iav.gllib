@@ -129,6 +129,10 @@ public class BSpline extends AbstractApproximation {
 	 * {@inheritDoc}
 	 */
 	public void initialisiere() {
+		if (getStuetzstellen().size() == 0) {
+			return;
+		}
+
 		t = new int[getStuetzstellen().size() + ordnung];
 		for (int j = 0; j < t.length; j++) {
 			if (j < ordnung) {

@@ -46,6 +46,13 @@ public class Treppenfunktion extends AbstractApproximation {
 	public Stuetzstelle<Double> get(long zeitstempel) {
 		Double d = null;
 
+		if (getStuetzstellen().size() == 0
+				|| (getStuetzstellen().get(0).getZeitstempel() < zeitstempel && zeitstempel > getStuetzstellen()
+						.get(getStuetzstellen().size() - 1).getZeitstempel())) {
+			// Zeitstempel liegt außerhalb der Ganglinie
+			return new Stuetzstelle<Double>(zeitstempel, null);
+		}
+
 		if (getStuetzstellen().get(getStuetzstellen().size() - 1)
 				.getZeitstempel() == zeitstempel) {
 			// Sonderfall letzte Stützstelle
