@@ -72,7 +72,7 @@ public abstract class AbstractApproximation implements Approximation {
 	 */
 	public Intervall getIntervall() {
 		return new Intervall(stuetzstellen.get(0).getZeitstempel(),
-				stuetzstellen.get(stuetzstellen.size()).getZeitstempel());
+				stuetzstellen.get(stuetzstellen.size() - 1).getZeitstempel());
 	}
 
 	/**
@@ -109,6 +109,9 @@ public abstract class AbstractApproximation implements Approximation {
 				.getZeitstempel()) {
 			interpolation.add(get(zeitstempel));
 			zeitstempel += intervallBreite;
+		}
+		if (interpolation.last().getZeitstempel() < getIntervall().getEnde()) {
+			interpolation.add(get(getIntervall().getEnde()));
 		}
 
 		return interpolation;
