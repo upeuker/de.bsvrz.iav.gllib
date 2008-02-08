@@ -57,6 +57,7 @@ import org.eclipse.ui.part.ViewPart;
 import de.bsvrz.iav.gllib.eclipse.GanglinienprognosePlugin;
 import de.bsvrz.iav.gllib.eclipse.draw2d.GlGanglinieMQ;
 import de.bsvrz.iav.gllib.eclipse.draw2d.GlKoordinatensystem;
+import de.bsvrz.iav.gllib.eclipse.draw2d.GlSkalierung;
 import de.bsvrz.iav.gllib.eclipse.views.provider.GanglinieLabelProvider;
 import de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ;
 import de.bsvrz.iav.gllib.gllib.dav.Ganglinienprognose;
@@ -85,6 +86,9 @@ public class GanglinienprognoseView extends ViewPart implements
 	/** Die Eigenschaft {@code txtAntwort}. */
 	private Text txtAntwort;
 
+	/** Die Eigenschaft {@code kos}. */
+	private GlKoordinatensystem kos;
+
 	/** Die Eigenschaft {@code ganglinie}. */
 	private GlGanglinieMQ ganglinie;
 
@@ -98,6 +102,7 @@ public class GanglinienprognoseView extends ViewPart implements
 
 			public void run() {
 				GanglinieMQ g;
+				GlSkalierung skal;
 
 				g = e.getGanglinien().iterator().next();
 				if (!g.isApproximationAktuell()) {
@@ -105,6 +110,11 @@ public class GanglinienprognoseView extends ViewPart implements
 				}
 				txtAntwort.setText(g.toString());
 				ganglinienListe.setInput(g.getStuetzstellen());
+
+				skal = new GlSkalierung();
+				skal.setMinZeit(g.getPrognoseIntervall().getStart());
+				skal.setMaxZeit(g.getPrognoseIntervall().getEnde());
+				kos.setSkalierung(skal);
 				ganglinie.setGanglinie(g);
 			}
 
@@ -273,7 +283,6 @@ public class GanglinienprognoseView extends ViewPart implements
 		TabItem tabItem;
 		FigureCanvas fc;
 		ScalableLayeredPane pane;
-		GlKoordinatensystem kos;
 
 		grpAntwort = new Group(elter, SWT.NONE);
 		grpAntwort.setLayout(new GridLayout());
@@ -298,7 +307,7 @@ public class GanglinienprognoseView extends ViewPart implements
 		tabItem.setControl(ganglinienListe.getControl());
 
 		fc = new FigureCanvas(tab);
-		ganglinie = new GlGanglinieMQ();
+		ganglinie = new GlGanglinieMQ(getViewSite().getShell().getDisplay());
 		kos = new GlKoordinatensystem();
 		kos.add(ganglinie);
 		pane = new ScalableLayeredPane();

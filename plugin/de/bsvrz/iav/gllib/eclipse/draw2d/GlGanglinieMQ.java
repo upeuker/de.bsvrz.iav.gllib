@@ -31,6 +31,7 @@ import org.eclipse.draw2d.Polyline;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
+import org.eclipse.swt.widgets.Display;
 
 import de.bsvrz.iav.gllib.gllib.Stuetzstelle;
 import de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ;
@@ -44,8 +45,124 @@ import de.bsvrz.iav.gllib.gllib.dav.Messwerte;
  */
 public class GlGanglinieMQ extends GlFigure {
 
+	/**
+	 * Aktualisiert die Punktlisten der Ganglinien.
+	 */
+	private class UpdateThread extends Thread {
+
+		/**
+		 * Initialisiert das Objekt.
+		 */
+		public UpdateThread() {
+			setName("GlGanglinieMQ Updater");
+			setDaemon(true);
+		}
+
+		/**
+		 * {@inheritDoc}
+		 * 
+		 * @see java.lang.Thread#run()
+		 */
+		@Override
+		public void run() {
+			synchronized (GlGanglinieMQ.this) {
+				approximationQKfz = new Polyline();
+				stuetzstellenQKfz = new PointList();
+				approximationQLkw = new Polyline();
+				stuetzstellenQLkw = new PointList();
+				approximationVPkw = new Polyline();
+				stuetzstellenVPkw = new PointList();
+				approximationVLkw = new Polyline();
+				stuetzstellenVLkw = new PointList();
+
+				if (ganglinie == null) {
+					display.asyncExec(new Runnable() {
+
+						public void run() {
+							repaint();
+						}
+
+					});
+
+					return;
+				}
+
+				rechne = true;
+
+				display.asyncExec(new Runnable() {
+
+					public void run() {
+						repaint();
+					}
+
+				});
+
+				if (!ganglinie.isApproximationAktuell()) {
+					ganglinie.aktualisiereApproximation();
+				}
+
+				for (Stuetzstelle<Messwerte> s : getGanglinie()
+						.getStuetzstellen()) {
+					if (s.getWert().getQKfz() != null) {
+						stuetzstellenQKfz.addPoint(getQKfz(s.getZeitstempel(),
+								s.getWert().getQKfz()));
+					}
+					if (s.getWert().getQLkw() != null) {
+						stuetzstellenQLkw.addPoint(getQKfz(s.getZeitstempel(),
+								s.getWert().getQLkw()));
+					}
+					if (s.getWert().getVPkw() != null) {
+						stuetzstellenVPkw.addPoint(getVKfz(s.getZeitstempel(),
+								s.getWert().getVPkw()));
+					}
+					if (s.getWert().getVLkw() != null) {
+						stuetzstellenVLkw.addPoint(getVKfz(s.getZeitstempel(),
+								s.getWert().getVLkw()));
+					}
+				}
+
+				for (Stuetzstelle<Double> s : getGanglinie().getGanglinieQKfz()
+						.getApproximation().interpoliere(
+								INTERPOLATIONSINTERVALL)) {
+					approximationQKfz.addPoint(getQKfz(s.getZeitstempel(), s
+							.getWert()));
+				}
+				for (Stuetzstelle<Double> s : getGanglinie().getGanglinieQLkw()
+						.getApproximation().interpoliere(
+								INTERPOLATIONSINTERVALL)) {
+					approximationQLkw.addPoint(getQKfz(s.getZeitstempel(), s
+							.getWert()));
+				}
+				for (Stuetzstelle<Double> s : getGanglinie().getGanglinieVPkw()
+						.getApproximation().interpoliere(
+								INTERPOLATIONSINTERVALL)) {
+					approximationVPkw.addPoint(getVKfz(s.getZeitstempel(), s
+							.getWert()));
+				}
+				for (Stuetzstelle<Double> s : getGanglinie().getGanglinieVLkw()
+						.getApproximation().interpoliere(
+								INTERPOLATIONSINTERVALL)) {
+					approximationVLkw.addPoint(getVKfz(s.getZeitstempel(), s
+							.getWert()));
+				}
+
+				rechne = false;
+				display.asyncExec(new Runnable() {
+
+					public void run() {
+						repaint();
+					}
+
+				});
+			}
+		}
+	}
+
 	/** Die Eigenschaft {@code INTERPOLATIONSINTERVALL}. */
 	private static final long INTERPOLATIONSINTERVALL = 15 * 60 * 1000;
+
+	/** Die Eigenschaft {@code display}. */
+	private final Display display;
 
 	/** Die Eigenschaft {@code ganglinie}. */
 	private GanglinieMQ ganglinie;
@@ -73,6 +190,20 @@ public class GlGanglinieMQ extends GlFigure {
 
 	/** Die Eigenschaft {@code stuetzstellenVLkw}. */
 	private PointList stuetzstellenVLkw;
+
+	/** Die Eigenschaft {@code rechne}. */
+	private boolean rechne;
+
+	/**
+	 * Initialisiert die Figure.
+	 * 
+	 * @param display
+	 *            das Display, welches zum Zeichnen verwendet wird.
+	 */
+	public GlGanglinieMQ(Display display) {
+		this.display = display;
+		rechne = false;
+	}
 
 	/**
 	 * Gibt die Ganglinie der Figur zurück.
@@ -117,6 +248,11 @@ public class GlGanglinieMQ extends GlFigure {
 	 */
 	@Override
 	protected void paintFigure(Graphics graphics) {
+		if (rechne) {
+			graphics.drawText("Berechne Ganglinie ...", 100, 100);
+			return;
+		}
+
 		if (approximationQKfz.getPoints() != null) {
 			graphics.setForegroundColor(FARBE_QKFZ);
 			graphics.setBackgroundColor(FARBE_QKFZ);
@@ -213,62 +349,69 @@ public class GlGanglinieMQ extends GlFigure {
 	 * Aktualisiert den Cache der benötigten Punkte für das Zeichnen.
 	 */
 	private void updateCache() {
-		approximationQKfz = new Polyline();
-		stuetzstellenQKfz = new PointList();
-		approximationQLkw = new Polyline();
-		stuetzstellenQLkw = new PointList();
-		approximationVPkw = new Polyline();
-		stuetzstellenVPkw = new PointList();
-		approximationVLkw = new Polyline();
-		stuetzstellenVLkw = new PointList();
 
-		if (ganglinie == null) {
-			return;
-		}
+		new UpdateThread().start();
 
-		if (!ganglinie.isApproximationAktuell()) {
-			ganglinie.aktualisiereApproximation();
-		}
-
-		for (Stuetzstelle<Messwerte> s : getGanglinie().getStuetzstellen()) {
-			if (s.getWert().getQKfz() != null) {
-				stuetzstellenQKfz.addPoint(getQKfz(s.getZeitstempel(), s
-						.getWert().getQKfz()));
-			}
-			if (s.getWert().getQLkw() != null) {
-				stuetzstellenQLkw.addPoint(getQKfz(s.getZeitstempel(), s
-						.getWert().getQLkw()));
-			}
-			if (s.getWert().getVPkw() != null) {
-				stuetzstellenVPkw.addPoint(getVKfz(s.getZeitstempel(), s
-						.getWert().getVPkw()));
-			}
-			if (s.getWert().getVLkw() != null) {
-				stuetzstellenVLkw.addPoint(getVKfz(s.getZeitstempel(), s
-						.getWert().getVLkw()));
-			}
-		}
-
-		for (Stuetzstelle<Double> s : getGanglinie().getGanglinieQKfz()
-				.getApproximation().interpoliere(INTERPOLATIONSINTERVALL)) {
-			approximationQKfz
-					.addPoint(getQKfz(s.getZeitstempel(), s.getWert()));
-		}
-		for (Stuetzstelle<Double> s : getGanglinie().getGanglinieQLkw()
-				.getApproximation().interpoliere(INTERPOLATIONSINTERVALL)) {
-			approximationQLkw
-					.addPoint(getQKfz(s.getZeitstempel(), s.getWert()));
-		}
-		for (Stuetzstelle<Double> s : getGanglinie().getGanglinieVPkw()
-				.getApproximation().interpoliere(INTERPOLATIONSINTERVALL)) {
-			approximationVPkw
-					.addPoint(getVKfz(s.getZeitstempel(), s.getWert()));
-		}
-		for (Stuetzstelle<Double> s : getGanglinie().getGanglinieVLkw()
-				.getApproximation().interpoliere(INTERPOLATIONSINTERVALL)) {
-			approximationVLkw
-					.addPoint(getVKfz(s.getZeitstempel(), s.getWert()));
-		}
+		// approximationQKfz = new Polyline();
+		// stuetzstellenQKfz = new PointList();
+		// approximationQLkw = new Polyline();
+		// stuetzstellenQLkw = new PointList();
+		// approximationVPkw = new Polyline();
+		// stuetzstellenVPkw = new PointList();
+		// approximationVLkw = new Polyline();
+		// stuetzstellenVLkw = new PointList();
+		// if (ganglinie == null) {
+		// return;
+		// }
+		//
+		// rechne = true;
+		// repaint();
+		//		
+		// if (!ganglinie.isApproximationAktuell()) {
+		// ganglinie.aktualisiereApproximation();
+		// }
+		//
+		// for (Stuetzstelle<Messwerte> s : getGanglinie().getStuetzstellen()) {
+		// if (s.getWert().getQKfz() != null) {
+		// stuetzstellenQKfz.addPoint(getQKfz(s.getZeitstempel(), s
+		// .getWert().getQKfz()));
+		// }
+		// if (s.getWert().getQLkw() != null) {
+		// stuetzstellenQLkw.addPoint(getQKfz(s.getZeitstempel(), s
+		// .getWert().getQLkw()));
+		// }
+		// if (s.getWert().getVPkw() != null) {
+		// stuetzstellenVPkw.addPoint(getVKfz(s.getZeitstempel(), s
+		// .getWert().getVPkw()));
+		// }
+		// if (s.getWert().getVLkw() != null) {
+		// stuetzstellenVLkw.addPoint(getVKfz(s.getZeitstempel(), s
+		// .getWert().getVLkw()));
+		// }
+		// }
+		//
+		// for (Stuetzstelle<Double> s : getGanglinie().getGanglinieQKfz()
+		// .getApproximation().interpoliere(INTERPOLATIONSINTERVALL)) {
+		// approximationQKfz
+		// .addPoint(getQKfz(s.getZeitstempel(), s.getWert()));
+		// }
+		// for (Stuetzstelle<Double> s : getGanglinie().getGanglinieQLkw()
+		// .getApproximation().interpoliere(INTERPOLATIONSINTERVALL)) {
+		// approximationQLkw
+		// .addPoint(getQKfz(s.getZeitstempel(), s.getWert()));
+		// }
+		// for (Stuetzstelle<Double> s : getGanglinie().getGanglinieVPkw()
+		// .getApproximation().interpoliere(INTERPOLATIONSINTERVALL)) {
+		// approximationVPkw
+		// .addPoint(getVKfz(s.getZeitstempel(), s.getWert()));
+		// }
+		// for (Stuetzstelle<Double> s : getGanglinie().getGanglinieVLkw()
+		// .getApproximation().interpoliere(INTERPOLATIONSINTERVALL)) {
+		// approximationVLkw
+		// .addPoint(getVKfz(s.getZeitstempel(), s.getWert()));
+		// }
+		//
+		// rechne = false;
 	}
 
 }

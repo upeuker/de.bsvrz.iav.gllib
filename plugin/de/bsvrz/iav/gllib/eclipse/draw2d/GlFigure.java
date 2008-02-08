@@ -26,6 +26,10 @@
 
 package de.bsvrz.iav.gllib.eclipse.draw2d;
 
+import static de.bsvrz.sys.funclib.bitctrl.util.Konstanten.MILLIS_PER_TAG;
+
+import java.util.Calendar;
+
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.geometry.Dimension;
@@ -83,7 +87,7 @@ public abstract class GlFigure extends Figure {
 	 *            die Skalierung.
 	 */
 	public void setSkalierung(GlSkalierung skalierung) {
-		this.skalierung = skalierung;
+		this.skalierung = skalierung.clone();
 		updateGroesse();
 	}
 
@@ -112,6 +116,24 @@ public abstract class GlFigure extends Figure {
 	 */
 	protected void updateGroesse() {
 		Dimension dim;
+		Calendar cal;
+
+		// Zeitachse immer mit voller Stunde beginnen
+		cal = Calendar.getInstance();
+		cal.setTimeInMillis(getSkalierung().getMinZeit());
+		if (cal.get(Calendar.MINUTE) != 0 || cal.get(Calendar.SECOND) != 0
+				|| cal.get(Calendar.MILLISECOND) != 0) {
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
+			cal.set(Calendar.MILLISECOND, 0);
+			getSkalierung().setMinZeit(cal.getTimeInMillis());
+		}
+
+		// Mindestens einen Tag anzeigen
+		if (getSkalierung().getMaxZeit() - getSkalierung().getMinZeit() < MILLIS_PER_TAG) {
+			getSkalierung().setMaxZeit(
+					getSkalierung().getMinZeit() + MILLIS_PER_TAG);
+		}
 
 		dim = getGroesse();
 		setSize(dim);

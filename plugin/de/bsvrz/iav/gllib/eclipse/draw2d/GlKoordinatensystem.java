@@ -110,7 +110,7 @@ public class GlKoordinatensystem extends GlFigure {
 
 		canvas = new FigureCanvas(shell, SWT.DOUBLE_BUFFERED);
 		// canvas.setBackground(ColorConstants.white);
-		g = new GlGanglinieMQ();
+		g = new GlGanglinieMQ(d);
 		g.setGanglinie(gmq);
 		skal = new GlSkalierung();
 		// skal.setMinZeit(0);
@@ -225,7 +225,7 @@ public class GlKoordinatensystem extends GlFigure {
 			format = DateFormat.getTimeInstance(DateFormat.SHORT);
 			g.drawText(format.format(cal.getTime()), x + 2, y + 1);
 
-			if (cal.get(Calendar.HOUR_OF_DAY) == 0) {
+			if (i == 0 || cal.get(Calendar.HOUR_OF_DAY) == 0) {
 				format = DateFormat.getDateInstance(DateFormat.SHORT);
 				g.drawText(format.format(cal.getTime()), x + 2, y + 15);
 				g.drawLine(x, y, x, y + 30);

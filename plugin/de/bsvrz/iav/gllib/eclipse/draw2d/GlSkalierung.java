@@ -35,7 +35,7 @@ import java.util.Calendar;
  * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
  */
-public class GlSkalierung {
+public class GlSkalierung implements Cloneable {
 
 	/** Die minimal anzuzeigende Zeit. */
 	private long minZeit;
@@ -87,6 +87,43 @@ public class GlSkalierung {
 		minQKfz = 0; // Standard 0
 		maxQKfz = 10000; // Maximal 100.000.000
 		zoomQKfz = 0.055;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see java.lang.Object#clone()
+	 */
+	@Override
+	public GlSkalierung clone() {
+		try {
+			return (GlSkalierung) super.clone();
+		} catch (CloneNotSupportedException ex) {
+			throw new IllegalStateException();
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this) {
+			return true;
+		}
+		if (obj instanceof GlSkalierung) {
+			GlSkalierung o;
+
+			o = (GlSkalierung) obj;
+			return minQKfz == o.minQKfz && maxQKfz == o.maxQKfz
+					&& zoomQKfz == o.zoomQKfz && minVKfz == o.minVKfz
+					&& maxVKfz == o.maxVKfz && zoomVKfz == o.zoomVKfz
+					&& minZeit == o.minZeit && maxZeit == o.maxZeit
+					&& zoomZeit == o.zoomZeit;
+		}
+		return false;
 	}
 
 	/**
