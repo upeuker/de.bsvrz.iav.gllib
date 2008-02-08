@@ -68,7 +68,7 @@ public class GlKoordinatensystem extends GlFigure {
 		final FigureCanvas canvas;
 		final ScalableLayeredPane pane;
 		final GlKoordinatensystem kos;
-		final GlGanglinie g;
+		final GlGanglinieMQ g;
 		GanglinieMQ gmq;
 		Calendar cal;
 		GlSkalierung skal;
@@ -111,7 +111,7 @@ public class GlKoordinatensystem extends GlFigure {
 
 		canvas = new FigureCanvas(shell, SWT.DOUBLE_BUFFERED);
 		canvas.setBackground(ColorConstants.white);
-		g = new GlGanglinie();
+		g = new GlGanglinieMQ();
 		g.setGanglinie(gmq);
 		skal = new GlSkalierung();
 		// skal.setMinZeit(0);

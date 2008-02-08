@@ -44,7 +44,7 @@ import de.bsvrz.iav.gllib.gllib.dav.Messwerte;
  * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
  */
-public class GlGanglinie extends GlFigure {
+public class GlGanglinieMQ extends GlFigure {
 
 	/** Die Eigenschaft {@code FARBE_QKFZ}. */
 	private static final Color FARBE_QKFZ = ColorConstants.red;
