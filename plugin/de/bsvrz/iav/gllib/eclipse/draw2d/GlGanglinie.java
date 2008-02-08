@@ -32,6 +32,7 @@ import org.eclipse.draw2d.Polyline;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
+import org.eclipse.swt.graphics.Color;
 
 import de.bsvrz.iav.gllib.gllib.Stuetzstelle;
 import de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ;
@@ -45,6 +46,18 @@ import de.bsvrz.iav.gllib.gllib.dav.Messwerte;
  */
 public class GlGanglinie extends GlFigure {
 
+	/** Die Eigenschaft {@code FARBE_QKFZ}. */
+	private static final Color FARBE_QKFZ = ColorConstants.red;
+
+	/** Die Eigenschaft {@code FARBE_QLKW}. */
+	private static final Color FARBE_QLKW = ColorConstants.orange;
+
+	/** Die Eigenschaft {@code FARBE_VPKW}. */
+	private static final Color FARBE_VPKW = ColorConstants.green;
+
+	/** Die Eigenschaft {@code FARBE_VLKW}. */
+	private static final Color FARBE_VLKW = ColorConstants.yellow;
+
 	/** Die Eigenschaft {@code ganglinie}. */
 	private GanglinieMQ ganglinie;
 
@@ -53,6 +66,24 @@ public class GlGanglinie extends GlFigure {
 
 	/** Die Eigenschaft {@code stuetzstellenQKfz}. */
 	private PointList stuetzstellenQKfz;
+
+	/** Die Eigenschaft {@code approximationQLkw}. */
+	private Polyline approximationQLkw;
+
+	/** Die Eigenschaft {@code stuetzstellenQLkw}. */
+	private PointList stuetzstellenQLkw;
+
+	/** Die Eigenschaft {@code approximationVPkw}. */
+	private Polyline approximationVPkw;
+
+	/** Die Eigenschaft {@code stuetzstellenVPkw}. */
+	private PointList stuetzstellenVPkw;
+
+	/** Die Eigenschaft {@code approximationVLkw}. */
+	private Polyline approximationVLkw;
+
+	/** Die Eigenschaft {@code stuetzstellenVLkw}. */
+	private PointList stuetzstellenVLkw;
 
 	/**
 	 * Gibt die Ganglinie der Figur zurück.
@@ -98,48 +129,52 @@ public class GlGanglinie extends GlFigure {
 	 */
 	@Override
 	protected void paintFigure(Graphics graphics) {
-		graphics.setForegroundColor(ColorConstants.red);
-		graphics.setBackgroundColor(ColorConstants.red);
-		graphics.drawPolyline(approximationQKfz.getPoints());
-		for (int i = 0; i < stuetzstellenQKfz.size(); ++i) {
-			Point p;
+		if (approximationQKfz.getPoints() != null) {
+			graphics.setForegroundColor(FARBE_QKFZ);
+			graphics.setBackgroundColor(FARBE_QKFZ);
+			graphics.drawPolyline(approximationQKfz.getPoints());
+			for (int i = 0; i < stuetzstellenQKfz.size(); ++i) {
+				Point p;
 
-			p = stuetzstellenQKfz.getPoint(i);
-			graphics.fillOval(p.x - 5, p.y - 5, 10, 10);
+				p = stuetzstellenQKfz.getPoint(i);
+				graphics.fillOval(p.x - 5, p.y - 5, 10, 10);
+			}
+		}
+		if (approximationQLkw.getPoints() != null) {
+			graphics.setForegroundColor(FARBE_QLKW);
+			graphics.setBackgroundColor(FARBE_QLKW);
+			graphics.drawPolyline(approximationQLkw.getPoints());
+			for (int i = 0; i < stuetzstellenQLkw.size(); ++i) {
+				Point p;
+
+				p = stuetzstellenQLkw.getPoint(i);
+				graphics.fillOval(p.x - 5, p.y - 5, 10, 10);
+			}
 		}
 
-		// Point pQKfz = null;
-		//
-		// if (!ganglinie.isApproximationAktuell()) {
-		// ganglinie.aktualisiereApproximation();
-		// }
-		//
-		// for (Stuetzstelle<Messwerte> s : getGanglinie().getStuetzstellen()) {
-		// Point p;
-		//
-		// // QKfz
-		// graphics.setForegroundColor(ColorConstants.red);
-		// graphics.setBackgroundColor(ColorConstants.red);
-		// p = getQKfz(s.getZeitstempel(), s.getWert().getQKfz());
-		// graphics.fillOval(p.x - 2, p.y - 2, 4, 4);
-		// }
-		//
-		// // QKfz
-		// for (Stuetzstelle<Double> s : getGanglinie().getGanglinieQKfz()
-		// .getApproximation().interpoliere(60 * 60 * 1000)) {
-		// Point p;
-		//
-		// graphics.setForegroundColor(ColorConstants.red);
-		// graphics.setBackgroundColor(ColorConstants.red);
-		// p = getQKfz(s.getZeitstempel(), s.getWert());
-		// if (pQKfz != null) {
-		// System.out.println("Zeichne: " + pQKfz + ", " + p);
-		// graphics.drawLine(pQKfz, p);
-		// }
-		//
-		// pQKfz = p;
-		// }
+		if (approximationVPkw.getPoints() != null) {
+			graphics.setForegroundColor(FARBE_VPKW);
+			graphics.setBackgroundColor(FARBE_VPKW);
+			graphics.drawPolyline(approximationVPkw.getPoints());
+			for (int i = 0; i < stuetzstellenVPkw.size(); ++i) {
+				Point p;
 
+				p = stuetzstellenVPkw.getPoint(i);
+				graphics.fillOval(p.x - 5, p.y - 5, 10, 10);
+			}
+		}
+
+		if (approximationVLkw.getPoints() != null) {
+			graphics.setForegroundColor(FARBE_VLKW);
+			graphics.setBackgroundColor(FARBE_VLKW);
+			graphics.drawPolyline(approximationVLkw.getPoints());
+			for (int i = 0; i < stuetzstellenVLkw.size(); ++i) {
+				Point p;
+
+				p = stuetzstellenVLkw.getPoint(i);
+				graphics.fillOval(p.x - 5, p.y - 5, 10, 10);
+			}
+		}
 	}
 
 	/**
@@ -190,6 +225,12 @@ public class GlGanglinie extends GlFigure {
 	private void updateCache() {
 		approximationQKfz = new Polyline();
 		stuetzstellenQKfz = new PointList();
+		approximationQLkw = new Polyline();
+		stuetzstellenQLkw = new PointList();
+		approximationVPkw = new Polyline();
+		stuetzstellenVPkw = new PointList();
+		approximationVLkw = new Polyline();
+		stuetzstellenVLkw = new PointList();
 
 		if (ganglinie == null) {
 			return;
@@ -200,17 +241,43 @@ public class GlGanglinie extends GlFigure {
 		}
 
 		for (Stuetzstelle<Messwerte> s : getGanglinie().getStuetzstellen()) {
-			// QKfz
-			stuetzstellenQKfz.addPoint(getQKfz(s.getZeitstempel(), s.getWert()
-					.getQKfz()));
-
+			if (s.getWert().getQKfz() != null) {
+				stuetzstellenQKfz.addPoint(getQKfz(s.getZeitstempel(), s
+						.getWert().getQKfz()));
+			}
+			if (s.getWert().getQLkw() != null) {
+				stuetzstellenQLkw.addPoint(getQKfz(s.getZeitstempel(), s
+						.getWert().getQLkw()));
+			}
+			if (s.getWert().getVPkw() != null) {
+				stuetzstellenVPkw.addPoint(getVKfz(s.getZeitstempel(), s
+						.getWert().getVPkw()));
+			}
+			if (s.getWert().getVLkw() != null) {
+				stuetzstellenVLkw.addPoint(getVKfz(s.getZeitstempel(), s
+						.getWert().getVLkw()));
+			}
 		}
 
-		// QKfz
 		for (Stuetzstelle<Double> s : getGanglinie().getGanglinieQKfz()
 				.getApproximation().interpoliere(15 * 60 * 1000)) {
 			approximationQKfz
 					.addPoint(getQKfz(s.getZeitstempel(), s.getWert()));
+		}
+		for (Stuetzstelle<Double> s : getGanglinie().getGanglinieQLkw()
+				.getApproximation().interpoliere(15 * 60 * 1000)) {
+			approximationQLkw
+					.addPoint(getQKfz(s.getZeitstempel(), s.getWert()));
+		}
+		for (Stuetzstelle<Double> s : getGanglinie().getGanglinieVPkw()
+				.getApproximation().interpoliere(15 * 60 * 1000)) {
+			approximationVPkw
+					.addPoint(getVKfz(s.getZeitstempel(), s.getWert()));
+		}
+		for (Stuetzstelle<Double> s : getGanglinie().getGanglinieVLkw()
+				.getApproximation().interpoliere(15 * 60 * 1000)) {
+			approximationVLkw
+					.addPoint(getVKfz(s.getZeitstempel(), s.getWert()));
 		}
 	}
 
