@@ -69,7 +69,7 @@ public class BSpline extends AbstractApproximation {
 		double t0, f;
 		Stuetzstelle<Double> s;
 
-		if (getStuetzstellen().size() == 0
+		if (getStuetzstellen().size() < getOrdnung()
 				|| (getStuetzstellen().get(0).getZeitstempel() < zeitstempel && zeitstempel > getStuetzstellen()
 						.get(getStuetzstellen().size() - 1).getZeitstempel())) {
 			// Zeitstempel liegt auﬂerhalb der Ganglinie
