@@ -82,11 +82,11 @@ public class GlSkalierung {
 
 		zoomZeit = 0.01;
 		minVKfz = 0; // Standard 0
-		maxVKfz = 255; // Standard 255
-		zoomVKfz = 2.5;
+		maxVKfz = 250; // Standard 255
+		zoomVKfz = 2;
 		minQKfz = 0; // Standard 0
 		maxQKfz = 10000; // Maximal 100.000.000
-		zoomQKfz = 0.07;
+		zoomQKfz = 0.055;
 	}
 
 	/**

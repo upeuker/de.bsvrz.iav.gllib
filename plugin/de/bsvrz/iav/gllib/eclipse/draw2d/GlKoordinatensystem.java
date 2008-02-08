@@ -73,8 +73,7 @@ public class GlKoordinatensystem extends GlFigure {
 		Calendar cal;
 		GlSkalierung skal;
 
-		d = new Display();
-
+		d = Display.getDefault();
 		shell = new Shell(d);
 		shell.setSize(1024, 786);
 		shell.setLayout(new FillLayout());
@@ -91,26 +90,26 @@ public class GlKoordinatensystem extends GlFigure {
 		// cal.setTimeInMillis(0);
 
 		gmq = new GanglinieMQ();
-		gmq.setStuetzstelle(cal.getTimeInMillis(), new Messwerte(0.0, null,
-				null, null));
+		gmq.setStuetzstelle(cal.getTimeInMillis(), new Messwerte(0.0, 0.0,
+				80.0, 78.0));
 		cal.add(Calendar.HOUR_OF_DAY, 3);
-		gmq.setStuetzstelle(cal.getTimeInMillis(), new Messwerte(3000.0, null,
-				null, null));
+		gmq.setStuetzstelle(cal.getTimeInMillis(), new Messwerte(3000.0,
+				1200.0, 100.0, 84.0));
 		cal.add(Calendar.HOUR_OF_DAY, 1);
 		gmq.setStuetzstelle(cal.getTimeInMillis(), new Messwerte(2000.0, null,
-				null, null));
+				150.0, null));
 		cal.add(Calendar.HOUR_OF_DAY, 2);
-		gmq.setStuetzstelle(cal.getTimeInMillis(), new Messwerte(4000.0, null,
-				null, null));
+		gmq.setStuetzstelle(cal.getTimeInMillis(), new Messwerte(4000.0,
+				2250.0, 180.0, 80.0));
 		cal.add(Calendar.HOUR_OF_DAY, 3);
-		gmq.setStuetzstelle(cal.getTimeInMillis(), new Messwerte(1000.0, null,
-				null, null));
+		gmq.setStuetzstelle(cal.getTimeInMillis(), new Messwerte(1000.0, 354.0,
+				130.0, 82.0));
 
 		gmq.setApproximation(new CubicSpline());
 		// gmq.setApproximation(new Polyline());
 
 		canvas = new FigureCanvas(shell, SWT.DOUBLE_BUFFERED);
-		canvas.setBackground(ColorConstants.white);
+		// canvas.setBackground(ColorConstants.white);
 		g = new GlGanglinieMQ();
 		g.setGanglinie(gmq);
 		skal = new GlSkalierung();
@@ -163,6 +162,20 @@ public class GlKoordinatensystem extends GlFigure {
 	/**
 	 * {@inheritDoc}
 	 * 
+	 * @see de.bsvrz.iav.gllib.eclipse.draw2d.GlFigure#getGroesse()
+	 */
+	@Override
+	protected Dimension getGroesse() {
+		Dimension dim;
+
+		dim = super.getGroesse();
+		dim.width += OFFSET.width;
+		return dim;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
 	 * @see org.eclipse.draw2d.Figure#paintChildren(org.eclipse.draw2d.Graphics)
 	 */
 	@Override
@@ -186,67 +199,90 @@ public class GlKoordinatensystem extends GlFigure {
 		Dimension basis;
 
 		basis = getGroesse();
-		g.setForegroundColor(ColorConstants.gray);
+		g.setForegroundColor(ColorConstants.darkGray);
+
+		// Koordinatensystem
+		g.setBackgroundColor(ColorConstants.white);
+		g.fillRectangle(OFFSET.width, 0, basis.width - 2 * OFFSET.width,
+				basis.height - OFFSET.height);
+		g.drawRectangle(OFFSET.width, 0, basis.width - 2 * OFFSET.width,
+				basis.height - OFFSET.height);
 
 		// Zeitachse
 		zeitbereich = (int) ((getSkalierung().getMaxZeit() - getSkalierung()
 				.getMinZeit()) / 1000);
 		schrittweite = 60 * 60;
 		for (int i = 0; i < zeitbereich; i += schrittweite) {
-			int pos;
+			int x, y;
 			Calendar cal;
 			DateFormat format;
 
+			x = (int) (OFFSET.width + getSkalierung().getZoomZeit() * i);
+			y = basis.height - OFFSET.height;
+
 			cal = Calendar.getInstance();
 			cal.setTimeInMillis(getSkalierung().getMinZeit() + i * 1000);
-
-			pos = (int) (getSkalierung().getZoomZeit() * i);
-
 			format = DateFormat.getTimeInstance(DateFormat.SHORT);
-			g.drawText(format.format(cal.getTime()), pos + 2, 1);
+			g.drawText(format.format(cal.getTime()), x + 2, y + 1);
 
 			if (cal.get(Calendar.HOUR_OF_DAY) == 0) {
 				format = DateFormat.getDateInstance(DateFormat.SHORT);
-				g.drawText(format.format(cal.getTime()), pos + 2, 15);
-				g.drawLine(pos, 0, pos, 30);
+				g.drawText(format.format(cal.getTime()), x + 2, y + 15);
+				g.drawLine(x, y, x, y + 30);
 			} else {
-				g.drawLine(pos, 0, pos, 14);
+				g.drawLine(x, y, x, y + 14);
 			}
 		}
 
 		// Verkehrsstärke
 		schrittweite = (getSkalierung().getMaxQKfz() - getSkalierung()
 				.getMinQKfz()) / 10;
-		for (int i = getSkalierung().getMinQKfz(); i < getSkalierung()
+		for (int i = getSkalierung().getMinQKfz(); i <= getSkalierung()
 				.getMaxQKfz(); i += schrittweite) {
 			int x, y;
 
-			x = 2;
-			y = (int) (basis.height - getSkalierung().getZoomQKfz() * i);
-			g.drawLine(x, y, x + 50, y);
-			g.drawText(String.valueOf(i) + " Kfz/h", x, y + 1);
+			x = 0;
+			y = (int) (basis.height - OFFSET.height - getSkalierung()
+					.getZoomQKfz()
+					* i);
+			g.drawLine(x, y, x + 60, y);
+			g.drawText(String.valueOf(i) + " Kfz/h", x + 2, y + 1);
 		}
 
 		// Geschwindigkeit
 		schrittweite = (getSkalierung().getMaxVKfz() - getSkalierung()
 				.getMinVKfz()) / 10;
-		for (int i = getSkalierung().getMinVKfz(); i < getSkalierung()
+		for (int i = getSkalierung().getMinVKfz(); i <= getSkalierung()
 				.getMaxVKfz(); i += schrittweite) {
 			int x, y;
 
-			x = basis.width - 50;
-			y = (int) (basis.height - getSkalierung().getZoomVKfz() * i);
+			x = basis.width - OFFSET.width;
+			y = (int) (basis.height - OFFSET.height - getSkalierung()
+					.getZoomVKfz()
+					* i);
 			g.drawLine(x, y, x + 50, y);
-			g.drawText(String.valueOf(i) + " km/h", x, y + 1);
+			g.drawText(String.valueOf(i) + " km/h", x + 2, y + 1);
 		}
+
+		// Legende
+		g.setForegroundColor(FARBE_QKFZ);
+		g.drawText("QKfz in Kfz/h", OFFSET.width + 10, 5);
+		g.setForegroundColor(FARBE_QLKW);
+		g.drawText("QLkw in Kfz/h", OFFSET.width + 10, 20);
+		g.setForegroundColor(FARBE_VPKW);
+		g.drawText("VPkw in km/h", OFFSET.width + 10, 35);
+		g.setForegroundColor(FARBE_VLKW);
+		g.drawText("VLkw in km/h", OFFSET.width + 10, 50);
 
 		// Mauszeiger
 		g.setForegroundColor(ColorConstants.black);
 		if (mausPos != null) {
-			if (0 <= mausPos.x && mausPos.x <= basis.width && 0 <= mausPos.y
-					&& mausPos.y <= basis.height) {
-				g.drawLine(mausPos.x, 0, mausPos.x, basis.height);
-				g.drawLine(0, mausPos.y, basis.width, mausPos.y);
+			if (OFFSET.width <= mausPos.x && mausPos.x <= basis.width
+					&& 0 <= mausPos.y
+					&& mausPos.y <= basis.height - OFFSET.height) {
+				g.drawLine(mausPos.x, 0, mausPos.x, basis.height
+						- OFFSET.height);
+				g.drawLine(OFFSET.width, mausPos.y, basis.width, mausPos.y);
 
 				String txt;
 				long t;
@@ -256,25 +292,27 @@ public class GlKoordinatensystem extends GlFigure {
 
 				// Zeit
 				t = getSkalierung().getMinZeit()
-						+ (long) (mausPos.x * 1000 / getSkalierung()
+						+ (long) ((mausPos.x - OFFSET.width) * 1000 / getSkalierung()
 								.getZoomZeit());
 				cal = Calendar.getInstance();
 				cal.setTimeInMillis(t);
 				format = DateFormat.getDateTimeInstance(DateFormat.SHORT,
 						DateFormat.SHORT);
-				txt = "Zeit: " + format.format(cal.getTime()) + "[" + t + "]";
+				txt = "Zeit: " + format.format(cal.getTime()) + " [" + t + "]";
 
 				// Verkehrstärke
-				qKfz = (int) (getSkalierung().getMinQKfz() + (basis.height - mausPos.y)
+				qKfz = (int) (getSkalierung().getMinQKfz() + (basis.height
+						- OFFSET.height - mausPos.y)
 						/ getSkalierung().getZoomQKfz());
 				txt += ", QKfz: " + qKfz + " Kfz/h";
 
 				// Geschwindigkeit
-				vKfz = (int) (getSkalierung().getMinVKfz() + (basis.height - mausPos.y)
+				vKfz = (int) (getSkalierung().getMinVKfz() + (basis.height
+						- OFFSET.height - mausPos.y)
 						/ getSkalierung().getZoomVKfz());
 				txt += ", VKfz: " + vKfz + " km/h";
 
-				g.drawText(txt, mausPos.x + 4, mausPos.y - 15);
+				g.drawText(txt, OFFSET.width + 100, 5);
 			}
 		}
 	}

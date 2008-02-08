@@ -217,7 +217,6 @@ public class CubicSpline extends AbstractApproximation {
 		r = addiere(r, multipliziere(c[index], potenz(subtrahiere(x, xi), 2)));
 		r = addiere(r, multipliziere(d[index], potenz(subtrahiere(x, xi), 3)));
 
-		System.out.println("Berechnet: " + r);
 		return new Stuetzstelle<Double>(zeitstempel, r.doubleValue());
 	}
 

@@ -26,8 +26,10 @@
 
 package de.bsvrz.iav.gllib.eclipse.draw2d;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.swt.graphics.Color;
 
 /**
  * Basisklasse der Draw2D-Figuren der Ganglinienbibliothek.
@@ -36,6 +38,24 @@ import org.eclipse.draw2d.geometry.Dimension;
  * @version $Id$
  */
 public abstract class GlFigure extends Figure {
+
+	/**
+	 * Der Offset um den die Ganglinien in der Figur des Koordinatensystems
+	 * verschoben sind, damit Platz für Achsen, Beschriftung und mehr bleibt.
+	 */
+	public static final Dimension OFFSET = new Dimension(60, 30);
+
+	/** Die Eigenschaft {@code FARBE_QKFZ}. */
+	public static final Color FARBE_QKFZ = ColorConstants.red;
+
+	/** Die Eigenschaft {@code FARBE_QLKW}. */
+	public static final Color FARBE_QLKW = ColorConstants.orange;
+
+	/** Die Eigenschaft {@code FARBE_VPKW}. */
+	public static final Color FARBE_VPKW = ColorConstants.blue;
+
+	/** Die Eigenschaft {@code FARBE_VLKW}. */
+	public static final Color FARBE_VLKW = ColorConstants.green;
 
 	/** Die Eigenschaft {@code skalierung}. */
 	private GlSkalierung skalierung;
@@ -73,16 +93,18 @@ public abstract class GlFigure extends Figure {
 	 * @return die Figurgröße.
 	 */
 	protected Dimension getGroesse() {
-		int zeit, v, q;
+		int zeit, v, q, hoehe;
 
-		zeit = (int) (getSkalierung().getZoomZeit()
-				* (getSkalierung().getMaxZeit() - getSkalierung().getMinZeit()) / 1000);
+		zeit = (int) (OFFSET.width + getSkalierung().getZoomZeit()
+				* (getSkalierung().getMaxZeit() - getSkalierung().getMinZeit())
+				/ 1000);
 		v = (int) (getSkalierung().getZoomVKfz() * (getSkalierung()
 				.getMaxVKfz() - getSkalierung().getMinVKfz()));
 		q = (int) (getSkalierung().getZoomQKfz() * (getSkalierung()
 				.getMaxQKfz() - getSkalierung().getMinQKfz()));
 
-		return new Dimension(zeit, Math.max(v, q));
+		hoehe = OFFSET.height + Math.max(v, q);
+		return new Dimension(zeit, hoehe);
 	}
 
 	/**

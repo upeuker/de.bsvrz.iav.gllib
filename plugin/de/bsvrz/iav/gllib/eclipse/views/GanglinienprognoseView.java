@@ -31,6 +31,8 @@ import java.util.Collections;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.draw2d.FigureCanvas;
+import org.eclipse.draw2d.ScalableLayeredPane;
 import org.eclipse.jface.util.Policy;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -46,11 +48,15 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.TabFolder;
+import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.ViewPart;
 
 import de.bsvrz.iav.gllib.eclipse.GanglinienprognosePlugin;
+import de.bsvrz.iav.gllib.eclipse.draw2d.GlGanglinieMQ;
+import de.bsvrz.iav.gllib.eclipse.draw2d.GlKoordinatensystem;
 import de.bsvrz.iav.gllib.eclipse.views.provider.GanglinieLabelProvider;
 import de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ;
 import de.bsvrz.iav.gllib.gllib.dav.Ganglinienprognose;
@@ -79,6 +85,9 @@ public class GanglinienprognoseView extends ViewPart implements
 	/** Die Eigenschaft {@code txtAntwort}. */
 	private Text txtAntwort;
 
+	/** Die Eigenschaft {@code ganglinie}. */
+	private GlGanglinieMQ ganglinie;
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -96,6 +105,7 @@ public class GanglinienprognoseView extends ViewPart implements
 				}
 				txtAntwort.setText(g.toString());
 				ganglinienListe.setInput(g.getStuetzstellen());
+				ganglinie.setGanglinie(g);
 			}
 
 		});
@@ -259,6 +269,11 @@ public class GanglinienprognoseView extends ViewPart implements
 		Group grpAntwort;
 		GridData gd;
 		TableColumn col;
+		TabFolder tab;
+		TabItem tabItem;
+		FigureCanvas fc;
+		ScalableLayeredPane pane;
+		GlKoordinatensystem kos;
 
 		grpAntwort = new Group(elter, SWT.NONE);
 		grpAntwort.setLayout(new GridLayout());
@@ -269,13 +284,29 @@ public class GanglinienprognoseView extends ViewPart implements
 		txtAntwort.setLayoutData(gd);
 		txtAntwort.setEditable(false);
 
-		gd = new GridData(GridData.FILL, GridData.FILL, true, true);
-		ganglinienListe = new TableViewer(grpAntwort);
-		ganglinienListe.getControl().setLayoutData(gd);
+		gd = new GridData(GridData.FILL, GridData.FILL, true, true, 2, 1);
+		tab = new TabFolder(grpAntwort, SWT.NONE);
+		tab.setLayoutData(gd);
+
+		ganglinienListe = new TableViewer(tab);
 		ganglinienListe.setContentProvider(new ArrayContentProvider());
 		ganglinienListe.setLabelProvider(new GanglinieLabelProvider());
 		ganglinienListe.getTable().setHeaderVisible(true);
 		ganglinienListe.getTable().setLinesVisible(true);
+		tabItem = new TabItem(tab, SWT.None);
+		tabItem.setText("Tabelle");
+		tabItem.setControl(ganglinienListe.getControl());
+
+		fc = new FigureCanvas(tab);
+		ganglinie = new GlGanglinieMQ();
+		kos = new GlKoordinatensystem();
+		kos.add(ganglinie);
+		pane = new ScalableLayeredPane();
+		pane.add(kos);
+		fc.setContents(pane);
+		tabItem = new TabItem(tab, SWT.None);
+		tabItem.setText("Diagramm");
+		tabItem.setControl(fc);
 
 		col = new TableColumn(ganglinienListe.getTable(), SWT.LEFT);
 		col.setText("Zeitstempel");

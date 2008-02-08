@@ -26,13 +26,11 @@
 
 package de.bsvrz.iav.gllib.eclipse.draw2d;
 
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.Polyline;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
-import org.eclipse.swt.graphics.Color;
 
 import de.bsvrz.iav.gllib.gllib.Stuetzstelle;
 import de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ;
@@ -46,17 +44,8 @@ import de.bsvrz.iav.gllib.gllib.dav.Messwerte;
  */
 public class GlGanglinieMQ extends GlFigure {
 
-	/** Die Eigenschaft {@code FARBE_QKFZ}. */
-	private static final Color FARBE_QKFZ = ColorConstants.red;
-
-	/** Die Eigenschaft {@code FARBE_QLKW}. */
-	private static final Color FARBE_QLKW = ColorConstants.orange;
-
-	/** Die Eigenschaft {@code FARBE_VPKW}. */
-	private static final Color FARBE_VPKW = ColorConstants.green;
-
-	/** Die Eigenschaft {@code FARBE_VLKW}. */
-	private static final Color FARBE_VLKW = ColorConstants.yellow;
+	/** Die Eigenschaft {@code INTERPOLATIONSINTERVALL}. */
+	private static final long INTERPOLATIONSINTERVALL = 15 * 60 * 1000;
 
 	/** Die Eigenschaft {@code ganglinie}. */
 	private GanglinieMQ ganglinie;
@@ -117,7 +106,6 @@ public class GlGanglinieMQ extends GlFigure {
 		update = getSkalierung() == null || !getSkalierung().equals(skalierung);
 		super.setSkalierung(skalierung);
 		if (update) {
-			System.out.println("Update Cache.");
 			updateCache();
 		}
 	}
@@ -137,7 +125,7 @@ public class GlGanglinieMQ extends GlFigure {
 				Point p;
 
 				p = stuetzstellenQKfz.getPoint(i);
-				graphics.fillOval(p.x - 5, p.y - 5, 10, 10);
+				graphics.fillOval(p.x - 2, p.y - 2, 4, 4);
 			}
 		}
 		if (approximationQLkw.getPoints() != null) {
@@ -148,7 +136,7 @@ public class GlGanglinieMQ extends GlFigure {
 				Point p;
 
 				p = stuetzstellenQLkw.getPoint(i);
-				graphics.fillOval(p.x - 5, p.y - 5, 10, 10);
+				graphics.fillOval(p.x - 2, p.y - 2, 4, 4);
 			}
 		}
 
@@ -160,7 +148,7 @@ public class GlGanglinieMQ extends GlFigure {
 				Point p;
 
 				p = stuetzstellenVPkw.getPoint(i);
-				graphics.fillOval(p.x - 5, p.y - 5, 10, 10);
+				graphics.fillOval(p.x - 2, p.y - 2, 4, 4);
 			}
 		}
 
@@ -172,7 +160,7 @@ public class GlGanglinieMQ extends GlFigure {
 				Point p;
 
 				p = stuetzstellenVLkw.getPoint(i);
-				graphics.fillOval(p.x - 5, p.y - 5, 10, 10);
+				graphics.fillOval(p.x - 2, p.y - 2, 4, 4);
 			}
 		}
 	}
@@ -193,8 +181,9 @@ public class GlGanglinieMQ extends GlFigure {
 
 		basis = getGroesse();
 		t = (int) ((zeitstempel - getSkalierung().getMinZeit()) / 1000);
-		x = (int) (t * getSkalierung().getZoomZeit());
-		y = (int) (basis.height - wert * getSkalierung().getZoomQKfz());
+		x = (int) (OFFSET.width + t * getSkalierung().getZoomZeit());
+		y = (int) (basis.height - OFFSET.height - wert
+				* getSkalierung().getZoomQKfz());
 		return new Point(x, y);
 	}
 
@@ -214,8 +203,9 @@ public class GlGanglinieMQ extends GlFigure {
 
 		basis = getGroesse();
 		t = (int) ((zeitstempel - getSkalierung().getMinZeit()) / 1000);
-		x = (int) (t * getSkalierung().getZoomZeit());
-		y = (int) (basis.height - wert * getSkalierung().getZoomVKfz());
+		x = (int) (OFFSET.width + t * getSkalierung().getZoomZeit());
+		y = (int) (basis.height - OFFSET.height - wert
+				* getSkalierung().getZoomVKfz());
 		return new Point(x, y);
 	}
 
@@ -260,22 +250,22 @@ public class GlGanglinieMQ extends GlFigure {
 		}
 
 		for (Stuetzstelle<Double> s : getGanglinie().getGanglinieQKfz()
-				.getApproximation().interpoliere(15 * 60 * 1000)) {
+				.getApproximation().interpoliere(INTERPOLATIONSINTERVALL)) {
 			approximationQKfz
 					.addPoint(getQKfz(s.getZeitstempel(), s.getWert()));
 		}
 		for (Stuetzstelle<Double> s : getGanglinie().getGanglinieQLkw()
-				.getApproximation().interpoliere(15 * 60 * 1000)) {
+				.getApproximation().interpoliere(INTERPOLATIONSINTERVALL)) {
 			approximationQLkw
 					.addPoint(getQKfz(s.getZeitstempel(), s.getWert()));
 		}
 		for (Stuetzstelle<Double> s : getGanglinie().getGanglinieVPkw()
-				.getApproximation().interpoliere(15 * 60 * 1000)) {
+				.getApproximation().interpoliere(INTERPOLATIONSINTERVALL)) {
 			approximationVPkw
 					.addPoint(getVKfz(s.getZeitstempel(), s.getWert()));
 		}
 		for (Stuetzstelle<Double> s : getGanglinie().getGanglinieVLkw()
-				.getApproximation().interpoliere(15 * 60 * 1000)) {
+				.getApproximation().interpoliere(INTERPOLATIONSINTERVALL)) {
 			approximationVLkw
 					.addPoint(getVKfz(s.getZeitstempel(), s.getWert()));
 		}
