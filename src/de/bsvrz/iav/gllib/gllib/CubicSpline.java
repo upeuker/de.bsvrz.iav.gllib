@@ -101,7 +101,7 @@ public class CubicSpline extends AbstractApproximation {
 		Vektor v;
 
 		n = getStuetzstellen().size();
-		if (n == 0) {
+		if (n < 3) {
 			return;
 		}
 

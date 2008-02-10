@@ -69,9 +69,8 @@ public class BSpline extends AbstractApproximation {
 		double t0, f;
 		Stuetzstelle<Double> s;
 
-		if (getStuetzstellen().size() < getOrdnung()
-				|| (getStuetzstellen().get(0).getZeitstempel() < zeitstempel && zeitstempel > getStuetzstellen()
-						.get(getStuetzstellen().size() - 1).getZeitstempel())) {
+		if ((zeitstempel < getStuetzstellen().get(0).getZeitstempel() || zeitstempel > getStuetzstellen()
+				.get(getStuetzstellen().size() - 1).getZeitstempel())) {
 			// Zeitstempel liegt außerhalb der Ganglinie
 			return new Stuetzstelle<Double>(zeitstempel, null);
 		}
@@ -125,12 +124,20 @@ public class BSpline extends AbstractApproximation {
 	/**
 	 * Bestimmt die Intervallgrenzen der Interpolation. Es gibt n+k-1 Intervalle
 	 * mit n&nbsp;=&nbsp;Knotenanzahl und k&nbsp;=&nbsp;Ordnung des B-Spline.
+	 * Ist die Ordnung des B-Spline größer als die Anzahl der Stützstellen, dann
+	 * wird die Ordnung auf die Stützstellenanzahl reduziert.
+	 * 
 	 * 
 	 * {@inheritDoc}
 	 */
 	public void initialisiere() {
 		if (getStuetzstellen().size() == 0) {
 			return;
+		}
+
+		if (getStuetzstellen().size() < getOrdnung()) {
+			// Ordnung größer als Anzahl der Stützstellen, Ordung anpassen
+			setOrdnung((byte) getStuetzstellen().size());
 		}
 
 		t = new int[getStuetzstellen().size() + ordnung];

@@ -26,7 +26,11 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
+import static de.bsvrz.sys.funclib.bitctrl.util.Konstanten.MILLIS_PER_STUNDE;
 import static org.junit.Assert.assertEquals;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -35,6 +39,7 @@ import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
 /**
  * Testet die Approximation einer Ganglinie mit Hilfe eines B-Spline.
  * 
+ * @todo B-Spline nachrechnen
  * @author BitCtrl Systems GmbH, Schumann
  * @version $Id$
  */
@@ -72,6 +77,76 @@ public class BSplineTest {
 
 		System.err.println("Integral B-Spline: "
 				+ spline.integral(new Intervall(0, 900)));
+	}
+
+	/**
+	 * Prüft das Verhalten des B-Spline bei (zu) wenigen Stützstellen.
+	 */
+	@Test
+	public void testAnzahlStuetzstelle() {
+		List<Stuetzstelle<Double>> stuetzstellen;
+		BSpline spline;
+
+		stuetzstellen = new ArrayList<Stuetzstelle<Double>>();
+
+		// Nur eine Stützstelle
+		stuetzstellen.add(new Stuetzstelle<Double>(100 * MILLIS_PER_STUNDE,
+				30.0));
+		spline = new BSpline();
+		spline.setStuetzstellen(stuetzstellen);
+		spline.setOrdnung((byte) 1);
+		spline.initialisiere();
+		assertEquals(new Stuetzstelle<Double>(0, null), spline.get(0));
+		assertEquals(new Stuetzstelle<Double>(100 * MILLIS_PER_STUNDE, 30.0),
+				spline.get(100 * MILLIS_PER_STUNDE));
+		assertEquals(new Stuetzstelle<Double>(120 * MILLIS_PER_STUNDE, null),
+				spline.get(120 * MILLIS_PER_STUNDE));
+
+		// Nur zwei Stützstellen
+		stuetzstellen.add(new Stuetzstelle<Double>(200 * MILLIS_PER_STUNDE,
+				80.0));
+		spline = new BSpline();
+		spline.setStuetzstellen(stuetzstellen);
+		spline.setOrdnung((byte) 2);
+		spline.initialisiere();
+		assertEquals(new Stuetzstelle<Double>(0, null), spline.get(0));
+		assertEquals(new Stuetzstelle<Double>(100 * MILLIS_PER_STUNDE, 30.0),
+				spline.get(100 * MILLIS_PER_STUNDE));
+		assertEquals(new Stuetzstelle<Double>(200 * MILLIS_PER_STUNDE, 80.0),
+				spline.get(200 * MILLIS_PER_STUNDE));
+		assertEquals(new Stuetzstelle<Double>(320 * MILLIS_PER_STUNDE, null),
+				spline.get(320 * MILLIS_PER_STUNDE));
+
+		// Nur drei Stützstellen
+		stuetzstellen.add(new Stuetzstelle<Double>(300 * MILLIS_PER_STUNDE,
+				40.0));
+		spline = new BSpline();
+		spline.setStuetzstellen(stuetzstellen);
+		spline.setOrdnung((byte) 3);
+		spline.initialisiere();
+		assertEquals(new Stuetzstelle<Double>(0, null), spline.get(0));
+		assertEquals(new Stuetzstelle<Double>(100 * MILLIS_PER_STUNDE, 30.0),
+				spline.get(100 * MILLIS_PER_STUNDE));
+		assertEquals(new Stuetzstelle<Double>(200 * MILLIS_PER_STUNDE, 57.5),
+				spline.get(200 * MILLIS_PER_STUNDE));
+		assertEquals(new Stuetzstelle<Double>(300 * MILLIS_PER_STUNDE, 40.0),
+				spline.get(300 * MILLIS_PER_STUNDE));
+		assertEquals(new Stuetzstelle<Double>(320 * MILLIS_PER_STUNDE, null),
+				spline.get(320 * MILLIS_PER_STUNDE));
+
+		// Nur drei Stützstellen, mit Ordnung 5
+		spline = new BSpline();
+		spline.setStuetzstellen(stuetzstellen);
+		spline.initialisiere();
+		assertEquals(new Stuetzstelle<Double>(0, null), spline.get(0));
+		assertEquals(new Stuetzstelle<Double>(100 * MILLIS_PER_STUNDE, 30.0),
+				spline.get(100 * MILLIS_PER_STUNDE));
+		assertEquals(new Stuetzstelle<Double>(200 * MILLIS_PER_STUNDE, 57.5),
+				spline.get(200 * MILLIS_PER_STUNDE));
+		assertEquals(new Stuetzstelle<Double>(300 * MILLIS_PER_STUNDE, 40.0),
+				spline.get(300 * MILLIS_PER_STUNDE));
+		assertEquals(new Stuetzstelle<Double>(320 * MILLIS_PER_STUNDE, null),
+				spline.get(320 * MILLIS_PER_STUNDE));
 	}
 
 	// /**
