@@ -54,18 +54,6 @@ public abstract class AbstractApproximation implements Approximation {
 	}
 
 	/**
-	 * Wirft immer eine {@link java.lang.CloneNotSupportedException}.
-	 * <p>
-	 * {@inheritDoc}
-	 * 
-	 * @throws CloneNotSupportedException
-	 */
-	@Override
-	public Approximation clone() throws CloneNotSupportedException {
-		throw new CloneNotSupportedException();
-	}
-
-	/**
 	 * {@inheritDoc}
 	 * 
 	 * @see de.bsvrz.iav.gllib.gllib.Approximation#getIntervall()

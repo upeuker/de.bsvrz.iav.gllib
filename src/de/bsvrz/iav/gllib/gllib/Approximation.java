@@ -42,15 +42,6 @@ import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
 public interface Approximation {
 
 	/**
-	 * Erzeugt eine Kopie der Approximation.
-	 * 
-	 * @return die kopierte Approximation.
-	 * @throws CloneNotSupportedException
-	 *             wenn das Klonen nicht unterst&uuml;tzt wird.
-	 */
-	Approximation clone() throws CloneNotSupportedException;
-
-	/**
 	 * Gibt die St&uuml;tzstelle zum angegebenen Zeitstempel zur&uuml;ck.
 	 * 
 	 * @param zeitstempel

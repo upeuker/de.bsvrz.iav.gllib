@@ -90,15 +90,11 @@ public interface IGanglinie<T> {
 	/**
 	 * Gibt die St&uuml;tzstelle zu einem bestimmten Zeitpunkt zur&uuml;ck. Es
 	 * wird die mit der Approximation berechnete St&uuml;tzstelle ausgeliefert.
-	 * Wurde keine Approximation festgelegt ({@code getApproximation() == null}),
-	 * dann wird die real existierende St&uuml;tzstelle ausgeliefert. Existiert
-	 * zum angefragten Zeitpunkt keine St&uuml;tzstelle, wird {@code null}
-	 * zur&uuml;ckgegegeben.
+	 * Die Approximation muss dazu zuvor festgelegt worden sein.
 	 * 
 	 * @param zeitstempel
 	 *            Der Zeitstempel zu dem eine St&uuml;tzstelle gesucht wird.
-	 * @return Die gesuchte St&uuml;tzstelle oder {@code null}, wenn keine
-	 *         berechnet werden konnte und keine existiert.
+	 * @return Die gesuchte St&uuml;tzstelle.
 	 */
 	Stuetzstelle<T> getStuetzstelle(long zeitstempel);
 
