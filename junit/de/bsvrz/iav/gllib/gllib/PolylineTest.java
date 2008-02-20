@@ -31,7 +31,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
+import com.bitctrl.util.Interval;
 
 /**
  * Testet die Approximation einer Ganglinie mit Hilfe einer Polylinie.
@@ -110,18 +110,18 @@ public class PolylineTest {
 	@Test
 	public void testIntegral() {
 		Polyline polyline;
-		Intervall intervall;
+		Interval intervall;
 
 		System.out.println("Polyline: Methode integral()");
 		polyline = new Polyline();
 		polyline.setStuetzstellen(ganglinie.getStuetzstellen());
 
 		// Intervallgrenzen liegen auf Stützstellen
-		intervall = new Intervall(0, 9000);
+		intervall = new Interval(0, 9000);
 		assertEquals(205000, polyline.integral(intervall));
 
 		// Intervallgrenzen liegen nicht auf Stützstellen
-		intervall = new Intervall(2000, 8000);
+		intervall = new Interval(2000, 8000);
 		assertEquals(170000, polyline.integral(intervall));
 	}
 

@@ -28,7 +28,7 @@ package de.bsvrz.iav.gllib.gllib;
 
 import java.util.List;
 
-import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
+import com.bitctrl.util.Interval;
 
 /**
  * Definiert eine gemeinsame Schnittstelle für Ganglinien.
@@ -78,14 +78,14 @@ public interface IGanglinie<T> {
 	 * @return Ein {@link Intervall} oder {@code null}, wenn keine
 	 *         St&uuml;tzstellen vorhanden sind
 	 */
-	Intervall getIntervall();
+	Interval getIntervall();
 
 	/**
 	 * Bestimmt die Intervalle in denen die Ganglinie definiert ist.
 	 * 
 	 * @return Liste von Intervallen
 	 */
-	List<Intervall> getIntervalle();
+	List<Interval> getIntervalle();
 
 	/**
 	 * Gibt die St&uuml;tzstelle zu einem bestimmten Zeitpunkt zur&uuml;ck. Es
@@ -114,7 +114,7 @@ public interface IGanglinie<T> {
 	 * @return die Liste der St&uuml;tzstellen im Intervall, sortiert nach
 	 *         Zeitstempel.
 	 */
-	List<Stuetzstelle<T>> getStuetzstellen(Intervall intervall);
+	List<Stuetzstelle<T>> getStuetzstellen(Interval intervall);
 
 	/**
 	 * Gibt {@code false} zur&uuml;ck, wenn die Approximation aktuallisiert
@@ -135,7 +135,7 @@ public interface IGanglinie<T> {
 	 *         undefinierten Bereiche enthält.
 	 * @see #getIntervalle()
 	 */
-	boolean isValid(Intervall intervall);
+	boolean isValid(Interval intervall);
 
 	/**
 	 * Pr&uuml;ft ob ein Zeitstempel im Definitionsbereich der Ganglinie liegt.

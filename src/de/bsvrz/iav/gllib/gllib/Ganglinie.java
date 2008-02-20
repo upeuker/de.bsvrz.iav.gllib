@@ -33,7 +33,7 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
+import com.bitctrl.util.Interval;
 
 /**
  * Repr&auml;sentiert eine allgemeine Ganglinie, bestehend aus einer sortierten
@@ -148,22 +148,22 @@ public class Ganglinie implements IGanglinie<Double> {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Intervall getIntervall() {
+	public Interval getIntervall() {
 		if (stuetzstellen.size() == 0) {
 			return null;
 		}
 
-		return new Intervall(stuetzstellen.firstKey(), stuetzstellen.lastKey());
+		return new Interval(stuetzstellen.firstKey(), stuetzstellen.lastKey());
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public List<Intervall> getIntervalle() {
-		List<Intervall> intervalle;
+	public List<Interval> getIntervalle() {
+		List<Interval> intervalle;
 		Long start, ende;
 
-		intervalle = new ArrayList<Intervall>();
+		intervalle = new ArrayList<Interval>();
 		start = null;
 		ende = null;
 
@@ -173,7 +173,7 @@ public class Ganglinie implements IGanglinie<Double> {
 				if (stuetzstellen.get(t) != null) {
 					if (t == stuetzstellen.lastKey()) {
 						// Die letzte Stützstelle ist das letzte Intervall
-						intervalle.add(new Intervall(t, t));
+						intervalle.add(new Interval(t, t));
 					} else {
 						start = t;
 					}
@@ -182,11 +182,11 @@ public class Ganglinie implements IGanglinie<Double> {
 				if (stuetzstellen.get(t) == null) {
 					// Definitionslücke gefunden
 					if (ende != null) {
-						intervalle.add(new Intervall(start, ende));
+						intervalle.add(new Interval(start, ende));
 						start = null;
 						ende = null;
 					} else {
-						intervalle.add(new Intervall(start, start));
+						intervalle.add(new Interval(start, start));
 						start = null;
 					}
 				} else {
@@ -196,7 +196,7 @@ public class Ganglinie implements IGanglinie<Double> {
 					}
 					if (t == stuetzstellen.lastKey()) {
 						// Die letzte Stützstelle ist das letzte Intervall
-						intervalle.add(new Intervall(start, ende));
+						intervalle.add(new Interval(start, ende));
 					}
 				}
 			}
@@ -242,12 +242,12 @@ public class Ganglinie implements IGanglinie<Double> {
 	/**
 	 * {@inheritDoc}
 	 */
-	public List<Stuetzstelle<Double>> getStuetzstellen(Intervall intervall) {
+	public List<Stuetzstelle<Double>> getStuetzstellen(Interval intervall) {
 		SortedMap<Long, Double> menge;
 		List<Stuetzstelle<Double>> liste;
 
 		menge = stuetzstellen.subMap(intervall.getStart(),
-				intervall.getEnde() + 1);
+				intervall.getEnd() + 1);
 		liste = new ArrayList<Stuetzstelle<Double>>();
 		for (long t : menge.keySet()) {
 			liste.add(getStuetzstelle(t));
@@ -268,12 +268,12 @@ public class Ganglinie implements IGanglinie<Double> {
 	 * 
 	 * @see de.bsvrz.iav.gllib.gllib.IGanglinie#isValid(de.bsvrz.sys.funclib.bitctrl.util.Intervall)
 	 */
-	public boolean isValid(Intervall intervall) {
+	public boolean isValid(Interval intervall) {
 		boolean ok;
 
 		ok = false;
-		for (Intervall i : getIntervalle()) {
-			if (i.isEnthalten(intervall)) {
+		for (Interval i : getIntervalle()) {
+			if (i.contains(intervall)) {
 				ok = true;
 				break;
 			}
@@ -289,8 +289,8 @@ public class Ganglinie implements IGanglinie<Double> {
 		boolean ok;
 
 		ok = false;
-		for (Intervall i : getIntervalle()) {
-			if (i.isEnthalten(zeitstempel)) {
+		for (Interval i : getIntervalle()) {
+			if (i.contains(zeitstempel)) {
 				ok = true;
 				break;
 			}

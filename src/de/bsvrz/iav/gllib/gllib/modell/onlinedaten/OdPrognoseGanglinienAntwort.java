@@ -33,6 +33,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import com.bitctrl.util.Interval;
+
 import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dav.daf.main.Data.Array;
@@ -49,7 +51,6 @@ import de.bsvrz.sys.funclib.bitctrl.modell.Datum;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.objekte.MessQuerschnittAllgemein;
-import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
 
 /**
  * Kapselt die Onlineattributgruppe {@code atg.prognoseGanglinienAntwort}.
@@ -404,7 +405,7 @@ public class OdPrognoseGanglinienAntwort extends
 			ganglinien.getItem(i).getTimeValue("ZeitpunktPrognoseBeginn")
 					.setMillis(g.getIntervall().getStart());
 			ganglinien.getItem(i).getTimeValue("ZeitpunktPrognoseEnde")
-					.setMillis(g.getIntervall().getEnde());
+					.setMillis(g.getIntervall().getEnd());
 
 			// Verfahren
 			ganglinien.getItem(i).getUnscaledValue("GanglinienVerfahren").set(
@@ -468,7 +469,7 @@ public class OdPrognoseGanglinienAntwort extends
 		if (result.hasData()) {
 			Array ganglinien;
 			Data daten = result.getData();
-			Intervall prognoseZeitraum;
+			Interval prognoseZeitraum;
 
 			datum.setAbsenderZeichen(daten.getTextValue("AbsenderZeichen")
 					.getText());
@@ -493,7 +494,7 @@ public class OdPrognoseGanglinienAntwort extends
 						.getUnscaledValue("Ordnung").longValue());
 
 				// Prognosezeitraum
-				prognoseZeitraum = new Intervall(ganglinien.getItem(i)
+				prognoseZeitraum = new Interval(ganglinien.getItem(i)
 						.getTimeValue("ZeitpunktPrognoseBeginn").getMillis(),
 						ganglinien.getItem(i).getTimeValue(
 								"ZeitpunktPrognoseEnde").getMillis());

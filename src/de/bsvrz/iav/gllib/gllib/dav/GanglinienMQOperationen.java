@@ -30,8 +30,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import com.bitctrl.util.Interval;
+
 import de.bsvrz.iav.gllib.gllib.GanglinienOperationen;
-import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
 
 /**
  * Helferklasse mit den Operationen auf Messquerschnittsganglinien.
@@ -88,7 +89,7 @@ public final class GanglinienMQOperationen {
 	 *            Auszuschneidendes Intervall
 	 * @return Der Intervallausschnitt
 	 */
-	public static GanglinieMQ auschneiden(GanglinieMQ g, Intervall i) {
+	public static GanglinieMQ auschneiden(GanglinieMQ g, Interval i) {
 		g.qKfz = GanglinienOperationen.auschneiden(g.qKfz, i);
 		g.qLkw = GanglinienOperationen.auschneiden(g.qLkw, i);
 		g.vPkw = GanglinienOperationen.auschneiden(g.vPkw, i);
@@ -267,7 +268,7 @@ public final class GanglinienMQOperationen {
 
 		fehler = new HashMap<Integer, Double>();
 		start = referenz.getIntervall().getStart() - offsetVor;
-		ende = referenz.getIntervall().getEnde() + offsetNach;
+		ende = referenz.getIntervall().getEnd() + offsetNach;
 
 		// Abstände der Ganglinien bestimmen
 		for (int i = 0; i < liste.size(); i++) {

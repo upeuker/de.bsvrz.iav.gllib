@@ -33,6 +33,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.SortedMap;
 
+import com.bitctrl.util.Interval;
+
 import de.bsvrz.iav.gllib.gllib.Approximation;
 import de.bsvrz.iav.gllib.gllib.BSpline;
 import de.bsvrz.iav.gllib.gllib.CubicSpline;
@@ -42,7 +44,6 @@ import de.bsvrz.iav.gllib.gllib.Polyline;
 import de.bsvrz.iav.gllib.gllib.Stuetzstelle;
 import de.bsvrz.sys.funclib.bitctrl.modell.kalender.objekte.EreignisTyp;
 import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.objekte.MessQuerschnittAllgemein;
-import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
 
 /**
  * F&uuml;r Messquerschnitte angepasste Ganglinie. Die vier Verkehrswerte QKfz,
@@ -133,7 +134,7 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	private boolean approximationAktuell = false;
 
 	/** Das Intervall für das die Ganglinie prognostiziert wird. */
-	private Intervall prognoseZeitraum;
+	private Interval prognoseZeitraum;
 
 	/**
 	 * Allgemeine Initialisierung.
@@ -404,7 +405,7 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	 * 
 	 * @see #setPrognoseZeitraum(Intervall)
 	 */
-	public Intervall getIntervall() {
+	public Interval getIntervall() {
 		if (prognoseZeitraum != null) {
 			return prognoseZeitraum;
 		}
@@ -417,7 +418,7 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	 * 
 	 * @see #setPrognoseZeitraum(Intervall)
 	 */
-	public List<Intervall> getIntervalle() {
+	public List<Interval> getIntervalle() {
 		throw new UnsupportedOperationException("Es müssen die Intervalle der "
 				+ "einzelnen Ganglinien für Q, V und QB abgefragt werden.");
 	}
@@ -463,7 +464,7 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	 * 
 	 * @return das Prognoseintervall.
 	 */
-	public Intervall getPrognoseIntervall() {
+	public Interval getPrognoseIntervall() {
 		return prognoseZeitraum;
 	}
 
@@ -508,7 +509,7 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 
 			zeitstempel = qKfz0.get(i).getZeitstempel();
 			if (prognoseZeitraum != null
-					&& !prognoseZeitraum.isEnthalten(zeitstempel)) {
+					&& !prognoseZeitraum.contains(zeitstempel)) {
 				continue;
 			}
 			liste
@@ -526,7 +527,7 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	 * 
 	 * @see #setPrognoseZeitraum(Intervall)
 	 */
-	public List<Stuetzstelle<Messwerte>> getStuetzstellen(Intervall intervall) {
+	public List<Stuetzstelle<Messwerte>> getStuetzstellen(Interval intervall) {
 		List<Stuetzstelle<Double>> qKfz0, qLkw0, vPkw0, vLkw0;
 		List<Stuetzstelle<Messwerte>> liste;
 
@@ -541,7 +542,7 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 
 			zeitstempel = qKfz0.get(i).getZeitstempel();
 			if (prognoseZeitraum != null
-					&& !prognoseZeitraum.isEnthalten(zeitstempel)) {
+					&& !prognoseZeitraum.contains(zeitstempel)) {
 				continue;
 			}
 			liste
@@ -593,9 +594,8 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean isValid(Intervall intervall) {
-		if (prognoseZeitraum != null
-				&& !prognoseZeitraum.isEnthalten(intervall)) {
+	public boolean isValid(Interval intervall) {
+		if (prognoseZeitraum != null && !prognoseZeitraum.contains(intervall)) {
 			// Teilintervall liegt nicht innerhalb der Prognoseganglinie
 			return false;
 		}
@@ -606,8 +606,7 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	 * {@inheritDoc}
 	 */
 	public boolean isValid(long zeitstempel) {
-		if (prognoseZeitraum != null
-				&& !prognoseZeitraum.isEnthalten(zeitstempel)) {
+		if (prognoseZeitraum != null && !prognoseZeitraum.contains(zeitstempel)) {
 			// Zeitstempel liegt nicht innerhalb der Prognoseganglinie
 			return false;
 		}
@@ -745,7 +744,7 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	 * @param prognoseZeitraum
 	 *            ein Intervall.
 	 */
-	public void setPrognoseZeitraum(Intervall prognoseZeitraum) {
+	public void setPrognoseZeitraum(Interval prognoseZeitraum) {
 		this.prognoseZeitraum = prognoseZeitraum;
 	}
 

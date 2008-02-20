@@ -38,7 +38,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Map.Entry;
 
-import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
+import com.bitctrl.util.Interval;
 
 /**
  * Helferklasse mit den Operationen auf Ganglinien, deren St&uuml;tzstellen
@@ -111,7 +111,7 @@ public final class GanglinienOperationen {
 	 *            Auszuschneidendes Intervall
 	 * @return Der Intervallausschnitt
 	 */
-	public static Ganglinie auschneiden(Ganglinie g, Intervall i) {
+	public static Ganglinie auschneiden(Ganglinie g, Interval i) {
 		Polyline p;
 
 		p = new Polyline();
@@ -119,11 +119,11 @@ public final class GanglinienOperationen {
 		p.initialisiere();
 
 		// Stützstellen an den beiden Schnittpunkten ergänzen, falls nötig
-		if (!g.existsStuetzstelle(i.start)) {
-			g.setStuetzstelle(p.get(i.start));
+		if (!g.existsStuetzstelle(i.getStart())) {
+			g.setStuetzstelle(p.get(i.getStart()));
 		}
-		if (!g.existsStuetzstelle(i.ende)) {
-			g.setStuetzstelle(p.get(i.ende));
+		if (!g.existsStuetzstelle(i.getEnd())) {
+			g.setStuetzstelle(p.get(i.getEnd()));
 		}
 
 		// Stützstellen außerhalb des Intervalls entfernen
@@ -133,7 +133,7 @@ public final class GanglinienOperationen {
 			long t;
 
 			t = iterator.next().getKey();
-			if (!i.isEnthalten(t)) {
+			if (!i.contains(t)) {
 				iterator.remove();
 			}
 		}
@@ -446,7 +446,7 @@ public final class GanglinienOperationen {
 
 		fehler = new HashMap<Integer, Double>();
 		start = referenz.getIntervall().getStart() - offsetVor;
-		ende = referenz.getIntervall().getEnde() + offsetNach;
+		ende = referenz.getIntervall().getEnd() + offsetNach;
 
 		// Abstände der Ganglinien bestimmen
 		for (int i = 0; i < liste.size(); i++) {
@@ -544,7 +544,7 @@ public final class GanglinienOperationen {
 	 * @return Konkatenation der beiden Ganglinien
 	 */
 	public static Ganglinie verbinde(Ganglinie g1, Ganglinie g2) {
-		if (g1.getIntervall().schneidet(g2.getIntervall())) {
+		if (g1.getIntervall().intersect(g2.getIntervall())) {
 			throw new IllegalArgumentException();
 		}
 

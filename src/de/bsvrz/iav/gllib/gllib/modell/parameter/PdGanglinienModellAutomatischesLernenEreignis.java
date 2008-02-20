@@ -26,10 +26,10 @@
 
 package de.bsvrz.iav.gllib.gllib.modell.parameter;
 
-import static de.bsvrz.sys.funclib.bitctrl.util.Konstanten.MILLIS_PER_SEKUNDE;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.bitctrl.Constants.MILLIS_PER_SEKUNDE;
 
 import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.ResultData;

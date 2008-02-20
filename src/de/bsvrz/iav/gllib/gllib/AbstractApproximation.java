@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
+import com.bitctrl.util.Interval;
 
 /**
  * Implementiert allgemeine Methoden der Schnittstelle.
@@ -51,92 +51,6 @@ public abstract class AbstractApproximation implements Approximation {
 	 */
 	protected AbstractApproximation() {
 		stuetzstellen = new ArrayList<Stuetzstelle<Double>>();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see de.bsvrz.iav.gllib.gllib.Approximation#getIntervall()
-	 */
-	public Intervall getIntervall() {
-		return new Intervall(stuetzstellen.get(0).getZeitstempel(),
-				stuetzstellen.get(stuetzstellen.size() - 1).getZeitstempel());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see de.bsvrz.iav.gllib.gllib.Approximation#getStuetzstellen()
-	 */
-	public List<Stuetzstelle<Double>> getStuetzstellen() {
-		return Collections.unmodifiableList(stuetzstellen);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public SortedSet<Stuetzstelle<Double>> interpoliere(long intervallBreite) {
-		if (intervallBreite <= 0) {
-			throw new IllegalArgumentException(
-					"Intervallbreite muss größer null sein.");
-		}
-
-		SortedSet<Stuetzstelle<Double>> interpolation;
-		long zeitstempel;
-
-		interpolation = new TreeSet<Stuetzstelle<Double>>();
-
-		// Sonderfall: keine Stützstellen vorhanden
-		if (stuetzstellen.size() == 0) {
-			return interpolation;
-		}
-
-		// Stützstellen an den Intervallgrenzen bestimmen
-		zeitstempel = stuetzstellen.get(0).getZeitstempel();
-		while (zeitstempel <= stuetzstellen.get(stuetzstellen.size() - 1)
-				.getZeitstempel()) {
-			interpolation.add(get(zeitstempel));
-			zeitstempel += intervallBreite;
-		}
-		if (interpolation.last().getZeitstempel() < getIntervall().getEnde()) {
-			interpolation.add(get(getIntervall().getEnde()));
-		}
-
-		return interpolation;
-	}
-
-	/**
-	 * Prüft ob für den Zeitstempel eine Stützstelle berechnet werden kann. Für
-	 * stetige Funktionen bedeutet dies, dass der Zeitstempel im Intervall der
-	 * Stützstellen liegt. Für unstetige Funktionen muss diese Methode passende
-	 * überschrieben werden.
-	 * 
-	 * @param t
-	 *            ein Zeitstempel.
-	 * @return {@code true}, wenn der Wert der Approximation zum angegebenen
-	 *         Zeitpunkt definiert ist.
-	 */
-	public boolean isValid(long t) {
-		return stuetzstellen.get(0).getZeitstempel() <= t
-				&& t <= stuetzstellen.get(stuetzstellen.size() - 1)
-						.getZeitstempel();
-	}
-
-	/**
-	 * Bestimmt die Liste der verwendeten St&uuml;tzstellen. Die Liste
-	 * entspricht der Ganglinie, abz&uuml;glich der undefinierten
-	 * St&uuml;tzstellen.
-	 * <p>
-	 * {@inheritDoc}
-	 */
-	public void setStuetzstellen(Collection<Stuetzstelle<Double>> stuetzstellen) {
-		this.stuetzstellen.clear();
-		for (Stuetzstelle<Double> s : stuetzstellen) {
-			if (s.getWert() != null) {
-				this.stuetzstellen.add(s);
-			}
-		}
-		Collections.sort(this.stuetzstellen);
 	}
 
 	/**
@@ -229,6 +143,92 @@ public abstract class AbstractApproximation implements Approximation {
 		}
 
 		return index;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see de.bsvrz.iav.gllib.gllib.Approximation#getIntervall()
+	 */
+	public Interval getIntervall() {
+		return new Interval(stuetzstellen.get(0).getZeitstempel(),
+				stuetzstellen.get(stuetzstellen.size() - 1).getZeitstempel());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see de.bsvrz.iav.gllib.gllib.Approximation#getStuetzstellen()
+	 */
+	public List<Stuetzstelle<Double>> getStuetzstellen() {
+		return Collections.unmodifiableList(stuetzstellen);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public SortedSet<Stuetzstelle<Double>> interpoliere(long intervallBreite) {
+		if (intervallBreite <= 0) {
+			throw new IllegalArgumentException(
+					"Intervallbreite muss größer null sein.");
+		}
+
+		SortedSet<Stuetzstelle<Double>> interpolation;
+		long zeitstempel;
+
+		interpolation = new TreeSet<Stuetzstelle<Double>>();
+
+		// Sonderfall: keine Stützstellen vorhanden
+		if (stuetzstellen.size() == 0) {
+			return interpolation;
+		}
+
+		// Stützstellen an den Intervallgrenzen bestimmen
+		zeitstempel = stuetzstellen.get(0).getZeitstempel();
+		while (zeitstempel <= stuetzstellen.get(stuetzstellen.size() - 1)
+				.getZeitstempel()) {
+			interpolation.add(get(zeitstempel));
+			zeitstempel += intervallBreite;
+		}
+		if (interpolation.last().getZeitstempel() < getIntervall().getEnd()) {
+			interpolation.add(get(getIntervall().getEnd()));
+		}
+
+		return interpolation;
+	}
+
+	/**
+	 * Prüft ob für den Zeitstempel eine Stützstelle berechnet werden kann. Für
+	 * stetige Funktionen bedeutet dies, dass der Zeitstempel im Intervall der
+	 * Stützstellen liegt. Für unstetige Funktionen muss diese Methode passende
+	 * überschrieben werden.
+	 * 
+	 * @param t
+	 *            ein Zeitstempel.
+	 * @return {@code true}, wenn der Wert der Approximation zum angegebenen
+	 *         Zeitpunkt definiert ist.
+	 */
+	public boolean isValid(long t) {
+		return stuetzstellen.get(0).getZeitstempel() <= t
+				&& t <= stuetzstellen.get(stuetzstellen.size() - 1)
+						.getZeitstempel();
+	}
+
+	/**
+	 * Bestimmt die Liste der verwendeten St&uuml;tzstellen. Die Liste
+	 * entspricht der Ganglinie, abz&uuml;glich der undefinierten
+	 * St&uuml;tzstellen.
+	 * <p>
+	 * {@inheritDoc}
+	 */
+	public void setStuetzstellen(Collection<Stuetzstelle<Double>> stuetzstellen) {
+		this.stuetzstellen.clear();
+		for (Stuetzstelle<Double> s : stuetzstellen) {
+			if (s.getWert() != null) {
+				this.stuetzstellen.add(s);
+			}
+		}
+		Collections.sort(this.stuetzstellen);
 	}
 
 }

@@ -30,7 +30,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.SortedSet;
 
-import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
+import com.bitctrl.util.Interval;
 
 /**
  * Schnittstelle f&uuml;r alle Approximationsmethoden von Ganglinien.
@@ -55,7 +55,7 @@ public interface Approximation {
 	 * 
 	 * @return das Intervall der Approximation.
 	 */
-	Intervall getIntervall();
+	Interval getIntervall();
 
 	/**
 	 * Gibt die Liste der Stützstellen zurück, die der Approximation zu Grunde
@@ -77,7 +77,7 @@ public interface Approximation {
 	 *            ein Intervall.
 	 * @return das Integral bzw. der Flächeninhalt unter der Kurve im Intervall.
 	 */
-	double integral(Intervall intervall);
+	double integral(Interval intervall);
 
 	/**
 	 * Gibt eine Interpolation der Approximation zur&uuml;ck. N&uuml;tzlich

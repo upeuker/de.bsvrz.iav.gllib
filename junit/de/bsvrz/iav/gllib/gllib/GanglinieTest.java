@@ -37,7 +37,7 @@ import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
+import com.bitctrl.util.Interval;
 
 /**
  * Testet die Verwendung einer Ganglinie.
@@ -80,9 +80,9 @@ public class GanglinieTest {
 		assertFalse(g.existsStuetzstelle(-1000));
 		assertFalse(g.existsStuetzstelle(6000));
 
-		assertEquals(new Intervall(1000, 4000), g.getIntervall());
+		assertEquals(new Interval(1000, 4000), g.getIntervall());
 		assertEquals(1, g.getIntervalle().size());
-		assertEquals(new Intervall(1000, 4000), g.getIntervalle().get(0));
+		assertEquals(new Interval(1000, 4000), g.getIntervalle().get(0));
 
 		assertTrue(g.isValid(1500));
 		assertTrue(g.isValid(3000));
@@ -133,7 +133,7 @@ public class GanglinieTest {
 		System.out.println("Ganglinie mit undefinierten Bereichen ...");
 
 		Ganglinie g;
-		List<Intervall> intervalle;
+		List<Interval> intervalle;
 
 		g = new Ganglinie();
 		g.setStuetzstelle(0, 30.0);
@@ -149,8 +149,8 @@ public class GanglinieTest {
 		g.setStuetzstelle(10000, 34.0);
 		g.setStuetzstelle(11000, 34.0);
 		g.setStuetzstelle(12000, 34.0);
-		intervalle = new ArrayList<Intervall>();
-		intervalle.add(new Intervall(0, 12000));
+		intervalle = new ArrayList<Interval>();
+		intervalle.add(new Interval(0, 12000));
 		assertEquals(intervalle, g.getIntervalle());
 
 		g = new Ganglinie();
@@ -167,9 +167,9 @@ public class GanglinieTest {
 		g.setStuetzstelle(10000, 34.0);
 		g.setStuetzstelle(11000, 34.0);
 		g.setStuetzstelle(12000, 34.0);
-		intervalle = new ArrayList<Intervall>();
-		intervalle.add(new Intervall(0, 2000));
-		intervalle.add(new Intervall(4000, 12000));
+		intervalle = new ArrayList<Interval>();
+		intervalle.add(new Interval(0, 2000));
+		intervalle.add(new Interval(4000, 12000));
 		assertEquals(intervalle, g.getIntervalle());
 
 		g = new Ganglinie();
@@ -186,11 +186,11 @@ public class GanglinieTest {
 		g.setStuetzstelle(10000, 34.0);
 		g.setStuetzstelle(11000, null);
 		g.setStuetzstelle(12000, 34.0);
-		intervalle = new ArrayList<Intervall>();
-		intervalle.add(new Intervall(0, 2000));
-		intervalle.add(new Intervall(4000, 7000));
-		intervalle.add(new Intervall(9000, 10000));
-		intervalle.add(new Intervall(12000, 12000));
+		intervalle = new ArrayList<Interval>();
+		intervalle.add(new Interval(0, 2000));
+		intervalle.add(new Interval(4000, 7000));
+		intervalle.add(new Interval(9000, 10000));
+		intervalle.add(new Interval(12000, 12000));
 		assertEquals(intervalle, g.getIntervalle());
 
 		g = new Ganglinie();
@@ -207,10 +207,10 @@ public class GanglinieTest {
 		g.setStuetzstelle(10000, 34.0);
 		g.setStuetzstelle(11000, 54.1);
 		g.setStuetzstelle(12000, null);
-		intervalle = new ArrayList<Intervall>();
-		intervalle.add(new Intervall(0, 2000));
-		intervalle.add(new Intervall(4000, 7000));
-		intervalle.add(new Intervall(9000, 11000));
+		intervalle = new ArrayList<Interval>();
+		intervalle.add(new Interval(0, 2000));
+		intervalle.add(new Interval(4000, 7000));
+		intervalle.add(new Interval(9000, 11000));
 		assertEquals(intervalle, g.getIntervalle());
 
 		g = new Ganglinie();
@@ -227,11 +227,11 @@ public class GanglinieTest {
 		g.setStuetzstelle(10000, 34.0);
 		g.setStuetzstelle(11000, null);
 		g.setStuetzstelle(12000, 34.0);
-		intervalle = new ArrayList<Intervall>();
-		intervalle.add(new Intervall(1000, 2000));
-		intervalle.add(new Intervall(4000, 7000));
-		intervalle.add(new Intervall(9000, 10000));
-		intervalle.add(new Intervall(12000, 12000));
+		intervalle = new ArrayList<Interval>();
+		intervalle.add(new Interval(1000, 2000));
+		intervalle.add(new Interval(4000, 7000));
+		intervalle.add(new Interval(9000, 10000));
+		intervalle.add(new Interval(12000, 12000));
 		System.out.println(intervalle);
 		System.out.println(g.getIntervalle());
 		assertEquals(intervalle, g.getIntervalle());
@@ -250,11 +250,11 @@ public class GanglinieTest {
 		g.setStuetzstelle(10000, 34.0);
 		g.setStuetzstelle(11000, 54.1);
 		g.setStuetzstelle(12000, null);
-		intervalle = new ArrayList<Intervall>();
-		intervalle.add(new Intervall(1000, 1000));
-		intervalle.add(new Intervall(3000, 3000));
-		intervalle.add(new Intervall(5000, 7000));
-		intervalle.add(new Intervall(9000, 11000));
+		intervalle = new ArrayList<Interval>();
+		intervalle.add(new Interval(1000, 1000));
+		intervalle.add(new Interval(3000, 3000));
+		intervalle.add(new Interval(5000, 7000));
+		intervalle.add(new Interval(9000, 11000));
 		assertEquals(intervalle, g.getIntervalle());
 	}
 

@@ -26,7 +26,7 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
-import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
+import com.bitctrl.util.Interval;
 
 /**
  * Approximation einer Ganglinie mit Hilfe von Polylines. Der Wert der
@@ -95,13 +95,13 @@ public class Polyline extends AbstractApproximation {
 	 * 
 	 * @see de.bsvrz.iav.gllib.gllib.Approximation#integral(de.bsvrz.sys.funclib.bitctrl.util.Intervall)
 	 */
-	public double integral(Intervall intervall) {
+	public double integral(Interval intervall) {
 		final int start;
 		final int ende;
 		double flaeche = 0;
 
 		start = findeStuetzstelleVor(intervall.getStart());
-		ende = findeStuetzstelleNach(intervall.getEnde());
+		ende = findeStuetzstelleNach(intervall.getEnd());
 
 		for (int i = start; i < ende; ++i) {
 			long breite;
@@ -147,13 +147,13 @@ public class Polyline extends AbstractApproximation {
 			flaeche -= (hDreieck - hRechteck) * breite / 2;
 		}
 
-		if (getStuetzstellen().get(ende).getZeitstempel() > intervall.getEnde()) {
+		if (getStuetzstellen().get(ende).getZeitstempel() > intervall.getEnd()) {
 			// Letzte Stützstelle liegt vor Intervall
 			long breite;
 			double hDreieck, hRechteck;
 
 			hRechteck = getStuetzstellen().get(ende).getWert();
-			hDreieck = get(intervall.getEnde()).getWert();
+			hDreieck = get(intervall.getEnd()).getWert();
 			if (hRechteck > hDreieck) {
 				// Das Rechteck muss die kleinere Höhe haben.
 				double tmp;
@@ -164,7 +164,7 @@ public class Polyline extends AbstractApproximation {
 			}
 
 			breite = getStuetzstellen().get(ende).getZeitstempel()
-					- intervall.getEnde();
+					- intervall.getEnd();
 			flaeche -= hRechteck * breite;
 			flaeche -= (hDreieck - hRechteck) * breite / 2;
 		}

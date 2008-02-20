@@ -31,7 +31,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
+import com.bitctrl.util.Interval;
 
 /**
  * Testet die Approximation einer Ganglinie mit Hilfe einer Treppenfunktion.
@@ -110,18 +110,18 @@ public class TreppenfunktionTest {
 	@Test
 	public void testIntegral() {
 		Treppenfunktion treppe;
-		Intervall intervall;
+		Interval intervall;
 
 		System.out.println("Treppenfunktion: Methode integral()");
 		treppe = new Treppenfunktion();
 		treppe.setStuetzstellen(ganglinie.getStuetzstellen());
 
 		// Intervallgrenzen liegen auf Stützstellen
-		intervall = new Intervall(0, 9000);
+		intervall = new Interval(0, 9000);
 		assertEquals(190000, treppe.integral(intervall));
 
 		// Intervallgrenzen liegen nicht auf Stützstellen
-		intervall = new Intervall(3500, 8500);
+		intervall = new Interval(3500, 8500);
 		assertEquals(170000, treppe.integral(intervall));
 	}
 

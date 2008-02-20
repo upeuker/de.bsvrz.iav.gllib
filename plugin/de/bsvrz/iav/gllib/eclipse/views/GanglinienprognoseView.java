@@ -114,7 +114,7 @@ public class GanglinienprognoseView extends ViewPart implements
 
 				skal = new GlSkalierung();
 				skal.setMinZeit(g.getPrognoseIntervall().getStart());
-				skal.setMaxZeit(g.getPrognoseIntervall().getEnde());
+				skal.setMaxZeit(g.getPrognoseIntervall().getEnd());
 				kos.setSkalierung(skal);
 				ganglinie.setGanglinie(g);
 			}

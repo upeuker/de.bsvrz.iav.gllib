@@ -26,7 +26,8 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
-import static de.bsvrz.sys.funclib.bitctrl.util.Konstanten.MILLIS_PER_STUNDE;
+import static com.bitctrl.Constants.MILLIS_PER_STUNDE;
+
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
+import com.bitctrl.util.Interval;
 
 /**
  * Testet die Approximation einer Ganglinie mit Hilfe eines B-Spline.
@@ -44,40 +45,6 @@ import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
  * @version $Id$
  */
 public class BSplineTest {
-
-	/**
-	 * Pr&uuml;ft ob bei Anfrage einer St&uuml;tzstelle auch der richtige
-	 * Zeitstempel kommt. Beim B-Spline ist dies nicht trivial. Dieser Test
-	 * arbeitet mit einer vorgegebenen Ganglinie.
-	 */
-	@Test
-	public void testGetA() {
-		Ganglinie g;
-		BSpline spline;
-
-		g = new Ganglinie();
-		g.setStuetzstelle(0, 0.0);
-		g.setStuetzstelle(3 * 60 * 1000, 300.0);
-		g.setStuetzstelle(4 * 60 * 1000, 200.0);
-		g.setStuetzstelle(6 * 60 * 1000, 400.0);
-		g.setStuetzstelle(9 * 60 * 1000, 100.0);
-
-		spline = new BSpline();
-		spline.setStuetzstellen(g.getStuetzstellen());
-
-		// Rechnen
-		for (byte k = 1; k <= g.anzahlStuetzstellen() && k <= 10; k++) {
-			spline.setOrdnung(k);
-			spline.initialisiere();
-
-			for (long t = g.getIntervall().start; t <= g.getIntervall().ende; t += 60 * 1000) {
-				assertEquals(t, spline.get(t).getZeitstempel());
-			}
-		}
-
-		System.err.println("Integral B-Spline: "
-				+ spline.integral(new Intervall(0, 900)));
-	}
 
 	/**
 	 * Prüft das Verhalten des B-Spline bei (zu) wenigen Stützstellen.
@@ -147,6 +114,41 @@ public class BSplineTest {
 				spline.get(300 * MILLIS_PER_STUNDE));
 		assertEquals(new Stuetzstelle<Double>(320 * MILLIS_PER_STUNDE, null),
 				spline.get(320 * MILLIS_PER_STUNDE));
+	}
+
+	/**
+	 * Pr&uuml;ft ob bei Anfrage einer St&uuml;tzstelle auch der richtige
+	 * Zeitstempel kommt. Beim B-Spline ist dies nicht trivial. Dieser Test
+	 * arbeitet mit einer vorgegebenen Ganglinie.
+	 */
+	@Test
+	public void testGetA() {
+		Ganglinie g;
+		BSpline spline;
+
+		g = new Ganglinie();
+		g.setStuetzstelle(0, 0.0);
+		g.setStuetzstelle(3 * 60 * 1000, 300.0);
+		g.setStuetzstelle(4 * 60 * 1000, 200.0);
+		g.setStuetzstelle(6 * 60 * 1000, 400.0);
+		g.setStuetzstelle(9 * 60 * 1000, 100.0);
+
+		spline = new BSpline();
+		spline.setStuetzstellen(g.getStuetzstellen());
+
+		// Rechnen
+		for (byte k = 1; k <= g.anzahlStuetzstellen() && k <= 10; k++) {
+			spline.setOrdnung(k);
+			spline.initialisiere();
+
+			for (long t = g.getIntervall().getStart(); t <= g.getIntervall()
+					.getEnd(); t += 60 * 1000) {
+				assertEquals(t, spline.get(t).getZeitstempel());
+			}
+		}
+
+		System.err.println("Integral B-Spline: "
+				+ spline.integral(new Interval(0, 900)));
 	}
 
 	// /**

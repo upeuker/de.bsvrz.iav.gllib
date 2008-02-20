@@ -26,7 +26,7 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
-import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
+import com.bitctrl.util.Interval;
 
 /**
  * Approximation einer Ganglinie mit Hilfe eines B-Splines beliebiger Ordung.
@@ -60,6 +60,40 @@ public class BSpline extends AbstractApproximation {
 	 */
 	public BSpline(byte ordnung) {
 		this.ordnung = ordnung;
+	}
+
+	/**
+	 * Berechnet die Stützstelle zu einer Intervallstelle.
+	 * 
+	 * @param t0
+	 *            Eine Stelle im Intervall des Parameters t
+	 * @return Die berechnete Stützstelle
+	 */
+	private Stuetzstelle<Double> bspline(double t0) {
+		double bx, by;
+		int i;
+
+		// Ränder der Ganglinie werden 1:1 übernommen
+		if (t0 <= t[0]) {
+			return getStuetzstellen().get(0);
+		} else if (t0 >= t[t.length - 1]) {
+			return getStuetzstellen().get(getStuetzstellen().size() - 1);
+		}
+
+		bx = by = 0;
+		i = (int) t0 + ordnung - 1;
+		// for (int j = 0; j < p.length; j++) {
+		for (int j = i - ordnung + 1; j <= i; j++) {
+
+			double n;
+
+			n = n(j, ordnung, t0);
+			bx += getStuetzstellen().get(j).getZeitstempel() * n;
+			by += getStuetzstellen().get(j).getWert().doubleValue() * n;
+
+		}
+
+		return new Stuetzstelle<Double>(Math.round(bx), by);
 	}
 
 	/**
@@ -163,70 +197,13 @@ public class BSpline extends AbstractApproximation {
 	 * @see de.bsvrz.iav.gllib.gllib.Approximation#integral(de.bsvrz.sys.funclib.bitctrl.util.Intervall)
 	 * @see #INTEGRATIONSINTERVALL
 	 */
-	public double integral(Intervall intervall) {
+	public double integral(Interval intervall) {
 		Polyline polyline;
 
 		polyline = new Polyline();
 		polyline.setStuetzstellen(interpoliere(INTEGRATIONSINTERVALL));
 
 		return polyline.integral(intervall);
-	}
-
-	/**
-	 * Legt die Ordnung des B-Splines fest.
-	 * 
-	 * @param ordnung
-	 *            Ordnung
-	 */
-	public void setOrdnung(byte ordnung) {
-		if (ordnung < 1 || ordnung > getStuetzstellen().size()) {
-			throw new IllegalArgumentException(
-					"Die Ordnung muss zwischen 1 und der Anzahl der definierten Stützstellen liegen.");
-		}
-
-		this.ordnung = ordnung;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String toString() {
-		return "B-Spline mit Ordnung " + ordnung;
-	}
-
-	/**
-	 * Berechnet die Stützstelle zu einer Intervallstelle.
-	 * 
-	 * @param t0
-	 *            Eine Stelle im Intervall des Parameters t
-	 * @return Die berechnete Stützstelle
-	 */
-	private Stuetzstelle<Double> bspline(double t0) {
-		double bx, by;
-		int i;
-
-		// Ränder der Ganglinie werden 1:1 übernommen
-		if (t0 <= t[0]) {
-			return getStuetzstellen().get(0);
-		} else if (t0 >= t[t.length - 1]) {
-			return getStuetzstellen().get(getStuetzstellen().size() - 1);
-		}
-
-		bx = by = 0;
-		i = (int) t0 + ordnung - 1;
-		// for (int j = 0; j < p.length; j++) {
-		for (int j = i - ordnung + 1; j <= i; j++) {
-
-			double n;
-
-			n = n(j, ordnung, t0);
-			bx += getStuetzstellen().get(j).getZeitstempel() * n;
-			by += getStuetzstellen().get(j).getWert().doubleValue() * n;
-
-		}
-
-		return new Stuetzstelle<Double>(Math.round(bx), by);
 	}
 
 	/**
@@ -276,6 +253,29 @@ public class BSpline extends AbstractApproximation {
 		}
 
 		return n;
+	}
+
+	/**
+	 * Legt die Ordnung des B-Splines fest.
+	 * 
+	 * @param ordnung
+	 *            Ordnung
+	 */
+	public void setOrdnung(byte ordnung) {
+		if (ordnung < 1 || ordnung > getStuetzstellen().size()) {
+			throw new IllegalArgumentException(
+					"Die Ordnung muss zwischen 1 und der Anzahl der definierten Stützstellen liegen.");
+		}
+
+		this.ordnung = ordnung;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return "B-Spline mit Ordnung " + ordnung;
 	}
 
 	/**

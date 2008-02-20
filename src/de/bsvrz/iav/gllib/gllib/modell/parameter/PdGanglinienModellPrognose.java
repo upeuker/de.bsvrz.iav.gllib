@@ -26,7 +26,8 @@
 
 package de.bsvrz.iav.gllib.gllib.modell.parameter;
 
-import static de.bsvrz.sys.funclib.bitctrl.util.Konstanten.MILLIS_PER_SEKUNDE;
+import static com.bitctrl.Constants.MILLIS_PER_SEKUNDE;
+
 import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dav.daf.main.config.AttributeGroup;
@@ -41,7 +42,8 @@ import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.objekte.MessQuerschnittAllgem
  * Kapselt die Parameterattributgruppe {@code atg.ganglinienModellPrognose}.
  * 
  * @author BitCtrl Systems GmbH, Falko Schumann
- * @version $Id$
+ * @version $Id: PdGanglinienModellPrognose.java 6217 2008-02-05 11:36:39Z
+ *          Schumann $
  */
 public class PdGanglinienModellPrognose extends
 		AbstractParameterDatensatz<PdGanglinienModellPrognose.Daten> {
@@ -191,6 +193,16 @@ public class PdGanglinienModellPrognose extends
 		}
 
 		/**
+		 * setzt den aktuellen Datenstatus.
+		 * 
+		 * @param datenStatus
+		 *            der neue Status
+		 */
+		protected void setDatenStatus(Status datenStatus) {
+			this.datenStatus = datenStatus;
+		}
+
+		/**
 		 * Legt den Wert der Eigenschaft {@code matchingIntervall} fest.
 		 * 
 		 * @param matchingIntervall
@@ -240,16 +252,6 @@ public class PdGanglinienModellPrognose extends
 			this.patternMatchingOffset = patternMatchingOffset;
 		}
 
-		/**
-		 * setzt den aktuellen Datenstatus.
-		 * 
-		 * @param datenStatus
-		 *            der neue Status
-		 */
-		protected void setDatenStatus(Status datenStatus) {
-			this.datenStatus = datenStatus;
-		}
-
 	}
 
 	/** Die PID der Attributgruppe. */
@@ -296,6 +298,32 @@ public class PdGanglinienModellPrognose extends
 	/**
 	 * {@inheritDoc}
 	 * 
+	 * @see de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatensatz#konvertiere(de.bsvrz.sys.funclib.bitctrl.modell.Datum)
+	 */
+	@Override
+	protected Data konvertiere(Daten datum) {
+		Data daten = erzeugeSendeCache();
+
+		daten.getUnscaledValue("GLAuswahlMethode").set(
+				datum.getAuswahlMethode());
+		daten.getUnscaledValue("GLPatternMatchingHorizont").set(
+				datum.getPatternMatchingHorizont() / MILLIS_PER_SEKUNDE);
+		daten.getUnscaledValue("GLMatchingIntervall").set(
+				datum.getMatchingIntervall() / MILLIS_PER_SEKUNDE);
+		daten.getUnscaledValue("GLPatterMatchingOffset").set(
+				datum.getPatternMatchingOffset() / MILLIS_PER_SEKUNDE);
+		daten.getUnscaledValue("GLMaximalerMatchingFehler").set(
+				datum.getMaxMatchingFehler());
+		// TODO fehlendes Attribut GLMaximaleDauerZyklischePrognose im DaK
+		// daten.getUnscaledValue("GLMaximaleDauerZyklischePrognose").set(
+		// datum.getMaxDauerZyklischePrognose() / MILLIS_PER_SEKUNDE);
+
+		return daten;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
 	 * @see de.bsvrz.sys.funclib.bitctrl.modell.Datensatz#setDaten(de.bsvrz.dav.daf.main.ResultData)
 	 */
 	public void setDaten(ResultData result) {
@@ -329,31 +357,5 @@ public class PdGanglinienModellPrognose extends
 		setDatum(result.getDataDescription().getAspect(), datum);
 		fireDatensatzAktualisiert(result.getDataDescription().getAspect(),
 				datum.clone());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatensatz#konvertiere(de.bsvrz.sys.funclib.bitctrl.modell.Datum)
-	 */
-	@Override
-	protected Data konvertiere(Daten datum) {
-		Data daten = erzeugeSendeCache();
-
-		daten.getUnscaledValue("GLAuswahlMethode").set(
-				datum.getAuswahlMethode());
-		daten.getUnscaledValue("GLPatternMatchingHorizont").set(
-				datum.getPatternMatchingHorizont() / MILLIS_PER_SEKUNDE);
-		daten.getUnscaledValue("GLMatchingIntervall").set(
-				datum.getMatchingIntervall() / MILLIS_PER_SEKUNDE);
-		daten.getUnscaledValue("GLPatterMatchingOffset").set(
-				datum.getPatternMatchingOffset() / MILLIS_PER_SEKUNDE);
-		daten.getUnscaledValue("GLMaximalerMatchingFehler").set(
-				datum.getMaxMatchingFehler());
-		// TODO fehlendes Attribut GLMaximaleDauerZyklischePrognose im DaK
-		// daten.getUnscaledValue("GLMaximaleDauerZyklischePrognose").set(
-		// datum.getMaxDauerZyklischePrognose() / MILLIS_PER_SEKUNDE);
-
-		return daten;
 	}
 }

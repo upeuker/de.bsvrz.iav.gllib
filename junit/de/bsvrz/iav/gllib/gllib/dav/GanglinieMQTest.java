@@ -34,8 +34,9 @@ import static org.junit.Assert.assertTrue;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.bitctrl.util.Interval;
+
 import de.bsvrz.iav.gllib.gllib.Stuetzstelle;
-import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
 
 /**
  * Testet die Verwendung einer Ganglinie.
@@ -81,7 +82,7 @@ public class GanglinieMQTest {
 		assertFalse(g.existsStuetzstelle(-1000));
 		assertFalse(g.existsStuetzstelle(6000));
 
-		assertEquals(new Intervall(1000, 4000), g.getIntervall());
+		assertEquals(new Interval(1000, 4000), g.getIntervall());
 
 		assertTrue(g.isValid(1500));
 		assertTrue(g.isValid(3000));

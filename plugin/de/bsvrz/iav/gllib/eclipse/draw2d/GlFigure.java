@@ -26,7 +26,7 @@
 
 package de.bsvrz.iav.gllib.eclipse.draw2d;
 
-import static de.bsvrz.sys.funclib.bitctrl.util.Konstanten.MILLIS_PER_TAG;
+import static com.bitctrl.Constants.MILLIS_PER_TAG;
 
 import java.util.Calendar;
 
@@ -72,26 +72,6 @@ public abstract class GlFigure extends Figure {
 	}
 
 	/**
-	 * Gibt die Skalierung des Koordinatensystems zurück.
-	 * 
-	 * @return die Skalierung.
-	 */
-	public GlSkalierung getSkalierung() {
-		return skalierung;
-	}
-
-	/**
-	 * Legt die Skalierung des Koordinatensystems fest.
-	 * 
-	 * @param skalierung
-	 *            die Skalierung.
-	 */
-	public void setSkalierung(GlSkalierung skalierung) {
-		this.skalierung = skalierung.clone();
-		updateGroesse();
-	}
-
-	/**
 	 * Berechnet die benötigte Größe der Figur, um sie komplett anzuzeigen.
 	 * 
 	 * @return die Figurgröße.
@@ -109,6 +89,26 @@ public abstract class GlFigure extends Figure {
 
 		hoehe = OFFSET.height + Math.max(v, q);
 		return new Dimension(zeit, hoehe);
+	}
+
+	/**
+	 * Gibt die Skalierung des Koordinatensystems zurück.
+	 * 
+	 * @return die Skalierung.
+	 */
+	public GlSkalierung getSkalierung() {
+		return skalierung;
+	}
+
+	/**
+	 * Legt die Skalierung des Koordinatensystems fest.
+	 * 
+	 * @param skalierung
+	 *            die Skalierung.
+	 */
+	public void setSkalierung(GlSkalierung skalierung) {
+		this.skalierung = skalierung.clone();
+		updateGroesse();
 	}
 
 	/**
