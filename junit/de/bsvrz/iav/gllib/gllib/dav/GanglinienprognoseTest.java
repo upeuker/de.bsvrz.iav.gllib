@@ -29,6 +29,8 @@ package de.bsvrz.iav.gllib.gllib.dav;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.bitctrl.util.Interval;
+
 import de.bsvrz.dav.daf.main.ClientDavInterface;
 import de.bsvrz.sys.funclib.application.StandardApplication;
 import de.bsvrz.sys.funclib.application.StandardApplicationRunner;
@@ -36,7 +38,6 @@ import de.bsvrz.sys.funclib.bitctrl.modell.DatensendeException;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
 import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.VerkehrsobjektFactory;
 import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.objekte.MessQuerschnittAllgemein;
-import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
 import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
 
 /**
@@ -94,7 +95,7 @@ public class GanglinienprognoseTest implements StandardApplication,
 		prognose = Ganglinienprognose.getInstanz();
 		prognose.addAntwortListener(this);
 		anfragen = new ArrayList<GlProgAnfrage>();
-		anfragen.add(new GlProgAnfrage(mq, new Intervall(1, 2 * 24 * 60 * 60
+		anfragen.add(new GlProgAnfrage(mq, new Interval(1, 2 * 24 * 60 * 60
 				* 1000), false));
 		try {
 			prognose.sendeAnfrage("Test GlLib", anfragen);

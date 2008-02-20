@@ -54,6 +54,8 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.ViewPart;
 
+import com.bitctrl.util.Interval;
+
 import de.bsvrz.iav.gllib.eclipse.GanglinienprognosePlugin;
 import de.bsvrz.iav.gllib.eclipse.draw2d.GlGanglinieMQ;
 import de.bsvrz.iav.gllib.eclipse.draw2d.GlKoordinatensystem;
@@ -68,7 +70,6 @@ import de.bsvrz.sys.funclib.bitctrl.modell.DatensendeException;
 import de.bsvrz.sys.funclib.bitctrl.modell.ModellTools;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
 import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.objekte.MessQuerschnittAllgemein;
-import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
 
 /**
  * Diese View erlaubt das Absetzen einer einfachen Ganglinienanfrage und zeigt
@@ -138,16 +139,6 @@ public class GanglinienprognoseView extends ViewPart implements
 		gd = new GridData(GridData.FILL, GridData.FILL, true, true);
 		erzeugeAntwort(parent).setLayoutData(gd);
 
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see org.eclipse.ui.part.WorkbenchPart#setFocus()
-	 */
-	@Override
-	public void setFocus() {
-		// nix
 	}
 
 	/**
@@ -223,7 +214,7 @@ public class GanglinienprognoseView extends ViewPart implements
 			public void widgetSelected(SelectionEvent e) {
 				Ganglinienprognose glprog;
 				GlProgAnfrage anfrage;
-				Intervall intervall;
+				Interval intervall;
 				Calendar von, bis;
 
 				von = Calendar.getInstance();
@@ -244,7 +235,7 @@ public class GanglinienprognoseView extends ViewPart implements
 				bis.set(Calendar.SECOND, zeitBis.getSeconds());
 				bis.set(Calendar.MILLISECOND, 0);
 
-				intervall = new Intervall(von.getTimeInMillis(), bis
+				intervall = new Interval(von.getTimeInMillis(), bis
 						.getTimeInMillis());
 				glprog = Ganglinienprognose.getInstanz();
 				glprog.addAntwortListener(GanglinienprognoseView.this);
@@ -350,5 +341,15 @@ public class GanglinienprognoseView extends ViewPart implements
 		col.setWidth(100);
 
 		return grpAntwort;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.ui.part.WorkbenchPart#setFocus()
+	 */
+	@Override
+	public void setFocus() {
+		// nix
 	}
 }

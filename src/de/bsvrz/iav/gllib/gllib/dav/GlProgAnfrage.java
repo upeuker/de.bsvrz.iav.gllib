@@ -29,12 +29,13 @@ package de.bsvrz.iav.gllib.gllib.dav;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.bitctrl.util.Interval;
+
 import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.Data.Array;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
 import de.bsvrz.sys.funclib.bitctrl.modell.kalender.objekte.EreignisTyp;
 import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.objekte.MessQuerschnittAllgemein;
-import de.bsvrz.sys.funclib.bitctrl.util.Intervall;
 
 /**
  * Repr&auml;sentiert eine einzelne Anfrage einer Anfragenachricht an die
@@ -49,7 +50,7 @@ public class GlProgAnfrage {
 	private MessQuerschnittAllgemein messQuerschnitt;
 
 	/** Der Zeitraum in f&uuml;r den die Ganglinie bestimmt werden soll. */
-	private Intervall prognoseZeitraum;
+	private Interval prognoseZeitraum;
 
 	/** Nur Auswahlverfahren der langfristigen Prognose benutzen? */
 	private boolean nurLangfristigeAuswahl;
@@ -90,7 +91,7 @@ public class GlProgAnfrage {
 	 *            Nur Auswahlverfahren der langfristigen Prognose benutzen?
 	 */
 	public GlProgAnfrage(MessQuerschnittAllgemein mq,
-			Intervall prognoseZeitraum, boolean nurLangfristigeAuswahl) {
+			Interval prognoseZeitraum, boolean nurLangfristigeAuswahl) {
 		this(mq, prognoseZeitraum, nurLangfristigeAuswahl, false, 1, 0, 1);
 	}
 
@@ -117,7 +118,7 @@ public class GlProgAnfrage {
 	 *            publizieren.
 	 */
 	public GlProgAnfrage(MessQuerschnittAllgemein mq,
-			Intervall prognoseZeitraum, boolean nurLangfristigeAuswahl,
+			Interval prognoseZeitraum, boolean nurLangfristigeAuswahl,
 			boolean zyklischePrognose, long pruefIntervall, double schwelle,
 			long sendeIntervall) {
 		this();
@@ -169,7 +170,7 @@ public class GlProgAnfrage {
 		daten.getTimeValue("ZeitpunktPrognoseBeginn").setMillis(
 				prognoseZeitraum.getStart());
 		daten.getTimeValue("ZeitpunktPrognoseEnde").setMillis(
-				prognoseZeitraum.getEnde());
+				prognoseZeitraum.getEnd());
 		daten.getScaledValue("Überprüfungsintervall").set(pruefIntervall);
 		daten.getScaledValue("Aktualisierungsschwelle").set(schwelle);
 		daten.getScaledValue("Aktualisierungsintervall").set(sendeIntervall);
@@ -224,7 +225,7 @@ public class GlProgAnfrage {
 	 *         ungültig ist. Bei einem ungültigen Intervall liegt der
 	 *         Startzeitpunkt <em>hinter</em> dem Endzeitpunkt.
 	 */
-	public Intervall getPrognoseZeitraum() {
+	public Interval getPrognoseZeitraum() {
 		return prognoseZeitraum;
 	}
 
@@ -328,7 +329,7 @@ public class GlProgAnfrage {
 		start = daten.getTimeValue("ZeitpunktPrognoseBeginn").getMillis();
 		ende = daten.getTimeValue("ZeitpunktPrognoseEnde").getMillis();
 		if (start <= ende) {
-			prognoseZeitraum = new Intervall(start, ende);
+			prognoseZeitraum = new Interval(start, ende);
 		} // Wenn Intervall ungültig, dann bleibt es null
 
 		if (daten.getUnscaledValue("NurLangfristigeAuswahl").getText().equals(
