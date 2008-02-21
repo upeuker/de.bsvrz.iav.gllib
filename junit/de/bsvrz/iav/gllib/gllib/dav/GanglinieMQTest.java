@@ -31,7 +31,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.bitctrl.util.Interval;
@@ -48,20 +47,10 @@ import de.bsvrz.iav.gllib.gllib.Stuetzstelle;
 public class GanglinieMQTest {
 
 	/**
-	 * Ausgabe, welche Klasse gerade getestet wird.
-	 */
-	@BeforeClass
-	public static void beforeClass() {
-		System.out.println("### Teste Klasse Ganglinie ###");
-	}
-
-	/**
 	 * Testet das Anlegen einer Ganglinien und einfache Bearbeitung derselben.
 	 */
 	@Test
 	public void testGanglinieAnlegen() {
-		System.out.println("Stützstellen anlegen und bearbeiten ...");
-
 		GanglinieMQ g;
 
 		g = new GanglinieMQ();
@@ -104,8 +93,6 @@ public class GanglinieMQTest {
 	 */
 	@Test
 	public void testGanglinieOhneStuetzstellen() {
-		System.out.println("Ganglinie ohne Stützstellen ...");
-
 		GanglinieMQ g;
 
 		g = new GanglinieMQ();

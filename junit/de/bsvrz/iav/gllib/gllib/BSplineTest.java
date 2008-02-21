@@ -27,15 +27,12 @@
 package de.bsvrz.iav.gllib.gllib;
 
 import static com.bitctrl.Constants.MILLIS_PER_HOUR;
-
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
-
-import com.bitctrl.util.Interval;
 
 /**
  * Testet die Approximation einer Ganglinie mit Hilfe eines B-Spline.
@@ -57,8 +54,8 @@ public class BSplineTest {
 		stuetzstellen = new ArrayList<Stuetzstelle<Double>>();
 
 		// Nur eine Stützstelle
-		stuetzstellen.add(new Stuetzstelle<Double>(100 * MILLIS_PER_HOUR,
-				30.0));
+		stuetzstellen
+				.add(new Stuetzstelle<Double>(100 * MILLIS_PER_HOUR, 30.0));
 		spline = new BSpline();
 		spline.setStuetzstellen(stuetzstellen);
 		spline.setOrdnung((byte) 1);
@@ -70,8 +67,8 @@ public class BSplineTest {
 				spline.get(120 * MILLIS_PER_HOUR));
 
 		// Nur zwei Stützstellen
-		stuetzstellen.add(new Stuetzstelle<Double>(200 * MILLIS_PER_HOUR,
-				80.0));
+		stuetzstellen
+				.add(new Stuetzstelle<Double>(200 * MILLIS_PER_HOUR, 80.0));
 		spline = new BSpline();
 		spline.setStuetzstellen(stuetzstellen);
 		spline.setOrdnung((byte) 2);
@@ -85,8 +82,8 @@ public class BSplineTest {
 				spline.get(320 * MILLIS_PER_HOUR));
 
 		// Nur drei Stützstellen
-		stuetzstellen.add(new Stuetzstelle<Double>(300 * MILLIS_PER_HOUR,
-				40.0));
+		stuetzstellen
+				.add(new Stuetzstelle<Double>(300 * MILLIS_PER_HOUR, 40.0));
 		spline = new BSpline();
 		spline.setStuetzstellen(stuetzstellen);
 		spline.setOrdnung((byte) 3);
@@ -146,9 +143,6 @@ public class BSplineTest {
 				assertEquals(t, spline.get(t).getZeitstempel());
 			}
 		}
-
-		System.err.println("Integral B-Spline: "
-				+ spline.integral(new Interval(0, 900)));
 	}
 
 	// /**

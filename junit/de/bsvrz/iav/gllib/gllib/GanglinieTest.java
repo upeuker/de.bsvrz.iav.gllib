@@ -34,7 +34,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.bitctrl.util.Interval;
@@ -49,20 +48,10 @@ import com.bitctrl.util.Interval;
 public class GanglinieTest {
 
 	/**
-	 * Ausgabe, welche Klasse gerade getestet wird.
-	 */
-	@BeforeClass
-	public static void beforeClass() {
-		System.out.println("### Teste Klasse Ganglinie ###");
-	}
-
-	/**
 	 * Testet das Anlegen einer Ganglinien und einfache Bearbeitung derselben.
 	 */
 	@Test
 	public void testGanglinieAnlegen() {
-		System.out.println("Stützstellen anlegen und bearbeiten ...");
-
 		Ganglinie g;
 
 		g = new Ganglinie();
@@ -106,8 +95,6 @@ public class GanglinieTest {
 	 */
 	@Test
 	public void testGanglinieOhneStuetzstellen() {
-		System.out.println("Ganglinie ohne Stützstellen ...");
-
 		Ganglinie g;
 
 		g = new Ganglinie();
@@ -130,8 +117,6 @@ public class GanglinieTest {
 	 */
 	@Test
 	public void testUndefinierteBereiche() {
-		System.out.println("Ganglinie mit undefinierten Bereichen ...");
-
 		Ganglinie g;
 		List<Interval> intervalle;
 
@@ -232,8 +217,6 @@ public class GanglinieTest {
 		intervalle.add(new Interval(4000, 7000));
 		intervalle.add(new Interval(9000, 10000));
 		intervalle.add(new Interval(12000, 12000));
-		System.out.println(intervalle);
-		System.out.println(g.getIntervalle());
 		assertEquals(intervalle, g.getIntervalle());
 
 		g = new Ganglinie();

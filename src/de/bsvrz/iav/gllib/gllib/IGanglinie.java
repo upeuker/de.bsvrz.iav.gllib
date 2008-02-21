@@ -75,7 +75,7 @@ public interface IGanglinie<T> {
 	/**
 	 * Gibt das Zeitintervall der Ganglinie zur&uuml;ck.
 	 * 
-	 * @return Ein {@link Intervall} oder {@code null}, wenn keine
+	 * @return Ein {@link Interval} oder {@code null}, wenn keine
 	 *         St&uuml;tzstellen vorhanden sind
 	 */
 	Interval getIntervall();

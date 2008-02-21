@@ -266,7 +266,7 @@ public class Ganglinie implements IGanglinie<Double> {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see de.bsvrz.iav.gllib.gllib.IGanglinie#isValid(de.bsvrz.sys.funclib.bitctrl.util.Intervall)
+	 * @see de.bsvrz.iav.gllib.gllib.IGanglinie#isValid(com.bitctrl.util.Interval)
 	 */
 	public boolean isValid(Interval intervall) {
 		boolean ok;

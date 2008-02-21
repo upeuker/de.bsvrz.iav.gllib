@@ -28,33 +28,23 @@ package de.bsvrz.iav.gllib.gllib;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
  * Testet die Verwendung einer Ganglinie.
  * 
  * @author BitCtrl Systems GmbH, Schumann
- * @version $Id$
+ * @version $Id: GanglinienOperationenTest.java 6277 2008-02-05 16:42:04Z
+ *          Schumann $
  */
 
 public class GanglinienOperationenTest {
-
-	/**
-	 * Ausgabe, welche Klasse gerade getestet wird.
-	 */
-	@BeforeClass
-	public static void beforeClass() {
-		System.out.println("### Teste Klasse GanglinienOperationen ###");
-	}
 
 	/**
 	 * Testet die Addition zweier Ganglinien.
 	 */
 	@Test
 	public void testAddiere() {
-		System.out.println("Addiere zwei Ganglinien ...");
-
 		Ganglinie g1, g2, ist, soll;
 
 		g1 = new Ganglinie();
@@ -89,8 +79,6 @@ public class GanglinienOperationenTest {
 	 */
 	@Test
 	public void testDividiere() {
-		System.out.println("Dividiere zwei Ganglinien ...");
-
 		Ganglinie g1, g2, ist, soll;
 
 		g1 = new Ganglinie();
@@ -125,8 +113,6 @@ public class GanglinienOperationenTest {
 	 */
 	@Test
 	public void testMultipliziere() {
-		System.out.println("Multipliziere zwei Ganglinien ...");
-
 		Ganglinie g1, g2, ist, soll;
 
 		g1 = new Ganglinie();
@@ -161,8 +147,6 @@ public class GanglinienOperationenTest {
 	 */
 	@Test
 	public void testSubtrahiere() {
-		System.out.println("Subtrahiere zwei Ganglinien ...");
-
 		Ganglinie g1, g2, ist, soll;
 
 		g1 = new Ganglinie();

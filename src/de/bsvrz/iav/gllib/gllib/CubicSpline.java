@@ -72,36 +72,6 @@ public class CubicSpline extends AbstractApproximation {
 	private RationaleZahl[] h;
 
 	/**
-	 * Berechnet die St&uuml;tzstelle.
-	 * 
-	 * @param zeitstempel
-	 *            Zeitstempel der gesuchten St&uuml;tzstelle
-	 * @return Die gesuchte St&uuml;tzstelle
-	 */
-	private Stuetzstelle<Double> berechneStuetzstelle(long zeitstempel) {
-		RationaleZahl r, x, xi;
-		int index;
-
-		index = -1;
-		for (int i = 0; i < getStuetzstellen().size(); ++i) {
-			if (getStuetzstellen().get(i).getZeitstempel() > zeitstempel) {
-				index = i - 1;
-				break;
-			}
-		}
-		xi = new RationaleZahl(getStuetzstellen().get(index).getZeitstempel()
-				/ FAKTOR);
-		x = new RationaleZahl(zeitstempel / FAKTOR);
-
-		r = a[index];
-		r = addiere(r, multipliziere(b[index], subtrahiere(x, xi)));
-		r = addiere(r, multipliziere(c[index], potenz(subtrahiere(x, xi), 2)));
-		r = addiere(r, multipliziere(d[index], potenz(subtrahiere(x, xi), 3)));
-
-		return new Stuetzstelle<Double>(zeitstempel, r.doubleValue());
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	public Stuetzstelle<Double> get(long zeitstempel) {
@@ -202,7 +172,7 @@ public class CubicSpline extends AbstractApproximation {
 	 * 
 	 * {@inheritDoc}
 	 * 
-	 * @see de.bsvrz.iav.gllib.gllib.Approximation#integral(de.bsvrz.sys.funclib.bitctrl.util.Intervall)
+	 * @see de.bsvrz.iav.gllib.gllib.Approximation#integral(com.bitctrl.util.Interval)
 	 * @see #INTEGRATIONSINTERVALL
 	 */
 	public double integral(Interval intervall) {
@@ -220,6 +190,36 @@ public class CubicSpline extends AbstractApproximation {
 	@Override
 	public String toString() {
 		return "Cubic-Spline";
+	}
+
+	/**
+	 * Berechnet die St&uuml;tzstelle.
+	 * 
+	 * @param zeitstempel
+	 *            Zeitstempel der gesuchten St&uuml;tzstelle
+	 * @return Die gesuchte St&uuml;tzstelle
+	 */
+	private Stuetzstelle<Double> berechneStuetzstelle(long zeitstempel) {
+		RationaleZahl r, x, xi;
+		int index;
+
+		index = -1;
+		for (int i = 0; i < getStuetzstellen().size(); ++i) {
+			if (getStuetzstellen().get(i).getZeitstempel() > zeitstempel) {
+				index = i - 1;
+				break;
+			}
+		}
+		xi = new RationaleZahl(getStuetzstellen().get(index).getZeitstempel()
+				/ FAKTOR);
+		x = new RationaleZahl(zeitstempel / FAKTOR);
+
+		r = a[index];
+		r = addiere(r, multipliziere(b[index], subtrahiere(x, xi)));
+		r = addiere(r, multipliziere(c[index], potenz(subtrahiere(x, xi), 2)));
+		r = addiere(r, multipliziere(d[index], potenz(subtrahiere(x, xi), 3)));
+
+		return new Stuetzstelle<Double>(zeitstempel, r.doubleValue());
 	}
 
 }

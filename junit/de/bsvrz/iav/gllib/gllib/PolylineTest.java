@@ -65,54 +65,42 @@ public class PolylineTest {
 		Polyline polyline;
 		long t;
 
-		System.out.println("Polyline:");
 		polyline = new Polyline();
 		polyline.setStuetzstellen(ganglinie.getStuetzstellen());
 
 		// Die existierenden Stützstellen
 		t = 0;
 		assertEquals(ganglinie.getStuetzstellen().get(0), polyline.get(t));
-		System.out.println(polyline.get(t));
 		t = 3000;
 		assertEquals(ganglinie.getStuetzstellen().get(1), polyline.get(t));
-		System.out.println(polyline.get(t));
 		t = 4000;
 		assertEquals(ganglinie.getStuetzstellen().get(2), polyline.get(t));
-		System.out.println(polyline.get(t));
 		t = 6000;
 		assertEquals(ganglinie.getStuetzstellen().get(3), polyline.get(t));
-		System.out.println(polyline.get(t));
 		t = 9000;
 		assertEquals(ganglinie.getStuetzstellen().get(4), polyline.get(t));
-		System.out.println(polyline.get(t));
 
 		// Punkte zwischen den Stützstellen
 		t = 1000;
 		assertEquals(new Stuetzstelle<Double>(t, 10.0), polyline.get(t));
-		System.out.println(polyline.get(t));
 		t = 2000;
 		assertEquals(new Stuetzstelle<Double>(t, 20.0), polyline.get(t));
-		System.out.println(polyline.get(t));
 		t = 5000;
 		assertEquals(new Stuetzstelle<Double>(t, 30.0), polyline.get(t));
-		System.out.println(polyline.get(t));
 		t = 7000;
 		assertEquals(new Stuetzstelle<Double>(t, 30.0), polyline.get(t));
-		System.out.println(polyline.get(t));
 		t = 8000;
 		assertEquals(new Stuetzstelle<Double>(t, 20.0), polyline.get(t));
-		System.out.println(polyline.get(t));
 	}
 
 	/**
-	 * Testet die Methode {@link Treppenfunktion#integral(Intervall)}.
+	 * Testet die Methode {@link Treppenfunktion#integral(Interval)}.
 	 */
 	@Test
 	public void testIntegral() {
 		Polyline polyline;
 		Interval intervall;
 
-		System.out.println("Polyline: Methode integral()");
 		polyline = new Polyline();
 		polyline.setStuetzstellen(ganglinie.getStuetzstellen());
 

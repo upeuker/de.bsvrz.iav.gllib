@@ -65,54 +65,42 @@ public class TreppenfunktionTest {
 		Treppenfunktion treppe;
 		long t;
 
-		System.out.println("Treppenfunktion:");
 		treppe = new Treppenfunktion();
 		treppe.setStuetzstellen(ganglinie.getStuetzstellen());
 
 		// Die existierenden Stützstellen
 		t = 0;
 		assertEquals(ganglinie.getStuetzstellen().get(0), treppe.get(t));
-		System.out.println(treppe.get(t));
 		t = 3000;
 		assertEquals(ganglinie.getStuetzstellen().get(1), treppe.get(t));
-		System.out.println(treppe.get(t));
 		t = 4000;
 		assertEquals(ganglinie.getStuetzstellen().get(2), treppe.get(t));
-		System.out.println(treppe.get(t));
 		t = 6000;
 		assertEquals(ganglinie.getStuetzstellen().get(3), treppe.get(t));
-		System.out.println(treppe.get(t));
 		t = 9000;
 		assertEquals(ganglinie.getStuetzstellen().get(4), treppe.get(t));
-		System.out.println(treppe.get(t));
 
 		// Punkte zwischen den Stützstellen
 		t = 1000;
 		assertEquals(new Stuetzstelle<Double>(t, 0.0), treppe.get(t));
-		System.out.println(treppe.get(t));
 		t = 2000;
 		assertEquals(new Stuetzstelle<Double>(t, 0.0), treppe.get(t));
-		System.out.println(treppe.get(t));
 		t = 5000;
 		assertEquals(new Stuetzstelle<Double>(t, 20.0), treppe.get(t));
-		System.out.println(treppe.get(t));
 		t = 7000;
 		assertEquals(new Stuetzstelle<Double>(t, 40.0), treppe.get(t));
-		System.out.println(treppe.get(t));
 		t = 8000;
 		assertEquals(new Stuetzstelle<Double>(t, 40.0), treppe.get(t));
-		System.out.println(treppe.get(t));
 	}
 
 	/**
-	 * Testet die Methode {@link Treppenfunktion#integral(Intervall)}.
+	 * Testet die Methode {@link Treppenfunktion#integral(Interval)}.
 	 */
 	@Test
 	public void testIntegral() {
 		Treppenfunktion treppe;
 		Interval intervall;
 
-		System.out.println("Treppenfunktion: Methode integral()");
 		treppe = new Treppenfunktion();
 		treppe.setStuetzstellen(ganglinie.getStuetzstellen());
 

@@ -30,7 +30,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -42,19 +41,10 @@ import org.junit.Test;
 public class StuetzstelleTest {
 
 	/**
-	 * Ausgabe welche Klasse gerade getestet wird.
-	 */
-	@BeforeClass
-	public static void beforeClass() {
-		System.out.println("### Teste Klasse Stuetzstelle ###");
-	}
-
-	/**
 	 * Test der Verwendung einer "normalen", also defierten Stützstelle.
 	 */
 	@Test
 	public void testDefinierteStuetzstelle() {
-		System.out.println("Definierte Stützstelle ...");
 		Stuetzstelle<Integer> s;
 
 		s = new Stuetzstelle<Integer>(10, 50);
@@ -67,7 +57,6 @@ public class StuetzstelleTest {
 	 */
 	@Test
 	public void testGleichheit() {
-		System.out.println("Gleichheit von Stützstellen ...");
 		Stuetzstelle<Integer> s1, s2;
 
 		s1 = new Stuetzstelle<Integer>(15, 30);
@@ -97,7 +86,6 @@ public class StuetzstelleTest {
 	 */
 	@Test
 	public void testOrdnung() {
-		System.out.println("Ordnung auf Stützstellen ...");
 		Stuetzstelle<Integer> s1, s2;
 
 		s1 = new Stuetzstelle<Integer>(10, 10);
@@ -125,8 +113,6 @@ public class StuetzstelleTest {
 	 */
 	@Test
 	public void testUndefinierteStuetzstelle() {
-		System.out.println("Undefinierte Stützstelle ...");
-
 		Stuetzstelle<Integer> s;
 
 		s = new Stuetzstelle<Integer>(10);

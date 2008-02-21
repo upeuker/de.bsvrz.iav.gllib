@@ -403,7 +403,7 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see #setPrognoseZeitraum(Intervall)
+	 * @see #setPrognoseZeitraum(Interval)
 	 */
 	public Interval getIntervall() {
 		if (prognoseZeitraum != null) {
@@ -416,7 +416,7 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see #setPrognoseZeitraum(Intervall)
+	 * @see #setPrognoseZeitraum(Interval)
 	 */
 	public List<Interval> getIntervalle() {
 		throw new UnsupportedOperationException("Es müssen die Intervalle der "
@@ -471,7 +471,7 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see #setPrognoseZeitraum(Intervall)
+	 * @see #setPrognoseZeitraum(Interval)
 	 */
 	public Stuetzstelle<Messwerte> getStuetzstelle(long zeitstempel) {
 		Double qKfz0, qLkw0, vPkw0, vLkw0;
@@ -493,7 +493,7 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see #setPrognoseZeitraum(Intervall)
+	 * @see #setPrognoseZeitraum(Interval)
 	 */
 	public List<Stuetzstelle<Messwerte>> getStuetzstellen() {
 		List<Stuetzstelle<Messwerte>> liste;
@@ -525,7 +525,7 @@ public class GanglinieMQ implements IGanglinie<Messwerte> {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see #setPrognoseZeitraum(Intervall)
+	 * @see #setPrognoseZeitraum(Interval)
 	 */
 	public List<Stuetzstelle<Messwerte>> getStuetzstellen(Interval intervall) {
 		List<Stuetzstelle<Double>> qKfz0, qLkw0, vPkw0, vLkw0;

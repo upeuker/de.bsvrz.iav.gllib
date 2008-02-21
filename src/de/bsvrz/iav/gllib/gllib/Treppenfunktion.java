@@ -83,7 +83,7 @@ public class Treppenfunktion extends AbstractApproximation {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see de.bsvrz.iav.gllib.gllib.Approximation#integral(de.bsvrz.sys.funclib.bitctrl.util.Intervall)
+	 * @see de.bsvrz.iav.gllib.gllib.Approximation#integral(com.bitctrl.util.Interval)
 	 */
 	public double integral(Interval intervall) {
 		final int start;

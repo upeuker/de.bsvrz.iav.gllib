@@ -108,13 +108,12 @@ public class Stuetzstelle<T> implements Comparable<Stuetzstelle<T>> {
 	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Stuetzstelle) {
-			Stuetzstelle s;
+			Stuetzstelle<?> s;
 
-			s = (Stuetzstelle) obj;
+			s = (Stuetzstelle<?>) obj;
 			if (wert != null) {
 				return zeitstempel == s.zeitstempel && wert.equals(s.wert);
 			}
