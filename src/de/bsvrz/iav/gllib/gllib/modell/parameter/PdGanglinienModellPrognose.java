@@ -26,7 +26,7 @@
 
 package de.bsvrz.iav.gllib.gllib.modell.parameter;
 
-import static com.bitctrl.Constants.MILLIS_PER_SEKUNDE;
+import static com.bitctrl.Constants.MILLIS_PER_SECOND;
 
 import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.ResultData;
@@ -307,11 +307,11 @@ public class PdGanglinienModellPrognose extends
 		daten.getUnscaledValue("GLAuswahlMethode").set(
 				datum.getAuswahlMethode());
 		daten.getUnscaledValue("GLPatternMatchingHorizont").set(
-				datum.getPatternMatchingHorizont() / MILLIS_PER_SEKUNDE);
+				datum.getPatternMatchingHorizont() / MILLIS_PER_SECOND);
 		daten.getUnscaledValue("GLMatchingIntervall").set(
-				datum.getMatchingIntervall() / MILLIS_PER_SEKUNDE);
+				datum.getMatchingIntervall() / MILLIS_PER_SECOND);
 		daten.getUnscaledValue("GLPatterMatchingOffset").set(
-				datum.getPatternMatchingOffset() / MILLIS_PER_SEKUNDE);
+				datum.getPatternMatchingOffset() / MILLIS_PER_SECOND);
 		daten.getUnscaledValue("GLMaximalerMatchingFehler").set(
 				datum.getMaxMatchingFehler());
 		// TODO fehlendes Attribut GLMaximaleDauerZyklischePrognose im DaK
@@ -337,13 +337,13 @@ public class PdGanglinienModellPrognose extends
 					.intValue());
 			datum.setPatternMatchingHorizont(daten.getUnscaledValue(
 					"GLPatternMatchingHorizont").longValue()
-					* MILLIS_PER_SEKUNDE);
+					* MILLIS_PER_SECOND);
 			datum.setMatchingIntervall(daten.getUnscaledValue(
 					"GLMatchingIntervall").longValue()
-					* MILLIS_PER_SEKUNDE);
+					* MILLIS_PER_SECOND);
 			datum.setPatternMatchingOffset(daten.getUnscaledValue(
 					"GLPatterMatchingOffset").longValue()
-					* MILLIS_PER_SEKUNDE);
+					* MILLIS_PER_SECOND);
 			datum.setMaxMatchingFehler(daten.getUnscaledValue(
 					"GLMaximalerMatchingFehler").intValue());
 			// TODO fehlendes Attribut GLMaximaleDauerZyklischePrognose im DaK

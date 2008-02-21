@@ -29,7 +29,7 @@ package de.bsvrz.iav.gllib.gllib.modell.parameter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.bitctrl.Constants.MILLIS_PER_SEKUNDE;
+import static com.bitctrl.Constants.MILLIS_PER_SECOND;
 
 import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.ResultData;
@@ -491,11 +491,11 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 		daten.getUnscaledValue("AlgGanglinienTyp")
 				.set(datum.getGanglinienTyp());
 		daten.getUnscaledValue("AlgMatchingIntervallNach").set(
-				datum.getMatchingIntervallNach() / MILLIS_PER_SEKUNDE);
+				datum.getMatchingIntervallNach() / MILLIS_PER_SECOND);
 		daten.getUnscaledValue("AlgMatchingIntervallVor").set(
-				datum.getMatchingIntervallVor() / MILLIS_PER_SEKUNDE);
+				datum.getMatchingIntervallVor() / MILLIS_PER_SECOND);
 		daten.getUnscaledValue("AlgMatchingSchrittweite").set(
-				datum.getMatchingSchrittweite() / MILLIS_PER_SEKUNDE);
+				datum.getMatchingSchrittweite() / MILLIS_PER_SECOND);
 		daten.getUnscaledValue("AlgMaxAbstand").set(datum.getMaxAbstand());
 		daten.getUnscaledValue("AlgMaxGanglinien")
 				.set(datum.getMaxGanglinien());
@@ -504,7 +504,7 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 		daten.getUnscaledValue("AlgMaxWichtungsfaktor").set(
 				datum.getMaxWichtungsfaktor());
 		daten.getUnscaledValue("AlgVergleichsSchrittweite").set(
-				datum.getVergleichsSchrittweite() / MILLIS_PER_SEKUNDE);
+				datum.getVergleichsSchrittweite() / MILLIS_PER_SECOND);
 		daten.getUnscaledValue("AlgStützstellenAbstand").set(
 				datum.getStuetzstellenAbstand());
 
@@ -544,13 +544,13 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 					.intValue());
 			datum.setMatchingIntervallNach(daten.getUnscaledValue(
 					"AlgMatchingIntervallNach").longValue()
-					* MILLIS_PER_SEKUNDE);
+					* MILLIS_PER_SECOND);
 			datum.setMatchingIntervallVor(daten.getUnscaledValue(
 					"AlgMatchingIntervallVor").longValue()
-					* MILLIS_PER_SEKUNDE);
+					* MILLIS_PER_SECOND);
 			datum.setMatchingSchrittweite(daten.getUnscaledValue(
 					"AlgMatchingSchrittweite").longValue()
-					* MILLIS_PER_SEKUNDE);
+					* MILLIS_PER_SECOND);
 			datum.setMaxAbstand(daten.getUnscaledValue("AlgMaxAbstand")
 					.intValue());
 			datum.setMaxGanglinien(daten.getUnscaledValue("AlgMaxGanglinien")
@@ -561,7 +561,7 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 					"AlgMaxWichtungsfaktor").intValue());
 			datum.setVergleichsSchrittweite(daten.getUnscaledValue(
 					"AlgVergleichsSchrittweite").longValue()
-					* MILLIS_PER_SEKUNDE);
+					* MILLIS_PER_SECOND);
 			datum.setStuetzstellenAbstand(daten.getUnscaledValue(
 					"AlgStützstellenAbstand").longValue());
 		}

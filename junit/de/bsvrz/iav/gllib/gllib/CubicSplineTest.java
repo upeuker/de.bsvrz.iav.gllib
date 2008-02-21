@@ -26,7 +26,7 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
-import static com.bitctrl.Constants.MILLIS_PER_STUNDE;
+import static com.bitctrl.Constants.MILLIS_PER_HOUR;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
@@ -68,10 +68,10 @@ public class CubicSplineTest {
 	public void setUp() {
 		ganglinie = new Ganglinie();
 		ganglinie.setStuetzstelle(0, 0.0);
-		ganglinie.setStuetzstelle(3 * MILLIS_PER_STUNDE, 3000.0);
-		ganglinie.setStuetzstelle(4 * MILLIS_PER_STUNDE, 2000.0);
-		ganglinie.setStuetzstelle(6 * MILLIS_PER_STUNDE, 4000.0);
-		ganglinie.setStuetzstelle(9 * MILLIS_PER_STUNDE, 1000.0);
+		ganglinie.setStuetzstelle(3 * MILLIS_PER_HOUR, 3000.0);
+		ganglinie.setStuetzstelle(4 * MILLIS_PER_HOUR, 2000.0);
+		ganglinie.setStuetzstelle(6 * MILLIS_PER_HOUR, 4000.0);
+		ganglinie.setStuetzstelle(9 * MILLIS_PER_HOUR, 1000.0);
 		ganglinie.setApproximation(new Polyline());
 		ganglinie.aktualisiereApproximation();
 	}
@@ -88,43 +88,43 @@ public class CubicSplineTest {
 		spline = new CubicSpline();
 
 		// Nur eine Stützstelle
-		stuetzstellen.add(new Stuetzstelle<Double>(100 * MILLIS_PER_STUNDE,
+		stuetzstellen.add(new Stuetzstelle<Double>(100 * MILLIS_PER_HOUR,
 				30.0));
 		spline.setStuetzstellen(stuetzstellen);
 		spline.initialisiere();
 		assertEquals(new Stuetzstelle<Double>(0, null), spline.get(0));
-		assertEquals(new Stuetzstelle<Double>(100 * MILLIS_PER_STUNDE, 30.0),
-				spline.get(100 * MILLIS_PER_STUNDE));
-		assertEquals(new Stuetzstelle<Double>(120 * MILLIS_PER_STUNDE, null),
-				spline.get(120 * MILLIS_PER_STUNDE));
+		assertEquals(new Stuetzstelle<Double>(100 * MILLIS_PER_HOUR, 30.0),
+				spline.get(100 * MILLIS_PER_HOUR));
+		assertEquals(new Stuetzstelle<Double>(120 * MILLIS_PER_HOUR, null),
+				spline.get(120 * MILLIS_PER_HOUR));
 
 		// Nur zwei Stützstellen
-		stuetzstellen.add(new Stuetzstelle<Double>(200 * MILLIS_PER_STUNDE,
+		stuetzstellen.add(new Stuetzstelle<Double>(200 * MILLIS_PER_HOUR,
 				80.0));
 		spline.setStuetzstellen(stuetzstellen);
 		spline.initialisiere();
 		assertEquals(new Stuetzstelle<Double>(0, null), spline.get(0));
-		assertEquals(new Stuetzstelle<Double>(100 * MILLIS_PER_STUNDE, 30.0),
-				spline.get(100 * MILLIS_PER_STUNDE));
-		assertEquals(new Stuetzstelle<Double>(200 * MILLIS_PER_STUNDE, 80.0),
-				spline.get(200 * MILLIS_PER_STUNDE));
-		assertEquals(new Stuetzstelle<Double>(320 * MILLIS_PER_STUNDE, null),
-				spline.get(320 * MILLIS_PER_STUNDE));
+		assertEquals(new Stuetzstelle<Double>(100 * MILLIS_PER_HOUR, 30.0),
+				spline.get(100 * MILLIS_PER_HOUR));
+		assertEquals(new Stuetzstelle<Double>(200 * MILLIS_PER_HOUR, 80.0),
+				spline.get(200 * MILLIS_PER_HOUR));
+		assertEquals(new Stuetzstelle<Double>(320 * MILLIS_PER_HOUR, null),
+				spline.get(320 * MILLIS_PER_HOUR));
 
 		// Nur drei Stützstellen
-		stuetzstellen.add(new Stuetzstelle<Double>(300 * MILLIS_PER_STUNDE,
+		stuetzstellen.add(new Stuetzstelle<Double>(300 * MILLIS_PER_HOUR,
 				40.0));
 		spline.setStuetzstellen(stuetzstellen);
 		spline.initialisiere();
 		assertEquals(new Stuetzstelle<Double>(0, null), spline.get(0));
-		assertEquals(new Stuetzstelle<Double>(100 * MILLIS_PER_STUNDE, 30.0),
-				spline.get(100 * MILLIS_PER_STUNDE));
-		assertEquals(new Stuetzstelle<Double>(200 * MILLIS_PER_STUNDE, 80.0),
-				spline.get(200 * MILLIS_PER_STUNDE));
-		assertEquals(new Stuetzstelle<Double>(300 * MILLIS_PER_STUNDE, 40.0),
-				spline.get(300 * MILLIS_PER_STUNDE));
-		assertEquals(new Stuetzstelle<Double>(320 * MILLIS_PER_STUNDE, null),
-				spline.get(320 * MILLIS_PER_STUNDE));
+		assertEquals(new Stuetzstelle<Double>(100 * MILLIS_PER_HOUR, 30.0),
+				spline.get(100 * MILLIS_PER_HOUR));
+		assertEquals(new Stuetzstelle<Double>(200 * MILLIS_PER_HOUR, 80.0),
+				spline.get(200 * MILLIS_PER_HOUR));
+		assertEquals(new Stuetzstelle<Double>(300 * MILLIS_PER_HOUR, 40.0),
+				spline.get(300 * MILLIS_PER_HOUR));
+		assertEquals(new Stuetzstelle<Double>(320 * MILLIS_PER_HOUR, null),
+				spline.get(320 * MILLIS_PER_HOUR));
 	}
 
 	/**
@@ -147,44 +147,44 @@ public class CubicSplineTest {
 		System.out.println(t + ". Stunde : " + spline.get(t));
 		assertEquals(ganglinie.getStuetzstelle(t), spline.get(t));
 
-		t = 1 * MILLIS_PER_STUNDE;
+		t = 1 * MILLIS_PER_HOUR;
 		System.out.println(t + ". Stunde : " + spline.get(t));
 		assertEquals(new RationaleZahl(1201000, 657).doubleValue(), spline.get(
 				t).getWert());
 
-		t = 2 * MILLIS_PER_STUNDE;
+		t = 2 * MILLIS_PER_HOUR;
 		System.out.println(t + ". Stunde : " + spline.get(t));
 		assertEquals(new RationaleZahl(1994000, 657).doubleValue(), spline.get(
 				t).getWert());
 
-		t = 3 * MILLIS_PER_STUNDE;
+		t = 3 * MILLIS_PER_HOUR;
 		System.out.println(t + ". Stunde : " + spline.get(t));
 		assertEquals(ganglinie.getStuetzstelle(t), spline.get(t));
 
-		t = 4 * MILLIS_PER_STUNDE;
+		t = 4 * MILLIS_PER_HOUR;
 		System.out.println(t + ". Stunde : " + spline.get(t));
 		assertEquals(ganglinie.getStuetzstelle(t), spline.get(t));
 
-		t = 5 * MILLIS_PER_STUNDE;
+		t = 5 * MILLIS_PER_HOUR;
 		System.out.println(t + ". Stunde : " + spline.get(t));
 		assertEquals(new RationaleZahl(198500, 73).doubleValue(), spline.get(t)
 				.getWert());
 
-		t = 6 * MILLIS_PER_STUNDE;
+		t = 6 * MILLIS_PER_HOUR;
 		System.out.println(t + ". Stunde : " + spline.get(t));
 		assertEquals(ganglinie.getStuetzstelle(t), spline.get(t));
 
-		t = 7 * MILLIS_PER_STUNDE;
+		t = 7 * MILLIS_PER_HOUR;
 		System.out.println(t + ". Stunde : " + spline.get(t));
 		assertEquals(new RationaleZahl(2621000, 657).doubleValue(), spline.get(
 				t).getWert());
 
-		t = 8 * MILLIS_PER_STUNDE;
+		t = 8 * MILLIS_PER_HOUR;
 		System.out.println(t + ". Stunde : " + spline.get(t));
 		assertEquals(new RationaleZahl(1834000, 657).doubleValue(), spline.get(
 				t).getWert());
 
-		t = 9 * MILLIS_PER_STUNDE;
+		t = 9 * MILLIS_PER_HOUR;
 		System.out.println(t + ". Stunde : " + spline.get(t));
 		assertEquals(ganglinie.getStuetzstelle(t), spline.get(t));
 
@@ -208,13 +208,13 @@ public class CubicSplineTest {
 
 		t = 0;
 		assertEquals(ganglinie.getStuetzstelle(t), spline.get(t));
-		t = 3 * MILLIS_PER_STUNDE;
+		t = 3 * MILLIS_PER_HOUR;
 		assertEquals(ganglinie.getStuetzstelle(t), spline.get(t));
-		t = 4 * MILLIS_PER_STUNDE;
+		t = 4 * MILLIS_PER_HOUR;
 		assertEquals(ganglinie.getStuetzstelle(t), spline.get(t));
-		t = 6 * MILLIS_PER_STUNDE;
+		t = 6 * MILLIS_PER_HOUR;
 		assertEquals(ganglinie.getStuetzstelle(t), spline.get(t));
-		t = 9 * MILLIS_PER_STUNDE;
+		t = 9 * MILLIS_PER_HOUR;
 		assertEquals(ganglinie.getStuetzstelle(t), spline.get(t));
 
 		System.out.println("O.k.");

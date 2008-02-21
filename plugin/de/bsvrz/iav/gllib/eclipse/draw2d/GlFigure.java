@@ -26,7 +26,7 @@
 
 package de.bsvrz.iav.gllib.eclipse.draw2d;
 
-import static com.bitctrl.Constants.MILLIS_PER_TAG;
+import static com.bitctrl.Constants.MILLIS_PER_DAY;
 
 import java.util.Calendar;
 
@@ -130,9 +130,9 @@ public abstract class GlFigure extends Figure {
 		}
 
 		// Mindestens einen Tag anzeigen
-		if (getSkalierung().getMaxZeit() - getSkalierung().getMinZeit() < MILLIS_PER_TAG) {
+		if (getSkalierung().getMaxZeit() - getSkalierung().getMinZeit() < MILLIS_PER_DAY) {
 			getSkalierung().setMaxZeit(
-					getSkalierung().getMinZeit() + MILLIS_PER_TAG);
+					getSkalierung().getMinZeit() + MILLIS_PER_DAY);
 		}
 
 		dim = getGroesse();
