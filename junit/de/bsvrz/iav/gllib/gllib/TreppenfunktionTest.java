@@ -106,11 +106,11 @@ public class TreppenfunktionTest {
 
 		// Intervallgrenzen liegen auf Stützstellen
 		intervall = new Interval(0, 9000);
-		assertEquals(190000, treppe.integral(intervall));
+		assertEquals(190000.0, treppe.integral(intervall));
 
 		// Intervallgrenzen liegen nicht auf Stützstellen
 		intervall = new Interval(3500, 8500);
-		assertEquals(170000, treppe.integral(intervall));
+		assertEquals(170000.0, treppe.integral(intervall));
 	}
 
 }

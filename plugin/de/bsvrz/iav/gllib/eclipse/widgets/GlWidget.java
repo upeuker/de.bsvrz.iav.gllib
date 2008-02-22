@@ -38,13 +38,16 @@ import org.eclipse.swt.widgets.Composite;
  */
 public class GlWidget extends Composite {
 
+	/** Die Eigenschaft {@code diagramm}. */
 	private final FigureCanvas diagramm;
 
 	/**
 	 * Initialisiert das Objekt.
 	 * 
 	 * @param parent
+	 *            das übergeordnete Widegt.
 	 * @param style
+	 *            der Style.
 	 */
 	public GlWidget(Composite parent, int style) {
 		super(parent, style);

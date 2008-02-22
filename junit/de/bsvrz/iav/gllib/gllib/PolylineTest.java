@@ -106,11 +106,11 @@ public class PolylineTest {
 
 		// Intervallgrenzen liegen auf Stützstellen
 		intervall = new Interval(0, 9000);
-		assertEquals(205000, polyline.integral(intervall));
+		assertEquals(205000.0, polyline.integral(intervall));
 
 		// Intervallgrenzen liegen nicht auf Stützstellen
 		intervall = new Interval(2000, 8000);
-		assertEquals(170000, polyline.integral(intervall));
+		assertEquals(170000.0, polyline.integral(intervall));
 	}
 
 }

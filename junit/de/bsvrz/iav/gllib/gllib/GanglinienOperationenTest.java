@@ -34,8 +34,7 @@ import org.junit.Test;
  * Testet die Verwendung einer Ganglinie.
  * 
  * @author BitCtrl Systems GmbH, Schumann
- * @version $Id: GanglinienOperationenTest.java 6277 2008-02-05 16:42:04Z
- *          Schumann $
+ * @version $Id$
  */
 
 public class GanglinienOperationenTest {
