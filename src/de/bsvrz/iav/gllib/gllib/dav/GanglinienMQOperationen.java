@@ -33,6 +33,7 @@ import java.util.Map.Entry;
 import com.bitctrl.util.Interval;
 
 import de.bsvrz.iav.gllib.gllib.GanglinienOperationen;
+import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
 
 /**
  * Helferklasse mit den Operationen auf Messquerschnittsganglinien.
@@ -402,6 +403,8 @@ public final class GanglinienMQOperationen {
 	 */
 	public static GanglinieMQ verschmelze(GanglinieMQ ganglinie,
 			GanglinieMQ historGl, long gewicht) {
+		final long zeitstempel;
+
 		assert ganglinie.getMessQuerschnitt().equals(
 				historGl.getMessQuerschnitt()) : "Die Ganglinien müssen zum gleichen Messquerschnitt gehören.";
 
@@ -421,7 +424,12 @@ public final class GanglinienMQOperationen {
 				historGl.vLkw, gewicht);
 
 		g.setAnzahlVerschmelzungen(historGl.getAnzahlVerschmelzungen() + 1);
-		g.setLetzteVerschmelzung(System.currentTimeMillis());
+		if (ObjektFactory.getInstanz().getVerbindung() != null) {
+			zeitstempel = ObjektFactory.getInstanz().getVerbindung().getTime();
+		} else {
+			zeitstempel = System.currentTimeMillis();
+		}
+		g.setLetzteVerschmelzung(zeitstempel);
 
 		return g;
 	}

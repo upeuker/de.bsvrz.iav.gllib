@@ -173,7 +173,10 @@ public final class GanglinienFactory {
 	 * @param mq
 	 *            der Messquerschnitt, für den die Ganglinie sein soll.
 	 * @return die Ganglinie.
+	 * @todo Implementieren.
+	 * @deprecated Muss noch implementiert werden!!
 	 */
+	@Deprecated
 	public GanglinieMQ erzeugeGanglinie(Typ typ, MessQuerschnittAllgemein mq) {
 		GanglinieMQ g;
 		switch (typ) {
