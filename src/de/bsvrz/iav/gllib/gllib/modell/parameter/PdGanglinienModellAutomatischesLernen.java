@@ -204,16 +204,18 @@ public class PdGanglinienModellAutomatischesLernen extends
 		 */
 		@Override
 		public String toString() {
-			String s = getClass().getSimpleName() + "[";
+			String s;
 
+			s = getClass().getSimpleName() + "[";
 			s += "zeitpunkt=" + getZeitpunkt();
-			s += "valid=" + isValid();
+			s += ", datenStatus=" + getDatenStatus();
 			s += ", aktualisierungsintervall=" + aktualisierungsintervall;
 			s += ", datenMindestalter=" + datenMindestalter;
 			s += ", maximalWichtung=" + maximalWichtung;
 			s += ", maxVergleichsAbstand=" + maxVergleichsAbstand;
+			s += "]";
 
-			return s + "]";
+			return s;
 		}
 
 		/**
@@ -229,7 +231,7 @@ public class PdGanglinienModellAutomatischesLernen extends
 	}
 
 	/** Die PID der Attributgruppe. */
-	public static final String ATG_GANGLINIEN_MODELL_AUTOMATISCHES_LERNEN_EREIGNIS = "atg.ganglinienModellAutomatischesLernenEreignis";
+	public static final String ATG_GANGLINIEN_MODELL_AUTOMATISCHES_LERNEN = "atg.ganglinienModellAutomatischesLernen";
 
 	/** Die Attributgruppe kann von allen Instanzen gemeinsam genutzt werden. */
 	private static AttributeGroup atg;
@@ -249,7 +251,7 @@ public class PdGanglinienModellAutomatischesLernen extends
 			DataModel modell = ObjektFactory.getInstanz().getVerbindung()
 					.getDataModel();
 			atg = modell
-					.getAttributeGroup(ATG_GANGLINIEN_MODELL_AUTOMATISCHES_LERNEN_EREIGNIS);
+					.getAttributeGroup(ATG_GANGLINIEN_MODELL_AUTOMATISCHES_LERNEN);
 			assert atg != null;
 		}
 	}

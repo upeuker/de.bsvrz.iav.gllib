@@ -309,16 +309,6 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 		}
 
 		/**
-		 * setzt den aktuellen Datenstatus.
-		 * 
-		 * @param datenStatus
-		 *            der neue Status
-		 */
-		protected void setDatenStatus(Status datenStatus) {
-			this.datenStatus = datenStatus;
-		}
-
-		/**
 		 * Legt den Wert der Eigenschaft {@code ganglinienTyp} fest.
 		 * 
 		 * @param ganglinienTyp
@@ -418,6 +408,45 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 			this.vergleichsSchrittweite = vergleichsSchrittweite;
 		}
 
+		/**
+		 * {@inheritDoc}
+		 * 
+		 * @see java.lang.Object#toString()
+		 */
+		@Override
+		public String toString() {
+			String s;
+
+			s = getClass().getSimpleName() + "[";
+			s += "zeitpunkt=" + getZeitpunkt();
+			s += ", datenStatus=" + getDatenStatus();
+			s += ", darstellungsverfahren=" + darstellungsverfahren;
+			s += ", ganglinienTyp=" + ganglinienTyp;
+			s += ", matchingIntervallNach=" + matchingIntervallNach;
+			s += ", matchingIntervallVor=" + matchingIntervallVor;
+			s += ", matchingSchrittweite=" + matchingSchrittweite;
+			s += ", maxAbstand=" + maxAbstand;
+			s += ", maxGanglinien=" + maxGanglinien;
+			s += ", maxMatchingFehler=" + maxMatchingFehler;
+			s += ", maxWichtungsfaktor=" + maxWichtungsfaktor;
+			s += ", stuetzstellenAbstand=" + stuetzstellenAbstand;
+			s += ", vergleichsSchrittweite=" + vergleichsSchrittweite;
+			s += ", bezugsereignistypen=" + bezugsereignistypen;
+			s += ", ausschlussliste=" + ausschlussliste;
+			s += "]";
+
+			return s;
+		}
+
+		/**
+		 * setzt den aktuellen Datenstatus.
+		 * 
+		 * @param datenStatus
+		 *            der neue Status
+		 */
+		protected void setDatenStatus(Status datenStatus) {
+			this.datenStatus = datenStatus;
+		}
 	}
 
 	/** Die PID der Attributgruppe. */
@@ -460,55 +489,6 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 	 */
 	public AttributeGroup getAttributGruppe() {
 		return atg;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatensatz#konvertiere(de.bsvrz.sys.funclib.bitctrl.modell.Datum)
-	 */
-	@Override
-	protected Data konvertiere(Daten datum) {
-		Data daten = erzeugeSendeCache();
-		ReferenceArray feld;
-
-		feld = daten.getReferenceArray("AlgAusschlussliste");
-		feld.setLength(datum.getAusschlussliste().size());
-		for (int i = 0; i < datum.getAusschlussliste().size(); i++) {
-			feld.getReferenceValue(i).setSystemObject(
-					datum.getAusschlussliste().get(i).getSystemObject());
-		}
-
-		feld = daten.getReferenceArray("AlgBezugsereignistypen");
-		feld.setLength(datum.getBezugsereignistypen().size());
-		for (int i = 0; i < feld.getLength(); i++) {
-			feld.getReferenceValue(i).setSystemObject(
-					datum.getBezugsereignistypen().get(i).getSystemObject());
-		}
-
-		daten.getUnscaledValue("AlgDarstellungsverfahren").set(
-				datum.getDarstellungsverfahren());
-		daten.getUnscaledValue("AlgGanglinienTyp")
-				.set(datum.getGanglinienTyp());
-		daten.getUnscaledValue("AlgMatchingIntervallNach").set(
-				datum.getMatchingIntervallNach() / MILLIS_PER_SECOND);
-		daten.getUnscaledValue("AlgMatchingIntervallVor").set(
-				datum.getMatchingIntervallVor() / MILLIS_PER_SECOND);
-		daten.getUnscaledValue("AlgMatchingSchrittweite").set(
-				datum.getMatchingSchrittweite() / MILLIS_PER_SECOND);
-		daten.getUnscaledValue("AlgMaxAbstand").set(datum.getMaxAbstand());
-		daten.getUnscaledValue("AlgMaxGanglinien")
-				.set(datum.getMaxGanglinien());
-		daten.getUnscaledValue("AlgMaxMatchingFehler").set(
-				datum.getMaxMatchingFehler());
-		daten.getUnscaledValue("AlgMaxWichtungsfaktor").set(
-				datum.getMaxWichtungsfaktor());
-		daten.getUnscaledValue("AlgVergleichsSchrittweite").set(
-				datum.getVergleichsSchrittweite() / MILLIS_PER_SECOND);
-		daten.getUnscaledValue("AlgStützstellenAbstand").set(
-				datum.getStuetzstellenAbstand());
-
-		return daten;
 	}
 
 	/**
@@ -571,6 +551,55 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 		setDatum(result.getDataDescription().getAspect(), datum);
 		fireDatensatzAktualisiert(result.getDataDescription().getAspect(),
 				datum.clone());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatensatz#konvertiere(de.bsvrz.sys.funclib.bitctrl.modell.Datum)
+	 */
+	@Override
+	protected Data konvertiere(Daten datum) {
+		Data daten = erzeugeSendeCache();
+		ReferenceArray feld;
+
+		feld = daten.getReferenceArray("AlgAusschlussliste");
+		feld.setLength(datum.getAusschlussliste().size());
+		for (int i = 0; i < datum.getAusschlussliste().size(); i++) {
+			feld.getReferenceValue(i).setSystemObject(
+					datum.getAusschlussliste().get(i).getSystemObject());
+		}
+
+		feld = daten.getReferenceArray("AlgBezugsereignistypen");
+		feld.setLength(datum.getBezugsereignistypen().size());
+		for (int i = 0; i < feld.getLength(); i++) {
+			feld.getReferenceValue(i).setSystemObject(
+					datum.getBezugsereignistypen().get(i).getSystemObject());
+		}
+
+		daten.getUnscaledValue("AlgDarstellungsverfahren").set(
+				datum.getDarstellungsverfahren());
+		daten.getUnscaledValue("AlgGanglinienTyp")
+				.set(datum.getGanglinienTyp());
+		daten.getUnscaledValue("AlgMatchingIntervallNach").set(
+				datum.getMatchingIntervallNach() / MILLIS_PER_SECOND);
+		daten.getUnscaledValue("AlgMatchingIntervallVor").set(
+				datum.getMatchingIntervallVor() / MILLIS_PER_SECOND);
+		daten.getUnscaledValue("AlgMatchingSchrittweite").set(
+				datum.getMatchingSchrittweite() / MILLIS_PER_SECOND);
+		daten.getUnscaledValue("AlgMaxAbstand").set(datum.getMaxAbstand());
+		daten.getUnscaledValue("AlgMaxGanglinien")
+				.set(datum.getMaxGanglinien());
+		daten.getUnscaledValue("AlgMaxMatchingFehler").set(
+				datum.getMaxMatchingFehler());
+		daten.getUnscaledValue("AlgMaxWichtungsfaktor").set(
+				datum.getMaxWichtungsfaktor());
+		daten.getUnscaledValue("AlgVergleichsSchrittweite").set(
+				datum.getVergleichsSchrittweite() / MILLIS_PER_SECOND);
+		daten.getUnscaledValue("AlgStützstellenAbstand").set(
+				datum.getStuetzstellenAbstand());
+
+		return daten;
 	}
 
 }

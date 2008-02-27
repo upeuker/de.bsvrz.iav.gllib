@@ -73,13 +73,6 @@ public class GanglinieMQTest {
 
 		assertEquals(new Interval(1000, 4000), g.getIntervall());
 
-		assertTrue(g.isValid(1500));
-		assertTrue(g.isValid(3000));
-		assertTrue(g.isValid(3500));
-		assertFalse(g.isValid(200));
-		assertFalse(g.isValid(900));
-		assertFalse(g.isValid(4500));
-
 		assertEquals(new Stuetzstelle<Messwerte>(1000, new Messwerte(90.0,
 				10.0, 130.0, 80.0)), g.getStuetzstellen().get(0));
 		assertEquals(new Stuetzstelle<Messwerte>(3000, new Messwerte(50.0, 5.0,
@@ -107,7 +100,6 @@ public class GanglinieMQTest {
 
 		assertEquals(null, g.getIntervall());
 		assertFalse(g.existsStuetzstelle(2));
-		assertFalse(g.isValid(2));
 
 		assertEquals(0, g.anzahlStuetzstellen());
 	}

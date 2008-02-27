@@ -27,6 +27,7 @@
 package de.bsvrz.iav.gllib.gllib;
 
 import java.util.List;
+import java.util.SortedMap;
 
 import com.bitctrl.util.Interval;
 
@@ -38,7 +39,7 @@ import com.bitctrl.util.Interval;
  * @param <T>
  *            der Typ des Wertes eines St&uuml;tzstelle.
  */
-public interface IGanglinie<T> {
+public interface IGanglinie<T> extends SortedMap<Long, T> {
 
 	/**
 	 * Aktualisiert die Approximation. Muss bei &Auml;nderung an den

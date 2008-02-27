@@ -128,7 +128,7 @@ public final class GanglinienOperationen {
 
 		// Stützstellen außerhalb des Intervalls entfernen
 		Iterator<Entry<Long, Double>> iterator;
-		iterator = g.stuetzstellen.entrySet().iterator();
+		iterator = g.entrySet().iterator();
 		while (iterator.hasNext()) {
 			long t;
 
@@ -273,15 +273,15 @@ public final class GanglinienOperationen {
 		long start, ende, breite;
 
 		// Zu betrachtendes Intervall und Intervallbreite bestimmen
-		if (g1.stuetzstellen.firstKey() < g2.stuetzstellen.firstKey()) {
-			start = g2.stuetzstellen.firstKey();
+		if (g1.firstKey() < g2.firstKey()) {
+			start = g2.firstKey();
 		} else {
-			start = g1.stuetzstellen.firstKey();
+			start = g1.firstKey();
 		}
-		if (g1.stuetzstellen.lastKey() < g2.stuetzstellen.lastKey()) {
-			ende = g1.stuetzstellen.lastKey();
+		if (g1.lastKey() < g2.lastKey()) {
+			ende = g1.lastKey();
 		} else {
-			ende = g2.stuetzstellen.lastKey();
+			ende = g2.lastKey();
 		}
 		breite = Math.round((double) (ende - start) / intervalle);
 
@@ -317,15 +317,15 @@ public final class GanglinienOperationen {
 		p2.initialisiere();
 
 		// Zu betrachtendes Intervall und Intervallbreite bestimmen
-		if (g1.stuetzstellen.firstKey() < g2.stuetzstellen.firstKey()) {
-			start = g2.stuetzstellen.firstKey();
+		if (g1.firstKey() < g2.firstKey()) {
+			start = g2.firstKey();
 		} else {
-			start = g1.stuetzstellen.firstKey();
+			start = g1.firstKey();
 		}
-		if (g1.stuetzstellen.lastKey() < g2.stuetzstellen.lastKey()) {
-			ende = g1.stuetzstellen.lastKey();
+		if (g1.lastKey() < g2.lastKey()) {
+			ende = g1.lastKey();
 		} else {
-			ende = g2.stuetzstellen.lastKey();
+			ende = g2.lastKey();
 		}
 
 		// Haltepunkte bestimmen
@@ -550,20 +550,20 @@ public final class GanglinienOperationen {
 
 		Ganglinie g;
 
-		g = new Ganglinie(g1.stuetzstellen);
-		for (long t : g2.stuetzstellen.keySet()) {
-			if (g.stuetzstellen.containsKey(t)) {
+		g = new Ganglinie(g1);
+		for (long t : g2.keySet()) {
+			if (g.containsKey(t)) {
 				Double d1, d2;
 
-				d1 = g.stuetzstellen.get(t);
-				d2 = g2.stuetzstellen.get(t);
+				d1 = g.get(t);
+				d2 = g2.get(t);
 				if (d1 != null && d2 != null) {
-					g.stuetzstellen.put(t, (d1 + d2) / 2);
+					g.put(t, (d1 + d2) / 2);
 				} else {
-					g.stuetzstellen.put(t, null);
+					g.put(t, null);
 				}
 			} else {
-				g.stuetzstellen.put(t, g2.stuetzstellen.get(t));
+				g.put(t, g2.get(t));
 			}
 		}
 
@@ -585,10 +585,11 @@ public final class GanglinienOperationen {
 		SortedMap<Long, Double> stuetzstellen;
 
 		stuetzstellen = new TreeMap<Long, Double>();
-		for (long t : g.stuetzstellen.keySet()) {
-			stuetzstellen.put(t + offset, g.stuetzstellen.get(t));
+		for (long t : g.keySet()) {
+			stuetzstellen.put(t + offset, g.get(t));
 		}
-		g.stuetzstellen = stuetzstellen;
+		g.clear();
+		g.putAll(stuetzstellen);
 		return g;
 	}
 
@@ -652,8 +653,8 @@ public final class GanglinienOperationen {
 		SortedSet<Long> zeitstempel;
 
 		zeitstempel = new TreeSet<Long>();
-		zeitstempel.addAll(g1.stuetzstellen.keySet());
-		zeitstempel.addAll(g2.stuetzstellen.keySet());
+		zeitstempel.addAll(g1.keySet());
+		zeitstempel.addAll(g2.keySet());
 
 		return new LinkedList<Long>(zeitstempel);
 	}

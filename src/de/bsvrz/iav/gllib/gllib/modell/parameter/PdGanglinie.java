@@ -268,16 +268,6 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 		}
 
 		/**
-		 * setzt den aktuellen Datenstatus.
-		 * 
-		 * @param datenStatus
-		 *            der neue Status
-		 */
-		protected void setDatenStatus(Status datenStatus) {
-			this.datenStatus = datenStatus;
-		}
-
-		/**
 		 * {@inheritDoc}
 		 * 
 		 * @see java.util.List#size()
@@ -311,6 +301,34 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 		 */
 		public <T> T[] toArray(T[] a) {
 			return ganglinien.toArray(a);
+		}
+
+		/**
+		 * {@inheritDoc}
+		 * 
+		 * @see java.lang.Object#toString()
+		 */
+		@Override
+		public String toString() {
+			String s;
+
+			s = getClass().getSimpleName() + "[";
+			s += "zeitpunkt=" + getZeitpunkt();
+			s += ", datenStatus=" + getDatenStatus();
+			s += ", Anzahl Ganglinien=" + ganglinien.size();
+			s += "]";
+
+			return s;
+		}
+
+		/**
+		 * setzt den aktuellen Datenstatus.
+		 * 
+		 * @param datenStatus
+		 *            der neue Status
+		 */
+		protected void setDatenStatus(Status datenStatus) {
+			this.datenStatus = datenStatus;
 		}
 
 	}
@@ -354,96 +372,6 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 	 */
 	public AttributeGroup getAttributGruppe() {
 		return atg;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatensatz#konvertiere(de.bsvrz.sys.funclib.bitctrl.modell.Datum)
-	 */
-	@Override
-	protected Data konvertiere(Daten datum) {
-		Data daten;
-		Array ganglinien;
-		int i;
-
-		daten = erzeugeSendeCache();
-
-		ganglinien = daten.getArray("Ganglinie");
-		ganglinien.setLength(datum.size());
-		i = 0;
-		for (GanglinieMQ g : datum) {
-			Array stuetzstellen;
-
-			ganglinien.getItem(i).getReferenceValue("EreignisTyp")
-					.setSystemObject(g.getEreignisTyp().getSystemObject());
-			ganglinien.getItem(i).getUnscaledValue("AnzahlVerschmelzungen")
-					.set(g.getAnzahlVerschmelzungen());
-			ganglinien.getItem(i).getTimeValue("LetzteVerschmelzung")
-					.setMillis(g.getLetzteVerschmelzung());
-			ganglinien.getItem(i).getUnscaledValue("GanglinienTyp").set(
-					g.getTyp());
-
-			if (g.isReferenz()) {
-				ganglinien.getItem(i).getUnscaledValue("Referenzganglinie")
-						.setText("Ja");
-			} else {
-				ganglinien.getItem(i).getUnscaledValue("Referenzganglinie")
-						.setText("Nein");
-			}
-
-			ganglinien.getItem(i).getUnscaledValue("GanglinienVerfahren").set(
-					g.getApproximationDaK());
-			ganglinien.getItem(i).getUnscaledValue("Ordnung").set(
-					g.getBSplineOrdnung());
-
-			stuetzstellen = ganglinien.getItem(i).getArray("Stützstelle");
-			List<Stuetzstelle<Messwerte>> liste = g.getStuetzstellen();
-			int j = 0;
-			stuetzstellen.setLength(liste.size());
-			for (Stuetzstelle<Messwerte> s : liste) {
-				stuetzstellen.getItem(j).getTimeValue("Zeit").setMillis(
-						s.getZeitstempel());
-
-				if (s.getWert().getQKfz() != null) {
-					stuetzstellen.getItem(j).getScaledValue("QKfz").set(
-							s.getWert().getQKfz());
-				} else {
-					stuetzstellen.getItem(j).getScaledValue("QKfz").set(
-							Messwerte.UNDEFINIERT);
-				}
-
-				if (s.getWert().getQLkw() != null) {
-					stuetzstellen.getItem(j).getScaledValue("QLkw").set(
-							s.getWert().getQLkw());
-				} else {
-					stuetzstellen.getItem(j).getScaledValue("QLkw").set(
-							Messwerte.UNDEFINIERT);
-				}
-
-				if (s.getWert().getVLkw() != null) {
-					stuetzstellen.getItem(j).getScaledValue("VLkw").set(
-							s.getWert().getVLkw());
-				} else {
-					stuetzstellen.getItem(j).getScaledValue("VLkw").set(
-							Messwerte.UNDEFINIERT);
-				}
-
-				if (s.getWert().getVPkw() != null) {
-					stuetzstellen.getItem(j).getScaledValue("VPkw").set(
-							s.getWert().getVPkw());
-				} else {
-					stuetzstellen.getItem(j).getScaledValue("VPkw").set(
-							Messwerte.UNDEFINIERT);
-				}
-
-				j++;
-			}
-
-			i++;
-		}
-
-		return daten;
 	}
 
 	/**
@@ -542,5 +470,95 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 		setDatum(result.getDataDescription().getAspect(), datum);
 		fireDatensatzAktualisiert(result.getDataDescription().getAspect(),
 				datum.clone());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatensatz#konvertiere(de.bsvrz.sys.funclib.bitctrl.modell.Datum)
+	 */
+	@Override
+	protected Data konvertiere(Daten datum) {
+		Data daten;
+		Array ganglinien;
+		int i;
+
+		daten = erzeugeSendeCache();
+
+		ganglinien = daten.getArray("Ganglinie");
+		ganglinien.setLength(datum.size());
+		i = 0;
+		for (GanglinieMQ g : datum) {
+			Array stuetzstellen;
+
+			ganglinien.getItem(i).getReferenceValue("EreignisTyp")
+					.setSystemObject(g.getEreignisTyp().getSystemObject());
+			ganglinien.getItem(i).getUnscaledValue("AnzahlVerschmelzungen")
+					.set(g.getAnzahlVerschmelzungen());
+			ganglinien.getItem(i).getTimeValue("LetzteVerschmelzung")
+					.setMillis(g.getLetzteVerschmelzung());
+			ganglinien.getItem(i).getUnscaledValue("GanglinienTyp").set(
+					g.getTyp());
+
+			if (g.isReferenz()) {
+				ganglinien.getItem(i).getUnscaledValue("Referenzganglinie")
+						.setText("Ja");
+			} else {
+				ganglinien.getItem(i).getUnscaledValue("Referenzganglinie")
+						.setText("Nein");
+			}
+
+			ganglinien.getItem(i).getUnscaledValue("GanglinienVerfahren").set(
+					g.getApproximationDaK());
+			ganglinien.getItem(i).getUnscaledValue("Ordnung").set(
+					g.getBSplineOrdnung());
+
+			stuetzstellen = ganglinien.getItem(i).getArray("Stützstelle");
+			List<Stuetzstelle<Messwerte>> liste = g.getStuetzstellen();
+			int j = 0;
+			stuetzstellen.setLength(liste.size());
+			for (Stuetzstelle<Messwerte> s : liste) {
+				stuetzstellen.getItem(j).getTimeValue("Zeit").setMillis(
+						s.getZeitstempel());
+
+				if (s.getWert().getQKfz() != null) {
+					stuetzstellen.getItem(j).getScaledValue("QKfz").set(
+							s.getWert().getQKfz());
+				} else {
+					stuetzstellen.getItem(j).getScaledValue("QKfz").set(
+							Messwerte.UNDEFINIERT);
+				}
+
+				if (s.getWert().getQLkw() != null) {
+					stuetzstellen.getItem(j).getScaledValue("QLkw").set(
+							s.getWert().getQLkw());
+				} else {
+					stuetzstellen.getItem(j).getScaledValue("QLkw").set(
+							Messwerte.UNDEFINIERT);
+				}
+
+				if (s.getWert().getVLkw() != null) {
+					stuetzstellen.getItem(j).getScaledValue("VLkw").set(
+							s.getWert().getVLkw());
+				} else {
+					stuetzstellen.getItem(j).getScaledValue("VLkw").set(
+							Messwerte.UNDEFINIERT);
+				}
+
+				if (s.getWert().getVPkw() != null) {
+					stuetzstellen.getItem(j).getScaledValue("VPkw").set(
+							s.getWert().getVPkw());
+				} else {
+					stuetzstellen.getItem(j).getScaledValue("VPkw").set(
+							Messwerte.UNDEFINIERT);
+				}
+
+				j++;
+			}
+
+			i++;
+		}
+
+		return daten;
 	}
 }

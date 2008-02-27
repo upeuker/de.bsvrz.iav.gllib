@@ -242,6 +242,29 @@ public class PdGanglinienModellPrognose extends
 		}
 
 		/**
+		 * {@inheritDoc}
+		 * 
+		 * @see java.lang.Object#toString()
+		 */
+		@Override
+		public String toString() {
+			String s;
+
+			s = getClass().getSimpleName() + "[";
+			s += "zeitpunkt=" + getZeitpunkt();
+			s += ", datenStatus=" + getDatenStatus();
+			s += ", auswahlMethode=" + auswahlMethode;
+			s += ", matchingIntervall=" + matchingIntervall;
+			s += ", maxDauerZyklischePrognose=" + maxDauerZyklischePrognose;
+			s += ", maxMatchingFehler=" + maxMatchingFehler;
+			s += ", patternMatchingHorizont=" + patternMatchingHorizont;
+			s += ", patternMatchingOffset=" + patternMatchingOffset;
+			s += "]";
+
+			return s;
+		}
+
+		/**
 		 * setzt den aktuellen Datenstatus.
 		 * 
 		 * @param datenStatus

@@ -33,6 +33,7 @@ import java.util.Map.Entry;
 import com.bitctrl.util.Interval;
 
 import de.bsvrz.iav.gllib.gllib.GanglinienOperationen;
+import de.bsvrz.iav.gllib.gllib.Stuetzstelle;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
 
 /**
@@ -62,16 +63,51 @@ public final class GanglinienMQOperationen {
 	public static GanglinieMQ addiere(GanglinieMQ g1, GanglinieMQ g2) {
 		assert g1.getMessQuerschnitt().equals(g2.getMessQuerschnitt()) : "Die Ganglinien müssen zum gleichen Messquerschnitt gehören.";
 
-		GanglinieMQ g;
+		final GanglinieMQ g;
+		final List<Stuetzstelle<Double>> stuetzstellenQKfz;
+		final List<Stuetzstelle<Double>> stuetzstellenQLkw;
+		final List<Stuetzstelle<Double>> stuetzstellenVPkw;
+		final List<Stuetzstelle<Double>> stuetzstellenVLkw;
 
 		g = new GanglinieMQ();
 		g.setMessQuerschnitt(g1.getMessQuerschnitt());
 		g.setApproximationDaK(g1.getApproximationDaK());
 
-		g.qKfz = GanglinienOperationen.addiere(g1.qKfz, g2.qKfz);
-		g.qLkw = GanglinienOperationen.addiere(g1.qLkw, g2.qLkw);
-		g.vPkw = GanglinienOperationen.addiere(g1.vPkw, g2.vPkw);
-		g.vLkw = GanglinienOperationen.addiere(g1.vLkw, g2.vLkw);
+		stuetzstellenQKfz = GanglinienOperationen.addiere(
+				g1.getGanglinieQKfz(), g2.getGanglinieQKfz())
+				.getStuetzstellen();
+		stuetzstellenQLkw = GanglinienOperationen.addiere(
+				g1.getGanglinieQLkw(), g2.getGanglinieQLkw())
+				.getStuetzstellen();
+		stuetzstellenVPkw = GanglinienOperationen.addiere(
+				g1.getGanglinieVPkw(), g2.getGanglinieVPkw())
+				.getStuetzstellen();
+		stuetzstellenVLkw = GanglinienOperationen.addiere(
+				g1.getGanglinieVLkw(), g2.getGanglinieVLkw())
+				.getStuetzstellen();
+
+		assert stuetzstellenQKfz.size() == stuetzstellenQLkw.size()
+				&& stuetzstellenQLkw.size() == stuetzstellenVPkw.size()
+				&& stuetzstellenVPkw.size() == stuetzstellenVLkw.size() : "Die berechneten Stützstellenlisten müssen gleich groß sein.";
+		for (int i = 0; i < stuetzstellenQKfz.size(); ++i) {
+			final long zeitstempel;
+			final Double qKfz, qLkw, vPkw, vLkw;
+
+			assert stuetzstellenQKfz.get(i).getZeitstempel() == stuetzstellenQLkw
+					.get(i).getZeitstempel()
+					&& stuetzstellenQLkw.get(i).getZeitstempel() == stuetzstellenVPkw
+							.get(i).getZeitstempel()
+					&& stuetzstellenVPkw.get(i).getZeitstempel() == stuetzstellenVLkw
+							.get(i).getZeitstempel() : "Die Stützstellen mit dem selben Index, müssen den selben Zeitstempel besitzen.";
+
+			zeitstempel = stuetzstellenQKfz.get(i).getZeitstempel();
+			qKfz = stuetzstellenQKfz.get(i).getWert();
+			qLkw = stuetzstellenQLkw.get(i).getWert();
+			vPkw = stuetzstellenVPkw.get(i).getWert();
+			vLkw = stuetzstellenVLkw.get(i).getWert();
+			g.setStuetzstelle(zeitstempel, new Messwerte(qKfz, qLkw, vPkw,
+					vLkw, g1.getK1(), g1.getK2()));
+		}
 
 		return g;
 	}

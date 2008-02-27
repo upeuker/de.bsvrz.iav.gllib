@@ -49,10 +49,11 @@ import com.bitctrl.util.Interval;
  * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
  */
-public class Ganglinie implements IGanglinie<Double> {
+public class Ganglinie extends TreeMap<Long, Double> implements
+		IGanglinie<Double> {
 
-	/** Speicher der St&uuml;tzstellen. */
-	SortedMap<Long, Double> stuetzstellen;
+	/** Die Eigenschaft {@code serialVersionUID}. */
+	private static final long serialVersionUID = 0;
 
 	/** Verfahren zur Berechnung der Punkte zwischen den St&uuml;tzstellen. */
 	private Approximation approximation;
@@ -64,7 +65,7 @@ public class Ganglinie implements IGanglinie<Double> {
 	 * Konstruiert eine Ganglinie ohne St&uuml;tzstellen.
 	 */
 	public Ganglinie() {
-		stuetzstellen = new TreeMap<Long, Double>();
+		approximation = new BSpline((byte) 5);
 	}
 
 	/**
@@ -77,7 +78,7 @@ public class Ganglinie implements IGanglinie<Double> {
 	public Ganglinie(Collection<Stuetzstelle<Double>> stuetzstellen) {
 		this();
 		for (Stuetzstelle<Double> s : stuetzstellen) {
-			this.stuetzstellen.put(s.getZeitstempel(), s.getWert());
+			put(s.getZeitstempel(), s.getWert());
 		}
 	}
 
@@ -91,9 +92,7 @@ public class Ganglinie implements IGanglinie<Double> {
 	 */
 	public Ganglinie(Map<Long, Double> stuetzstellen) {
 		this();
-		for (long t : stuetzstellen.keySet()) {
-			this.stuetzstellen.put(t, stuetzstellen.get(t));
-		}
+		putAll(stuetzstellen);
 	}
 
 	/**
@@ -113,7 +112,7 @@ public class Ganglinie implements IGanglinie<Double> {
 	 * {@inheritDoc}
 	 */
 	public int anzahlStuetzstellen() {
-		return stuetzstellen.size();
+		return size();
 	}
 
 	/**
@@ -126,7 +125,7 @@ public class Ganglinie implements IGanglinie<Double> {
 	public Ganglinie clone() {
 		Ganglinie g;
 
-		g = new Ganglinie(stuetzstellen);
+		g = new Ganglinie(this);
 		g.setApproximation(approximation);
 		return g;
 	}
@@ -135,7 +134,7 @@ public class Ganglinie implements IGanglinie<Double> {
 	 * {@inheritDoc}
 	 */
 	public boolean existsStuetzstelle(long zeitstempel) {
-		return stuetzstellen.containsKey(zeitstempel);
+		return containsKey(zeitstempel);
 	}
 
 	/**
@@ -149,11 +148,11 @@ public class Ganglinie implements IGanglinie<Double> {
 	 * {@inheritDoc}
 	 */
 	public Interval getIntervall() {
-		if (stuetzstellen.size() == 0) {
+		if (size() == 0) {
 			return null;
 		}
 
-		return new Interval(stuetzstellen.firstKey(), stuetzstellen.lastKey());
+		return new Interval(firstKey(), lastKey());
 	}
 
 	/**
@@ -167,11 +166,11 @@ public class Ganglinie implements IGanglinie<Double> {
 		start = null;
 		ende = null;
 
-		for (long t : stuetzstellen.keySet()) {
+		for (long t : keySet()) {
 			if (start == null) {
 				// Beginn eines neuen Intervalls
-				if (stuetzstellen.get(t) != null) {
-					if (t == stuetzstellen.lastKey()) {
+				if (get(t) != null) {
+					if (t == lastKey()) {
 						// Die letzte Stützstelle ist das letzte Intervall
 						intervalle.add(new Interval(t, t));
 					} else {
@@ -179,7 +178,7 @@ public class Ganglinie implements IGanglinie<Double> {
 					}
 				}
 			} else {
-				if (stuetzstellen.get(t) == null) {
+				if (get(t) == null) {
 					// Definitionslücke gefunden
 					if (ende != null) {
 						intervalle.add(new Interval(start, ende));
@@ -191,10 +190,10 @@ public class Ganglinie implements IGanglinie<Double> {
 					}
 				} else {
 					// Intervall verlängern
-					if (stuetzstellen.get(t) != null) {
+					if (get(t) != null) {
 						ende = t;
 					}
-					if (t == stuetzstellen.lastKey()) {
+					if (t == lastKey()) {
 						// Die letzte Stützstelle ist das letzte Intervall
 						intervalle.add(new Interval(start, ende));
 					}
@@ -232,8 +231,8 @@ public class Ganglinie implements IGanglinie<Double> {
 		List<Stuetzstelle<Double>> liste;
 
 		liste = new ArrayList<Stuetzstelle<Double>>();
-		for (long t : stuetzstellen.keySet()) {
-			liste.add(new Stuetzstelle<Double>(t, stuetzstellen.get(t)));
+		for (long t : keySet()) {
+			liste.add(new Stuetzstelle<Double>(t, get(t)));
 		}
 
 		return liste;
@@ -246,8 +245,7 @@ public class Ganglinie implements IGanglinie<Double> {
 		SortedMap<Long, Double> menge;
 		List<Stuetzstelle<Double>> liste;
 
-		menge = stuetzstellen.subMap(intervall.getStart(),
-				intervall.getEnd() + 1);
+		menge = subMap(intervall.getStart(), intervall.getEnd() + 1);
 		liste = new ArrayList<Stuetzstelle<Double>>();
 		for (long t : menge.keySet()) {
 			liste.add(getStuetzstelle(t));
@@ -303,7 +301,7 @@ public class Ganglinie implements IGanglinie<Double> {
 	 * {@inheritDoc}
 	 */
 	public void remove(long zeitstempel) {
-		stuetzstellen.remove(zeitstempel);
+		remove(zeitstempel);
 		approximationAktuell = false;
 	}
 
@@ -311,7 +309,7 @@ public class Ganglinie implements IGanglinie<Double> {
 	 * Entfernt alle St&uuml;tzstellen.
 	 */
 	public void removeAll() {
-		stuetzstellen.clear();
+		clear();
 		approximationAktuell = false;
 	}
 
@@ -329,7 +327,7 @@ public class Ganglinie implements IGanglinie<Double> {
 	public boolean setStuetzstelle(long zeitstempel, Double wert) {
 		boolean neu;
 
-		neu = stuetzstellen.put(zeitstempel, wert) == null;
+		neu = put(zeitstempel, wert) == null;
 		approximationAktuell = false;
 		return neu;
 	}

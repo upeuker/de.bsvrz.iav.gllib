@@ -40,7 +40,7 @@ public class BSpline extends AbstractApproximation {
 	public static final long INTEGRATIONSINTERVALL = 60 * 1000;
 
 	/** Die Ordnung des B-Splines. */
-	private byte ordnung;
+	private int ordnung;
 
 	/** Grenzstellen der Interpolationsintervalle, aufsteigend sortiert. */
 	private int[] t;
@@ -49,7 +49,7 @@ public class BSpline extends AbstractApproximation {
 	 * Erzeugt einen B-Spline mit der Ordnung 5.
 	 */
 	public BSpline() {
-		this((byte) 5);
+		this(5);
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class BSpline extends AbstractApproximation {
 	 * @param ordnung
 	 *            die Ordnung des Bspline.
 	 */
-	public BSpline(byte ordnung) {
+	public BSpline(int ordnung) {
 		this.ordnung = ordnung;
 	}
 
@@ -117,7 +117,7 @@ public class BSpline extends AbstractApproximation {
 	 * 
 	 * @return Ordnung
 	 */
-	public byte getOrdnung() {
+	public int getOrdnung() {
 		return ordnung;
 	}
 
