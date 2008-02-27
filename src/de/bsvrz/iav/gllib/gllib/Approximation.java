@@ -33,7 +33,7 @@ import java.util.SortedSet;
 import com.bitctrl.util.Interval;
 
 /**
- * Schnittstelle f&uuml;r alle Approximationsmethoden von Ganglinien.
+ * Schnittstelle für alle Approximationsmethoden von Ganglinien.
  * Implementierende Klassen sollten einen parameterlosen Konstruktor besitzen.
  * 
  * @author BitCtrl Systems GmbH, Falko Schumann
@@ -42,11 +42,11 @@ import com.bitctrl.util.Interval;
 public interface Approximation {
 
 	/**
-	 * Gibt die St&uuml;tzstelle zum angegebenen Zeitstempel zur&uuml;ck.
+	 * Gibt die Stützstelle zum angegebenen Zeitstempel zurück.
 	 * 
 	 * @param zeitstempel
 	 *            Zeitstempel
-	 * @return Wert als St&uuml;tzstelle
+	 * @return Wert als Stützstelle
 	 */
 	Stuetzstelle<Double> get(long zeitstempel);
 
@@ -66,7 +66,7 @@ public interface Approximation {
 	List<Stuetzstelle<Double>> getStuetzstellen();
 
 	/**
-	 * F&uuml;hrt notwendige Initialisierungsarbeiten der Approximation aus.
+	 * Führt notwendige Initialisierungsarbeiten der Approximation aus.
 	 */
 	void initialisiere();
 
@@ -80,24 +80,24 @@ public interface Approximation {
 	double integral(Interval intervall);
 
 	/**
-	 * Gibt eine Interpolation der Approximation zur&uuml;ck. N&uuml;tzlich
-	 * f&uuml;r die grafische Darstellung von Ganglinien, indem in einem festen
-	 * Abstand St&uuml;tzstellen berechnet werden, die als Polygonzug
+	 * Gibt eine Interpolation der Approximation zurück. Nützlich
+	 * für die grafische Darstellung von Ganglinien, indem in einem festen
+	 * Abstand Stützstellen berechnet werden, die als Polygonzug
 	 * darstellbar sind.
 	 * 
 	 * @param intervallBreite
-	 *            Die gew&uuml;nschte Breite der Intervalle
-	 * @return Nach Zeitstempel sortierte Liste der St&uuml;tzstellen
+	 *            Die gewünschte Breite der Intervalle
+	 * @return Nach Zeitstempel sortierte Liste der Stützstellen
 	 * @throws IllegalArgumentException
 	 *             Wenn die Intervallbreite kleiner oder gleich 0 ist
 	 */
 	SortedSet<Stuetzstelle<Double>> interpoliere(long intervallBreite);
 
 	/**
-	 * Legt die St&uuml;tzstellen der Approximation fest.
+	 * Legt die Stützstellen der Approximation fest.
 	 * 
 	 * @param stuetzstellen
-	 *            die Menge der bekannten St&uuml;tzstellen.
+	 *            die Menge der bekannten Stützstellen.
 	 */
 	void setStuetzstellen(Collection<Stuetzstelle<Double>> stuetzstellen);
 

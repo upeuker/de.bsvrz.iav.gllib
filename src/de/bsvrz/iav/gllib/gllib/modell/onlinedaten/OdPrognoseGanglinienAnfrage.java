@@ -148,7 +148,7 @@ public class OdPrognoseGanglinienAnfrage extends
 		}
 
 		/**
-		 * Es wird eine flache Kopie zur&uuml;ckgegeben.
+		 * Es wird eine flache Kopie zurückgegeben.
 		 * 
 		 * {@inheritDoc}
 		 * 
@@ -186,7 +186,7 @@ public class OdPrognoseGanglinienAnfrage extends
 		}
 
 		/**
-		 * Gibt die anfragende Applikation zur&uuml;ck.
+		 * Gibt die anfragende Applikation zurück.
 		 * 
 		 * @return die Applikation.
 		 */
@@ -195,7 +195,7 @@ public class OdPrognoseGanglinienAnfrage extends
 		}
 
 		/**
-		 * Gibt die Zeichenkette zur&uuml;ck, die der Absender in der Nachricht
+		 * Gibt die Zeichenkette zurück, die der Absender in der Nachricht
 		 * frei eintragen darf.
 		 * 
 		 * @return Eine Zeichenkette

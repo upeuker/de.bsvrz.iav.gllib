@@ -30,7 +30,7 @@ import com.bitctrl.util.Interval;
 
 /**
  * Approximation einer Ganglinie mit Hilfe von Polylines. Der Wert der
- * St&uuml;tzstelle zu einem Zeitstempel wird nach folgender Formel berechnet:
+ * Stützstelle zu einem Zeitstempel wird nach folgender Formel berechnet:
  * <p>
  * <img src="doc-files/formel_polyline.png">
  * 

@@ -29,8 +29,8 @@ package de.bsvrz.iav.gllib.gllib.dav;
 import java.util.EventListener;
 
 /**
- * Schnittsstelle die anfragende Applikationen implementieren m&uuml;ssen, um
- * &uuml;ber das Eintreffen der Prognoseantwort informiert zu werden.
+ * Schnittsstelle die anfragende Applikationen implementieren müssen, um
+ * über das Eintreffen der Prognoseantwort informiert zu werden.
  * 
  * @author BitCtrl Systems GmbH, Schumann
  * @version $Id$
@@ -38,7 +38,7 @@ import java.util.EventListener;
 public interface GlProgAntwortListener extends EventListener {
 
 	/**
-	 * Wird ausgel&ouml;&szlig;t, wenn die Antwort auf eine Prognoseanfrage
+	 * Wird ausgelößt, wenn die Antwort auf eine Prognoseanfrage
 	 * eingetroffen ist.
 	 * 
 	 * @param e

@@ -114,7 +114,7 @@ public class BSplineTest {
 	}
 
 	/**
-	 * Pr&uuml;ft ob bei Anfrage einer St&uuml;tzstelle auch der richtige
+	 * Prüft ob bei Anfrage einer Stützstelle auch der richtige
 	 * Zeitstempel kommt. Beim B-Spline ist dies nicht trivial. Dieser Test
 	 * arbeitet mit einer vorgegebenen Ganglinie.
 	 */
@@ -146,9 +146,9 @@ public class BSplineTest {
 	}
 
 	// /**
-	// * Pr&uuml;ft ob bei Anfrage einer St&uuml;tzstelle auch der richtige
+	// * Prüft ob bei Anfrage einer Stützstelle auch der richtige
 	// * Zeitstempel kommt. Beim B-Spline ist dies nicht trivial. Dieser Test
-	// * arbeitet mit einer zuf&auml;lligen Ganglinie.
+	// * arbeitet mit einer zufälligen Ganglinie.
 	// */
 	// @Test
 	// public void testGetB() {

@@ -36,7 +36,7 @@ import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjektTyp;
 
 /**
- * Fabrikmethode f&uuml;r gekapselte Systemobjekte aus dem Ganglinienmodell.
+ * Fabrikmethode für gekapselte Systemobjekte aus dem Ganglinienmodell.
  * Jedes gekapselte Objekt wird als Singleton behandelt und zwischengespeichert.
  * 
  * @author BitCtrl Systems GmbH, Falko Schumann

@@ -124,7 +124,7 @@ public abstract class AbstractApproximation implements Approximation {
 
 	/**
 	 * Bestimmt die Liste der verwendeten Stützstellen. Die Liste entspricht der
-	 * Ganglinie, abz&uuml;glich der undefinierten Stützstellen.
+	 * Ganglinie, abzüglich der undefinierten Stützstellen.
 	 * 
 	 * {@inheritDoc}
 	 */

@@ -36,8 +36,8 @@ import java.util.TreeMap;
 import com.bitctrl.util.Interval;
 
 /**
- * Repr&auml;sentiert eine allgemeine Ganglinie, bestehend aus einer sortierten
- * Menge von St&uuml;tzstellen und der Angabe eines Interpolationsverfahren.
+ * Repräsentiert eine allgemeine Ganglinie, bestehend aus einer sortierten
+ * Menge von Stützstellen und der Angabe eines Interpolationsverfahren.
  * Wird kein Approximationsverfahren festgelegt, wird ein
  * {@link de.bsvrz.iav.gllib.gllib.BSpline B-Spline} mit Standardordnung
  * angenommen.
@@ -55,25 +55,25 @@ public class Ganglinie extends TreeMap<Long, Double> implements
 	/** Die Eigenschaft {@code serialVersionUID}. */
 	private static final long serialVersionUID = 0;
 
-	/** Verfahren zur Berechnung der Punkte zwischen den St&uuml;tzstellen. */
+	/** Verfahren zur Berechnung der Punkte zwischen den Stützstellen. */
 	private Approximation approximation;
 
 	/** Flag, ob die Approximation aktuallisiert werden muss. */
 	private boolean approximationAktuell = false;
 
 	/**
-	 * Konstruiert eine Ganglinie ohne St&uuml;tzstellen.
+	 * Konstruiert eine Ganglinie ohne Stützstellen.
 	 */
 	public Ganglinie() {
 		approximation = new BSpline((byte) 5);
 	}
 
 	/**
-	 * Kopierkonstruktor. Es werden die St&uuml;tzstellen aus der
-	 * <em>Collection</em> &uuml;bernommen.
+	 * Kopierkonstruktor. Es werden die Stützstellen aus der
+	 * <em>Collection</em> übernommen.
 	 * 
 	 * @param stuetzstellen
-	 *            Die St&uuml;tzstellen der Ganglinie.
+	 *            Die Stützstellen der Ganglinie.
 	 */
 	public Ganglinie(Collection<Stuetzstelle<Double>> stuetzstellen) {
 		this();
@@ -83,12 +83,12 @@ public class Ganglinie extends TreeMap<Long, Double> implements
 	}
 
 	/**
-	 * Kopierkonstruktor. Es werden die St&uuml;tzstellen aus der <em>Map</em>
-	 * &uuml;bernommen, wobei die Schl&uuml;ssel als Zeitstempel interpretiert
+	 * Kopierkonstruktor. Es werden die Stützstellen aus der <em>Map</em>
+	 * übernommen, wobei die Schlüssel als Zeitstempel interpretiert
 	 * werden (Zeitstempel -> Wert).
 	 * 
 	 * @param stuetzstellen
-	 *            Die St&uuml;tzstellen der Ganglinie.
+	 *            Die Stützstellen der Ganglinie.
 	 */
 	public Ganglinie(Map<Long, Double> stuetzstellen) {
 		this();
@@ -117,7 +117,7 @@ public class Ganglinie extends TreeMap<Long, Double> implements
 
 	/**
 	 * Kopiert die St&uumltzstellen und das Approximationsverfahren. Der Wert
-	 * f&uuml;r {@code approximationAktuell} wird auf false gesetzt.
+	 * für {@code approximationAktuell} wird auf false gesetzt.
 	 * 
 	 * {@inheritDoc}
 	 */
@@ -306,7 +306,7 @@ public class Ganglinie extends TreeMap<Long, Double> implements
 	}
 
 	/**
-	 * Entfernt alle St&uuml;tzstellen.
+	 * Entfernt alle Stützstellen.
 	 */
 	public void removeAll() {
 		clear();

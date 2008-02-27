@@ -149,7 +149,7 @@ public class OdPrognoseGanglinienAntwort extends
 		}
 
 		/**
-		 * Es wird eine flache Kopie zur&uuml;ckgegeben.
+		 * Es wird eine flache Kopie zurückgegeben.
 		 * 
 		 * {@inheritDoc}
 		 * 
@@ -186,7 +186,7 @@ public class OdPrognoseGanglinienAntwort extends
 		}
 
 		/**
-		 * Gibt das Zeichen des Absenders zur&uuml;ck. Der Text wurde bei der
+		 * Gibt das Zeichen des Absenders zurück. Der Text wurde bei der
 		 * Anfrage in die Anfragenachricht eingetragen und von der
 		 * Ganglinienprognose in die Antwort kopiert. Somit kann die anfragende
 		 * Applikation mehrere Anfragen unterscheiden.

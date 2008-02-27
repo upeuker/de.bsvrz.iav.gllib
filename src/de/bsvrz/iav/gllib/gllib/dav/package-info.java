@@ -26,8 +26,8 @@
 
 /**
  * Mit der Klasse {@link de.bsvrz.iav.gllib.gllib.dav.Ganglinienprognose}
- * k&ouml;nnen Anfragen an die Ganglinienprognose gestellt werden, ohne den
- * Datenkatalog kennen zu m&uuml;ssen.
+ * können Anfragen an die Ganglinienprognose gestellt werden, ohne den
+ * Datenkatalog kennen zu müssen.
  */
 package de.bsvrz.iav.gllib.gllib.dav;
 

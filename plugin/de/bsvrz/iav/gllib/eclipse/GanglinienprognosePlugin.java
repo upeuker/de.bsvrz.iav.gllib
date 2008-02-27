@@ -47,7 +47,7 @@ public class GanglinienprognosePlugin extends AbstractUIPlugin {
 	private static GanglinienprognosePlugin plugin;
 
 	/**
-	 * Gibt die Instanz des Plugin zur&uuml;ck, nachdem es initialisiert wurde.
+	 * Gibt die Instanz des Plugin zurück, nachdem es initialisiert wurde.
 	 * 
 	 * @return das Plugin.
 	 */

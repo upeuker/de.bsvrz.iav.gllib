@@ -113,7 +113,7 @@ public class BSpline extends AbstractApproximation {
 	}
 
 	/**
-	 * Gibt die Ordgung des B-Splines zur&uuml;ck.
+	 * Gibt die Ordgung des B-Splines zurück.
 	 * 
 	 * @return Ordnung
 	 */
@@ -230,15 +230,15 @@ public class BSpline extends AbstractApproximation {
 	}
 
 	/**
-	 * Berechnet rekursiv das Gewicht einer St&uuml;tzstelle.
+	 * Berechnet rekursiv das Gewicht einer Stützstelle.
 	 * 
 	 * @param i
-	 *            Index der St&uuml;tzstelle, dessen Gewicht gesucht ist
+	 *            Index der Stützstelle, dessen Gewicht gesucht ist
 	 * @param m
 	 *            Ordnung des B-Spline und gleichzeitig Invariante der Rekursion
 	 * @param t0
 	 *            Wert im Intervall des Parameters t
-	 * @return Das Gewicht der i-ten St&uuml;tzstelle
+	 * @return Das Gewicht der i-ten Stützstelle
 	 */
 	private double n(int i, int m, double t0) {
 		double n; // Gewicht

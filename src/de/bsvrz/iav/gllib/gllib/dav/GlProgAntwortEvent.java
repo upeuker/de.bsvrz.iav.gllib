@@ -37,8 +37,8 @@ import de.bsvrz.iav.gllib.gllib.modell.onlinedaten.OdPrognoseGanglinienAntwort;
 import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.objekte.MessQuerschnittAllgemein;
 
 /**
- * Repr&auml;sentiert eine Antwortnachricht der Ganglinienprognose. Enthalten
- * sind f&uuml;r alle angefragten Messquerschnitte die prognostizuierten
+ * Repräsentiert eine Antwortnachricht der Ganglinienprognose. Enthalten
+ * sind für alle angefragten Messquerschnitte die prognostizuierten
  * Ganglinien.
  * <p>
  * Hinweis: Dieses Event ist nicht Serialisierbar, da enthaltene Objekt nicht
@@ -76,7 +76,7 @@ public class GlProgAntwortEvent extends EventObject {
 	}
 
 	/**
-	 * Gibt das Zeichen des Absenders zur&uuml;ck. Der Text wurde bei der
+	 * Gibt das Zeichen des Absenders zurück. Der Text wurde bei der
 	 * Anfrage in die Anfragenachricht eingetragen und von der
 	 * Ganglinienprognose in die Antwort kopiert. Somit kann die anfragende
 	 * Applikation mehrere Anfragen unterscheiden.
@@ -88,7 +88,7 @@ public class GlProgAntwortEvent extends EventObject {
 	}
 
 	/**
-	 * Gibt die Menge der prognostizierten Ganglinien zur&uuml;ck.
+	 * Gibt die Menge der prognostizierten Ganglinien zurück.
 	 * 
 	 * @return eine Menge von Ganglinien.
 	 */
@@ -97,7 +97,7 @@ public class GlProgAntwortEvent extends EventObject {
 	}
 
 	/**
-	 * Gibt die Menge der Messquerschnitte zur&uuml;ck, f&uuml;r die Ganglinien
+	 * Gibt die Menge der Messquerschnitte zurück, für die Ganglinien
 	 * prognostiziert wurden.
 	 * 
 	 * @return eine Menge von Messquerschnitten.
@@ -107,7 +107,7 @@ public class GlProgAntwortEvent extends EventObject {
 	}
 
 	/**
-	 * Gibt die prognostizierte Ganglinie zu einem Messquerschnitt zur&uuml;ck.
+	 * Gibt die prognostizierte Ganglinie zu einem Messquerschnitt zurück.
 	 * 
 	 * @param mq
 	 *            ein Messquerschnitt.

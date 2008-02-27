@@ -68,7 +68,7 @@ public class CubicSpline extends AbstractApproximation {
 	/** Der vierte Koeffizient des Polynoms. */
 	private RationaleZahl[] d;
 
-	/** Die Abst&auml;nde der St&uuml;tzstellen. */
+	/** Die Abstände der Stützstellen. */
 	private RationaleZahl[] h;
 
 	/**
@@ -193,11 +193,11 @@ public class CubicSpline extends AbstractApproximation {
 	}
 
 	/**
-	 * Berechnet die St&uuml;tzstelle.
+	 * Berechnet die Stützstelle.
 	 * 
 	 * @param zeitstempel
-	 *            Zeitstempel der gesuchten St&uuml;tzstelle
-	 * @return Die gesuchte St&uuml;tzstelle
+	 *            Zeitstempel der gesuchten Stützstelle
+	 * @return Die gesuchte Stützstelle
 	 */
 	private Stuetzstelle<Double> berechneStuetzstelle(long zeitstempel) {
 		RationaleZahl r, x, xi;

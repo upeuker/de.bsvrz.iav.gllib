@@ -30,33 +30,33 @@ import java.text.DateFormat;
 import java.util.Date;
 
 /**
- * Repr&auml;sentiert eine allgemeine St&uuml;tzstelle f&uuml;r Ganglinien
- * bestehend aus Zeitstempel und Wert. Die St&uuml;tzstellen k&ouml;nnen nach
- * den Zeitstempeln sortiert werden. Ist der Wert einer St&uuml;tzstelle
+ * Repräsentiert eine allgemeine Stützstelle für Ganglinien
+ * bestehend aus Zeitstempel und Wert. Die Stützstellen können nach
+ * den Zeitstempeln sortiert werden. Ist der Wert einer Stützstelle
  * <em>undefiniert</em> ({@code null}), so ist auch das Intervall bis zur
- * vorherigen und n&auml;chsten St&uuml;tzstelle <em>undefiniert</em>.
+ * vorherigen und nächsten Stützstelle <em>undefiniert</em>.
  * <p>
- * <strong>Hinweis:</strong> Die nat&uuml;rliche Ordnung der St&uuml;tzstellen
- * ist <em>nicht</em> konsistent mit der Gleichheit. Zwei St&uuml;tzstellen
- * sind gleich, wenn sie in Zeitstempel und Wert &uuml;bereinstimmen. Die
- * nat&uuml;rliche Ordung hingegen bassiert ausschlie&szlig;lich auf den
+ * <strong>Hinweis:</strong> Die natürliche Ordnung der Stützstellen
+ * ist <em>nicht</em> konsistent mit der Gleichheit. Zwei Stützstellen
+ * sind gleich, wenn sie in Zeitstempel und Wert übereinstimmen. Die
+ * natürliche Ordung hingegen bassiert ausschließlich auf den
  * Zeitstempeln und ignoriert die Werte.
  * 
  * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
  * @param <T>
- *            der Typ des Wertes der St&uuml;tzstelle.
+ *            der Typ des Wertes der Stützstelle.
  */
 public class Stuetzstelle<T> implements Comparable<Stuetzstelle<T>> {
 
-	/** Der Wert an der St&uuml;tzstelle. */
+	/** Der Wert an der Stützstelle. */
 	private final T wert;
 
-	/** Zeitpunkt der St&uuml;tzstelle. */
+	/** Zeitpunkt der Stützstelle. */
 	private final long zeitstempel;
 
 	/**
-	 * Initialisierung. F&uuml;r den Wert wird <code>null</code>
+	 * Initialisierung. Für den Wert wird <code>null</code>
 	 * (=undefiniert) angenommen.
 	 * 
 	 * @param zeitstempel
@@ -72,7 +72,7 @@ public class Stuetzstelle<T> implements Comparable<Stuetzstelle<T>> {
 	 * @param zeitstempel
 	 *            Zeitstempel
 	 * @param wert
-	 *            Wert oder {@code null} f&uuml;r "undefiniert"
+	 *            Wert oder {@code null} für "undefiniert"
 	 */
 	public Stuetzstelle(long zeitstempel, T wert) {
 		this.zeitstempel = zeitstempel;
@@ -80,13 +80,13 @@ public class Stuetzstelle<T> implements Comparable<Stuetzstelle<T>> {
 	}
 
 	/**
-	 * Eine St&uuml;tzstelle ist kleiner bzw gr&ouml;&szlig;er, wenn der
-	 * Zeitstempel kleiner bzw gr&ouml;&szlig;er ist.
+	 * Eine Stützstelle ist kleiner bzw größer, wenn der
+	 * Zeitstempel kleiner bzw größer ist.
 	 * 
 	 * @param stuetzstelle
-	 *            Eine St&uuml;tzstelle zum Vergleichen
-	 * @return -1, 0 oder +1, wenn der Zeitstempel dieser St&uuml;tzstelle
-	 *         kleiner, gleich oder gr&ouml;&szlig;er als die St&uuml;tzstelle
+	 *            Eine Stützstelle zum Vergleichen
+	 * @return -1, 0 oder +1, wenn der Zeitstempel dieser Stützstelle
+	 *         kleiner, gleich oder größer als die Stützstelle
 	 *         im Parameter ist
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
@@ -101,7 +101,7 @@ public class Stuetzstelle<T> implements Comparable<Stuetzstelle<T>> {
 	}
 
 	/**
-	 * Zwei St&uuml;tzstellen sind identisch, wenn beide den selben Zeitstempel
+	 * Zwei Stützstellen sind identisch, wenn beide den selben Zeitstempel
 	 * und Wert haben.
 	 * 
 	 * {@inheritDoc}
@@ -124,16 +124,16 @@ public class Stuetzstelle<T> implements Comparable<Stuetzstelle<T>> {
 	}
 
 	/**
-	 * Gibt den Wert der St&uuml;tzstelle zur&uuml;ck.
+	 * Gibt den Wert der Stützstelle zurück.
 	 * 
-	 * @return Wert oder {@code null} f&uuml;r "undefiniert"
+	 * @return Wert oder {@code null} für "undefiniert"
 	 */
 	public T getWert() {
 		return wert;
 	}
 
 	/**
-	 * Gibt den Zeitstempel der St&uuml;tzstelle zur&uuml;ck.
+	 * Gibt den Zeitstempel der Stützstelle zurück.
 	 * 
 	 * @return Zeitstempel
 	 */

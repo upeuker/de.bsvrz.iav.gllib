@@ -65,7 +65,7 @@ public class PdGanglinienModellPrognose extends
 		private int auswahlMethode;
 
 		/**
-		 * Intervall in die Vergangenheit, was ber&uuml;cksichtigt wird.
+		 * Intervall in die Vergangenheit, was berücksichtigt wird.
 		 * 
 		 * @todo überlappt sich mit {@link #patternMatchingOffset}
 		 */

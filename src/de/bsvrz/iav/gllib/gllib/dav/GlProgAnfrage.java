@@ -38,7 +38,7 @@ import de.bsvrz.sys.funclib.bitctrl.modell.kalender.objekte.EreignisTyp;
 import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.objekte.MessQuerschnittAllgemein;
 
 /**
- * Repr&auml;sentiert eine einzelne Anfrage einer Anfragenachricht an die
+ * Repräsentiert eine einzelne Anfrage einer Anfragenachricht an die
  * Ganglinienprognose.
  * 
  * @author BitCtrl Systems GmbH, Schumann
@@ -46,10 +46,10 @@ import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.objekte.MessQuerschnittAllgem
  */
 public class GlProgAnfrage {
 
-	/** Messquerschnitt f&uuml;r den eine Ganglinie angefragt wird. */
+	/** Messquerschnitt für den eine Ganglinie angefragt wird. */
 	private MessQuerschnittAllgemein messQuerschnitt;
 
-	/** Der Zeitraum in f&uuml;r den die Ganglinie bestimmt werden soll. */
+	/** Der Zeitraum in für den die Ganglinie bestimmt werden soll. */
 	private Interval prognoseZeitraum;
 
 	/** Nur Auswahlverfahren der langfristigen Prognose benutzen? */
@@ -61,17 +61,17 @@ public class GlProgAnfrage {
 	/** Soll eine zyklische Prognose erstellt werden? */
 	private boolean zyklischePrognose;
 
-	/** Sp&auml;testens nach dieser Zeit in Sekunden Prognose pr&uuml;fen. */
+	/** Spätestens nach dieser Zeit in Sekunden Prognose prüfen. */
 	private long pruefIntervall;
 
 	/** Maximale &Auml;nderung in Prozent zwischen zwei zyklischen Prognosen. */
 	private double schwelle;
 
-	/** Sp&auml;testens nach dieser Zeit in Sekunden Prognose publizieren. */
+	/** Spätestens nach dieser Zeit in Sekunden Prognose publizieren. */
 	private long sendeIntervall;
 
 	/**
-	 * Konstruktor f&uuml;r Vererbung.
+	 * Konstruktor für Vererbung.
 	 */
 	public GlProgAnfrage() {
 		ereignisTypen = new HashSet<EreignisTyp>();
@@ -79,11 +79,11 @@ public class GlProgAnfrage {
 
 	/**
 	 * Generiert eine einmalige Anfrage. Die Option "zyklische Anfrage" wird auf
-	 * {@code false} gesetzt und die davon abh&auml;ngigen Parameter mit
+	 * {@code false} gesetzt und die davon abhängigen Parameter mit
 	 * Defaultwerten belegt.
 	 * 
 	 * @param mq
-	 *            der Messquerschnitt f&uuml;r den eine Ganglinie angefragt
+	 *            der Messquerschnitt für den eine Ganglinie angefragt
 	 *            wird.
 	 * @param prognoseZeitraum
 	 *            der Zeitraum der Prognose.
@@ -99,7 +99,7 @@ public class GlProgAnfrage {
 	 * Generiert eine Anfrage.
 	 * 
 	 * @param mq
-	 *            der Messquerschnitt f&uuml;r den eine Ganglinie angefragt
+	 *            der Messquerschnitt für den eine Ganglinie angefragt
 	 *            wird.
 	 * @param prognoseZeitraum
 	 *            der Zeitraum der Prognose.
@@ -108,13 +108,13 @@ public class GlProgAnfrage {
 	 * @param zyklischePrognose
 	 *            Soll eine zyklische Prognose erstellt werden?
 	 * @param pruefIntervall
-	 *            Sp&auml;testens nach dieser Zeit in Sekunden Prognose
-	 *            pr&uuml;fen.
+	 *            Spätestens nach dieser Zeit in Sekunden Prognose
+	 *            prüfen.
 	 * @param schwelle
 	 *            Maximale &Auml;nderung in Prozent zwischen zwei zyklischen
 	 *            Prognosen.
 	 * @param sendeIntervall
-	 *            Sp&auml;testens nach dieser Zeit in Sekunden Prognose
+	 *            Spätestens nach dieser Zeit in Sekunden Prognose
 	 *            publizieren.
 	 */
 	public GlProgAnfrage(MessQuerschnittAllgemein mq,
@@ -159,7 +159,7 @@ public class GlProgAnfrage {
 	 * 
 	 * @param daten
 	 *            ein Datum, welches eine (leere) Anfrage darstellt.
-	 * @return das ausgef&uuml;llte Datum.
+	 * @return das ausgefüllte Datum.
 	 */
 	public Data getDaten(Data daten) {
 		Array feld;
@@ -199,7 +199,7 @@ public class GlProgAnfrage {
 	}
 
 	/**
-	 * Gibt die Menge der ausgeschlossenen Ereignistypen zur&uuml;ck.
+	 * Gibt die Menge der ausgeschlossenen Ereignistypen zurück.
 	 * 
 	 * @return Ereignistypeniterator
 	 */
@@ -208,8 +208,8 @@ public class GlProgAnfrage {
 	}
 
 	/**
-	 * Gibt den Messquerschnitt f&uuml;r den eine Ganglinie angefragt wird
-	 * zur&uuml;ck.
+	 * Gibt den Messquerschnitt für den eine Ganglinie angefragt wird
+	 * zurück.
 	 * 
 	 * @return Ein Messquerschnitt
 	 */
@@ -230,12 +230,12 @@ public class GlProgAnfrage {
 	}
 
 	/**
-	 * Sp&auml;testens nach dieser Zeit in Sekunden wird die Prognose
-	 * gepr&uuml;ft.
+	 * Spätestens nach dieser Zeit in Sekunden wird die Prognose
+	 * geprüft.
 	 * <p>
 	 * TODO: Was wird nach dieser Zeit geprüft?
 	 * 
-	 * @return Pr&uuml;fintervall in Sekunden
+	 * @return Prüfintervall in Sekunden
 	 * @see #isZyklischePrognose()
 	 */
 	public long getPruefIntervall() {
@@ -244,7 +244,7 @@ public class GlProgAnfrage {
 
 	/**
 	 * Maximale &Auml;nderung in Prozent zwischen zwei zyklischen Prognosen.
-	 * Wird dieser Schwellwert &uuml;berschritten, wird eine neue Prognose
+	 * Wird dieser Schwellwert überschritten, wird eine neue Prognose
 	 * publiziert.
 	 * 
 	 * @return Schwellwert in Prozent
@@ -255,9 +255,9 @@ public class GlProgAnfrage {
 	}
 
 	/**
-	 * Sp&auml;testens nach dieser Zeit in Sekunden wird eine Prognose
+	 * Spätestens nach dieser Zeit in Sekunden wird eine Prognose
 	 * publiziert. Die Ganglinie wird nach dieser Zeit auch publiziert, wenn sie
-	 * sich nicht ge&auml;ndert hat.
+	 * sich nicht geändert hat.
 	 * 
 	 * @return Zyklus des Publizierens in Sekunden
 	 * @see #isZyklischePrognose()
@@ -276,11 +276,11 @@ public class GlProgAnfrage {
 	}
 
 	/**
-	 * Gibt zur&uuml;ck, ob es sich um eine zyklische oder einmalige Prognose
+	 * Gibt zurück, ob es sich um eine zyklische oder einmalige Prognose
 	 * handelt.
 	 * 
 	 * @return {@code true}, wenn die Prognose zyklisch wiederholt wird und
-	 *         {@code false}, wenn die Prognose nur einmal durchgef&uuml;hrt
+	 *         {@code false}, wenn die Prognose nur einmal durchgeführt
 	 *         wird
 	 * @see #getPruefIntervall()
 	 * @see #getSchwelle()
@@ -304,7 +304,7 @@ public class GlProgAnfrage {
 	}
 
 	/**
-	 * &Uuml;bernimmt die Informationen aus dem Datum als inneren Zustand.
+	 * übernimmt die Informationen aus dem Datum als inneren Zustand.
 	 * <p>
 	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
 	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.

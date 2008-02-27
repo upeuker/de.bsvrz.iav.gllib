@@ -82,7 +82,7 @@ public class GanglinieMQTest {
 	}
 
 	/**
-	 * Testet den Umgang einer Ganglinie ohne St&uuml;tzstellen.
+	 * Testet den Umgang einer Ganglinie ohne Stützstellen.
 	 */
 	@Test
 	public void testGanglinieOhneStuetzstellen() {

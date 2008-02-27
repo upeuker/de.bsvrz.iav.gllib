@@ -45,9 +45,9 @@ import de.bsvrz.sys.funclib.bitctrl.modell.systemmodellglobal.objekte.Applikatio
 import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
- * Mit dieser Klasse k&ouml;nnen Applikation bequem Anfragen an die
+ * Mit dieser Klasse können Applikation bequem Anfragen an die
  * Ganglinienprognose stellen, ohne sich mit dem Datenkatalog
- * auseinanderzusetzen m&uuml;ssen.
+ * auseinanderzusetzen müssen.
  * <p>
  * <em>Hinweis:</em> Die Ganglinienprognose benutzt die
  * {@link de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory}. Die Factory muss
@@ -80,7 +80,7 @@ public final class Ganglinienprognose implements DatensatzUpdateListener {
 	private static Ganglinienprognose singleton;
 
 	/**
-	 * Gibt eine Ganglinienprognose als Singleton zur&uuml;ck.
+	 * Gibt eine Ganglinienprognose als Singleton zurück.
 	 * 
 	 * @return die Ganglinienprognose als Singleton.
 	 */
@@ -187,7 +187,7 @@ public final class Ganglinienprognose implements DatensatzUpdateListener {
 
 	/**
 	 * Sendet eine Anfrage an die Ganglinienprognose. Die anfragende Applikation
-	 * wird &uuml;ber ein Event &uuml;ber die eingetroffene Antwort informiert.
+	 * wird über ein Event über die eingetroffene Antwort informiert.
 	 * 
 	 * @param absenderZeichen
 	 *            ein beliebiger Text.
@@ -216,7 +216,7 @@ public final class Ganglinienprognose implements DatensatzUpdateListener {
 	}
 
 	/**
-	 * Informiert alle registrierten Listener &uuml;ber eine Antwort.
+	 * Informiert alle registrierten Listener über eine Antwort.
 	 * 
 	 * @param datum
 	 *            ein Datum mit der Antwort auf eine Prognoseanfrage.

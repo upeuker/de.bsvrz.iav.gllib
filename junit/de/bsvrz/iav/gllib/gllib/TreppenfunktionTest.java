@@ -58,7 +58,7 @@ public class TreppenfunktionTest {
 	}
 
 	/**
-	 * Testet ob der Spline durch alle St&uuml;tzstellen durchgeht.
+	 * Testet ob der Spline durch alle Stützstellen durchgeht.
 	 */
 	@Test
 	public void testGet() {

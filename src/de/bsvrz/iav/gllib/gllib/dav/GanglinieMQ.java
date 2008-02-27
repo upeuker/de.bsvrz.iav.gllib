@@ -48,10 +48,9 @@ import de.bsvrz.sys.funclib.bitctrl.modell.kalender.objekte.EreignisTyp;
 import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.objekte.MessQuerschnittAllgemein;
 
 /**
- * F&uuml;r Messquerschnitte angepasste Ganglinie. Die vier Verkehrswerte QKfz,
- * QLkw, VPkw und VLkw werden als Gruppe pro Zeitstempel gesichert. Aus diesen
- * Werten lassen sich die drei davon abh&auml;ngigen Gr&ouml;&szlig;e QPkw, VKfz
- * und QB berechnen.
+ * Für Messquerschnitte angepasste Ganglinie. Die vier Verkehrswerte QKfz, QLkw,
+ * VPkw und VLkw werden als Gruppe pro Zeitstempel gesichert. Aus diesen Werten
+ * lassen sich die drei davon abhängigen Größe QPkw, VKfz und QB berechnen.
  * 
  * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
@@ -62,61 +61,61 @@ public class GanglinieMQ extends TreeMap<Long, Messwerte> implements
 	/** Die Attributgruppe, in der historische Ganglinien gesichert werden. */
 	public static final String ATG_GANGLINIE = "atg.ganglinie";
 
-	/** Datenkatalogkonstante f&uuml;r die unbestimmte Approximation. */
+	/** Datenkatalogkonstante für die unbestimmte Approximation. */
 	public static final int APPROX_UNBESTIMMT = 0;
 
-	/** Datenkatalogkonstante f&uuml;r einen B-Spline. */
+	/** Datenkatalogkonstante für einen B-Spline. */
 	public static final int APPROX_BSPLINE = 1;
 
-	/** Datenkatalogkonstante f&uuml;r einen Cubic-Spline. */
+	/** Datenkatalogkonstante für einen Cubic-Spline. */
 	public static final int APPROX_CUBICSPLINE = 2;
 
-	/** Datenkatalogkonstante f&uuml;r eine Polylinie. */
+	/** Datenkatalogkonstante für eine Polylinie. */
 	public static final int APPROX_POLYLINE = 3;
 
-	/** Standardordung der Approximation. Nur f&uuml;r B-Spline relevant. */
+	/** Standardordung der Approximation. Nur für B-Spline relevant. */
 	public static final byte APPROX_STANDARD_ORDNUNG = 5;
 
-	/** Datenkatalogkonstante f&uuml;r eine absolute Ganglinie. */
+	/** Datenkatalogkonstante für eine absolute Ganglinie. */
 	public static final int TYP_ABSOLUT = 0;
 
-	/** Datenkatalogkonstante f&uuml;r eine relative additive Ganglinie. */
+	/** Datenkatalogkonstante für eine relative additive Ganglinie. */
 	public static final int TYP_ADDITIV = 1;
 
-	/** Datenkatalogkonstante f&uuml;r eine relative multiplikative Ganglinie. */
+	/** Datenkatalogkonstante für eine relative multiplikative Ganglinie. */
 	public static final int TYP_MULTIPLIKATIV = 2;
 
 	/** Die Eigenschaft {@code serialVersionUID}. */
 	private static final long serialVersionUID = 0;
 
-	// /** Ganglinie f&uuml;r QKfz. */
+	// /** Ganglinie für QKfz. */
 	// Ganglinie qKfz;
 	//
-	// /** Ganglinie f&uuml;r QLkw. */
+	// /** Ganglinie für QLkw. */
 	// Ganglinie qLkw;
 	//
-	// /** Ganglinie f&uuml;r VPkw. */
+	// /** Ganglinie für VPkw. */
 	// Ganglinie vPkw;
 	//
-	// /** Ganglinie f&uuml;r VLkw. */
+	// /** Ganglinie für VLkw. */
 	// Ganglinie vLkw;
 
-	/** Der Messquerschnitt, zu dem die Ganglinie geh&ouml;rt. */
+	/** Der Messquerschnitt, zu dem die Ganglinie gehört. */
 	private MessQuerschnittAllgemein messQuerschnitt;
 
-	/** Parameter f&uuml;r die Berechnung von QB. Standard ist 2,0. */
+	/** Parameter für die Berechnung von QB. Standard ist 2,0. */
 	private float k1 = 2.0f;
 
-	/** Parameter f&uuml;r die Berechnung von QB. Standard ist 0,01. */
+	/** Parameter für die Berechnung von QB. Standard ist 0,01. */
 	private float k2 = 0.01f;
 
 	/** Zeitpunkt der letzten Verschmelzung. */
 	private long letzteVerschmelzung;
 
-	/** Anzahl der Verschmelzung mit anderen Ganglinienb. */
+	/** Anzahl der Verschmelzung mit anderen Ganglinien. */
 	private long anzahlVerschmelzungen;
 
-	/** Identifier f&uuml;r das mit der Ganglinie verkn&uuml;pfte Ereignis. */
+	/** Identifier für das mit der Ganglinie verknüpfte Ereignis. */
 	private EreignisTyp ereignisTyp;
 
 	/** Flag, ob die Ganglinie eine Referenzganglinie darstellt. */
@@ -140,7 +139,7 @@ public class GanglinieMQ extends TreeMap<Long, Messwerte> implements
 	private Interval prognoseZeitraum;
 
 	/**
-	 * Konstruiert eine Ganglinie ohne St&uuml;tzstellen.
+	 * Konstruiert eine Ganglinie ohne Stützstellen.
 	 */
 	public GanglinieMQ() {
 		// nix
@@ -150,7 +149,7 @@ public class GanglinieMQ extends TreeMap<Long, Messwerte> implements
 	 * Kopierkonstruktor.
 	 * 
 	 * @param stuetzstellen
-	 *            die St&uuml;tzstellen aus denen die Ganglinie bestehen soll.
+	 *            die Stützstellen aus denen die Ganglinie bestehen soll.
 	 */
 	public GanglinieMQ(Collection<Stuetzstelle<Messwerte>> stuetzstellen) {
 		this();
@@ -163,7 +162,7 @@ public class GanglinieMQ extends TreeMap<Long, Messwerte> implements
 	 * Kopierkonstruktor.
 	 * 
 	 * @param stuetzstellen
-	 *            die St&uuml;tzstellen aus denen die Ganglinie bestehen soll.
+	 *            die Stützstellen aus denen die Ganglinie bestehen soll.
 	 */
 	public GanglinieMQ(SortedMap<Long, Messwerte> stuetzstellen) {
 		this();
@@ -222,7 +221,7 @@ public class GanglinieMQ extends TreeMap<Long, Messwerte> implements
 
 	/**
 	 * Gibt die Anzahl der bisherigen Verschmelzungen beim automatischen Lernen
-	 * zur&uuml;ck.
+	 * zurück.
 	 * 
 	 * @return Anzahl bisheriger Verschmelzungen
 	 */
@@ -255,7 +254,7 @@ public class GanglinieMQ extends TreeMap<Long, Messwerte> implements
 	}
 
 	/**
-	 * Gibt die Art der Approximation als Datenkatalogkonstante zur&uuml;ck.
+	 * Gibt die Art der Approximation als Datenkatalogkonstante zurück.
 	 * 
 	 * @return eine der Konstante {@link #APPROX_POLYLINE},
 	 *         {@link #APPROX_CUBICSPLINE}, {@link #APPROX_BSPLINE} oder
@@ -266,7 +265,7 @@ public class GanglinieMQ extends TreeMap<Long, Messwerte> implements
 	}
 
 	/**
-	 * Gibt die Ordnung des B-Spline zur&uuml;ck. Wird zur Approximation kein
+	 * Gibt die Ordnung des B-Spline zurück. Wird zur Approximation kein
 	 * B-Spline benutzt, wird der Wert ignoriert.
 	 * 
 	 * @return die Ordnung des B-Spline.
@@ -276,7 +275,7 @@ public class GanglinieMQ extends TreeMap<Long, Messwerte> implements
 	}
 
 	/**
-	 * Gibt den Ereignistyp der Ganglinie zur&uuml;ck.
+	 * Gibt den Ereignistyp der Ganglinie zurück.
 	 * 
 	 * @return der Ereignistyp.
 	 */
@@ -285,10 +284,10 @@ public class GanglinieMQ extends TreeMap<Long, Messwerte> implements
 	}
 
 	/**
-	 * Gibt die Ganglinie f&uuml;r QB zur&uuml;ck.
+	 * Gibt die Ganglinie für QB zurück.
 	 * 
-	 * @return eine einfache mathematische Ganglinie mit den St&uuml;tzstellen
-	 *         von QB.
+	 * @return eine einfache mathematische Ganglinie mit den Stützstellen von
+	 *         QB.
 	 */
 	public Ganglinie getGanglinieQB() {
 		Ganglinie g;
@@ -303,10 +302,10 @@ public class GanglinieMQ extends TreeMap<Long, Messwerte> implements
 	}
 
 	/**
-	 * Gibt die Ganglinie f&uuml;r QKfz zur&uuml;ck.
+	 * Gibt die Ganglinie für QKfz zurück.
 	 * 
-	 * @return eine einfache mathematische Ganglinie mit den St&uuml;tzstellen
-	 *         von QKfz.
+	 * @return eine einfache mathematische Ganglinie mit den Stützstellen von
+	 *         QKfz.
 	 */
 	public Ganglinie getGanglinieQKfz() {
 		Ganglinie g;
@@ -321,10 +320,10 @@ public class GanglinieMQ extends TreeMap<Long, Messwerte> implements
 	}
 
 	/**
-	 * Gibt die Ganglinie f&uuml;r QLkw zur&uuml;ck.
+	 * Gibt die Ganglinie für QLkw zurück.
 	 * 
-	 * @return eine einfache mathematische Ganglinie mit den St&uuml;tzstellen
-	 *         von QLkw.
+	 * @return eine einfache mathematische Ganglinie mit den Stützstellen von
+	 *         QLkw.
 	 */
 	public Ganglinie getGanglinieQLkw() {
 		Ganglinie g;
@@ -339,10 +338,10 @@ public class GanglinieMQ extends TreeMap<Long, Messwerte> implements
 	}
 
 	/**
-	 * Gibt die Ganglinie f&uuml;r QPkw zur&uuml;ck.
+	 * Gibt die Ganglinie für QPkw zurück.
 	 * 
-	 * @return eine einfache mathematische Ganglinie mit den St&uuml;tzstellen
-	 *         von QPkw.
+	 * @return eine einfache mathematische Ganglinie mit den Stützstellen von
+	 *         QPkw.
 	 */
 	public Ganglinie getGanglinieQPkw() {
 		Ganglinie g;
@@ -357,10 +356,10 @@ public class GanglinieMQ extends TreeMap<Long, Messwerte> implements
 	}
 
 	/**
-	 * Gibt die Ganglinie f&uuml;r VKfz zur&uuml;ck.
+	 * Gibt die Ganglinie für VKfz zurück.
 	 * 
-	 * @return eine einfache mathematische Ganglinie mit den St&uuml;tzstellen
-	 *         von VKfz.
+	 * @return eine einfache mathematische Ganglinie mit den Stützstellen von
+	 *         VKfz.
 	 */
 	public Ganglinie getGanglinieVKfz() {
 		Ganglinie g;
@@ -376,10 +375,10 @@ public class GanglinieMQ extends TreeMap<Long, Messwerte> implements
 	}
 
 	/**
-	 * Gibt die Ganglinie f&uuml;r VLkw zur&uuml;ck.
+	 * Gibt die Ganglinie für VLkw zurück.
 	 * 
-	 * @return eine einfache mathematische Ganglinie mit den St&uuml;tzstellen
-	 *         von VLkw.
+	 * @return eine einfache mathematische Ganglinie mit den Stützstellen von
+	 *         VLkw.
 	 */
 	public Ganglinie getGanglinieVLkw() {
 		Ganglinie g;
@@ -394,10 +393,10 @@ public class GanglinieMQ extends TreeMap<Long, Messwerte> implements
 	}
 
 	/**
-	 * Gibt die Ganglinie f&uuml;r QPkw zur&uuml;ck.
+	 * Gibt die Ganglinie für QPkw zurück.
 	 * 
-	 * @return eine einfache mathematische Ganglinie mit den St&uuml;tzstellen
-	 *         von QPkw.
+	 * @return eine einfache mathematische Ganglinie mit den Stützstellen von
+	 *         QPkw.
 	 */
 	public Ganglinie getGanglinieVPkw() {
 		Ganglinie g;
@@ -438,7 +437,7 @@ public class GanglinieMQ extends TreeMap<Long, Messwerte> implements
 	}
 
 	/**
-	 * Gibt einen Parameter f&uuml;r die Berechnung von QB zur&uuml;ck.
+	 * Gibt einen Parameter für die Berechnung von QB zurück.
 	 * 
 	 * @return der Parameter.
 	 */
@@ -447,7 +446,7 @@ public class GanglinieMQ extends TreeMap<Long, Messwerte> implements
 	}
 
 	/**
-	 * Gibt einen Parameter f&uuml;r die Berechnung von QB zur&uuml;ck.
+	 * Gibt einen Parameter für die Berechnung von QB zurück.
 	 * 
 	 * @return der Parameter
 	 */
@@ -456,7 +455,7 @@ public class GanglinieMQ extends TreeMap<Long, Messwerte> implements
 	}
 
 	/**
-	 * Gibt den Zeitpunkt der letzten Verschmelzung als Zeitstempel zur&uuml;ck.
+	 * Gibt den Zeitpunkt der letzten Verschmelzung als Zeitstempel zurück.
 	 * 
 	 * @return Zeitstempel
 	 */
@@ -465,7 +464,7 @@ public class GanglinieMQ extends TreeMap<Long, Messwerte> implements
 	}
 
 	/**
-	 * Gibt den Messquerschnitt der Ganglinie zur&uuml;ck.
+	 * Gibt den Messquerschnitt der Ganglinie zurück.
 	 * 
 	 * @return ein Messquerschnitt.
 	 */
@@ -474,7 +473,7 @@ public class GanglinieMQ extends TreeMap<Long, Messwerte> implements
 	}
 
 	/**
-	 * Gibt das Prognoseintervall der Ganglinie zur&uuml;ck.
+	 * Gibt das Prognoseintervall der Ganglinie zurück.
 	 * 
 	 * @return das Prognoseintervall.
 	 */
@@ -553,7 +552,7 @@ public class GanglinieMQ extends TreeMap<Long, Messwerte> implements
 	}
 
 	/**
-	 * Gibt den Ganglinientyp zur&uuml;ck.
+	 * Gibt den Ganglinientyp zurück.
 	 * 
 	 * @return der Typ der Ganglinie.
 	 */
@@ -697,7 +696,7 @@ public class GanglinieMQ extends TreeMap<Long, Messwerte> implements
 	}
 
 	/**
-	 * Legt den Parameter k1 f&uuml;r die Berechnung von QB fest.
+	 * Legt den Parameter k1 für die Berechnung von QB fest.
 	 * 
 	 * @param k1
 	 *            der parameter k1
@@ -718,7 +717,7 @@ public class GanglinieMQ extends TreeMap<Long, Messwerte> implements
 	}
 
 	/**
-	 * Legt den Parameter k2 f&uuml;r die Berechnung von QB fest.
+	 * Legt den Parameter k2 für die Berechnung von QB fest.
 	 * 
 	 * @param k2
 	 *            der parameter k2

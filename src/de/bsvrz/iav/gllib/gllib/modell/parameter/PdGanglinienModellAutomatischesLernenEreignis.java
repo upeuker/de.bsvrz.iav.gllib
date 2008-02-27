@@ -64,7 +64,7 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 		/** Die Liste der Ausschlussereignistypen. */
 		private final List<EreignisTyp> ausschlussliste = new ArrayList<EreignisTyp>();
 
-		/** Die Liste der Bezugsereignistypen (nur f&uuml;r relative Ganglinien). */
+		/** Die Liste der Bezugsereignistypen (nur für relative Ganglinien). */
 		private final List<EreignisTyp> bezugsereignistypen = new ArrayList<EreignisTyp>();
 
 		/**
@@ -86,7 +86,7 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 		 */
 		private int ganglinienTyp;
 
-		/** Abstand der St&uuml;tzstellen in generierten Ganglinien. */
+		/** Abstand der Stützstellen in generierten Ganglinien. */
 		private long stuetzstellenAbstand;
 
 		/**
@@ -107,7 +107,7 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 		/** Der maximale Abstand, bei dem Ganglinien verschmolzen werden. */
 		private int maxAbstand;
 
-		/** Die maximale Anzahl von Ganglinien f&uuml;r den Ereignistyp. */
+		/** Die maximale Anzahl von Ganglinien für den Ereignistyp. */
 		private long maxGanglinien;
 
 		/** Der maximal erlaubte Fehler beim Pattern-Matching. */
@@ -164,7 +164,7 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 		}
 
 		/**
-		 * Gibt die Liste der Bezugsereignistypen (nur f&uuml;r relative
+		 * Gibt die Liste der Bezugsereignistypen (nur für relative
 		 * Ganglinien) wieder.
 		 * 
 		 * @return {@code bezugsereignistypen}.
@@ -245,7 +245,7 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 		}
 
 		/**
-		 * Gibt die maximale Anzahl von Ganglinien f&uuml;r den Ereignistyp
+		 * Gibt die maximale Anzahl von Ganglinien für den Ereignistyp
 		 * wieder.
 		 * 
 		 * @return {@code maxGanglinien}.
@@ -277,7 +277,7 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 		}
 
 		/**
-		 * Gibt den Abstand der St&uuml;tzstellen in generierten Ganglinien
+		 * Gibt den Abstand der Stützstellen in generierten Ganglinien
 		 * wieder.
 		 * 
 		 * @return {@code stuetzstellenAbstand} in Sekunden.

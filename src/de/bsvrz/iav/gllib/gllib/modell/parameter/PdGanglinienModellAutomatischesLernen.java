@@ -174,7 +174,7 @@ public class PdGanglinienModellAutomatischesLernen extends
 
 		/**
 		 * Maximaler Wichtungsfaktor der historischen Ganglinien bei der
-		 * Verschmelzung mit Analyseganglinien. Das Gewicht muss gr&ouml;ßer 0
+		 * Verschmelzung mit Analyseganglinien. Das Gewicht muss größer 0
 		 * sein.
 		 * 
 		 * @param maximalWichtung
@@ -187,7 +187,7 @@ public class PdGanglinienModellAutomatischesLernen extends
 		/**
 		 * Wenn dieses Abstandsmaß beim zyklischen Archivieren und Vergleichen
 		 * von Ganglinien überschritten wird, wird eine Meldung erzeugt. Der
-		 * Wert muss gr&ouml;&szlig;er als 1 sein. Werte &uuml;ber 100 Prozent
+		 * Wert muss größer als 1 sein. Werte über 100 Prozent
 		 * sind erlaubt.
 		 * 
 		 * @param maxVergleichsAbstand

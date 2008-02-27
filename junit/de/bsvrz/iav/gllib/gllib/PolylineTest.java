@@ -58,7 +58,7 @@ public class PolylineTest {
 	}
 
 	/**
-	 * Testet ob der Spline durch alle St&uuml;tzstellen durchgeht.
+	 * Testet ob der Spline durch alle Stützstellen durchgeht.
 	 */
 	@Test
 	public void testGet() {

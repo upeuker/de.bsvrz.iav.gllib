@@ -37,36 +37,36 @@ import com.bitctrl.util.Interval;
  * @author BitCtrl Systems GmbH, Schumann
  * @version $Id$
  * @param <T>
- *            der Typ des Wertes eines St&uuml;tzstelle.
+ *            der Typ des Wertes eines Stützstelle.
  */
 public interface IGanglinie<T> extends SortedMap<Long, T> {
 
 	/**
 	 * Aktualisiert die Approximation. Muss bei &Auml;nderung an den
-	 * St&uuml;tzstellen der Ganglinie aufgerufen werden.
+	 * Stützstellen der Ganglinie aufgerufen werden.
 	 */
 	void aktualisiereApproximation();
 
 	/**
-	 * Gibt die Anzahl der St&uuml;tzstellen der Ganglinie zur&uuml;ck.
+	 * Gibt die Anzahl der Stützstellen der Ganglinie zurück.
 	 * 
-	 * @return St&uuml;tzstellenanzahl
+	 * @return Stützstellenanzahl
 	 */
 	int anzahlStuetzstellen();
 
 	/**
-	 * Pr&uuml;ft ob zu einem Zeitstempel eine reale St&uuml;tzstelle existiert.
+	 * Prüft ob zu einem Zeitstempel eine reale Stützstelle existiert.
 	 * 
 	 * @param zeitstempel
 	 *            Ein Zeitstempel
-	 * @return {@code true}, wenn die Ganglinie eine St&uuml;tzstelle zum
+	 * @return {@code true}, wenn die Ganglinie eine Stützstelle zum
 	 *         Zeitpunkt speichert und {@code false}, wenn zu dem Zeitpunkt die
-	 *         St&uuml;tzstelle berechnet werden muss
+	 *         Stützstelle berechnet werden muss
 	 */
 	boolean existsStuetzstelle(long zeitstempel);
 
 	/**
-	 * Die Ganglinie als Approximation zu&uuml;ck.
+	 * Die Ganglinie als Approximation zuück.
 	 * 
 	 * @return die Approximation der Ganglinie oder {@code null}, wenn keine
 	 *         Approximation festgelegt wurde.
@@ -74,10 +74,10 @@ public interface IGanglinie<T> extends SortedMap<Long, T> {
 	Approximation getApproximation();
 
 	/**
-	 * Gibt das Zeitintervall der Ganglinie zur&uuml;ck.
+	 * Gibt das Zeitintervall der Ganglinie zurück.
 	 * 
 	 * @return Ein {@link Interval} oder {@code null}, wenn keine
-	 *         St&uuml;tzstellen vorhanden sind
+	 *         Stützstellen vorhanden sind
 	 */
 	Interval getIntervall();
 
@@ -89,37 +89,37 @@ public interface IGanglinie<T> extends SortedMap<Long, T> {
 	List<Interval> getIntervalle();
 
 	/**
-	 * Gibt die St&uuml;tzstelle zu einem bestimmten Zeitpunkt zur&uuml;ck. Es
-	 * wird die mit der Approximation berechnete St&uuml;tzstelle ausgeliefert.
+	 * Gibt die Stützstelle zu einem bestimmten Zeitpunkt zurück. Es
+	 * wird die mit der Approximation berechnete Stützstelle ausgeliefert.
 	 * Die Approximation muss dazu zuvor festgelegt worden sein.
 	 * 
 	 * @param zeitstempel
-	 *            Der Zeitstempel zu dem eine St&uuml;tzstelle gesucht wird.
-	 * @return Die gesuchte St&uuml;tzstelle.
+	 *            Der Zeitstempel zu dem eine Stützstelle gesucht wird.
+	 * @return Die gesuchte Stützstelle.
 	 */
 	Stuetzstelle<T> getStuetzstelle(long zeitstempel);
 
 	/**
-	 * Gibt ein sortiertes Feld der existierenden St&uuml;tzstellen
-	 * zur&uuml;ck;.
+	 * Gibt ein sortiertes Feld der existierenden Stützstellen
+	 * zurück;.
 	 * 
-	 * @return Nach Zeitstempel sortiere St&uuml;tzstellen
+	 * @return Nach Zeitstempel sortiere Stützstellen
 	 */
 	List<Stuetzstelle<T>> getStuetzstellen();
 
 	/**
-	 * Die existierenden St&uuml;tzstellen im angegebenen Intervall zur&uuml;ck.
+	 * Die existierenden Stützstellen im angegebenen Intervall zurück.
 	 * 
 	 * @param intervall
 	 *            ein zeitliches Intervall.
-	 * @return die Liste der St&uuml;tzstellen im Intervall, sortiert nach
+	 * @return die Liste der Stützstellen im Intervall, sortiert nach
 	 *         Zeitstempel.
 	 */
 	List<Stuetzstelle<T>> getStuetzstellen(Interval intervall);
 
 	/**
-	 * Gibt {@code false} zur&uuml;ck, wenn die Approximation aktuallisiert
-	 * werden muss, weil sich die Ganglinie ge&auml;ndert hat.
+	 * Gibt {@code false} zurück, wenn die Approximation aktuallisiert
+	 * werden muss, weil sich die Ganglinie geändert hat.
 	 * 
 	 * @return {@code true}, wenn Ganglinie und Approximation konform gehen und
 	 *         {@code false}, wenn die Approximation aktualisiert werden muss.
@@ -139,10 +139,10 @@ public interface IGanglinie<T> extends SortedMap<Long, T> {
 	boolean isValid(Interval intervall);
 
 	/**
-	 * Pr&uuml;ft ob ein Zeitstempel im Definitionsbereich der Ganglinie liegt.
+	 * Prüft ob ein Zeitstempel im Definitionsbereich der Ganglinie liegt.
 	 * 
 	 * @param zeitstempel
-	 *            zu pr&uuml;fender Zeitstempel
+	 *            zu prüfender Zeitstempel
 	 * @return <code>true</code>, wenn <code>zeitstempel</code> im
 	 *         definierten Bereich der Ganglinie liegt
 	 * @see #getIntervalle()
@@ -150,48 +150,48 @@ public interface IGanglinie<T> extends SortedMap<Long, T> {
 	boolean isValid(long zeitstempel);
 
 	/**
-	 * Entfernt eine St&uuml;tzstelle.
+	 * Entfernt eine Stützstelle.
 	 * 
 	 * @param zeitstempel
-	 *            Zeitstempel der St&uuml;tzstelle, die entfernt werden soll
+	 *            Zeitstempel der Stützstelle, die entfernt werden soll
 	 */
 	void remove(long zeitstempel);
 
 	/**
 	 * Legt das Approximationsverfahren fest, mit dem die Werte zwischen den
-	 * St&uuml;tzstellen bestimmt werden soll.
+	 * Stützstellen bestimmt werden soll.
 	 * 
 	 * @param approximation
-	 *            Klasse eines Approximationsverfahrens. Die Klasse m&uuml;ss
+	 *            Klasse eines Approximationsverfahrens. Die Klasse müss
 	 *            einen parameterlosen Konstruktor besitzen.
 	 * @throws IllegalArgumentException
-	 *             Wenn die Klassen keinen &ouml;ffentlichen parameterlosen
+	 *             Wenn die Klassen keinen öffentlichen parameterlosen
 	 *             Konstruktor besitzt
 	 */
 	void setApproximation(Approximation approximation);
 
 	/**
-	 * Nimmt eine St&uuml;tzstelle in die Ganglinie auf. Existiert zu dem
-	 * Zeitpunkt bereits eine, wird diese &uuml;berschrieben.
+	 * Nimmt eine Stützstelle in die Ganglinie auf. Existiert zu dem
+	 * Zeitpunkt bereits eine, wird diese überschrieben.
 	 * 
 	 * @param zeitstempel
-	 *            Zeitstempel der St&uuml;tzstelle
+	 *            Zeitstempel der Stützstelle
 	 * @param wert
-	 *            Wert der St&uuml;tzstelle
-	 * @return {@code true}, wenn die St&uuml;tzstelle neu angelegt wurde und
-	 *         {@code false}, wenn eine vorhandene St&uuml;tzstelle ersetzt
+	 *            Wert der Stützstelle
+	 * @return {@code true}, wenn die Stützstelle neu angelegt wurde und
+	 *         {@code false}, wenn eine vorhandene Stützstelle ersetzt
 	 *         wurde.
 	 */
 	boolean setStuetzstelle(long zeitstempel, T wert);
 
 	/**
-	 * Nimmt eine St&uuml;tzstelle in die Ganglinie auf. Existiert zu dem
-	 * Zeitpunkt bereits eine, wird diese &uuml;berschrieben.
+	 * Nimmt eine Stützstelle in die Ganglinie auf. Existiert zu dem
+	 * Zeitpunkt bereits eine, wird diese überschrieben.
 	 * 
 	 * @param s
-	 *            Die neue Stu&uuml;tzstelle
-	 * @return {@code true}, wenn die St&uuml;tzstelle neu angelegt wurde und
-	 *         {@code false}, wenn eine vorhandene St&uuml;tzstelle ersetzt
+	 *            Die neue Stuützstelle
+	 * @return {@code true}, wenn die Stützstelle neu angelegt wurde und
+	 *         {@code false}, wenn eine vorhandene Stützstelle ersetzt
 	 *         wurde.
 	 */
 	boolean setStuetzstelle(Stuetzstelle<T> s);

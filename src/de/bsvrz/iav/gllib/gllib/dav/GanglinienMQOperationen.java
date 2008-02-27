@@ -32,8 +32,8 @@ import java.util.Map.Entry;
 
 import com.bitctrl.util.Interval;
 
+import de.bsvrz.iav.gllib.gllib.Ganglinie;
 import de.bsvrz.iav.gllib.gllib.GanglinienOperationen;
-import de.bsvrz.iav.gllib.gllib.Stuetzstelle;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
 
 /**
@@ -50,9 +50,9 @@ import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
 public final class GanglinienMQOperationen {
 
 	/**
-	 * Addiert zwei Ganglinien, indem die Werte der vervollst&auml;ndigten
-	 * St&uuml;tzstellenmenge addiert werden. Die beiden Ganglinien werden dabei
-	 * nicht ver&auml;ndert.
+	 * Addiert zwei Ganglinien, indem die Werte der vervollständigten
+	 * Stützstellenmenge addiert werden. Die beiden Ganglinien werden dabei
+	 * nicht verändert.
 	 * 
 	 * @param g1
 	 *            Erste Ganglinie
@@ -61,61 +61,27 @@ public final class GanglinienMQOperationen {
 	 * @return Die "Summe" der beiden Ganglinien
 	 */
 	public static GanglinieMQ addiere(GanglinieMQ g1, GanglinieMQ g2) {
-		assert g1.getMessQuerschnitt().equals(g2.getMessQuerschnitt()) : "Die Ganglinien müssen zum gleichen Messquerschnitt gehören.";
+		final Ganglinie gQKfz;
+		final Ganglinie gQLkw;
+		final Ganglinie gVPkw;
+		final Ganglinie gVLkw;
 
-		final GanglinieMQ g;
-		final List<Stuetzstelle<Double>> stuetzstellenQKfz;
-		final List<Stuetzstelle<Double>> stuetzstellenQLkw;
-		final List<Stuetzstelle<Double>> stuetzstellenVPkw;
-		final List<Stuetzstelle<Double>> stuetzstellenVLkw;
+		gQKfz = GanglinienOperationen.addiere(g1.getGanglinieQKfz(), g2
+				.getGanglinieQKfz());
+		gQLkw = GanglinienOperationen.addiere(g1.getGanglinieQLkw(), g2
+				.getGanglinieQLkw());
+		gVPkw = GanglinienOperationen.addiere(g1.getGanglinieVPkw(), g2
+				.getGanglinieVPkw());
+		gVLkw = GanglinienOperationen.addiere(g1.getGanglinieVLkw(), g2
+				.getGanglinieVLkw());
 
-		g = new GanglinieMQ();
-		g.setMessQuerschnitt(g1.getMessQuerschnitt());
-		g.setApproximationDaK(g1.getApproximationDaK());
-
-		stuetzstellenQKfz = GanglinienOperationen.addiere(
-				g1.getGanglinieQKfz(), g2.getGanglinieQKfz())
-				.getStuetzstellen();
-		stuetzstellenQLkw = GanglinienOperationen.addiere(
-				g1.getGanglinieQLkw(), g2.getGanglinieQLkw())
-				.getStuetzstellen();
-		stuetzstellenVPkw = GanglinienOperationen.addiere(
-				g1.getGanglinieVPkw(), g2.getGanglinieVPkw())
-				.getStuetzstellen();
-		stuetzstellenVLkw = GanglinienOperationen.addiere(
-				g1.getGanglinieVLkw(), g2.getGanglinieVLkw())
-				.getStuetzstellen();
-
-		assert stuetzstellenQKfz.size() == stuetzstellenQLkw.size()
-				&& stuetzstellenQLkw.size() == stuetzstellenVPkw.size()
-				&& stuetzstellenVPkw.size() == stuetzstellenVLkw.size() : "Die berechneten Stützstellenlisten müssen gleich groß sein.";
-		for (int i = 0; i < stuetzstellenQKfz.size(); ++i) {
-			final long zeitstempel;
-			final Double qKfz, qLkw, vPkw, vLkw;
-
-			assert stuetzstellenQKfz.get(i).getZeitstempel() == stuetzstellenQLkw
-					.get(i).getZeitstempel()
-					&& stuetzstellenQLkw.get(i).getZeitstempel() == stuetzstellenVPkw
-							.get(i).getZeitstempel()
-					&& stuetzstellenVPkw.get(i).getZeitstempel() == stuetzstellenVLkw
-							.get(i).getZeitstempel() : "Die Stützstellen mit dem selben Index, müssen den selben Zeitstempel besitzen.";
-
-			zeitstempel = stuetzstellenQKfz.get(i).getZeitstempel();
-			qKfz = stuetzstellenQKfz.get(i).getWert();
-			qLkw = stuetzstellenQLkw.get(i).getWert();
-			vPkw = stuetzstellenVPkw.get(i).getWert();
-			vLkw = stuetzstellenVLkw.get(i).getWert();
-			g.setStuetzstelle(zeitstempel, new Messwerte(qKfz, qLkw, vPkw,
-					vLkw, g1.getK1(), g1.getK2()));
-		}
-
-		return g;
+		return zusammenfuehren(gQKfz, gQLkw, gVPkw, gVLkw);
 	}
 
 	/**
 	 * Schneidet ein Intervall aus einer GanglinieMQ heraus. Existieren keine
-	 * St&uuml;tzstellen in den Intervallgrenzen, werden an diesen Stellen
-	 * mittels Approximation durch Polyline St&uuml;tzstellen hinzugef&uuml;gt.
+	 * Stützstellen in den Intervallgrenzen, werden an diesen Stellen mittels
+	 * Approximation durch Polyline Stützstellen hinzugefügt.
 	 * <p>
 	 * <em>Hinweis:</em> Das Intervall wird aus der Ganglinie im Parameter
 	 * ausgeschnitten.
@@ -127,11 +93,18 @@ public final class GanglinienMQOperationen {
 	 * @return Der Intervallausschnitt
 	 */
 	public static GanglinieMQ auschneiden(GanglinieMQ g, Interval i) {
-		g.qKfz = GanglinienOperationen.auschneiden(g.qKfz, i);
-		g.qLkw = GanglinienOperationen.auschneiden(g.qLkw, i);
-		g.vPkw = GanglinienOperationen.auschneiden(g.vPkw, i);
-		g.vLkw = GanglinienOperationen.auschneiden(g.vLkw, i);
+		final Ganglinie gQKfz;
+		final Ganglinie gQLkw;
+		final Ganglinie gVPkw;
+		final Ganglinie gVLkw;
 
+		gQKfz = GanglinienOperationen.auschneiden(g.getGanglinieQKfz(), i);
+		gQLkw = GanglinienOperationen.auschneiden(g.getGanglinieQLkw(), i);
+		gVPkw = GanglinienOperationen.auschneiden(g.getGanglinieVPkw(), i);
+		gVLkw = GanglinienOperationen.auschneiden(g.getGanglinieVLkw(), i);
+
+		g.clear();
+		g.putAll(zusammenfuehren(gQKfz, gQLkw, gVPkw, gVLkw));
 		return g;
 	}
 
@@ -146,22 +119,24 @@ public final class GanglinienMQOperationen {
 	 * @return Abstand nach dem Basisabstandsverfahren
 	 */
 	public static int basisabstand(GanglinieMQ g1, GanglinieMQ g2) {
-		assert g1.getMessQuerschnitt().equals(g2.getMessQuerschnitt()) : "Die Ganglinien müssen zum gleichen Messquerschnitt gehören.";
-
 		int fehlerQKfz, fehlerQLkw, fehlerVPkw, fehlerVLkw;
 
-		fehlerQKfz = GanglinienOperationen.basisabstand(g1.qKfz, g2.qKfz);
-		fehlerQLkw = GanglinienOperationen.basisabstand(g1.qLkw, g2.qLkw);
-		fehlerVPkw = GanglinienOperationen.basisabstand(g1.vPkw, g2.vPkw);
-		fehlerVLkw = GanglinienOperationen.basisabstand(g1.vLkw, g2.vLkw);
+		fehlerQKfz = GanglinienOperationen.basisabstand(g1.getGanglinieQKfz(),
+				g2.getGanglinieQKfz());
+		fehlerQLkw = GanglinienOperationen.basisabstand(g1.getGanglinieQLkw(),
+				g2.getGanglinieQLkw());
+		fehlerVPkw = GanglinienOperationen.basisabstand(g1.getGanglinieVPkw(),
+				g2.getGanglinieVPkw());
+		fehlerVLkw = GanglinienOperationen.basisabstand(g1.getGanglinieVLkw(),
+				g2.getGanglinieVLkw());
 
 		return (fehlerQKfz + fehlerQLkw + fehlerVLkw + fehlerVPkw) / 4;
 	}
 
 	/**
-	 * Division zweier Ganglinien, indem die Werte der vervollst&auml;ndigten
-	 * St&uuml;tzstellenmenge dividiert werden. Die beiden Ganglinien werden
-	 * dabei nicht ver&auml;ndert.
+	 * Division zweier Ganglinien, indem die Werte der vervollständigten
+	 * Stützstellenmenge dividiert werden. Die beiden Ganglinien werden dabei
+	 * nicht verändert.
 	 * 
 	 * @param g1
 	 *            Erste Ganglinie
@@ -170,20 +145,23 @@ public final class GanglinienMQOperationen {
 	 * @return Das "Produkt" der beiden Ganglinien
 	 */
 	public static GanglinieMQ dividiere(GanglinieMQ g1, GanglinieMQ g2) {
+		final Ganglinie gQKfz;
+		final Ganglinie gQLkw;
+		final Ganglinie gVPkw;
+		final Ganglinie gVLkw;
+
 		assert g1.getMessQuerschnitt().equals(g2.getMessQuerschnitt()) : "Die Ganglinien müssen zum gleichen Messquerschnitt gehören.";
 
-		GanglinieMQ g;
+		gQKfz = GanglinienOperationen.dividiere(g1.getGanglinieQKfz(), g2
+				.getGanglinieQKfz());
+		gQLkw = GanglinienOperationen.dividiere(g1.getGanglinieQLkw(), g2
+				.getGanglinieQLkw());
+		gVPkw = GanglinienOperationen.dividiere(g1.getGanglinieVPkw(), g2
+				.getGanglinieVPkw());
+		gVLkw = GanglinienOperationen.dividiere(g1.getGanglinieVLkw(), g2
+				.getGanglinieVLkw());
 
-		g = new GanglinieMQ();
-		g.setMessQuerschnitt(g1.getMessQuerschnitt());
-		g.setApproximationDaK(g1.getApproximationDaK());
-
-		g.qKfz = GanglinienOperationen.dividiere(g1.qKfz, g2.qKfz);
-		g.qLkw = GanglinienOperationen.dividiere(g1.qLkw, g2.qLkw);
-		g.vPkw = GanglinienOperationen.dividiere(g1.vPkw, g2.vPkw);
-		g.vLkw = GanglinienOperationen.dividiere(g1.vLkw, g2.vLkw);
-
-		return g;
+		return zusammenfuehren(gQKfz, gQLkw, gVPkw, gVLkw);
 	}
 
 	/**
@@ -205,14 +183,14 @@ public final class GanglinienMQOperationen {
 
 		int fehlerQKfz, fehlerQLkw, fehlerVPkw, fehlerVLkw;
 
-		fehlerQKfz = GanglinienOperationen.komplexerAbstand(g1.qKfz, g2.qKfz,
-				intervalle);
-		fehlerQLkw = GanglinienOperationen.komplexerAbstand(g1.qLkw, g2.qLkw,
-				intervalle);
-		fehlerVPkw = GanglinienOperationen.komplexerAbstand(g1.vPkw, g2.vPkw,
-				intervalle);
-		fehlerVLkw = GanglinienOperationen.komplexerAbstand(g1.vLkw, g2.vLkw,
-				intervalle);
+		fehlerQKfz = GanglinienOperationen.komplexerAbstand(g1
+				.getGanglinieQKfz(), g2.getGanglinieQKfz(), intervalle);
+		fehlerQLkw = GanglinienOperationen.komplexerAbstand(g1
+				.getGanglinieQLkw(), g2.getGanglinieQLkw(), intervalle);
+		fehlerVPkw = GanglinienOperationen.komplexerAbstand(g1
+				.getGanglinieVPkw(), g2.getGanglinieVPkw(), intervalle);
+		fehlerVLkw = GanglinienOperationen.komplexerAbstand(g1
+				.getGanglinieVLkw(), g2.getGanglinieVLkw(), intervalle);
 
 		return (fehlerQKfz + fehlerQLkw + fehlerVLkw + fehlerVPkw) / 4;
 	}
@@ -236,22 +214,22 @@ public final class GanglinienMQOperationen {
 
 		int fehlerQKfz, fehlerQLkw, fehlerVPkw, fehlerVLkw;
 
-		fehlerQKfz = GanglinienOperationen.komplexerAbstand(g1.qKfz, g2.qKfz,
-				intervallBreite);
-		fehlerQLkw = GanglinienOperationen.komplexerAbstand(g1.qLkw, g2.qLkw,
-				intervallBreite);
-		fehlerVPkw = GanglinienOperationen.komplexerAbstand(g1.vPkw, g2.vPkw,
-				intervallBreite);
-		fehlerVLkw = GanglinienOperationen.komplexerAbstand(g1.vLkw, g2.vLkw,
-				intervallBreite);
+		fehlerQKfz = GanglinienOperationen.komplexerAbstand(g1
+				.getGanglinieQKfz(), g2.getGanglinieQKfz(), intervallBreite);
+		fehlerQLkw = GanglinienOperationen.komplexerAbstand(g1
+				.getGanglinieQLkw(), g2.getGanglinieQLkw(), intervallBreite);
+		fehlerVPkw = GanglinienOperationen.komplexerAbstand(g1
+				.getGanglinieQPkw(), g2.getGanglinieVPkw(), intervallBreite);
+		fehlerVLkw = GanglinienOperationen.komplexerAbstand(g1
+				.getGanglinieQLkw(), g2.getGanglinieVLkw(), intervallBreite);
 
 		return (fehlerQKfz + fehlerQLkw + fehlerVLkw + fehlerVPkw) / 4;
 	}
 
 	/**
-	 * Multiplikation zweier Ganglinien, indem die Werte der
-	 * vervollst&auml;ndigten St&uuml;tzstellenmenge multipliziert werden. Die
-	 * beiden Ganglinien werden dabei nicht ver&auml;ndert.
+	 * Multiplikation zweier Ganglinien, indem die Werte der vervollständigten
+	 * Stützstellenmenge multipliziert werden. Die beiden Ganglinien werden
+	 * dabei nicht verändert.
 	 * 
 	 * @param g1
 	 *            Erste Ganglinie
@@ -260,20 +238,21 @@ public final class GanglinienMQOperationen {
 	 * @return Das "Produkt" der beiden Ganglinien
 	 */
 	public static GanglinieMQ multipliziere(GanglinieMQ g1, GanglinieMQ g2) {
-		assert g1.getMessQuerschnitt().equals(g2.getMessQuerschnitt()) : "Die Ganglinien müssen zum gleichen Messquerschnitt gehören.";
+		final Ganglinie gQKfz;
+		final Ganglinie gQLkw;
+		final Ganglinie gVPkw;
+		final Ganglinie gVLkw;
 
-		GanglinieMQ g;
+		gQKfz = GanglinienOperationen.multipliziere(g1.getGanglinieQKfz(), g2
+				.getGanglinieQKfz());
+		gQLkw = GanglinienOperationen.multipliziere(g1.getGanglinieQLkw(), g2
+				.getGanglinieQLkw());
+		gVPkw = GanglinienOperationen.multipliziere(g1.getGanglinieVPkw(), g2
+				.getGanglinieVPkw());
+		gVLkw = GanglinienOperationen.multipliziere(g1.getGanglinieVLkw(), g2
+				.getGanglinieVLkw());
 
-		g = new GanglinieMQ();
-		g.setMessQuerschnitt(g1.getMessQuerschnitt());
-		g.setApproximationDaK(g1.getApproximationDaK());
-
-		g.qKfz = GanglinienOperationen.multipliziere(g1.qKfz, g2.qKfz);
-		g.qLkw = GanglinienOperationen.multipliziere(g1.qLkw, g2.qLkw);
-		g.vPkw = GanglinienOperationen.multipliziere(g1.vPkw, g2.vPkw);
-		g.vLkw = GanglinienOperationen.multipliziere(g1.vLkw, g2.vLkw);
-
-		return g;
+		return zusammenfuehren(gQKfz, gQLkw, gVPkw, gVLkw);
 	}
 
 	/**
@@ -341,9 +320,9 @@ public final class GanglinienMQOperationen {
 	}
 
 	/**
-	 * Subtraktion zweier Ganglinien, indem die Werte der vervollst&auml;ndigten
-	 * St&uuml;tzstellenmenge subtrahiert werden. Die beiden Ganglinien werden
-	 * dabei nicht ver&auml;ndert.
+	 * Subtraktion zweier Ganglinien, indem die Werte der vervollständigten
+	 * Stützstellenmenge subtrahiert werden. Die beiden Ganglinien werden dabei
+	 * nicht verändert.
 	 * 
 	 * @param g1
 	 *            Erste Ganglinie
@@ -352,29 +331,29 @@ public final class GanglinienMQOperationen {
 	 * @return Die "Differenz" der beiden Ganglinien
 	 */
 	public static GanglinieMQ subtrahiere(GanglinieMQ g1, GanglinieMQ g2) {
-		assert g1.getMessQuerschnitt().equals(g2.getMessQuerschnitt()) : "Die Ganglinien müssen zum gleichen Messquerschnitt gehören.";
+		final Ganglinie gQKfz;
+		final Ganglinie gQLkw;
+		final Ganglinie gVPkw;
+		final Ganglinie gVLkw;
 
-		GanglinieMQ g;
+		gQKfz = GanglinienOperationen.subtrahiere(g1.getGanglinieQKfz(), g2
+				.getGanglinieQKfz());
+		gQLkw = GanglinienOperationen.subtrahiere(g1.getGanglinieQLkw(), g2
+				.getGanglinieQLkw());
+		gVPkw = GanglinienOperationen.subtrahiere(g1.getGanglinieVPkw(), g2
+				.getGanglinieVPkw());
+		gVLkw = GanglinienOperationen.subtrahiere(g1.getGanglinieVLkw(), g2
+				.getGanglinieVLkw());
 
-		g = new GanglinieMQ();
-		g.setMessQuerschnitt(g1.getMessQuerschnitt());
-		g.setApproximationDaK(g1.getApproximationDaK());
-
-		g.qKfz = GanglinienOperationen.subtrahiere(g1.qKfz, g2.qKfz);
-		g.qLkw = GanglinienOperationen.subtrahiere(g1.qLkw, g2.qLkw);
-		g.vPkw = GanglinienOperationen.subtrahiere(g1.vPkw, g2.vPkw);
-		g.vLkw = GanglinienOperationen.subtrahiere(g1.vLkw, g2.vLkw);
-
-		return g;
+		return zusammenfuehren(gQKfz, gQLkw, gVPkw, gVLkw);
 	}
 
 	/**
-	 * Verbindet zwei Ganglinien durch Konkatenation. Es werden die
-	 * St&uuml;tzstellen beider Ganglinien zu einer neuen Ganglinien
-	 * zusammengefasst. Dies ist nur m&ouml;glich, wenn sich die
-	 * St&uuml;tzstellenmengen nicht &uuml;berschneiden. Ber&uuml;hren sich die
-	 * beiden Ganglinien wird im Ber&uuml;hrungspunkt er Mittelwert der beiden
-	 * St&uuml;tzstellen gebildet.
+	 * Verbindet zwei Ganglinien durch Konkatenation. Es werden die Stützstellen
+	 * beider Ganglinien zu einer neuen Ganglinien zusammengefasst. Dies ist nur
+	 * möglich, wenn sich die Stützstellenmengen nicht überschneiden. Berühren
+	 * sich die beiden Ganglinien wird im Berührungspunkt er Mittelwert der
+	 * beiden Stützstellen gebildet.
 	 * 
 	 * @param g1
 	 *            Erste Ganglinie
@@ -383,20 +362,18 @@ public final class GanglinienMQOperationen {
 	 * @return Konkatenation der beiden Ganglinien
 	 */
 	public static GanglinieMQ verbinde(GanglinieMQ g1, GanglinieMQ g2) {
-		assert g1.getMessQuerschnitt().equals(g2.getMessQuerschnitt()) : "Die Ganglinien müssen zum gleichen Messquerschnitt gehören.";
+		final Ganglinie gQKfz, gQLkw, gVPkw, gVLkw;
 
-		GanglinieMQ g;
+		gQKfz = GanglinienOperationen.verbinde(g1.getGanglinieQKfz(), g2
+				.getGanglinieQKfz());
+		gQLkw = GanglinienOperationen.verbinde(g1.getGanglinieQLkw(), g2
+				.getGanglinieQLkw());
+		gVPkw = GanglinienOperationen.verbinde(g1.getGanglinieQPkw(), g2
+				.getGanglinieQPkw());
+		gVLkw = GanglinienOperationen.verbinde(g1.getGanglinieQLkw(), g2
+				.getGanglinieQLkw());
 
-		g = new GanglinieMQ();
-		g.setMessQuerschnitt(g1.getMessQuerschnitt());
-		g.setApproximationDaK(g1.getApproximationDaK());
-
-		g.qKfz = GanglinienOperationen.verbinde(g1.qKfz, g2.qKfz);
-		g.qLkw = GanglinienOperationen.verbinde(g1.qLkw, g2.qLkw);
-		g.vPkw = GanglinienOperationen.verbinde(g1.vPkw, g2.vPkw);
-		g.vLkw = GanglinienOperationen.verbinde(g1.vLkw, g2.vLkw);
-
-		return g;
+		return zusammenfuehren(gQKfz, gQLkw, gVPkw, gVLkw);
 	}
 
 	/**
@@ -411,22 +388,28 @@ public final class GanglinienMQOperationen {
 	 * @return Die verschobene Ganglinie
 	 */
 	public static GanglinieMQ verschiebe(GanglinieMQ g, long offset) {
-		g.qKfz = GanglinienOperationen.verschiebe(g.qKfz, offset);
-		g.qLkw = GanglinienOperationen.verschiebe(g.qLkw, offset);
-		g.vPkw = GanglinienOperationen.verschiebe(g.vPkw, offset);
-		g.vLkw = GanglinienOperationen.verschiebe(g.vLkw, offset);
+		Ganglinie gQKfz, gQLkw, gVPkw, gVLkw;
 
+		gQKfz = GanglinienOperationen.verschiebe(g.getGanglinieQKfz(), offset);
+		gQLkw = GanglinienOperationen.verschiebe(g.getGanglinieQLkw(), offset);
+		gVPkw = GanglinienOperationen.verschiebe(g.getGanglinieVPkw(), offset);
+		gVLkw = GanglinienOperationen.verschiebe(g.getGanglinieVLkw(), offset);
+
+		g.clear();
+		g.putAll(zusammenfuehren(gQKfz, gQLkw, gVPkw, gVLkw));
 		return g;
 	}
 
 	/**
 	 * Verschmilzt eine Ganglinie mit einer anderen. Dabei wird das gewichtete
-	 * arithmetische Mittel der vervollst&auml;ndigten St&uuml;tzstellen
-	 * gebildet. Die zweite Ganglinie hat immer das Gewicht 1. Die beiden
-	 * Ganglinien werden dabei nicht ver&auml;ndert.
+	 * arithmetische Mittel der vervollständigten Stützstellen gebildet. Die
+	 * zweite Ganglinie hat immer das Gewicht 1. Die beiden Ganglinien werden
+	 * dabei nicht verändert.
 	 * <p>
 	 * Die Anzahl der Verschmelzungen und der Zeitpunkt der letzten
 	 * Verschmelzungen werden aktualisiert.
+	 * <p>
+	 * <em>Hinweis:</em> die historische Ganglinie im Parameter wird geändert.
 	 * 
 	 * @param ganglinie
 	 *            die Ganglinie mit der verschmolzen wird. Sie hat immer das
@@ -440,32 +423,58 @@ public final class GanglinienMQOperationen {
 	public static GanglinieMQ verschmelze(GanglinieMQ ganglinie,
 			GanglinieMQ historGl, long gewicht) {
 		final long zeitstempel;
+		final Ganglinie gQKfz, gQLkw, gVPkw, gVLkw;
 
-		assert ganglinie.getMessQuerschnitt().equals(
-				historGl.getMessQuerschnitt()) : "Die Ganglinien müssen zum gleichen Messquerschnitt gehören.";
+		gQKfz = GanglinienOperationen.verschmelze(ganglinie.getGanglinieQKfz(),
+				historGl.getGanglinieQKfz(), gewicht);
+		gQLkw = GanglinienOperationen.verschmelze(ganglinie.getGanglinieQLkw(),
+				historGl.getGanglinieQLkw(), gewicht);
+		gVPkw = GanglinienOperationen.verschmelze(ganglinie.getGanglinieVPkw(),
+				historGl.getGanglinieVPkw(), gewicht);
+		gVLkw = GanglinienOperationen.verschmelze(ganglinie.getGanglinieVLkw(),
+				historGl.getGanglinieVLkw(), gewicht);
 
-		GanglinieMQ g;
-
-		g = new GanglinieMQ();
-		g.setMessQuerschnitt(ganglinie.getMessQuerschnitt());
-		g.setApproximationDaK(ganglinie.getApproximationDaK());
-
-		g.qKfz = GanglinienOperationen.verschmelze(ganglinie.qKfz,
-				historGl.qKfz, gewicht);
-		g.qLkw = GanglinienOperationen.verschmelze(ganglinie.qLkw,
-				historGl.qLkw, gewicht);
-		g.vPkw = GanglinienOperationen.verschmelze(ganglinie.vPkw,
-				historGl.vPkw, gewicht);
-		g.vLkw = GanglinienOperationen.verschmelze(ganglinie.vLkw,
-				historGl.vLkw, gewicht);
-
-		g.setAnzahlVerschmelzungen(historGl.getAnzahlVerschmelzungen() + 1);
+		historGl.clear();
+		historGl.putAll(zusammenfuehren(gQKfz, gQLkw, gVPkw, gVLkw));
+		historGl
+				.setAnzahlVerschmelzungen(historGl.getAnzahlVerschmelzungen() + 1);
 		if (ObjektFactory.getInstanz().getVerbindung() != null) {
 			zeitstempel = ObjektFactory.getInstanz().getVerbindung().getTime();
 		} else {
 			zeitstempel = System.currentTimeMillis();
 		}
-		g.setLetzteVerschmelzung(zeitstempel);
+		historGl.setLetzteVerschmelzung(zeitstempel);
+
+		return historGl;
+	}
+
+	/**
+	 * Erzeugt aus den vier Ganglinien eine Messquerschnittsganglinie.
+	 * 
+	 * @param gQKfz
+	 *            die Ganglinie für QKfz.
+	 * @param gQLkw
+	 *            die Ganglinie für QLkw.
+	 * @param gVPkw
+	 *            die Ganglinie für VPkw.
+	 * @param gVLkw
+	 *            die Ganglinie für VLkw.
+	 * @return die zusammengeführte Ganglinie.
+	 */
+	private static GanglinieMQ zusammenfuehren(Ganglinie gQKfz,
+			Ganglinie gQLkw, Ganglinie gVPkw, Ganglinie gVLkw) {
+		final GanglinieMQ g;
+
+		assert gQKfz.size() == gQLkw.size() && gQLkw.size() == gVPkw.size()
+				&& gVPkw.size() == gVLkw.size() : "Die berechneten Stützstellenlisten müssen gleich groß sein.";
+		g = new GanglinieMQ();
+		for (Long t : gQKfz.keySet()) {
+			assert gQKfz.containsKey(t) && gQLkw.containsKey(t)
+					&& gVPkw.containsKey(t) && gVLkw.containsKey(t) : "Die Stützstellen mit dem selben Index, müssen den selben Zeitstempel besitzen.";
+
+			g.setStuetzstelle(t, new Messwerte(gQKfz.get(t), gQLkw.get(t),
+					gVPkw.get(t), gVLkw.get(t)));
+		}
 
 		return g;
 	}

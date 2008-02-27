@@ -41,7 +41,7 @@ import java.util.Map.Entry;
 import com.bitctrl.util.Interval;
 
 /**
- * Helferklasse mit den Operationen auf Ganglinien, deren St&uuml;tzstellen
+ * Helferklasse mit den Operationen auf Ganglinien, deren Stützstellen
  * Gleitkommazahlen sind.
  * 
  * @author BitCtrl Systems GmbH, Schumann
@@ -50,9 +50,9 @@ import com.bitctrl.util.Interval;
 public final class GanglinienOperationen {
 
 	/**
-	 * Addiert zwei Ganglinien, indem die Werte der vervollst&auml;ndigten
-	 * St&uuml;tzstellenmenge addiert werden. Die beiden Ganglinien werden dabei
-	 * nicht ver&auml;ndert.
+	 * Addiert zwei Ganglinien, indem die Werte der vervollständigten
+	 * Stützstellenmenge addiert werden. Die beiden Ganglinien werden dabei
+	 * nicht verändert.
 	 * 
 	 * @param g1
 	 *            Erste Ganglinie
@@ -70,7 +70,7 @@ public final class GanglinienOperationen {
 						g2.getApproximation().getClass())
 				|| (g1.getApproximation() == null ^ g2.getApproximation() == null)) {
 			throw new IllegalArgumentException(
-					"Die Addition kann nicht durchgeführt werden, da die beiden Ganglinien unterschiedle Approximationsverfahren verwenden.");
+					"Die Addition kann nicht durchgeführt werden, da die beiden Ganglinien unterschiedlische Approximationsverfahren verwenden.");
 		}
 
 		p1 = new Polyline();
@@ -99,8 +99,8 @@ public final class GanglinienOperationen {
 
 	/**
 	 * Schneidet ein Intervall aus einer Ganglinie heraus. Existieren keine
-	 * St&uuml;tzstellen in den Intervallgrenzen, werden an diesen Stellen
-	 * mittels Approximation durch Polyline St&uuml;tzstellen hinzugef&uuml;gt.
+	 * Stützstellen in den Intervallgrenzen, werden an diesen Stellen mittels
+	 * Approximation durch Polyline Stützstellen hinzugefügt.
 	 * <p>
 	 * <em>Hinweis:</em> Das Intervall wird aus der Ganglinie im Parameter
 	 * ausgeschnitten.
@@ -206,9 +206,9 @@ public final class GanglinienOperationen {
 	}
 
 	/**
-	 * Division zweier Ganglinien, indem die Werte der vervollst&auml;ndigten
-	 * St&uuml;tzstellenmenge dividiert werden. Die beiden Ganglinien werden
-	 * dabei nicht ver&auml;ndert.
+	 * Division zweier Ganglinien, indem die Werte der vervollständigten
+	 * Stützstellenmenge dividiert werden. Die beiden Ganglinien werden dabei
+	 * nicht verändert.
 	 * 
 	 * @param g1
 	 *            Erste Ganglinie
@@ -370,9 +370,9 @@ public final class GanglinienOperationen {
 	}
 
 	/**
-	 * Multiplikation zweier Ganglinien, indem die Werte der
-	 * vervollst&auml;ndigten St&uuml;tzstellenmenge multipliziert werden. Die
-	 * beiden Ganglinien werden dabei nicht ver&auml;ndert.
+	 * Multiplikation zweier Ganglinien, indem die Werte der vervollständigten
+	 * Stützstellenmenge multipliziert werden. Die beiden Ganglinien werden
+	 * dabei nicht verändert.
 	 * 
 	 * @param g1
 	 *            Erste Ganglinie
@@ -482,9 +482,9 @@ public final class GanglinienOperationen {
 	}
 
 	/**
-	 * Subtraktion zweier Ganglinien, indem die Werte der vervollst&auml;ndigten
-	 * St&uuml;tzstellenmenge subtrahiert werden. Die beiden Ganglinien werden
-	 * dabei nicht ver&auml;ndert.
+	 * Subtraktion zweier Ganglinien, indem die Werte der vervollständigten
+	 * Stützstellenmenge subtrahiert werden. Die beiden Ganglinien werden dabei
+	 * nicht verändert.
 	 * 
 	 * @param g1
 	 *            Erste Ganglinie
@@ -530,12 +530,11 @@ public final class GanglinienOperationen {
 	}
 
 	/**
-	 * Verbindet zwei Ganglinien durch Konkatenation. Es werden die
-	 * St&uuml;tzstellen beider Ganglinien zu einer neuen Ganglinien
-	 * zusammengefasst. Dies ist nur m&ouml;glich, wenn sich die
-	 * St&uuml;tzstellenmengen nicht &uuml;berschneiden. Ber&uuml;hren sich die
-	 * beiden Ganglinien wird im Ber&uuml;hrungspunkt er Mittelwert der beiden
-	 * St&uuml;tzstellen gebildet.
+	 * Verbindet zwei Ganglinien durch Konkatenation. Es werden die Stützstellen
+	 * beider Ganglinien zu einer neuen Ganglinien zusammengefasst. Dies ist nur
+	 * möglich, wenn sich die Stützstellenmengen nicht überschneiden. Berühren
+	 * sich die beiden Ganglinien wird im Berührungspunkt er Mittelwert der
+	 * beiden Stützstellen gebildet.
 	 * 
 	 * @param g1
 	 *            Erste Ganglinie
@@ -595,8 +594,8 @@ public final class GanglinienOperationen {
 
 	/**
 	 * Verschmilzt eine Ganglinie mit einer anderen. Dabei wird das gewichtete
-	 * arithmetische Mittel der vervollst&auml;ndigten St&uuml;tzstellen
-	 * gebildet. Die zweite Ganglinie hat immer das Gewicht 1.
+	 * arithmetische Mittel der vervollständigten Stützstellen gebildet. Die
+	 * zweite Ganglinie hat immer das Gewicht 1.
 	 * 
 	 * @param g1
 	 *            die Ganglinie mit der verschmolzen wird. Sie hat immer das
@@ -640,13 +639,13 @@ public final class GanglinienOperationen {
 	}
 
 	/**
-	 * Bestimmt die vereinigte Menge der St&uuml;tzstellen beider Ganglinien.
+	 * Bestimmt die vereinigte Menge der Stützstellen beider Ganglinien.
 	 * 
 	 * @param g1
 	 *            Erste Ganglinie
 	 * @param g2
 	 *            Zweite Ganglinie
-	 * @return Menge von St&uuml;tzstellenreferenzen in Form von Zeitstempeln
+	 * @return Menge von Stützstellenreferenzen in Form von Zeitstempeln
 	 */
 	private static LinkedList<Long> vervollstaendigeStuetzstellen(Ganglinie g1,
 			Ganglinie g2) {
