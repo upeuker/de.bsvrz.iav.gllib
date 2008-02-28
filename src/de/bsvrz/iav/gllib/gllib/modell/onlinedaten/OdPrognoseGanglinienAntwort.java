@@ -186,10 +186,10 @@ public class OdPrognoseGanglinienAntwort extends
 		}
 
 		/**
-		 * Gibt das Zeichen des Absenders zurück. Der Text wurde bei der
-		 * Anfrage in die Anfragenachricht eingetragen und von der
-		 * Ganglinienprognose in die Antwort kopiert. Somit kann die anfragende
-		 * Applikation mehrere Anfragen unterscheiden.
+		 * Gibt das Zeichen des Absenders zurück. Der Text wurde bei der Anfrage
+		 * in die Anfragenachricht eingetragen und von der Ganglinienprognose in
+		 * die Antwort kopiert. Somit kann die anfragende Applikation mehrere
+		 * Anfragen unterscheiden.
 		 * 
 		 * @return das Absenderzeichen.
 		 */
@@ -266,16 +266,6 @@ public class OdPrognoseGanglinienAntwort extends
 		}
 
 		/**
-		 * setzt den aktuellen Datenstatus.
-		 * 
-		 * @param datenStatus
-		 *            der neue Status
-		 */
-		protected void setDatenStatus(Status datenStatus) {
-			this.datenStatus = datenStatus;
-		}
-
-		/**
 		 * {@inheritDoc}
 		 * 
 		 * @see java.util.Collection#size()
@@ -317,6 +307,16 @@ public class OdPrognoseGanglinienAntwort extends
 			s += ", ganglinien=" + ganglinien;
 
 			return s + "]";
+		}
+
+		/**
+		 * setzt den aktuellen Datenstatus.
+		 * 
+		 * @param datenStatus
+		 *            der neue Status
+		 */
+		protected void setDatenStatus(Status datenStatus) {
+			this.datenStatus = datenStatus;
 		}
 
 	}
@@ -375,6 +375,96 @@ public class OdPrognoseGanglinienAntwort extends
 	 */
 	public AttributeGroup getAttributGruppe() {
 		return atg;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see de.bsvrz.sys.funclib.bitctrl.modell.Datensatz#setDaten(de.bsvrz.dav.daf.main.ResultData)
+	 */
+	public void setDaten(final ResultData result) {
+		check(result);
+
+		Daten datum = new Daten();
+		if (result.hasData()) {
+			Array ganglinien;
+			Data daten = result.getData();
+			Interval prognoseZeitraum;
+
+			datum.setAbsenderZeichen(daten.getTextValue("AbsenderZeichen")
+					.getText());
+
+			datum.clear();
+			ganglinien = daten.getArray("PrognoseGanglinie");
+			for (int i = 0; i < ganglinien.getLength(); i++) {
+				GanglinieMQ g;
+				Array feld;
+
+				g = new GanglinieMQ();
+
+				g.setMessQuerschnitt((MessQuerschnittAllgemein) ObjektFactory
+						.getInstanz().getModellobjekt(
+								ganglinien.getItem(i).getReferenceValue(
+										"Messquerschnitt").getSystemObject()));
+
+				// Verfahren
+				g.setApproximationDaK(ganglinien.getItem(i).getUnscaledValue(
+						"GanglinienVerfahren").intValue());
+				g.setBSplineOrdnung((byte) ganglinien.getItem(i)
+						.getUnscaledValue("Ordnung").longValue());
+
+				// Prognosezeitraum
+				prognoseZeitraum = new Interval(ganglinien.getItem(i)
+						.getTimeValue("ZeitpunktPrognoseBeginn").getMillis(),
+						ganglinien.getItem(i).getTimeValue(
+								"ZeitpunktPrognoseEnde").getMillis());
+				g.setPrognoseZeitraum(prognoseZeitraum);
+
+				// Stützstellen
+				feld = ganglinien.getItem(i).getArray("Stützstelle");
+				for (int j = 0; j < feld.getLength(); j++) {
+					long zeitstempel;
+					Double qKfz0, qLkw0, vPkw0, vLkw0;
+
+					zeitstempel = feld.getItem(j).getTimeValue("Zeit")
+							.getMillis();
+					if (feld.getItem(j).getScaledValue("QKfz").doubleValue() == Messwerte.UNDEFINIERT) {
+						qKfz0 = null;
+					} else {
+						qKfz0 = feld.getItem(j).getScaledValue("QKfz")
+								.doubleValue();
+					}
+					if (feld.getItem(j).getScaledValue("QLkw").doubleValue() == Messwerte.UNDEFINIERT) {
+						qLkw0 = null;
+					} else {
+						qLkw0 = feld.getItem(j).getScaledValue("QLkw")
+								.doubleValue();
+					}
+					if (feld.getItem(j).getScaledValue("VPkw").doubleValue() == Messwerte.UNDEFINIERT) {
+						vPkw0 = null;
+					} else {
+						vPkw0 = feld.getItem(j).getScaledValue("VPkw")
+								.doubleValue();
+					}
+					if (feld.getItem(j).getScaledValue("VLkw").doubleValue() == Messwerte.UNDEFINIERT) {
+						vLkw0 = null;
+					} else {
+						vLkw0 = feld.getItem(j).getScaledValue("VLkw")
+								.doubleValue();
+					}
+					g.put(zeitstempel,
+							new Messwerte(qKfz0, qLkw0, vPkw0, vLkw0));
+				}
+
+				datum.add(g);
+			}
+		}
+
+		datum.setDatenStatus(Datum.Status.getStatus(result.getDataState()));
+		datum.setZeitstempel(result.getDataTime());
+		setDatum(result.getDataDescription().getAspect(), datum);
+		fireDatensatzAktualisiert(result.getDataDescription().getAspect(),
+				datum.clone());
 	}
 
 	/**
@@ -455,96 +545,6 @@ public class OdPrognoseGanglinienAntwort extends
 		}
 
 		return daten;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see de.bsvrz.sys.funclib.bitctrl.modell.Datensatz#setDaten(de.bsvrz.dav.daf.main.ResultData)
-	 */
-	public void setDaten(final ResultData result) {
-		check(result);
-
-		Daten datum = new Daten();
-		if (result.hasData()) {
-			Array ganglinien;
-			Data daten = result.getData();
-			Interval prognoseZeitraum;
-
-			datum.setAbsenderZeichen(daten.getTextValue("AbsenderZeichen")
-					.getText());
-
-			datum.clear();
-			ganglinien = daten.getArray("PrognoseGanglinie");
-			for (int i = 0; i < ganglinien.getLength(); i++) {
-				GanglinieMQ g;
-				Array feld;
-
-				g = new GanglinieMQ();
-
-				g.setMessQuerschnitt((MessQuerschnittAllgemein) ObjektFactory
-						.getInstanz().getModellobjekt(
-								ganglinien.getItem(i).getReferenceValue(
-										"Messquerschnitt").getSystemObject()));
-
-				// Verfahren
-				g.setApproximationDaK(ganglinien.getItem(i).getUnscaledValue(
-						"GanglinienVerfahren").intValue());
-				g.setBSplineOrdnung((byte) ganglinien.getItem(i)
-						.getUnscaledValue("Ordnung").longValue());
-
-				// Prognosezeitraum
-				prognoseZeitraum = new Interval(ganglinien.getItem(i)
-						.getTimeValue("ZeitpunktPrognoseBeginn").getMillis(),
-						ganglinien.getItem(i).getTimeValue(
-								"ZeitpunktPrognoseEnde").getMillis());
-				g.setPrognoseZeitraum(prognoseZeitraum);
-
-				// Stützstellen
-				feld = ganglinien.getItem(i).getArray("Stützstelle");
-				for (int j = 0; j < feld.getLength(); j++) {
-					long zeitstempel;
-					Double qKfz0, qLkw0, vPkw0, vLkw0;
-
-					zeitstempel = feld.getItem(j).getTimeValue("Zeit")
-							.getMillis();
-					if (feld.getItem(j).getScaledValue("QKfz").doubleValue() == Messwerte.UNDEFINIERT) {
-						qKfz0 = null;
-					} else {
-						qKfz0 = feld.getItem(j).getScaledValue("QKfz")
-								.doubleValue();
-					}
-					if (feld.getItem(j).getScaledValue("QLkw").doubleValue() == Messwerte.UNDEFINIERT) {
-						qLkw0 = null;
-					} else {
-						qLkw0 = feld.getItem(j).getScaledValue("QLkw")
-								.doubleValue();
-					}
-					if (feld.getItem(j).getScaledValue("VPkw").doubleValue() == Messwerte.UNDEFINIERT) {
-						vPkw0 = null;
-					} else {
-						vPkw0 = feld.getItem(j).getScaledValue("VPkw")
-								.doubleValue();
-					}
-					if (feld.getItem(j).getScaledValue("VLkw").doubleValue() == Messwerte.UNDEFINIERT) {
-						vLkw0 = null;
-					} else {
-						vLkw0 = feld.getItem(j).getScaledValue("VLkw")
-								.doubleValue();
-					}
-					g.setStuetzstelle(zeitstempel, new Messwerte(qKfz0, qLkw0,
-							vPkw0, vLkw0));
-				}
-
-				datum.add(g);
-			}
-		}
-
-		datum.setDatenStatus(Datum.Status.getStatus(result.getDataState()));
-		datum.setZeitstempel(result.getDataTime());
-		setDatum(result.getDataDescription().getAspect(), datum);
-		fireDatensatzAktualisiert(result.getDataDescription().getAspect(),
-				datum.clone());
 	}
 
 }

@@ -36,116 +36,80 @@ import java.util.TreeMap;
 import com.bitctrl.util.Interval;
 
 /**
- * Repräsentiert eine allgemeine Ganglinie, bestehend aus einer sortierten
- * Menge von Stützstellen und der Angabe eines Interpolationsverfahren.
- * Wird kein Approximationsverfahren festgelegt, wird ein
- * {@link de.bsvrz.iav.gllib.gllib.BSpline B-Spline} mit Standardordnung
- * angenommen.
- * <p>
- * Da Ganglinien verschiedene Approximationsverfahren verwenden können, wird für
- * neue Ganglinien, die bei den Operationen (z. B. Addition) entstehen, das
- * Standardverfahren festgelegt (B-Spline mit Ordnung 5).
+ * Repräsentiert eine allgemeine Ganglinie, bestehend aus einer sortierten Menge
+ * von Stützstellen und der Angabe eines Interpolationsverfahren.
  * 
  * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
+ * @param <T>
+ *            der Typ der Ganglinie.
  */
-public class Ganglinie extends TreeMap<Long, Double> implements
-		IGanglinie<Double> {
+public class Ganglinie<T> extends TreeMap<Long, T> {
 
 	/** Die Eigenschaft {@code serialVersionUID}. */
 	private static final long serialVersionUID = 0;
 
 	/** Verfahren zur Berechnung der Punkte zwischen den Stützstellen. */
-	private Approximation approximation;
+	private Approximation<T> approximation;
 
 	/** Flag, ob die Approximation aktuallisiert werden muss. */
-	private boolean approximationAktuell = false;
+	private boolean approximationAktuell;
 
 	/**
 	 * Konstruiert eine Ganglinie ohne Stützstellen.
 	 */
 	public Ganglinie() {
-		approximation = new BSpline((byte) 5);
+		setApproximationAktuell(false);
 	}
 
 	/**
-	 * Kopierkonstruktor. Es werden die Stützstellen aus der
-	 * <em>Collection</em> übernommen.
+	 * Markiert zusätzlich die Approximation als nicht mehr aktuell.
 	 * 
-	 * @param stuetzstellen
-	 *            Die Stützstellen der Ganglinie.
-	 */
-	public Ganglinie(Collection<Stuetzstelle<Double>> stuetzstellen) {
-		this();
-		for (Stuetzstelle<Double> s : stuetzstellen) {
-			put(s.getZeitstempel(), s.getWert());
-		}
-	}
-
-	/**
-	 * Kopierkonstruktor. Es werden die Stützstellen aus der <em>Map</em>
-	 * übernommen, wobei die Schlüssel als Zeitstempel interpretiert
-	 * werden (Zeitstempel -> Wert).
+	 * {@inheritDoc}
 	 * 
-	 * @param stuetzstellen
-	 *            Die Stützstellen der Ganglinie.
+	 * @see java.util.TreeMap#clear()
 	 */
-	public Ganglinie(Map<Long, Double> stuetzstellen) {
-		this();
-		putAll(stuetzstellen);
+	@Override
+	public void clear() {
+		setApproximationAktuell(false);
+		super.clear();
 	}
 
 	/**
-	 * {@inheritDoc}
-	 */
-	public void aktualisiereApproximation() {
-		if (approximation == null) {
-			throw new IllegalStateException(
-					"Es wurde keine Approximation festgelegt.");
-		}
-		approximation.setStuetzstellen(getStuetzstellen());
-		approximation.initialisiere();
-		approximationAktuell = true;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public int anzahlStuetzstellen() {
-		return size();
-	}
-
-	/**
-	 * Kopiert die St&uumltzstellen und das Approximationsverfahren. Der Wert
-	 * für {@code approximationAktuell} wird auf false gesetzt.
+	 * Kopiert die Stützstellen und das Approximationsverfahren. Der Wert für
+	 * {@code approximationAktuell} wird auf false gesetzt.
 	 * 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Ganglinie clone() {
-		Ganglinie g;
+	public Ganglinie<T> clone() {
+		Ganglinie<T> g;
 
-		g = new Ganglinie(this);
+		g = new Ganglinie<T>();
+		g.putAll(this);
 		g.setApproximation(approximation);
 		return g;
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Gibt die Approximation der Ganglinie zurück. Die Approximation wird falls
+	 * nötig vorher initialisiert.
+	 * 
+	 * @return die Approximation.
 	 */
-	public boolean existsStuetzstelle(long zeitstempel) {
-		return containsKey(zeitstempel);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public Approximation getApproximation() {
+	public Approximation<T> getApproximation() {
+		if (approximation != null) {
+			aktualisiereApproximation();
+		}
 		return approximation;
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Gibt das Intervall der Ganglinie zurück. Das Intervall besteht aus der
+	 * ersten und letzten Stützstelle. Existieren keine Stützstellen wird
+	 * {@code null} zurückgegeben.
+	 * 
+	 * @return das Ganglinienintervall oder {@code null}.
 	 */
 	public Interval getIntervall() {
 		if (size() == 0) {
@@ -156,7 +120,9 @@ public class Ganglinie extends TreeMap<Long, Double> implements
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Bestimmt die Intervalle in denen die Ganglinie definiert ist.
+	 * 
+	 * @return eine Liste von Intervallen.
 	 */
 	public List<Interval> getIntervalle() {
 		List<Interval> intervalle;
@@ -205,18 +171,22 @@ public class Ganglinie extends TreeMap<Long, Double> implements
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Gibt die Stützstelle zu einem bestimmten Zeitpunkt zurück. Es wird die
+	 * mit der Approximation berechnete Stützstelle ausgeliefert. Die
+	 * Approximation muss dazu zuvor festgelegt worden sein.
+	 * 
+	 * @param zeitstempel
+	 *            der Zeitstempel zu dem eine Stützstelle gesucht wird.
+	 * @return die gesuchte Stützstelle.
 	 */
-	public Stuetzstelle<Double> getStuetzstelle(long zeitstempel) {
+	public Stuetzstelle<T> getStuetzstelle(long zeitstempel) {
 		if (!isValid(zeitstempel)) {
 			// Zeitstempel liegt in einem undefinierten Teilintervall
-			return new Stuetzstelle<Double>(zeitstempel, null);
+			return new Stuetzstelle<T>(zeitstempel, null);
 		}
 
 		if (approximation != null) {
-			if (!isApproximationAktuell()) {
-				aktualisiereApproximation();
-			}
+			aktualisiereApproximation();
 			return approximation.get(zeitstempel);
 		}
 
@@ -225,28 +195,35 @@ public class Ganglinie extends TreeMap<Long, Double> implements
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Gibt ein sortiertes Feld der existierenden Stützstellen zurück.
+	 * 
+	 * @return die nach Zeitstempel sortierten Stützstellen.
 	 */
-	public List<Stuetzstelle<Double>> getStuetzstellen() {
-		List<Stuetzstelle<Double>> liste;
+	public List<Stuetzstelle<T>> getStuetzstellen() {
+		List<Stuetzstelle<T>> liste;
 
-		liste = new ArrayList<Stuetzstelle<Double>>();
+		liste = new ArrayList<Stuetzstelle<T>>();
 		for (long t : keySet()) {
-			liste.add(new Stuetzstelle<Double>(t, get(t)));
+			liste.add(new Stuetzstelle<T>(t, get(t)));
 		}
 
 		return liste;
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Gibt die existierenden Stützstellen im angegebenen Intervall zurück.
+	 * 
+	 * @param intervall
+	 *            ein Intervall.
+	 * @return die Liste der Stützstellen im Intervall, sortiert nach
+	 *         Zeitstempel.
 	 */
-	public List<Stuetzstelle<Double>> getStuetzstellen(Interval intervall) {
-		SortedMap<Long, Double> menge;
-		List<Stuetzstelle<Double>> liste;
+	public List<Stuetzstelle<T>> getStuetzstellen(Interval intervall) {
+		SortedMap<Long, T> menge;
+		List<Stuetzstelle<T>> liste;
 
 		menge = subMap(intervall.getStart(), intervall.getEnd() + 1);
-		liste = new ArrayList<Stuetzstelle<Double>>();
+		liste = new ArrayList<Stuetzstelle<T>>();
 		for (long t : menge.keySet()) {
 			liste.add(getStuetzstelle(t));
 		}
@@ -255,16 +232,14 @@ public class Ganglinie extends TreeMap<Long, Double> implements
 	}
 
 	/**
-	 * {@inheritDoc}
-	 */
-	public boolean isApproximationAktuell() {
-		return approximationAktuell;
-	}
-
-	/**
-	 * {@inheritDoc}
+	 * Prüft ob ein Teilintervall der Ganglinie vollständig definiert ist, also
+	 * keine undefinierten Berreiche enthält.
 	 * 
-	 * @see de.bsvrz.iav.gllib.gllib.IGanglinie#isValid(com.bitctrl.util.Interval)
+	 * @param intervall
+	 *            das zu prüfende Intervall.
+	 * @return {@code true}, wenn das Teilintervall der Ganglinie keine
+	 *         undefinierten Bereiche enthält.
+	 * @see #getIntervalle()
 	 */
 	public boolean isValid(Interval intervall) {
 		boolean ok;
@@ -281,7 +256,13 @@ public class Ganglinie extends TreeMap<Long, Double> implements
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Prüft ob ein Zeitstempel im definiterten Bereich der Ganglinie liegt.
+	 * 
+	 * @param zeitstempel
+	 *            der zu prüfender Zeitstempel.
+	 * @return {@code true}, wenn der Zeitstempel im definierten Bereich der
+	 *         Ganglinie liegt.
+	 * @see #getIntervalle()
 	 */
 	public boolean isValid(long zeitstempel) {
 		boolean ok;
@@ -298,49 +279,81 @@ public class Ganglinie extends TreeMap<Long, Double> implements
 	}
 
 	/**
+	 * Markiert zusätzlich die Approximation als nicht mehr aktuell.
+	 * 
 	 * {@inheritDoc}
+	 * 
+	 * @see java.util.TreeMap#put(java.lang.Object, java.lang.Object)
 	 */
-	public void remove(long zeitstempel) {
-		remove(zeitstempel);
-		approximationAktuell = false;
+	@Override
+	public T put(Long key, T value) {
+		setApproximationAktuell(false);
+		return super.put(key, value);
 	}
 
 	/**
-	 * Entfernt alle Stützstellen.
+	 * Markiert zusätzlich die Approximation als nicht mehr aktuell.
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @see java.util.TreeMap#putAll(java.util.Map)
 	 */
-	public void removeAll() {
-		clear();
-		approximationAktuell = false;
+	@Override
+	public void putAll(Map<? extends Long, ? extends T> map) {
+		setApproximationAktuell(false);
+		super.putAll(map);
 	}
 
 	/**
+	 * Markiert zusätzlich die Approximation als nicht mehr aktuell.
+	 * 
 	 * {@inheritDoc}
+	 * 
+	 * @see java.util.TreeMap#remove(java.lang.Object)
 	 */
-	public void setApproximation(Approximation approximation) {
+	@Override
+	public T remove(Object key) {
+		setApproximationAktuell(false);
+		return super.remove(key);
+	}
+
+	/**
+	 * Legt das Approximationsverfahren fest, mit dem die Werte zwischen den
+	 * Stützstellen bestimmt werden soll.
+	 * 
+	 * @param approximation
+	 *            das Approximationsverfahren.
+	 */
+	public void setApproximation(Approximation<T> approximation) {
+		setApproximationAktuell(false);
 		this.approximation = approximation;
-		approximationAktuell = false;
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Nimmt eine Stützstelle in die Ganglinie auf. Existiert zu dem Zeitpunkt
+	 * bereits eine, wird diese überschrieben.
+	 * 
+	 * @param s
+	 *            die neue Stuützstelle.
+	 * @return {@code true}, wenn die Stützstelle neu angelegt wurde und
+	 *         {@code false}, wenn eine vorhandene Stützstelle ersetzt wurde.
 	 */
-	public boolean setStuetzstelle(long zeitstempel, Double wert) {
-		boolean neu;
-
-		neu = put(zeitstempel, wert) == null;
-		approximationAktuell = false;
-		return neu;
+	public boolean setStuetzstelle(Stuetzstelle<T> s) {
+		return put(s.getZeitstempel(), s.getWert()) == null;
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Ersetzt die Stützstellen der Ganglinie.
+	 * 
+	 * @param stuetzstellen
+	 *            die neuen Stützstellen
 	 */
-	public boolean setStuetzstelle(Stuetzstelle<Double> s) {
-		boolean neu;
-
-		neu = setStuetzstelle(s.getZeitstempel(), s.getWert());
-		approximationAktuell = false;
-		return neu;
+	public void setStuetzstellen(Collection<Stuetzstelle<T>> stuetzstellen) {
+		setApproximationAktuell(false);
+		clear();
+		for (Stuetzstelle<T> s : stuetzstellen) {
+			put(s.getZeitstempel(), s.getWert());
+		}
 	}
 
 	/**
@@ -351,6 +364,38 @@ public class Ganglinie extends TreeMap<Long, Double> implements
 	@Override
 	public String toString() {
 		return getClass().getName() + "[" + getStuetzstellen().toString() + "]";
+	}
+
+	/**
+	 * Aktualisiert falls nötig die Approximation.
+	 */
+	private void aktualisiereApproximation() {
+		if (!isApproximationAktuell()) {
+			approximation.setStuetzstellen(getStuetzstellen());
+			approximation.initialisiere();
+		}
+	}
+
+	/**
+	 * Gibt {@code false} zurück, wenn die Approximation aktuallisiert werden
+	 * muss, weil sich die Ganglinie geändert hat.
+	 * 
+	 * @return {@code true}, wenn Ganglinie und Approximation konform gehen und
+	 *         {@code false}, wenn die Approximation aktualisiert werden muss.
+	 */
+	private boolean isApproximationAktuell() {
+		return approximationAktuell;
+	}
+
+	/**
+	 * Setzt das Flag, ob die Approximation noch gültig ist oder nicht.
+	 * 
+	 * @param approximationAktuell
+	 *            {@code false}, wenn die Approximation aktualisiert werden
+	 *            muss.
+	 */
+	private void setApproximationAktuell(boolean approximationAktuell) {
+		this.approximationAktuell = approximationAktuell;
 	}
 
 }

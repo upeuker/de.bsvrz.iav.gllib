@@ -34,7 +34,7 @@ import com.bitctrl.util.Interval;
  * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
  */
-public class BSpline extends AbstractApproximation {
+public class BSpline extends AbstractApproximation<Double> {
 
 	/** Das Breite der Teilintervalle beim Integrieren: eine Minute. */
 	public static final long INTEGRATIONSINTERVALL = 60 * 1000;

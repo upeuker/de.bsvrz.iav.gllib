@@ -40,17 +40,19 @@ import com.bitctrl.util.Interval;
  * 
  * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
+ * @param <T>
+ *            der Typ der Approximation.
  */
-public abstract class AbstractApproximation implements Approximation {
+public abstract class AbstractApproximation<T> implements Approximation<T> {
 
 	/** Liste der verwendeten Stützstellen. */
-	private final List<Stuetzstelle<Double>> stuetzstellen;
+	private final List<Stuetzstelle<T>> stuetzstellen;
 
 	/**
 	 * Initialisiert die Stützstellenliste.
 	 */
 	public AbstractApproximation() {
-		stuetzstellen = new ArrayList<Stuetzstelle<Double>>();
+		stuetzstellen = new ArrayList<Stuetzstelle<T>>();
 	}
 
 	/**
@@ -68,23 +70,23 @@ public abstract class AbstractApproximation implements Approximation {
 	 * 
 	 * @see de.bsvrz.iav.gllib.gllib.Approximation#getStuetzstellen()
 	 */
-	public List<Stuetzstelle<Double>> getStuetzstellen() {
+	public List<Stuetzstelle<T>> getStuetzstellen() {
 		return Collections.unmodifiableList(stuetzstellen);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public SortedSet<Stuetzstelle<Double>> interpoliere(long intervallBreite) {
+	public SortedSet<Stuetzstelle<T>> interpoliere(long intervallBreite) {
 		if (intervallBreite <= 0) {
 			throw new IllegalArgumentException(
 					"Intervallbreite muss größer null sein.");
 		}
 
-		SortedSet<Stuetzstelle<Double>> interpolation;
+		SortedSet<Stuetzstelle<T>> interpolation;
 		long zeitstempel;
 
-		interpolation = new TreeSet<Stuetzstelle<Double>>();
+		interpolation = new TreeSet<Stuetzstelle<T>>();
 
 		// Sonderfall: keine Stützstellen vorhanden
 		if (stuetzstellen.size() == 0) {
@@ -128,9 +130,9 @@ public abstract class AbstractApproximation implements Approximation {
 	 * 
 	 * {@inheritDoc}
 	 */
-	public void setStuetzstellen(Collection<Stuetzstelle<Double>> stuetzstellen) {
+	public void setStuetzstellen(Collection<Stuetzstelle<T>> stuetzstellen) {
 		this.stuetzstellen.clear();
-		for (Stuetzstelle<Double> s : stuetzstellen) {
+		for (Stuetzstelle<T> s : stuetzstellen) {
 			if (s.getWert() != null) {
 				this.stuetzstellen.add(s);
 			}

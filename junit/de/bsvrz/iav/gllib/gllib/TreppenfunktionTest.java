@@ -42,19 +42,19 @@ import com.bitctrl.util.Interval;
 public class TreppenfunktionTest {
 
 	/** Die Testganglinie. */
-	private Ganglinie ganglinie;
+	private Ganglinie<Double> ganglinie;
 
 	/**
 	 * Testganglinie initialisieren.
 	 */
 	@Before
 	public void setUp() {
-		ganglinie = new Ganglinie();
-		ganglinie.setStuetzstelle(0, 0.0);
-		ganglinie.setStuetzstelle(3000, 30.0);
-		ganglinie.setStuetzstelle(4000, 20.0);
-		ganglinie.setStuetzstelle(6000, 40.0);
-		ganglinie.setStuetzstelle(9000, 10.0);
+		ganglinie = new Ganglinie<Double>();
+		ganglinie.put(0L, 0.0);
+		ganglinie.put(3000L, 30.0);
+		ganglinie.put(4000L, 20.0);
+		ganglinie.put(6000L, 40.0);
+		ganglinie.put(9000L, 10.0);
 	}
 
 	/**

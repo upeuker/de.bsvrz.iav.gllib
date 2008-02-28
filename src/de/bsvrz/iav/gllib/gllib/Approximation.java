@@ -38,8 +38,10 @@ import com.bitctrl.util.Interval;
  * 
  * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
+ * @param <T>
+ *            der Typ der Approximation.
  */
-public interface Approximation {
+public interface Approximation<T> {
 
 	/**
 	 * Gibt die Stützstelle zum angegebenen Zeitstempel zurück.
@@ -48,7 +50,7 @@ public interface Approximation {
 	 *            Zeitstempel
 	 * @return Wert als Stützstelle
 	 */
-	Stuetzstelle<Double> get(long zeitstempel);
+	Stuetzstelle<T> get(long zeitstempel);
 
 	/**
 	 * Gibt das Intervall zurück, in dem die Approximation definiert ist.
@@ -63,7 +65,7 @@ public interface Approximation {
 	 * 
 	 * @return die unveränderliche Liste der Stützstellen.
 	 */
-	List<Stuetzstelle<Double>> getStuetzstellen();
+	List<Stuetzstelle<T>> getStuetzstellen();
 
 	/**
 	 * Führt notwendige Initialisierungsarbeiten der Approximation aus.
@@ -80,10 +82,9 @@ public interface Approximation {
 	double integral(Interval intervall);
 
 	/**
-	 * Gibt eine Interpolation der Approximation zurück. Nützlich
-	 * für die grafische Darstellung von Ganglinien, indem in einem festen
-	 * Abstand Stützstellen berechnet werden, die als Polygonzug
-	 * darstellbar sind.
+	 * Gibt eine Interpolation der Approximation zurück. Nützlich für die
+	 * grafische Darstellung von Ganglinien, indem in einem festen Abstand
+	 * Stützstellen berechnet werden, die als Polygonzug darstellbar sind.
 	 * 
 	 * @param intervallBreite
 	 *            Die gewünschte Breite der Intervalle
@@ -91,7 +92,7 @@ public interface Approximation {
 	 * @throws IllegalArgumentException
 	 *             Wenn die Intervallbreite kleiner oder gleich 0 ist
 	 */
-	SortedSet<Stuetzstelle<Double>> interpoliere(long intervallBreite);
+	SortedSet<Stuetzstelle<T>> interpoliere(long intervallBreite);
 
 	/**
 	 * Legt die Stützstellen der Approximation fest.
@@ -99,6 +100,6 @@ public interface Approximation {
 	 * @param stuetzstellen
 	 *            die Menge der bekannten Stützstellen.
 	 */
-	void setStuetzstellen(Collection<Stuetzstelle<Double>> stuetzstellen);
+	void setStuetzstellen(Collection<Stuetzstelle<T>> stuetzstellen);
 
 }

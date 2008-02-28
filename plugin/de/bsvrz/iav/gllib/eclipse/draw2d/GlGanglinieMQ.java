@@ -97,10 +97,6 @@ public class GlGanglinieMQ extends GlFigure {
 
 				});
 
-				if (!ganglinie.isApproximationAktuell()) {
-					ganglinie.aktualisiereApproximation();
-				}
-
 				for (Stuetzstelle<Messwerte> s : getGanglinie()
 						.getStuetzstellen()) {
 					if (s.getWert().getQKfz() != null) {

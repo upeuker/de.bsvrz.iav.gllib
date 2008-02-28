@@ -45,7 +45,7 @@ import de.bsvrz.sys.funclib.bitctrl.math.algebra.Vektor;
  * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
  */
-public class CubicSpline extends AbstractApproximation {
+public class CubicSpline extends AbstractApproximation<Double> {
 
 	/** Das Breite der Teilintervalle beim Integrieren: eine Minute. */
 	public static final long INTEGRATIONSINTERVALL = 60 * 1000;

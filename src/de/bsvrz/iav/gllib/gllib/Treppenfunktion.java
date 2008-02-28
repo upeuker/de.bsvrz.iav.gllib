@@ -36,7 +36,7 @@ import com.bitctrl.util.Interval;
  * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
  */
-public class Treppenfunktion extends AbstractApproximation {
+public class Treppenfunktion extends AbstractApproximation<Double> {
 
 	/**
 	 * {@inheritDoc}

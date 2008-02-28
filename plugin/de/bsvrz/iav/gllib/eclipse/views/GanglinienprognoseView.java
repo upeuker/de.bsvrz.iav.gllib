@@ -106,9 +106,6 @@ public class GanglinienprognoseView extends ViewPart implements
 				GlSkalierung skal;
 
 				g = e.getGanglinien().iterator().next();
-				if (!g.isApproximationAktuell()) {
-					g.aktualisiereApproximation();
-				}
 				txtAntwort.setText(g.toString());
 				ganglinienListe.setInput(g.getStuetzstellen());
 
@@ -139,6 +136,16 @@ public class GanglinienprognoseView extends ViewPart implements
 		gd = new GridData(GridData.FILL, GridData.FILL, true, true);
 		erzeugeAntwort(parent).setLayoutData(gd);
 
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.ui.part.WorkbenchPart#setFocus()
+	 */
+	@Override
+	public void setFocus() {
+		// nix
 	}
 
 	/**
@@ -341,15 +348,5 @@ public class GanglinienprognoseView extends ViewPart implements
 		col.setWidth(100);
 
 		return grpAntwort;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see org.eclipse.ui.part.WorkbenchPart#setFocus()
-	 */
-	@Override
-	public void setFocus() {
-		// nix
 	}
 }

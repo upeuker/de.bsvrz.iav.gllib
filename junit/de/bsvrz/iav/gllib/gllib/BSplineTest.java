@@ -114,27 +114,27 @@ public class BSplineTest {
 	}
 
 	/**
-	 * Prüft ob bei Anfrage einer Stützstelle auch der richtige
-	 * Zeitstempel kommt. Beim B-Spline ist dies nicht trivial. Dieser Test
-	 * arbeitet mit einer vorgegebenen Ganglinie.
+	 * Prüft ob bei Anfrage einer Stützstelle auch der richtige Zeitstempel
+	 * kommt. Beim B-Spline ist dies nicht trivial. Dieser Test arbeitet mit
+	 * einer vorgegebenen Ganglinie.
 	 */
 	@Test
 	public void testGetA() {
-		Ganglinie g;
+		Ganglinie<Double> g;
 		BSpline spline;
 
-		g = new Ganglinie();
-		g.setStuetzstelle(0, 0.0);
-		g.setStuetzstelle(3 * 60 * 1000, 300.0);
-		g.setStuetzstelle(4 * 60 * 1000, 200.0);
-		g.setStuetzstelle(6 * 60 * 1000, 400.0);
-		g.setStuetzstelle(9 * 60 * 1000, 100.0);
+		g = new Ganglinie<Double>();
+		g.put(0L, 0.0);
+		g.put(3L * MILLIS_PER_HOUR, 300.0);
+		g.put(4L * MILLIS_PER_HOUR, 200.0);
+		g.put(6L * MILLIS_PER_HOUR, 400.0);
+		g.put(9L * MILLIS_PER_HOUR, 100.0);
 
 		spline = new BSpline();
 		spline.setStuetzstellen(g.getStuetzstellen());
 
 		// Rechnen
-		for (byte k = 1; k <= g.anzahlStuetzstellen() && k <= 10; k++) {
+		for (byte k = 1; k <= g.size() && k <= 10; k++) {
 			spline.setOrdnung(k);
 			spline.initialisiere();
 
@@ -145,6 +145,7 @@ public class BSplineTest {
 		}
 	}
 
+	// TODO Kommentar entfernen
 	// /**
 	// * Prüft ob bei Anfrage einer Stützstelle auch der richtige
 	// * Zeitstempel kommt. Beim B-Spline ist dies nicht trivial. Dieser Test

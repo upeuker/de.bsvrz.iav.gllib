@@ -38,7 +38,7 @@ import com.bitctrl.util.Interval;
  * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
  */
-public class Polyline extends AbstractApproximation {
+public class Polyline extends AbstractApproximation<Double> {
 
 	/**
 	 * {@inheritDoc}

@@ -37,9 +37,6 @@ import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dav.daf.main.Data.Array;
 import de.bsvrz.dav.daf.main.config.AttributeGroup;
 import de.bsvrz.dav.daf.main.config.DataModel;
-import de.bsvrz.iav.gllib.gllib.BSpline;
-import de.bsvrz.iav.gllib.gllib.CubicSpline;
-import de.bsvrz.iav.gllib.gllib.Polyline;
 import de.bsvrz.iav.gllib.gllib.Stuetzstelle;
 import de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ;
 import de.bsvrz.iav.gllib.gllib.dav.Messwerte;
@@ -412,23 +409,10 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 					g.setReferenz(false);
 				}
 
-				switch (daten.getUnscaledValue("GanglinienVerfahren")
-						.intValue()) {
-				case GanglinieMQ.APPROX_BSPLINE:
-					g.setApproximation(new BSpline());
-					g.setBSplineOrdnung((byte) daten
-							.getUnscaledValue("Ordnung").longValue());
-					break;
-				case GanglinieMQ.APPROX_CUBICSPLINE:
-					g.setApproximation(new CubicSpline());
-					break;
-				case GanglinieMQ.APPROX_POLYLINE:
-					g.setApproximation(new Polyline());
-					break;
-				default:
-					g.setApproximation(new BSpline());
-					g.setBSplineOrdnung((byte) 5);
-				}
+				g.setApproximationDaK(daten.getUnscaledValue(
+						"GanglinienVerfahren").intValue());
+				g.setBSplineOrdnung((byte) daten.getUnscaledValue("Ordnung")
+						.longValue());
 
 				stuetzstellen = daten.getArray("Stützstelle");
 				for (int j = 0; j < stuetzstellen.getLength(); j++) {
@@ -457,8 +441,8 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 					if (vLkw0 == Messwerte.UNDEFINIERT) {
 						vLkw0 = null;
 					}
-					g.setStuetzstelle(zeitstempel, new Messwerte(qKfz0, qLkw0,
-							vPkw0, vLkw0));
+					g.put(zeitstempel,
+							new Messwerte(qKfz0, qLkw0, vPkw0, vLkw0));
 				}
 
 				datum.add(g);

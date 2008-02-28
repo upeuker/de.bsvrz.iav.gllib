@@ -52,22 +52,22 @@ public class GanglinieTest {
 	 */
 	@Test
 	public void testGanglinieAnlegen() {
-		Ganglinie g;
+		Ganglinie<Double> g;
 
-		g = new Ganglinie();
-		g.setStuetzstelle(1000, 25.0);
-		g.setStuetzstelle(3000, 40.0);
-		g.setStuetzstelle(4000, 35.0);
+		g = new Ganglinie<Double>();
+		g.put(1000L, 25.0);
+		g.put(3000L, 40.0);
+		g.put(4000L, 35.0);
 
-		assertEquals(3, g.anzahlStuetzstellen());
+		assertEquals(3, g.size());
 		assertEquals(3, g.getStuetzstellen().size());
 
-		assertTrue(g.existsStuetzstelle(1000));
-		assertTrue(g.existsStuetzstelle(3000));
-		assertTrue(g.existsStuetzstelle(4000));
-		assertFalse(g.existsStuetzstelle(500));
-		assertFalse(g.existsStuetzstelle(-1000));
-		assertFalse(g.existsStuetzstelle(6000));
+		assertTrue(g.containsKey(1000L));
+		assertTrue(g.containsKey(3000L));
+		assertTrue(g.containsKey(4000L));
+		assertFalse(g.containsKey(500L));
+		assertFalse(g.containsKey(-1000L));
+		assertFalse(g.containsKey(6000L));
 
 		assertEquals(new Interval(1000, 4000), g.getIntervall());
 		assertEquals(1, g.getIntervalle().size());
@@ -87,7 +87,7 @@ public class GanglinieTest {
 		assertEquals(new Stuetzstelle<Double>(4000, 35.0), g.getStuetzstellen()
 				.get(2));
 
-		assertEquals(3, g.anzahlStuetzstellen());
+		assertEquals(3, g.size());
 	}
 
 	/**
@@ -95,21 +95,21 @@ public class GanglinieTest {
 	 */
 	@Test
 	public void testGanglinieOhneStuetzstellen() {
-		Ganglinie g;
+		Ganglinie<Double> g;
 
-		g = new Ganglinie();
+		g = new Ganglinie<Double>();
 
 		assertNull(g.getStuetzstelle(1).getWert());
 
-		assertEquals(0, g.anzahlStuetzstellen());
+		assertEquals(0, g.size());
 		assertEquals(0, g.getStuetzstellen().size());
 
 		assertEquals(0, g.getIntervalle().size());
 		assertEquals(null, g.getIntervall());
-		assertFalse(g.existsStuetzstelle(2));
+		assertFalse(g.containsKey(2));
 		assertFalse(g.isValid(2));
 
-		assertEquals(0, g.anzahlStuetzstellen());
+		assertEquals(0, g.size());
 	}
 
 	/**
@@ -117,60 +117,60 @@ public class GanglinieTest {
 	 */
 	@Test
 	public void testUndefinierteBereiche() {
-		Ganglinie g;
+		Ganglinie<Double> g;
 		List<Interval> intervalle;
 
-		g = new Ganglinie();
-		g.setStuetzstelle(0, 30.0);
-		g.setStuetzstelle(1000, 15.0);
-		g.setStuetzstelle(2000, 34.0);
-		g.setStuetzstelle(3000, 54.0);
-		g.setStuetzstelle(4000, 23.0);
-		g.setStuetzstelle(5000, 15.0);
-		g.setStuetzstelle(6000, 34.0);
-		g.setStuetzstelle(7000, 45.8);
-		g.setStuetzstelle(8000, 23.0);
-		g.setStuetzstelle(9000, 15.0);
-		g.setStuetzstelle(10000, 34.0);
-		g.setStuetzstelle(11000, 34.0);
-		g.setStuetzstelle(12000, 34.0);
+		g = new Ganglinie<Double>();
+		g.put(0L, 30.0);
+		g.put(1000L, 15.0);
+		g.put(2000L, 34.0);
+		g.put(3000L, 54.0);
+		g.put(4000L, 23.0);
+		g.put(5000L, 15.0);
+		g.put(6000L, 34.0);
+		g.put(7000L, 45.8);
+		g.put(8000L, 23.0);
+		g.put(9000L, 15.0);
+		g.put(10000L, 34.0);
+		g.put(11000L, 34.0);
+		g.put(12000L, 34.0);
 		intervalle = new ArrayList<Interval>();
 		intervalle.add(new Interval(0, 12000));
 		assertEquals(intervalle, g.getIntervalle());
 
-		g = new Ganglinie();
-		g.setStuetzstelle(0, 30.0);
-		g.setStuetzstelle(1000, 15.0);
-		g.setStuetzstelle(2000, 34.0);
-		g.setStuetzstelle(3000, null);
-		g.setStuetzstelle(4000, 23.0);
-		g.setStuetzstelle(5000, 15.0);
-		g.setStuetzstelle(6000, 34.0);
-		g.setStuetzstelle(7000, 45.8);
-		g.setStuetzstelle(8000, 23.0);
-		g.setStuetzstelle(9000, 15.0);
-		g.setStuetzstelle(10000, 34.0);
-		g.setStuetzstelle(11000, 34.0);
-		g.setStuetzstelle(12000, 34.0);
+		g = new Ganglinie<Double>();
+		g.put(0L, 30.0);
+		g.put(1000L, 15.0);
+		g.put(2000L, 34.0);
+		g.put(3000L, null);
+		g.put(4000L, 23.0);
+		g.put(5000L, 15.0);
+		g.put(6000L, 34.0);
+		g.put(7000L, 45.8);
+		g.put(8000L, 23.0);
+		g.put(9000L, 15.0);
+		g.put(10000L, 34.0);
+		g.put(11000L, 34.0);
+		g.put(12000L, 34.0);
 		intervalle = new ArrayList<Interval>();
 		intervalle.add(new Interval(0, 2000));
 		intervalle.add(new Interval(4000, 12000));
 		assertEquals(intervalle, g.getIntervalle());
 
-		g = new Ganglinie();
-		g.setStuetzstelle(0, 30.0);
-		g.setStuetzstelle(1000, 15.0);
-		g.setStuetzstelle(2000, 34.0);
-		g.setStuetzstelle(3000, null);
-		g.setStuetzstelle(4000, 23.0);
-		g.setStuetzstelle(5000, 15.0);
-		g.setStuetzstelle(6000, 34.0);
-		g.setStuetzstelle(7000, 45.8);
-		g.setStuetzstelle(8000, null);
-		g.setStuetzstelle(9000, 15.0);
-		g.setStuetzstelle(10000, 34.0);
-		g.setStuetzstelle(11000, null);
-		g.setStuetzstelle(12000, 34.0);
+		g = new Ganglinie<Double>();
+		g.put(0L, 30.0);
+		g.put(1000L, 15.0);
+		g.put(2000L, 34.0);
+		g.put(3000L, null);
+		g.put(4000L, 23.0);
+		g.put(5000L, 15.0);
+		g.put(6000L, 34.0);
+		g.put(7000L, 45.8);
+		g.put(8000L, null);
+		g.put(9000L, 15.0);
+		g.put(10000L, 34.0);
+		g.put(11000L, null);
+		g.put(12000L, 34.0);
 		intervalle = new ArrayList<Interval>();
 		intervalle.add(new Interval(0, 2000));
 		intervalle.add(new Interval(4000, 7000));
@@ -178,40 +178,40 @@ public class GanglinieTest {
 		intervalle.add(new Interval(12000, 12000));
 		assertEquals(intervalle, g.getIntervalle());
 
-		g = new Ganglinie();
-		g.setStuetzstelle(0, 30.0);
-		g.setStuetzstelle(1000, 15.0);
-		g.setStuetzstelle(2000, 34.0);
-		g.setStuetzstelle(3000, null);
-		g.setStuetzstelle(4000, 23.0);
-		g.setStuetzstelle(5000, 15.0);
-		g.setStuetzstelle(6000, 34.0);
-		g.setStuetzstelle(7000, 45.8);
-		g.setStuetzstelle(8000, null);
-		g.setStuetzstelle(9000, 15.0);
-		g.setStuetzstelle(10000, 34.0);
-		g.setStuetzstelle(11000, 54.1);
-		g.setStuetzstelle(12000, null);
+		g = new Ganglinie<Double>();
+		g.put(0L, 30.0);
+		g.put(1000L, 15.0);
+		g.put(2000L, 34.0);
+		g.put(3000L, null);
+		g.put(4000L, 23.0);
+		g.put(5000L, 15.0);
+		g.put(6000L, 34.0);
+		g.put(7000L, 45.8);
+		g.put(8000L, null);
+		g.put(9000L, 15.0);
+		g.put(10000L, 34.0);
+		g.put(11000L, 54.1);
+		g.put(12000L, null);
 		intervalle = new ArrayList<Interval>();
 		intervalle.add(new Interval(0, 2000));
 		intervalle.add(new Interval(4000, 7000));
 		intervalle.add(new Interval(9000, 11000));
 		assertEquals(intervalle, g.getIntervalle());
 
-		g = new Ganglinie();
-		g.setStuetzstelle(0, null);
-		g.setStuetzstelle(1000, 15.0);
-		g.setStuetzstelle(2000, 34.0);
-		g.setStuetzstelle(3000, null);
-		g.setStuetzstelle(4000, 23.0);
-		g.setStuetzstelle(5000, 15.0);
-		g.setStuetzstelle(6000, 34.0);
-		g.setStuetzstelle(7000, 45.8);
-		g.setStuetzstelle(8000, null);
-		g.setStuetzstelle(9000, 15.0);
-		g.setStuetzstelle(10000, 34.0);
-		g.setStuetzstelle(11000, null);
-		g.setStuetzstelle(12000, 34.0);
+		g = new Ganglinie<Double>();
+		g.put(0L, null);
+		g.put(1000L, 15.0);
+		g.put(2000L, 34.0);
+		g.put(3000L, null);
+		g.put(4000L, 23.0);
+		g.put(5000L, 15.0);
+		g.put(6000L, 34.0);
+		g.put(7000L, 45.8);
+		g.put(8000L, null);
+		g.put(9000L, 15.0);
+		g.put(10000L, 34.0);
+		g.put(11000L, null);
+		g.put(12000L, 34.0);
 		intervalle = new ArrayList<Interval>();
 		intervalle.add(new Interval(1000, 2000));
 		intervalle.add(new Interval(4000, 7000));
@@ -219,20 +219,20 @@ public class GanglinieTest {
 		intervalle.add(new Interval(12000, 12000));
 		assertEquals(intervalle, g.getIntervalle());
 
-		g = new Ganglinie();
-		g.setStuetzstelle(0, null);
-		g.setStuetzstelle(1000, 15.0);
-		g.setStuetzstelle(2000, null);
-		g.setStuetzstelle(3000, 34.0);
-		g.setStuetzstelle(4000, null);
-		g.setStuetzstelle(5000, 15.0);
-		g.setStuetzstelle(6000, 34.0);
-		g.setStuetzstelle(7000, 45.8);
-		g.setStuetzstelle(8000, null);
-		g.setStuetzstelle(9000, 15.0);
-		g.setStuetzstelle(10000, 34.0);
-		g.setStuetzstelle(11000, 54.1);
-		g.setStuetzstelle(12000, null);
+		g = new Ganglinie<Double>();
+		g.put(0L, null);
+		g.put(1000L, 15.0);
+		g.put(2000L, null);
+		g.put(3000L, 34.0);
+		g.put(4000L, null);
+		g.put(5000L, 15.0);
+		g.put(6000L, 34.0);
+		g.put(7000L, 45.8);
+		g.put(8000L, null);
+		g.put(9000L, 15.0);
+		g.put(10000L, 34.0);
+		g.put(11000L, 54.1);
+		g.put(12000L, null);
 		intervalle = new ArrayList<Interval>();
 		intervalle.add(new Interval(1000, 1000));
 		intervalle.add(new Interval(3000, 3000));

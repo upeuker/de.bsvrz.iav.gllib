@@ -46,21 +46,20 @@ import de.bsvrz.sys.funclib.bitctrl.math.RationaleZahl;
 public class CubicSplineTest {
 
 	/** Die Testganglinie. */
-	private Ganglinie ganglinie;
+	private Ganglinie<Double> ganglinie;
 
 	/**
 	 * Testganglinie initialisieren.
 	 */
 	@Before
 	public void setUp() {
-		ganglinie = new Ganglinie();
-		ganglinie.setStuetzstelle(0, 0.0);
-		ganglinie.setStuetzstelle(3 * MILLIS_PER_HOUR, 3000.0);
-		ganglinie.setStuetzstelle(4 * MILLIS_PER_HOUR, 2000.0);
-		ganglinie.setStuetzstelle(6 * MILLIS_PER_HOUR, 4000.0);
-		ganglinie.setStuetzstelle(9 * MILLIS_PER_HOUR, 1000.0);
+		ganglinie = new Ganglinie<Double>();
+		ganglinie.put(0L, 0.0);
+		ganglinie.put(3L * MILLIS_PER_HOUR, 3000.0);
+		ganglinie.put(4L * MILLIS_PER_HOUR, 2000.0);
+		ganglinie.put(6L * MILLIS_PER_HOUR, 4000.0);
+		ganglinie.put(9L * MILLIS_PER_HOUR, 1000.0);
 		ganglinie.setApproximation(new Polyline());
-		ganglinie.aktualisiereApproximation();
 	}
 
 	/**

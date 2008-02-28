@@ -52,7 +52,8 @@ public final class GanglinienMQOperationen {
 	/**
 	 * Addiert zwei Ganglinien, indem die Werte der vervollständigten
 	 * Stützstellenmenge addiert werden. Die beiden Ganglinien werden dabei
-	 * nicht verändert.
+	 * nicht verändert. Die Metainformationen der ersten Ganglinien werden in
+	 * die Ergebnisganglinie kopiert.
 	 * 
 	 * @param g1
 	 *            Erste Ganglinie
@@ -61,10 +62,10 @@ public final class GanglinienMQOperationen {
 	 * @return Die "Summe" der beiden Ganglinien
 	 */
 	public static GanglinieMQ addiere(GanglinieMQ g1, GanglinieMQ g2) {
-		final Ganglinie gQKfz;
-		final Ganglinie gQLkw;
-		final Ganglinie gVPkw;
-		final Ganglinie gVLkw;
+		final Ganglinie<Double> gQKfz;
+		final Ganglinie<Double> gQLkw;
+		final Ganglinie<Double> gVPkw;
+		final Ganglinie<Double> gVLkw;
 
 		gQKfz = GanglinienOperationen.addiere(g1.getGanglinieQKfz(), g2
 				.getGanglinieQKfz());
@@ -75,7 +76,7 @@ public final class GanglinienMQOperationen {
 		gVLkw = GanglinienOperationen.addiere(g1.getGanglinieVLkw(), g2
 				.getGanglinieVLkw());
 
-		return zusammenfuehren(gQKfz, gQLkw, gVPkw, gVLkw);
+		return kopiereMetaDaten(zusammenfuehren(gQKfz, gQLkw, gVPkw, gVLkw), g1);
 	}
 
 	/**
@@ -93,10 +94,10 @@ public final class GanglinienMQOperationen {
 	 * @return Der Intervallausschnitt
 	 */
 	public static GanglinieMQ auschneiden(GanglinieMQ g, Interval i) {
-		final Ganglinie gQKfz;
-		final Ganglinie gQLkw;
-		final Ganglinie gVPkw;
-		final Ganglinie gVLkw;
+		final Ganglinie<Double> gQKfz;
+		final Ganglinie<Double> gQLkw;
+		final Ganglinie<Double> gVPkw;
+		final Ganglinie<Double> gVLkw;
 
 		gQKfz = GanglinienOperationen.auschneiden(g.getGanglinieQKfz(), i);
 		gQLkw = GanglinienOperationen.auschneiden(g.getGanglinieQLkw(), i);
@@ -136,7 +137,8 @@ public final class GanglinienMQOperationen {
 	/**
 	 * Division zweier Ganglinien, indem die Werte der vervollständigten
 	 * Stützstellenmenge dividiert werden. Die beiden Ganglinien werden dabei
-	 * nicht verändert.
+	 * nicht verändert. Die Metainformationen der ersten Ganglinien werden in
+	 * die Ergebnisganglinie kopiert.
 	 * 
 	 * @param g1
 	 *            Erste Ganglinie
@@ -145,10 +147,10 @@ public final class GanglinienMQOperationen {
 	 * @return Das "Produkt" der beiden Ganglinien
 	 */
 	public static GanglinieMQ dividiere(GanglinieMQ g1, GanglinieMQ g2) {
-		final Ganglinie gQKfz;
-		final Ganglinie gQLkw;
-		final Ganglinie gVPkw;
-		final Ganglinie gVLkw;
+		final Ganglinie<Double> gQKfz;
+		final Ganglinie<Double> gQLkw;
+		final Ganglinie<Double> gVPkw;
+		final Ganglinie<Double> gVLkw;
 
 		assert g1.getMessQuerschnitt().equals(g2.getMessQuerschnitt()) : "Die Ganglinien müssen zum gleichen Messquerschnitt gehören.";
 
@@ -161,7 +163,7 @@ public final class GanglinienMQOperationen {
 		gVLkw = GanglinienOperationen.dividiere(g1.getGanglinieVLkw(), g2
 				.getGanglinieVLkw());
 
-		return zusammenfuehren(gQKfz, gQLkw, gVPkw, gVLkw);
+		return kopiereMetaDaten(zusammenfuehren(gQKfz, gQLkw, gVPkw, gVLkw), g1);
 	}
 
 	/**
@@ -227,9 +229,38 @@ public final class GanglinienMQOperationen {
 	}
 
 	/**
+	 * Kopiert die Metainformationen einer Ganglinie auf eine andere.
+	 * <p>
+	 * <em>Hinweis:</em> Es wird die Ganglinie im Parameter verändert.
+	 * 
+	 * @param ziel
+	 *            das Ziel der Metadaten.
+	 * @param quelle
+	 *            die Quelle der Metadaten.
+	 * @return die neue Ganglinie.
+	 */
+	public static GanglinieMQ kopiereMetaDaten(GanglinieMQ ziel,
+			GanglinieMQ quelle) {
+		ziel.setAnzahlVerschmelzungen(quelle.getAnzahlVerschmelzungen());
+		ziel.setApproximationDaK(quelle.getApproximationDaK());
+		ziel.setBSplineOrdnung(quelle.getBSplineOrdnung());
+		ziel.setEreignisTyp(quelle.getEreignisTyp());
+		ziel.setK1(quelle.getK1());
+		ziel.setK2(quelle.getK2());
+		ziel.setLetzteVerschmelzung(quelle.getLetzteVerschmelzung());
+		ziel.setMessQuerschnitt(quelle.getMessQuerschnitt());
+		ziel.setPrognoseZeitraum(quelle.getPrognoseIntervall());
+		ziel.setReferenz(quelle.isReferenz());
+		ziel.setTyp(quelle.getTyp());
+
+		return ziel;
+	}
+
+	/**
 	 * Multiplikation zweier Ganglinien, indem die Werte der vervollständigten
 	 * Stützstellenmenge multipliziert werden. Die beiden Ganglinien werden
-	 * dabei nicht verändert.
+	 * dabei nicht verändert. Die Metainformationen der ersten Ganglinien werden
+	 * in die Ergebnisganglinie kopiert.
 	 * 
 	 * @param g1
 	 *            Erste Ganglinie
@@ -238,10 +269,10 @@ public final class GanglinienMQOperationen {
 	 * @return Das "Produkt" der beiden Ganglinien
 	 */
 	public static GanglinieMQ multipliziere(GanglinieMQ g1, GanglinieMQ g2) {
-		final Ganglinie gQKfz;
-		final Ganglinie gQLkw;
-		final Ganglinie gVPkw;
-		final Ganglinie gVLkw;
+		final Ganglinie<Double> gQKfz;
+		final Ganglinie<Double> gQLkw;
+		final Ganglinie<Double> gVPkw;
+		final Ganglinie<Double> gVLkw;
 
 		gQKfz = GanglinienOperationen.multipliziere(g1.getGanglinieQKfz(), g2
 				.getGanglinieQKfz());
@@ -252,7 +283,7 @@ public final class GanglinienMQOperationen {
 		gVLkw = GanglinienOperationen.multipliziere(g1.getGanglinieVLkw(), g2
 				.getGanglinieVLkw());
 
-		return zusammenfuehren(gQKfz, gQLkw, gVPkw, gVLkw);
+		return kopiereMetaDaten(zusammenfuehren(gQKfz, gQLkw, gVPkw, gVLkw), g1);
 	}
 
 	/**
@@ -322,7 +353,8 @@ public final class GanglinienMQOperationen {
 	/**
 	 * Subtraktion zweier Ganglinien, indem die Werte der vervollständigten
 	 * Stützstellenmenge subtrahiert werden. Die beiden Ganglinien werden dabei
-	 * nicht verändert.
+	 * nicht verändert. Die Metainformationen der ersten Ganglinien werden in
+	 * die Ergebnisganglinie kopiert.
 	 * 
 	 * @param g1
 	 *            Erste Ganglinie
@@ -331,10 +363,10 @@ public final class GanglinienMQOperationen {
 	 * @return Die "Differenz" der beiden Ganglinien
 	 */
 	public static GanglinieMQ subtrahiere(GanglinieMQ g1, GanglinieMQ g2) {
-		final Ganglinie gQKfz;
-		final Ganglinie gQLkw;
-		final Ganglinie gVPkw;
-		final Ganglinie gVLkw;
+		final Ganglinie<Double> gQKfz;
+		final Ganglinie<Double> gQLkw;
+		final Ganglinie<Double> gVPkw;
+		final Ganglinie<Double> gVLkw;
 
 		gQKfz = GanglinienOperationen.subtrahiere(g1.getGanglinieQKfz(), g2
 				.getGanglinieQKfz());
@@ -345,7 +377,7 @@ public final class GanglinienMQOperationen {
 		gVLkw = GanglinienOperationen.subtrahiere(g1.getGanglinieVLkw(), g2
 				.getGanglinieVLkw());
 
-		return zusammenfuehren(gQKfz, gQLkw, gVPkw, gVLkw);
+		return kopiereMetaDaten(zusammenfuehren(gQKfz, gQLkw, gVPkw, gVLkw), g1);
 	}
 
 	/**
@@ -353,7 +385,8 @@ public final class GanglinienMQOperationen {
 	 * beider Ganglinien zu einer neuen Ganglinien zusammengefasst. Dies ist nur
 	 * möglich, wenn sich die Stützstellenmengen nicht überschneiden. Berühren
 	 * sich die beiden Ganglinien wird im Berührungspunkt er Mittelwert der
-	 * beiden Stützstellen gebildet.
+	 * beiden Stützstellen gebildet. Die Metainformationen der ersten Ganglinien
+	 * werden in die Ergebnisganglinie kopiert.
 	 * 
 	 * @param g1
 	 *            Erste Ganglinie
@@ -362,18 +395,18 @@ public final class GanglinienMQOperationen {
 	 * @return Konkatenation der beiden Ganglinien
 	 */
 	public static GanglinieMQ verbinde(GanglinieMQ g1, GanglinieMQ g2) {
-		final Ganglinie gQKfz, gQLkw, gVPkw, gVLkw;
+		final Ganglinie<Double> gQKfz, gQLkw, gVPkw, gVLkw;
 
 		gQKfz = GanglinienOperationen.verbinde(g1.getGanglinieQKfz(), g2
 				.getGanglinieQKfz());
 		gQLkw = GanglinienOperationen.verbinde(g1.getGanglinieQLkw(), g2
 				.getGanglinieQLkw());
-		gVPkw = GanglinienOperationen.verbinde(g1.getGanglinieQPkw(), g2
-				.getGanglinieQPkw());
-		gVLkw = GanglinienOperationen.verbinde(g1.getGanglinieQLkw(), g2
-				.getGanglinieQLkw());
+		gVPkw = GanglinienOperationen.verbinde(g1.getGanglinieVPkw(), g2
+				.getGanglinieVPkw());
+		gVLkw = GanglinienOperationen.verbinde(g1.getGanglinieVLkw(), g2
+				.getGanglinieVLkw());
 
-		return zusammenfuehren(gQKfz, gQLkw, gVPkw, gVLkw);
+		return kopiereMetaDaten(zusammenfuehren(gQKfz, gQLkw, gVPkw, gVLkw), g1);
 	}
 
 	/**
@@ -388,7 +421,7 @@ public final class GanglinienMQOperationen {
 	 * @return Die verschobene Ganglinie
 	 */
 	public static GanglinieMQ verschiebe(GanglinieMQ g, long offset) {
-		Ganglinie gQKfz, gQLkw, gVPkw, gVLkw;
+		Ganglinie<Double> gQKfz, gQLkw, gVPkw, gVLkw;
 
 		gQKfz = GanglinienOperationen.verschiebe(g.getGanglinieQKfz(), offset);
 		gQLkw = GanglinienOperationen.verschiebe(g.getGanglinieQLkw(), offset);
@@ -423,7 +456,7 @@ public final class GanglinienMQOperationen {
 	public static GanglinieMQ verschmelze(GanglinieMQ ganglinie,
 			GanglinieMQ historGl, long gewicht) {
 		final long zeitstempel;
-		final Ganglinie gQKfz, gQLkw, gVPkw, gVLkw;
+		final Ganglinie<Double> gQKfz, gQLkw, gVPkw, gVLkw;
 
 		gQKfz = GanglinienOperationen.verschmelze(ganglinie.getGanglinieQKfz(),
 				historGl.getGanglinieQKfz(), gewicht);
@@ -461,8 +494,9 @@ public final class GanglinienMQOperationen {
 	 *            die Ganglinie für VLkw.
 	 * @return die zusammengeführte Ganglinie.
 	 */
-	private static GanglinieMQ zusammenfuehren(Ganglinie gQKfz,
-			Ganglinie gQLkw, Ganglinie gVPkw, Ganglinie gVLkw) {
+	public static GanglinieMQ zusammenfuehren(Ganglinie<Double> gQKfz,
+			Ganglinie<Double> gQLkw, Ganglinie<Double> gVPkw,
+			Ganglinie<Double> gVLkw) {
 		final GanglinieMQ g;
 
 		assert gQKfz.size() == gQLkw.size() && gQLkw.size() == gVPkw.size()
@@ -472,8 +506,8 @@ public final class GanglinienMQOperationen {
 			assert gQKfz.containsKey(t) && gQLkw.containsKey(t)
 					&& gVPkw.containsKey(t) && gVLkw.containsKey(t) : "Die Stützstellen mit dem selben Index, müssen den selben Zeitstempel besitzen.";
 
-			g.setStuetzstelle(t, new Messwerte(gQKfz.get(t), gQLkw.get(t),
-					gVPkw.get(t), gVLkw.get(t)));
+			g.put(t, new Messwerte(gQKfz.get(t), gQLkw.get(t), gVPkw.get(t),
+					gVLkw.get(t)));
 		}
 
 		return g;

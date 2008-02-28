@@ -44,31 +44,31 @@ public class GanglinienOperationenTest {
 	 */
 	@Test
 	public void testAddiere() {
-		Ganglinie g1, g2, ist, soll;
+		Ganglinie<Double> g1, g2, ist, soll;
 
-		g1 = new Ganglinie();
-		g1.setStuetzstelle(0, 0.0);
-		g1.setStuetzstelle(30, 30.0);
-		g1.setStuetzstelle(40, 20.0);
-		g1.setStuetzstelle(60, 40.0);
-		g1.setStuetzstelle(90, 10.0);
+		g1 = new Ganglinie<Double>();
+		g1.put(0L, 0.0);
+		g1.put(30L, 30.0);
+		g1.put(40L, 20.0);
+		g1.put(60L, 40.0);
+		g1.put(90L, 10.0);
 
-		g2 = new Ganglinie();
-		g2.setStuetzstelle(10, 20.0);
-		g2.setStuetzstelle(30, 40.0);
-		g2.setStuetzstelle(70, 0.0);
-		g2.setStuetzstelle(90, 20.0);
+		g2 = new Ganglinie<Double>();
+		g2.put(10L, 20.0);
+		g2.put(30L, 40.0);
+		g2.put(70L, 0.0);
+		g2.put(90L, 20.0);
 
 		ist = GanglinienOperationen.addiere(g1, g2);
 
-		soll = new Ganglinie();
-		soll.setStuetzstelle(0, null);
-		soll.setStuetzstelle(10, 30.0);
-		soll.setStuetzstelle(30, 70.0);
-		soll.setStuetzstelle(40, 50.0);
-		soll.setStuetzstelle(60, 50.0);
-		soll.setStuetzstelle(70, 30.0);
-		soll.setStuetzstelle(90, 30.0);
+		soll = new Ganglinie<Double>();
+		soll.put(0L, null);
+		soll.put(10L, 30.0);
+		soll.put(30L, 70.0);
+		soll.put(40L, 50.0);
+		soll.put(60L, 50.0);
+		soll.put(70L, 30.0);
+		soll.put(90L, 30.0);
 
 		assertEquals(soll.getStuetzstellen(), ist.getStuetzstellen());
 	}
@@ -78,31 +78,31 @@ public class GanglinienOperationenTest {
 	 */
 	@Test
 	public void testDividiere() {
-		Ganglinie g1, g2, ist, soll;
+		Ganglinie<Double> g1, g2, ist, soll;
 
-		g1 = new Ganglinie();
-		g1.setStuetzstelle(0, 0.0);
-		g1.setStuetzstelle(30, 30.0);
-		g1.setStuetzstelle(40, 20.0);
-		g1.setStuetzstelle(60, 40.0);
-		g1.setStuetzstelle(90, 10.0);
+		g1 = new Ganglinie<Double>();
+		g1.put(0L, 0.0);
+		g1.put(30L, 30.0);
+		g1.put(40L, 20.0);
+		g1.put(60L, 40.0);
+		g1.put(90L, 10.0);
 
-		g2 = new Ganglinie();
-		g2.setStuetzstelle(10, 20.0);
-		g2.setStuetzstelle(30, 40.0);
-		g2.setStuetzstelle(70, 0.0);
-		g2.setStuetzstelle(90, 20.0);
+		g2 = new Ganglinie<Double>();
+		g2.put(10L, 20.0);
+		g2.put(30L, 40.0);
+		g2.put(70L, 0.0);
+		g2.put(90L, 20.0);
 
 		ist = GanglinienOperationen.dividiere(g1, g2);
 
-		soll = new Ganglinie();
-		soll.setStuetzstelle(0, null);
-		soll.setStuetzstelle(10, 0.5);
-		soll.setStuetzstelle(30, 0.75);
-		soll.setStuetzstelle(40, 0.6666666666666666);
-		soll.setStuetzstelle(60, 4.0);
-		soll.setStuetzstelle(70, null);
-		soll.setStuetzstelle(90, 0.5);
+		soll = new Ganglinie<Double>();
+		soll.put(0L, null);
+		soll.put(10L, 0.5);
+		soll.put(30L, 0.75);
+		soll.put(40L, 0.6666666666666666);
+		soll.put(60L, 4.0);
+		soll.put(70L, null);
+		soll.put(90L, 0.5);
 
 		assertEquals(soll.getStuetzstellen(), ist.getStuetzstellen());
 	}
@@ -112,31 +112,31 @@ public class GanglinienOperationenTest {
 	 */
 	@Test
 	public void testMultipliziere() {
-		Ganglinie g1, g2, ist, soll;
+		Ganglinie<Double> g1, g2, ist, soll;
 
-		g1 = new Ganglinie();
-		g1.setStuetzstelle(0, 0.0);
-		g1.setStuetzstelle(30, 30.0);
-		g1.setStuetzstelle(40, 20.0);
-		g1.setStuetzstelle(60, 40.0);
-		g1.setStuetzstelle(90, 10.0);
+		g1 = new Ganglinie<Double>();
+		g1.put(0L, 0.0);
+		g1.put(30L, 30.0);
+		g1.put(40L, 20.0);
+		g1.put(60L, 40.0);
+		g1.put(90L, 10.0);
 
-		g2 = new Ganglinie();
-		g2.setStuetzstelle(10, 20.0);
-		g2.setStuetzstelle(30, 40.0);
-		g2.setStuetzstelle(70, 0.0);
-		g2.setStuetzstelle(90, 20.0);
+		g2 = new Ganglinie<Double>();
+		g2.put(10L, 20.0);
+		g2.put(30L, 40.0);
+		g2.put(70L, 0.0);
+		g2.put(90L, 20.0);
 
 		ist = GanglinienOperationen.multipliziere(g1, g2);
 
-		soll = new Ganglinie();
-		soll.setStuetzstelle(0, null);
-		soll.setStuetzstelle(10, 200.0);
-		soll.setStuetzstelle(30, 1200.0);
-		soll.setStuetzstelle(40, 600.0);
-		soll.setStuetzstelle(60, 400.0);
-		soll.setStuetzstelle(70, 0.0);
-		soll.setStuetzstelle(90, 200.0);
+		soll = new Ganglinie<Double>();
+		soll.put(0L, null);
+		soll.put(10L, 200.0);
+		soll.put(30L, 1200.0);
+		soll.put(40L, 600.0);
+		soll.put(60L, 400.0);
+		soll.put(70L, 0.0);
+		soll.put(90L, 200.0);
 
 		assertEquals(soll.getStuetzstellen(), ist.getStuetzstellen());
 	}
@@ -146,31 +146,31 @@ public class GanglinienOperationenTest {
 	 */
 	@Test
 	public void testSubtrahiere() {
-		Ganglinie g1, g2, ist, soll;
+		Ganglinie<Double> g1, g2, ist, soll;
 
-		g1 = new Ganglinie();
-		g1.setStuetzstelle(0, 0.0);
-		g1.setStuetzstelle(30, 30.0);
-		g1.setStuetzstelle(40, 20.0);
-		g1.setStuetzstelle(60, 40.0);
-		g1.setStuetzstelle(90, 10.0);
+		g1 = new Ganglinie<Double>();
+		g1.put(0L, 0.0);
+		g1.put(30L, 30.0);
+		g1.put(40L, 20.0);
+		g1.put(60L, 40.0);
+		g1.put(90L, 10.0);
 
-		g2 = new Ganglinie();
-		g2.setStuetzstelle(10, 20.0);
-		g2.setStuetzstelle(30, 40.0);
-		g2.setStuetzstelle(70, 0.0);
-		g2.setStuetzstelle(90, 20.0);
+		g2 = new Ganglinie<Double>();
+		g2.put(10L, 20.0);
+		g2.put(30L, 40.0);
+		g2.put(70L, 0.0);
+		g2.put(90L, 20.0);
 
 		ist = GanglinienOperationen.subtrahiere(g1, g2);
 
-		soll = new Ganglinie();
-		soll.setStuetzstelle(0, null);
-		soll.setStuetzstelle(10, -10.0);
-		soll.setStuetzstelle(30, -10.0);
-		soll.setStuetzstelle(40, -10.0);
-		soll.setStuetzstelle(60, 30.0);
-		soll.setStuetzstelle(70, 30.0);
-		soll.setStuetzstelle(90, -10.0);
+		soll = new Ganglinie<Double>();
+		soll.put(0L, null);
+		soll.put(10L, -10.0);
+		soll.put(30L, -10.0);
+		soll.put(40L, -10.0);
+		soll.put(60L, 30.0);
+		soll.put(70L, 30.0);
+		soll.put(90L, -10.0);
 
 		assertEquals(soll.getStuetzstellen(), ist.getStuetzstellen());
 	}

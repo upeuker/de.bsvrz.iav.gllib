@@ -42,7 +42,6 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-import de.bsvrz.iav.gllib.gllib.CubicSpline;
 import de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ;
 import de.bsvrz.iav.gllib.gllib.dav.Messwerte;
 
@@ -90,22 +89,22 @@ public class GlKoordinatensystem extends GlFigure {
 		// cal.setTimeInMillis(0);
 
 		gmq = new GanglinieMQ();
-		gmq.setStuetzstelle(cal.getTimeInMillis(), new Messwerte(0.0, 0.0,
-				80.0, 78.0));
+		gmq.put(cal.getTimeInMillis(), new Messwerte(0.0, 0.0, 80.0, 78.0));
 		cal.add(Calendar.HOUR_OF_DAY, 3);
-		gmq.setStuetzstelle(cal.getTimeInMillis(), new Messwerte(3000.0,
-				1200.0, 100.0, 84.0));
+		gmq.put(cal.getTimeInMillis(), new Messwerte(3000.0, 1200.0, 100.0,
+				84.0));
 		cal.add(Calendar.HOUR_OF_DAY, 1);
-		gmq.setStuetzstelle(cal.getTimeInMillis(), new Messwerte(2000.0, null,
-				150.0, null));
+		gmq
+				.put(cal.getTimeInMillis(), new Messwerte(2000.0, null, 150.0,
+						null));
 		cal.add(Calendar.HOUR_OF_DAY, 2);
-		gmq.setStuetzstelle(cal.getTimeInMillis(), new Messwerte(4000.0,
-				2250.0, 180.0, 80.0));
+		gmq.put(cal.getTimeInMillis(), new Messwerte(4000.0, 2250.0, 180.0,
+				80.0));
 		cal.add(Calendar.HOUR_OF_DAY, 3);
-		gmq.setStuetzstelle(cal.getTimeInMillis(), new Messwerte(1000.0, 354.0,
-				130.0, 82.0));
+		gmq.put(cal.getTimeInMillis(),
+				new Messwerte(1000.0, 354.0, 130.0, 82.0));
 
-		gmq.setApproximation(new CubicSpline());
+		gmq.setApproximationDaK(GanglinieMQ.APPROX_CUBICSPLINE);
 		// gmq.setApproximation(new Polyline());
 
 		canvas = new FigureCanvas(shell, SWT.DOUBLE_BUFFERED);

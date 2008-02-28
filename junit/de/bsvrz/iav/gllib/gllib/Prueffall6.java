@@ -46,28 +46,28 @@ public class Prueffall6 {
 	 */
 	@Test
 	public void testfall6() {
-		Ganglinie g, erg;
+		Ganglinie<Double> g, erg;
 		Interval i;
 
-		g = new Ganglinie();
-		g.setStuetzstelle(5 * MILLIS_PER_MINUTE, 35.0);
-		g.setStuetzstelle(15 * MILLIS_PER_MINUTE, 20.0);
-		g.setStuetzstelle(20 * MILLIS_PER_MINUTE, 30.0);
-		g.setStuetzstelle(35 * MILLIS_PER_MINUTE, 10.0);
-		g.setStuetzstelle(50 * MILLIS_PER_MINUTE, 25.0);
-		g.setStuetzstelle(65 * MILLIS_PER_MINUTE, 20.0);
-		g.setStuetzstelle(75 * MILLIS_PER_MINUTE, 30.0);
-		g.setStuetzstelle(80 * MILLIS_PER_MINUTE, 20.0);
+		g = new Ganglinie<Double>();
+		g.put(5 * MILLIS_PER_MINUTE, 35.0);
+		g.put(15 * MILLIS_PER_MINUTE, 20.0);
+		g.put(20 * MILLIS_PER_MINUTE, 30.0);
+		g.put(35 * MILLIS_PER_MINUTE, 10.0);
+		g.put(50 * MILLIS_PER_MINUTE, 25.0);
+		g.put(65 * MILLIS_PER_MINUTE, 20.0);
+		g.put(75 * MILLIS_PER_MINUTE, 30.0);
+		g.put(80 * MILLIS_PER_MINUTE, 20.0);
 
 		i = new Interval(20 * MILLIS_PER_MINUTE, 70 * MILLIS_PER_MINUTE);
 		g = GanglinienOperationen.auschneiden(g, i);
 
-		erg = new Ganglinie();
-		erg.setStuetzstelle(20 * MILLIS_PER_MINUTE, 30.0);
-		erg.setStuetzstelle(35 * MILLIS_PER_MINUTE, 10.0);
-		erg.setStuetzstelle(50 * MILLIS_PER_MINUTE, 25.0);
-		erg.setStuetzstelle(65 * MILLIS_PER_MINUTE, 20.0);
-		erg.setStuetzstelle(70 * MILLIS_PER_MINUTE, 25.0);
+		erg = new Ganglinie<Double>();
+		erg.put(20 * MILLIS_PER_MINUTE, 30.0);
+		erg.put(35 * MILLIS_PER_MINUTE, 10.0);
+		erg.put(50 * MILLIS_PER_MINUTE, 25.0);
+		erg.put(65 * MILLIS_PER_MINUTE, 20.0);
+		erg.put(70 * MILLIS_PER_MINUTE, 25.0);
 
 		assertEquals(erg.getStuetzstellen(), g.getStuetzstellen());
 	}
