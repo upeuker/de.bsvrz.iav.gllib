@@ -208,7 +208,7 @@ public final class GanglinienMQOperationen {
 	 *            Zweite Ganglinie.
 	 * @param intervallBreite
 	 *            die Breite der zu vergleichenden Intervalle.
-	 * @return Abstand nach dem komplexen Abstandsverfahren
+	 * @return Abstand nach dem komplexen Abstandsverfahren in Prozent.
 	 */
 	public static int komplexerAbstand(GanglinieMQ g1, GanglinieMQ g2,
 			long intervallBreite) {
