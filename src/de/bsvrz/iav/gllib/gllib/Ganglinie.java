@@ -55,11 +55,26 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	/** Flag, ob die Approximation aktuallisiert werden muss. */
 	private boolean approximationAktuell;
 
+	/** Cached die Teilintervalle der Ganglinie mit definierten Stützstellen. */
+	private final List<Interval> intervalle;
+
 	/**
 	 * Konstruiert eine Ganglinie ohne Stützstellen.
 	 */
 	public Ganglinie() {
+		intervalle = new ArrayList<Interval>();
 		setApproximationAktuell(false);
+	}
+
+	/**
+	 * Aktualisiert falls nötig die Approximation.
+	 */
+	private void aktualisiereApproximation() {
+		if (!isApproximationAktuell()) {
+			getIntervalle();
+			approximation.setStuetzstellen(getStuetzstellen());
+			approximation.initialisiere();
+		}
 	}
 
 	/**
@@ -125,14 +140,17 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	 * @return eine Liste von Intervallen.
 	 */
 	public List<Interval> getIntervalle() {
-		List<Interval> intervalle;
+		if (isApproximationAktuell()) {
+			return intervalle;
+		}
+
 		Long start, ende;
 
-		intervalle = new ArrayList<Interval>();
+		intervalle.clear();
 		start = null;
 		ende = null;
 
-		for (long t : keySet()) {
+		for (final long t : keySet()) {
 			if (start == null) {
 				// Beginn eines neuen Intervalls
 				if (get(t) != null) {
@@ -179,7 +197,7 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	 *            der Zeitstempel zu dem eine Stützstelle gesucht wird.
 	 * @return die gesuchte Stützstelle.
 	 */
-	public Stuetzstelle<T> getStuetzstelle(long zeitstempel) {
+	public Stuetzstelle<T> getStuetzstelle(final long zeitstempel) {
 		if (!isValid(zeitstempel)) {
 			// Zeitstempel liegt in einem undefinierten Teilintervall
 			return new Stuetzstelle<T>(zeitstempel, null);
@@ -203,7 +221,7 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 		List<Stuetzstelle<T>> liste;
 
 		liste = new ArrayList<Stuetzstelle<T>>();
-		for (long t : keySet()) {
+		for (final long t : keySet()) {
 			liste.add(new Stuetzstelle<T>(t, get(t)));
 		}
 
@@ -218,17 +236,28 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	 * @return die Liste der Stützstellen im Intervall, sortiert nach
 	 *         Zeitstempel.
 	 */
-	public List<Stuetzstelle<T>> getStuetzstellen(Interval intervall) {
+	public List<Stuetzstelle<T>> getStuetzstellen(final Interval intervall) {
 		SortedMap<Long, T> menge;
 		List<Stuetzstelle<T>> liste;
 
 		menge = subMap(intervall.getStart(), intervall.getEnd() + 1);
 		liste = new ArrayList<Stuetzstelle<T>>();
-		for (long t : menge.keySet()) {
+		for (final long t : menge.keySet()) {
 			liste.add(getStuetzstelle(t));
 		}
 
 		return liste;
+	}
+
+	/**
+	 * Gibt {@code false} zurück, wenn die Approximation aktuallisiert werden
+	 * muss, weil sich die Ganglinie geändert hat.
+	 * 
+	 * @return {@code true}, wenn Ganglinie und Approximation konform gehen und
+	 *         {@code false}, wenn die Approximation aktualisiert werden muss.
+	 */
+	private boolean isApproximationAktuell() {
+		return approximationAktuell;
 	}
 
 	/**
@@ -241,11 +270,11 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	 *         undefinierten Bereiche enthält.
 	 * @see #getIntervalle()
 	 */
-	public boolean isValid(Interval intervall) {
+	public boolean isValid(final Interval intervall) {
 		boolean ok;
 
 		ok = false;
-		for (Interval i : getIntervalle()) {
+		for (final Interval i : getIntervalle()) {
 			if (i.contains(intervall)) {
 				ok = true;
 				break;
@@ -264,11 +293,11 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	 *         Ganglinie liegt.
 	 * @see #getIntervalle()
 	 */
-	public boolean isValid(long zeitstempel) {
+	public boolean isValid(final long zeitstempel) {
 		boolean ok;
 
 		ok = false;
-		for (Interval i : getIntervalle()) {
+		for (final Interval i : getIntervalle()) {
 			if (i.contains(zeitstempel)) {
 				ok = true;
 				break;
@@ -286,7 +315,7 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	 * @see java.util.TreeMap#put(java.lang.Object, java.lang.Object)
 	 */
 	@Override
-	public T put(Long key, T value) {
+	public T put(final Long key, final T value) {
 		setApproximationAktuell(false);
 		return super.put(key, value);
 	}
@@ -299,7 +328,7 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	 * @see java.util.TreeMap#putAll(java.util.Map)
 	 */
 	@Override
-	public void putAll(Map<? extends Long, ? extends T> map) {
+	public void putAll(final Map<? extends Long, ? extends T> map) {
 		setApproximationAktuell(false);
 		super.putAll(map);
 	}
@@ -312,7 +341,7 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	 * @see java.util.TreeMap#remove(java.lang.Object)
 	 */
 	@Override
-	public T remove(Object key) {
+	public T remove(final Object key) {
 		setApproximationAktuell(false);
 		return super.remove(key);
 	}
@@ -324,9 +353,20 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	 * @param approximation
 	 *            das Approximationsverfahren.
 	 */
-	public void setApproximation(Approximation<T> approximation) {
+	public void setApproximation(final Approximation<T> approximation) {
 		setApproximationAktuell(false);
 		this.approximation = approximation;
+	}
+
+	/**
+	 * Setzt das Flag, ob die Approximation noch gültig ist oder nicht.
+	 * 
+	 * @param approximationAktuell
+	 *            {@code false}, wenn die Approximation aktualisiert werden
+	 *            muss.
+	 */
+	private void setApproximationAktuell(final boolean approximationAktuell) {
+		this.approximationAktuell = approximationAktuell;
 	}
 
 	/**
@@ -338,7 +378,7 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	 * @return {@code true}, wenn die Stützstelle neu angelegt wurde und
 	 *         {@code false}, wenn eine vorhandene Stützstelle ersetzt wurde.
 	 */
-	public boolean setStuetzstelle(Stuetzstelle<T> s) {
+	public boolean setStuetzstelle(final Stuetzstelle<T> s) {
 		return put(s.getZeitstempel(), s.getWert()) == null;
 	}
 
@@ -348,10 +388,10 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	 * @param stuetzstellen
 	 *            die neuen Stützstellen
 	 */
-	public void setStuetzstellen(Collection<Stuetzstelle<T>> stuetzstellen) {
+	public void setStuetzstellen(final Collection<Stuetzstelle<T>> stuetzstellen) {
 		setApproximationAktuell(false);
 		clear();
-		for (Stuetzstelle<T> s : stuetzstellen) {
+		for (final Stuetzstelle<T> s : stuetzstellen) {
 			put(s.getZeitstempel(), s.getWert());
 		}
 	}
@@ -364,38 +404,6 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	@Override
 	public String toString() {
 		return getClass().getName() + "[" + getStuetzstellen().toString() + "]";
-	}
-
-	/**
-	 * Aktualisiert falls nötig die Approximation.
-	 */
-	private void aktualisiereApproximation() {
-		if (!isApproximationAktuell()) {
-			approximation.setStuetzstellen(getStuetzstellen());
-			approximation.initialisiere();
-		}
-	}
-
-	/**
-	 * Gibt {@code false} zurück, wenn die Approximation aktuallisiert werden
-	 * muss, weil sich die Ganglinie geändert hat.
-	 * 
-	 * @return {@code true}, wenn Ganglinie und Approximation konform gehen und
-	 *         {@code false}, wenn die Approximation aktualisiert werden muss.
-	 */
-	private boolean isApproximationAktuell() {
-		return approximationAktuell;
-	}
-
-	/**
-	 * Setzt das Flag, ob die Approximation noch gültig ist oder nicht.
-	 * 
-	 * @param approximationAktuell
-	 *            {@code false}, wenn die Approximation aktualisiert werden
-	 *            muss.
-	 */
-	private void setApproximationAktuell(boolean approximationAktuell) {
-		this.approximationAktuell = approximationAktuell;
 	}
 
 }

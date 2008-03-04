@@ -59,10 +59,45 @@ public class GanglinienOperationenTest {
 		g2.put(70L, 0.0);
 		g2.put(90L, 20.0);
 
-		ist = GanglinienOperationen.addiere(g1, g2);
+		ist = GanglinienOperationen.addiere(g1, g2, false);
 
 		soll = new Ganglinie<Double>();
 		soll.put(0L, null);
+		soll.put(10L, 30.0);
+		soll.put(30L, 70.0);
+		soll.put(40L, 50.0);
+		soll.put(60L, 50.0);
+		soll.put(70L, 30.0);
+		soll.put(90L, 30.0);
+
+		assertEquals(soll.getStuetzstellen(), ist.getStuetzstellen());
+	}
+
+	/**
+	 * Testet die Addition zweier Ganglinien mit undefinierten Teilbereich,
+	 * wobei Definitionslücken geschlossen werden sollen.
+	 */
+	@Test
+	public void testAddiereMitUndefiniertUndLueckenSchliessen() {
+		Ganglinie<Double> g1, g2, ist, soll;
+
+		g1 = new Ganglinie<Double>();
+		g1.put(0L, 0.0);
+		g1.put(30L, 30.0);
+		g1.put(40L, 20.0);
+		g1.put(60L, 40.0);
+		g1.put(90L, 10.0);
+
+		g2 = new Ganglinie<Double>();
+		g2.put(10L, 20.0);
+		g2.put(30L, 40.0);
+		g2.put(70L, 0.0);
+		g2.put(90L, 20.0);
+
+		ist = GanglinienOperationen.addiere(g1, g2, true);
+
+		soll = new Ganglinie<Double>();
+		soll.put(0L, 0.0);
 		soll.put(10L, 30.0);
 		soll.put(30L, 70.0);
 		soll.put(40L, 50.0);
@@ -93,7 +128,7 @@ public class GanglinienOperationenTest {
 		g2.put(70L, 0.0);
 		g2.put(90L, 20.0);
 
-		ist = GanglinienOperationen.dividiere(g1, g2);
+		ist = GanglinienOperationen.dividiere(g1, g2, false);
 
 		soll = new Ganglinie<Double>();
 		soll.put(0L, null);
@@ -127,7 +162,7 @@ public class GanglinienOperationenTest {
 		g2.put(70L, 0.0);
 		g2.put(90L, 20.0);
 
-		ist = GanglinienOperationen.multipliziere(g1, g2);
+		ist = GanglinienOperationen.multipliziere(g1, g2, false);
 
 		soll = new Ganglinie<Double>();
 		soll.put(0L, null);
@@ -161,7 +196,7 @@ public class GanglinienOperationenTest {
 		g2.put(70L, 0.0);
 		g2.put(90L, 20.0);
 
-		ist = GanglinienOperationen.subtrahiere(g1, g2);
+		ist = GanglinienOperationen.subtrahiere(g1, g2, false);
 
 		soll = new Ganglinie<Double>();
 		soll.put(0L, null);

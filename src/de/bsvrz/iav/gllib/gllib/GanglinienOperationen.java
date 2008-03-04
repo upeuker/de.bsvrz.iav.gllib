@@ -58,10 +58,14 @@ public final class GanglinienOperationen {
 	 *            Erste Ganglinie
 	 * @param g2
 	 *            Zweite Ganglinie
+	 * @param defLueckenSchliessen
+	 *            wenn {@code true}, dann wird bei nur einem undefinierten
+	 *            Operanden der definierte Operand als Ergebnis angenommen. Wenn
+	 *            {@code false} dann ist das Ergebnis ebenfalls undefiniert.
 	 * @return Die "Summe" der beiden Ganglinien
 	 */
-	public static Ganglinie<Double> addiere(Ganglinie<Double> g1,
-			Ganglinie<Double> g2) {
+	public static Ganglinie<Double> addiere(final Ganglinie<Double> g1,
+			final Ganglinie<Double> g2, final boolean defLueckenSchliessen) {
 		Ganglinie<Double> g;
 		Polyline p1, p2;
 		Queue<Long> zeitstempel;
@@ -88,10 +92,21 @@ public final class GanglinienOperationen {
 
 			z = zeitstempel.poll();
 
-			if (p1.get(z).getWert() == null || p2.get(z).getWert() == null) {
-				g.put(z, null);
-			} else {
+			if (g1.isValid(z) && g2.isValid(z)) {
 				g.put(z, p1.get(z).getWert() + p2.get(z).getWert());
+			} else if (defLueckenSchliessen) {
+				// undefiniert # irgendwas = irgendwas
+				if (g1.isValid(z)) {
+					g.put(z, p1.get(z).getWert());
+				} else if (g2.isValid(z)) {
+					g.put(z, p2.get(z).getWert());
+				} else {
+					// beide Operanden sind undefiniert
+					g.put(z, null);
+				}
+			} else {
+				// undefiniert # irgendwas = undefiniert
+				g.put(z, null);
 			}
 		}
 
@@ -112,7 +127,8 @@ public final class GanglinienOperationen {
 	 *            Auszuschneidendes Intervall
 	 * @return Der Intervallausschnitt
 	 */
-	public static Ganglinie<Double> auschneiden(Ganglinie<Double> g, Interval i) {
+	public static Ganglinie<Double> auschneiden(final Ganglinie<Double> g,
+			final Interval i) {
 		Polyline p;
 
 		p = new Polyline();
@@ -152,7 +168,8 @@ public final class GanglinienOperationen {
 	 *            Zweite Ganglinie
 	 * @return Abstand nach dem Basisabstandsverfahren in Prozent.
 	 */
-	public static int basisabstand(Ganglinie<Double> g1, Ganglinie<Double> g2) {
+	public static int basisabstand(final Ganglinie<Double> g1,
+			final Ganglinie<Double> g2) {
 		Polyline p1, p2;
 		Queue<Long> zeitstempel;
 		double fehler, summe;
@@ -214,10 +231,14 @@ public final class GanglinienOperationen {
 	 *            Erste Ganglinie
 	 * @param g2
 	 *            Zweite Ganglinie
+	 * @param defLueckenSchliessen
+	 *            wenn {@code true}, dann wird bei nur einem undefinierten
+	 *            Operanden der definierte Operand als Ergebnis angenommen. Wenn
+	 *            {@code false} dann ist das Ergebnis ebenfalls undefiniert.
 	 * @return Das "Produkt" der beiden Ganglinien
 	 */
-	public static Ganglinie<Double> dividiere(Ganglinie<Double> g1,
-			Ganglinie<Double> g2) {
+	public static Ganglinie<Double> dividiere(final Ganglinie<Double> g1,
+			final Ganglinie<Double> g2, final boolean defLueckenSchliessen) {
 		Ganglinie<Double> g;
 		Polyline p1, p2;
 		Queue<Long> zeitstempel;
@@ -244,12 +265,29 @@ public final class GanglinienOperationen {
 
 			z = zeitstempel.poll();
 
-			if (p1.get(z).getWert() == null || p2.get(z).getWert() == null
-					|| p2.get(z).getWert() == 0) {
-				// Einer der Werte ist undefiniert oder der Divisor ist 0
-				g.put(z, null);
+			if (g1.isValid(z) && g2.isValid(z)) {
+				double x;
+
+				x = p1.get(z).getWert() / p2.get(z).getWert();
+				if (x == Double.NaN || x == Double.NEGATIVE_INFINITY
+						|| x == Double.POSITIVE_INFINITY) {
+					g.put(z, null);
+				} else {
+					g.put(z, x);
+				}
+			} else if (defLueckenSchliessen) {
+				// undefiniert # irgendwas = irgendwas
+				if (g1.isValid(z)) {
+					g.put(z, p1.get(z).getWert());
+				} else if (g2.isValid(z)) {
+					g.put(z, p2.get(z).getWert());
+				} else {
+					// beide Operanden sind undefiniert
+					g.put(z, null);
+				}
 			} else {
-				g.put(z, p1.get(z).getWert() / p2.get(z).getWert());
+				// undefiniert # irgendwas = undefiniert
+				g.put(z, null);
 			}
 		}
 
@@ -269,8 +307,8 @@ public final class GanglinienOperationen {
 	 *            die Anzahl der zu vergleichenden Intervalle.
 	 * @return Abstand nach dem komplexen Abstandsverfahren in Prozent.
 	 */
-	public static int komplexerAbstand(Ganglinie<Double> g1,
-			Ganglinie<Double> g2, int intervalle) {
+	public static int komplexerAbstand(final Ganglinie<Double> g1,
+			final Ganglinie<Double> g2, final int intervalle) {
 		long start, ende, breite;
 
 		// Zu betrachtendes Intervall und Intervallbreite bestimmen
@@ -302,8 +340,8 @@ public final class GanglinienOperationen {
 	 *            die Breite der zu vergleichenden Intervalle.
 	 * @return Abstand nach dem komplexen Abstandsverfahren in Prozent.
 	 */
-	public static int komplexerAbstand(Ganglinie<Double> g1,
-			Ganglinie<Double> g2, long intervallBreite) {
+	public static int komplexerAbstand(final Ganglinie<Double> g1,
+			final Ganglinie<Double> g2, final long intervallBreite) {
 		Polyline p1, p2;
 		List<Long> zeitstempel;
 		double fehler, summe;
@@ -339,7 +377,7 @@ public final class GanglinienOperationen {
 		// Quadratischen Fehler bestimmen
 		summe = 0;
 		undefinierte = 0;
-		for (long z : zeitstempel) {
+		for (final long z : zeitstempel) {
 			if (p1.get(z).getWert() != null && p2.get(z).getWert() != null) {
 				double x;
 
@@ -354,7 +392,7 @@ public final class GanglinienOperationen {
 		// Prozentualen Fehler bestimmen
 		summe = 0;
 		undefinierte = 0;
-		for (long z : zeitstempel) {
+		for (final long z : zeitstempel) {
 			if (p1.get(z).getWert() != null && p2.get(z).getWert() != null) {
 				double x;
 
@@ -379,10 +417,14 @@ public final class GanglinienOperationen {
 	 *            Erste Ganglinie
 	 * @param g2
 	 *            Zweite Ganglinie
+	 * @param defLueckenSchliessen
+	 *            wenn {@code true}, dann wird bei nur einem undefinierten
+	 *            Operanden der definierte Operand als Ergebnis angenommen. Wenn
+	 *            {@code false} dann ist das Ergebnis ebenfalls undefiniert.
 	 * @return Das "Produkt" der beiden Ganglinien
 	 */
-	public static Ganglinie<Double> multipliziere(Ganglinie<Double> g1,
-			Ganglinie<Double> g2) {
+	public static Ganglinie<Double> multipliziere(final Ganglinie<Double> g1,
+			final Ganglinie<Double> g2, final boolean defLueckenSchliessen) {
 		Ganglinie<Double> g;
 		Polyline p1, p2;
 		Queue<Long> zeitstempel;
@@ -409,10 +451,21 @@ public final class GanglinienOperationen {
 
 			z = zeitstempel.poll();
 
-			if (p1.get(z).getWert() == null || p2.get(z).getWert() == null) {
-				g.put(z, null);
-			} else {
+			if (g1.isValid(z) && g2.isValid(z)) {
 				g.put(z, p1.get(z).getWert() * p2.get(z).getWert());
+			} else if (defLueckenSchliessen) {
+				// undefiniert # irgendwas = irgendwas
+				if (g1.isValid(z)) {
+					g.put(z, p1.get(z).getWert());
+				} else if (g2.isValid(z)) {
+					g.put(z, p2.get(z).getWert());
+				} else {
+					// beide Operanden sind undefiniert
+					g.put(z, null);
+				}
+			} else {
+				// undefiniert # irgendwas = undefiniert
+				g.put(z, null);
 			}
 		}
 
@@ -439,9 +492,9 @@ public final class GanglinienOperationen {
 	 *            verschoben werden.
 	 * @return der Index der Ganglinie mit dem kleinsten Abstand.
 	 */
-	public static int patternMatching(Ganglinie<Double> referenz,
-			List<Ganglinie<Double>> liste, long offsetVor, long offsetNach,
-			long intervall) {
+	public static int patternMatching(final Ganglinie<Double> referenz,
+			final List<Ganglinie<Double>> liste, long offsetVor,
+			final long offsetNach, final long intervall) {
 		HashMap<Integer, Double> fehler;
 		int index;
 		long start, ende; // Start und Ende des Pattern-Matching-Intervalls
@@ -471,7 +524,7 @@ public final class GanglinienOperationen {
 
 		// Ganglinie mit dem kleinsten Abstand bestimmen
 		index = -1;
-		for (Entry<Integer, Double> e : fehler.entrySet()) {
+		for (final Entry<Integer, Double> e : fehler.entrySet()) {
 			if (index == -1) {
 				index = e.getKey();
 			} else {
@@ -492,10 +545,14 @@ public final class GanglinienOperationen {
 	 *            Erste Ganglinie
 	 * @param g2
 	 *            Zweite Ganglinie
+	 * @param defLueckenSchliessen
+	 *            wenn {@code true}, dann wird bei nur einem undefinierten
+	 *            Operanden der definierte Operand als Ergebnis angenommen. Wenn
+	 *            {@code false} dann ist das Ergebnis ebenfalls undefiniert.
 	 * @return Die "Differenz" der beiden Ganglinien
 	 */
-	public static Ganglinie<Double> subtrahiere(Ganglinie<Double> g1,
-			Ganglinie<Double> g2) {
+	public static Ganglinie<Double> subtrahiere(final Ganglinie<Double> g1,
+			final Ganglinie<Double> g2, final boolean defLueckenSchliessen) {
 		Ganglinie<Double> g;
 		Polyline p1, p2;
 		Queue<Long> zeitstempel;
@@ -522,10 +579,21 @@ public final class GanglinienOperationen {
 
 			z = zeitstempel.poll();
 
-			if (p1.get(z).getWert() == null || p2.get(z).getWert() == null) {
-				g.put(z, null);
-			} else {
+			if (g1.isValid(z) && g2.isValid(z)) {
 				g.put(z, p1.get(z).getWert() - p2.get(z).getWert());
+			} else if (defLueckenSchliessen) {
+				// undefiniert # irgendwas = irgendwas
+				if (g1.isValid(z)) {
+					g.put(z, p1.get(z).getWert());
+				} else if (g2.isValid(z)) {
+					g.put(z, p2.get(z).getWert());
+				} else {
+					// beide Operanden sind undefiniert
+					g.put(z, null);
+				}
+			} else {
+				// undefiniert # irgendwas = undefiniert
+				g.put(z, null);
 			}
 		}
 
@@ -545,8 +613,8 @@ public final class GanglinienOperationen {
 	 *            Zweite Ganglinie
 	 * @return Konkatenation der beiden Ganglinien
 	 */
-	public static Ganglinie<Double> verbinde(Ganglinie<Double> g1,
-			Ganglinie<Double> g2) {
+	public static Ganglinie<Double> verbinde(final Ganglinie<Double> g1,
+			final Ganglinie<Double> g2) {
 		if (g1.getIntervall().intersect(g2.getIntervall())) {
 			throw new IllegalArgumentException();
 		}
@@ -555,7 +623,7 @@ public final class GanglinienOperationen {
 
 		g = new Ganglinie<Double>();
 		g.putAll(g1);
-		for (long t : g2.keySet()) {
+		for (final long t : g2.keySet()) {
 			if (g.containsKey(t)) {
 				Double d1, d2;
 
@@ -585,11 +653,12 @@ public final class GanglinienOperationen {
 	 *            Offset um den die Ganglinie verschoben werden soll
 	 * @return Die verschobene Ganglinie
 	 */
-	public static Ganglinie<Double> verschiebe(Ganglinie<Double> g, long offset) {
+	public static Ganglinie<Double> verschiebe(final Ganglinie<Double> g,
+			final long offset) {
 		SortedMap<Long, Double> stuetzstellen;
 
 		stuetzstellen = new TreeMap<Long, Double>();
-		for (long t : g.keySet()) {
+		for (final long t : g.keySet()) {
 			stuetzstellen.put(t + offset, g.get(t));
 		}
 		g.clear();
@@ -609,11 +678,15 @@ public final class GanglinienOperationen {
 	 *            die Ganglinie die verschmolzen wird.
 	 * @param gewicht
 	 *            das Gewicht der zweiten Ganglinie.
-	 * 
+	 * @param defLueckenSchliessen
+	 *            wenn {@code true}, dann wird bei nur einem undefinierten
+	 *            Operanden der definierte Operand als Ergebnis angenommen. Wenn
+	 *            {@code false} dann ist das Ergebnis ebenfalls undefiniert.
 	 * @return das Ergebnis der Verschmelzung.
 	 */
-	public static Ganglinie<Double> verschmelze(Ganglinie<Double> g1,
-			Ganglinie<Double> g2, long gewicht) {
+	public static Ganglinie<Double> verschmelze(final Ganglinie<Double> g1,
+			final Ganglinie<Double> g2, final long gewicht,
+			final boolean defLueckenSchliessen) {
 		Ganglinie<Double> g;
 		Polyline p1, p2;
 		Queue<Long> zeitstempel;
@@ -632,11 +705,22 @@ public final class GanglinienOperationen {
 
 			z = zeitstempel.poll();
 
-			if (p1.get(z).getWert() == null || p2.get(z).getWert() == null) {
-				g.put(z, null);
-			} else {
+			if (g1.isValid(z) && g2.isValid(z)) {
 				g.put(z, (p1.get(z).getWert() + p2.get(z).getWert() * gewicht)
 						/ (gewicht + 1));
+			} else if (defLueckenSchliessen) {
+				// undefiniert # irgendwas = irgendwas
+				if (g1.isValid(z)) {
+					g.put(z, p1.get(z).getWert());
+				} else if (g2.isValid(z)) {
+					g.put(z, p2.get(z).getWert());
+				} else {
+					// beide Operanden sind undefiniert
+					g.put(z, null);
+				}
+			} else {
+				// undefiniert # irgendwas = undefiniert
+				g.put(z, null);
 			}
 		}
 
@@ -653,7 +737,7 @@ public final class GanglinienOperationen {
 	 * @return Menge von Stützstellenreferenzen in Form von Zeitstempeln
 	 */
 	private static LinkedList<Long> vervollstaendigeStuetzstellen(
-			Ganglinie<Double> g1, Ganglinie<Double> g2) {
+			final Ganglinie<Double> g1, final Ganglinie<Double> g2) {
 		SortedSet<Long> zeitstempel;
 
 		zeitstempel = new TreeSet<Long>();
