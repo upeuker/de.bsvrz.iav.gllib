@@ -67,17 +67,6 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	}
 
 	/**
-	 * Aktualisiert falls nötig die Approximation.
-	 */
-	private void aktualisiereApproximation() {
-		if (!isApproximationAktuell()) {
-			getIntervalle();
-			approximation.setStuetzstellen(getStuetzstellen());
-			approximation.initialisiere();
-		}
-	}
-
-	/**
 	 * Markiert zusätzlich die Approximation als nicht mehr aktuell.
 	 * 
 	 * {@inheritDoc}
@@ -250,17 +239,6 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	}
 
 	/**
-	 * Gibt {@code false} zurück, wenn die Approximation aktuallisiert werden
-	 * muss, weil sich die Ganglinie geändert hat.
-	 * 
-	 * @return {@code true}, wenn Ganglinie und Approximation konform gehen und
-	 *         {@code false}, wenn die Approximation aktualisiert werden muss.
-	 */
-	private boolean isApproximationAktuell() {
-		return approximationAktuell;
-	}
-
-	/**
 	 * Prüft ob ein Teilintervall der Ganglinie vollständig definiert ist, also
 	 * keine undefinierten Berreiche enthält.
 	 * 
@@ -359,17 +337,6 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	}
 
 	/**
-	 * Setzt das Flag, ob die Approximation noch gültig ist oder nicht.
-	 * 
-	 * @param approximationAktuell
-	 *            {@code false}, wenn die Approximation aktualisiert werden
-	 *            muss.
-	 */
-	private void setApproximationAktuell(final boolean approximationAktuell) {
-		this.approximationAktuell = approximationAktuell;
-	}
-
-	/**
 	 * Nimmt eine Stützstelle in die Ganglinie auf. Existiert zu dem Zeitpunkt
 	 * bereits eine, wird diese überschrieben.
 	 * 
@@ -404,6 +371,39 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	@Override
 	public String toString() {
 		return getClass().getName() + "[" + getStuetzstellen().toString() + "]";
+	}
+
+	/**
+	 * Aktualisiert falls nötig die Approximation.
+	 */
+	private void aktualisiereApproximation() {
+		if (!isApproximationAktuell()) {
+			getIntervalle();
+			approximation.setStuetzstellen(getStuetzstellen());
+			approximation.initialisiere();
+		}
+	}
+
+	/**
+	 * Gibt {@code false} zurück, wenn die Approximation aktuallisiert werden
+	 * muss, weil sich die Ganglinie geändert hat.
+	 * 
+	 * @return {@code true}, wenn Ganglinie und Approximation konform gehen und
+	 *         {@code false}, wenn die Approximation aktualisiert werden muss.
+	 */
+	private boolean isApproximationAktuell() {
+		return approximationAktuell;
+	}
+
+	/**
+	 * Setzt das Flag, ob die Approximation noch gültig ist oder nicht.
+	 * 
+	 * @param approximationAktuell
+	 *            {@code false}, wenn die Approximation aktualisiert werden
+	 *            muss.
+	 */
+	private void setApproximationAktuell(final boolean approximationAktuell) {
+		this.approximationAktuell = approximationAktuell;
 	}
 
 }
