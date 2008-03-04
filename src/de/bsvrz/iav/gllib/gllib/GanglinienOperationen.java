@@ -473,6 +473,51 @@ public final class GanglinienOperationen {
 	}
 
 	/**
+	 * Normiert die Stützstellen einer Ganglinie. Mehrere hintereinander
+	 * folgende undefinierte Stützstellen werden zusammengefasst. Der Abstand
+	 * der Stützstellen wird auf ein definiertes Intervall normiert. Der
+	 * Intervallzyklus beginnt mit dem Zeitstempel der ersten Stützstelle.
+	 * <p>
+	 * <em>Hinweis:</em> die Ganglinie im Parameter wird verändert.
+	 * 
+	 * @param g
+	 *            eine Ganglinie.
+	 * @param abstand
+	 *            der gewünschte Stützstellenabstand.
+	 * @return die normierte Ganglinie.
+	 */
+	public static Ganglinie<Double> normiere(final Ganglinie<Double> g,
+			final long abstand) {
+		final Polyline p;
+		final SortedMap<Long, Double> stuetzstellen;
+		final long halberAbstand;
+
+		p = new Polyline();
+		p.setStuetzstellen(g.getStuetzstellen());
+		p.initialisiere();
+
+		stuetzstellen = new TreeMap<Long, Double>();
+		halberAbstand = abstand / 2;
+		stuetzstellen.put(g.firstKey(), g.get(g.firstKey()));
+		for (long i = g.firstKey() + halberAbstand; i < g.lastKey(); i += abstand) {
+			final Interval intervall;
+
+			intervall = new Interval(i - halberAbstand, i + halberAbstand);
+			if (g.isValid(intervall)) {
+				stuetzstellen.put(i, p.integral(intervall)
+						/ intervall.getLength());
+			} else {
+				stuetzstellen.put(i, null);
+			}
+		}
+		stuetzstellen.put(g.lastKey(), g.get(g.lastKey()));
+
+		g.clear();
+		g.putAll(stuetzstellen);
+		return g;
+	}
+
+	/**
 	 * Führt das Pattern-Matching einer Menge von Ganglinien mit einer
 	 * Referenzganglinie aus. Ergebnis ist die Ganglinie aus der Menge mit dem
 	 * geringsten Abstand zur Referenzganglinie.
@@ -661,6 +706,42 @@ public final class GanglinienOperationen {
 		for (final long t : g.keySet()) {
 			stuetzstellen.put(t + offset, g.get(t));
 		}
+		g.clear();
+		g.putAll(stuetzstellen);
+		return g;
+	}
+
+	/**
+	 * Verschiebt eine Ganglinie auf der Zeitachse um ein halbes
+	 * Stützstellenintervall. Jede Stützstelle wird um den halben Abstand zur
+	 * nächsten Stützstelle verschoben. Die letzte Stützstelle wird um den
+	 * halben Abstand zur vorherigen Stützstelle verschoben. Gibt es nur eine
+	 * Stützstelle, wird diese nicht verschoben.
+	 * <p>
+	 * <em>Hinweis:</em> Es wird die Ganglinie im Parameter verschoben.
+	 * 
+	 * @param g
+	 *            Zu verschiebende Ganglinie
+	 * @return Die verschobene Ganglinie
+	 */
+	public static Ganglinie<Double> verschiebeUmHalbesIntervall(
+			final Ganglinie<Double> g) {
+		SortedMap<Long, Double> stuetzstellen;
+		long intervall, t0;
+
+		t0 = Long.MIN_VALUE;
+		intervall = 0;
+		stuetzstellen = new TreeMap<Long, Double>();
+		for (final Long t : g.keySet()) {
+			if (t0 == Long.MIN_VALUE) {
+				t0 = t;
+			} else {
+				intervall = t - t0;
+				stuetzstellen.put(t0 + intervall / 2, g.get(t0));
+				t0 = t;
+			}
+		}
+		stuetzstellen.put(g.lastKey() + intervall / 2, g.get(g.lastKey()));
 		g.clear();
 		g.putAll(stuetzstellen);
 		return g;

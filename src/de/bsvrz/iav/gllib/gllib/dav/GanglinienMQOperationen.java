@@ -302,6 +302,33 @@ public final class GanglinienMQOperationen {
 	}
 
 	/**
+	 * Normiert die Stützstellen einer Ganglinie. Mehrere hintereinander
+	 * folgende undefinierte Stützstellen werden zusammengefasst. Der Abstand
+	 * der Stützstellen wird auf ein definiertes Intervall normiert. Der
+	 * Intervallzyklus beginnt mit dem Zeitstempel der ersten Stützstelle.
+	 * <p>
+	 * <em>Hinweis:</em> die Ganglinie im Parameter wird verändert.
+	 * 
+	 * @param g
+	 *            eine Ganglinie.
+	 * @param abstand
+	 *            der gewünschte Stützstellenabstand.
+	 * @return die normierte Ganglinie.
+	 */
+	public static GanglinieMQ normiere(final GanglinieMQ g, final long abstand) {
+		Ganglinie<Double> gQKfz, gQLkw, gVPkw, gVLkw;
+
+		gQKfz = GanglinienOperationen.normiere(g.getGanglinieQKfz(), abstand);
+		gQLkw = GanglinienOperationen.normiere(g.getGanglinieQLkw(), abstand);
+		gVPkw = GanglinienOperationen.normiere(g.getGanglinieVPkw(), abstand);
+		gVLkw = GanglinienOperationen.normiere(g.getGanglinieVLkw(), abstand);
+
+		g.clear();
+		g.putAll(zusammenfuehren(gQKfz, gQLkw, gVPkw, gVLkw));
+		return g;
+	}
+
+	/**
 	 * Führt das Pattern-Matching einer Menge von Ganglinien mit einer
 	 * Referenzganglinie aus. Ergebnis ist die Ganglinie aus der Menge mit dem
 	 * geringsten Abstand zur Referenzganglinie.
@@ -448,6 +475,36 @@ public final class GanglinienMQOperationen {
 		gQLkw = GanglinienOperationen.verschiebe(g.getGanglinieQLkw(), offset);
 		gVPkw = GanglinienOperationen.verschiebe(g.getGanglinieVPkw(), offset);
 		gVLkw = GanglinienOperationen.verschiebe(g.getGanglinieVLkw(), offset);
+
+		g.clear();
+		g.putAll(zusammenfuehren(gQKfz, gQLkw, gVPkw, gVLkw));
+		return g;
+	}
+
+	/**
+	 * Verschiebt eine Ganglinie auf der Zeitachse um ein halbes
+	 * Stützstellenintervall. Jede Stützstelle wird um den halben Abstand zur
+	 * nächsten Stützstelle verschoben. Die letzte Stützstelle wird um den
+	 * halben Abstand zur vorherigen Stützstelle verschoben. Gibt es nur eine
+	 * Stützstelle, wird diese nicht verschoben.
+	 * <p>
+	 * <em>Hinweis:</em> Es wird die Ganglinie im Parameter verschoben.
+	 * 
+	 * @param g
+	 *            Zu verschiebende Ganglinie
+	 * @return Die verschobene Ganglinie
+	 */
+	public static GanglinieMQ verschiebeUmHalbesIntervall(final GanglinieMQ g) {
+		Ganglinie<Double> gQKfz, gQLkw, gVPkw, gVLkw;
+
+		gQKfz = GanglinienOperationen.verschiebeUmHalbesIntervall(g
+				.getGanglinieQKfz());
+		gQLkw = GanglinienOperationen.verschiebeUmHalbesIntervall(g
+				.getGanglinieQLkw());
+		gVPkw = GanglinienOperationen.verschiebeUmHalbesIntervall(g
+				.getGanglinieVPkw());
+		gVLkw = GanglinienOperationen.verschiebeUmHalbesIntervall(g
+				.getGanglinieVLkw());
 
 		g.clear();
 		g.putAll(zusammenfuehren(gQKfz, gQLkw, gVPkw, gVLkw));

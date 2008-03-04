@@ -26,10 +26,10 @@
 
 package de.bsvrz.iav.gllib.gllib.modell.parameter;
 
+import static com.bitctrl.Constants.MILLIS_PER_SECOND;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.bitctrl.Constants.MILLIS_PER_SECOND;
 
 import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.ResultData;
@@ -132,7 +132,7 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 		 */
 		@Override
 		public Daten clone() {
-			Daten klon = new Daten();
+			final Daten klon = new Daten();
 
 			klon.datenStatus = datenStatus;
 			klon.ausschlussliste.addAll(ausschlussliste);
@@ -164,8 +164,8 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 		}
 
 		/**
-		 * Gibt die Liste der Bezugsereignistypen (nur für relative
-		 * Ganglinien) wieder.
+		 * Gibt die Liste der Bezugsereignistypen (nur für relative Ganglinien)
+		 * wieder.
 		 * 
 		 * @return {@code bezugsereignistypen}.
 		 */
@@ -205,7 +205,7 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 		 * Gibt das Intervall nach der Ganglinie, welches beim Pattern-Matching
 		 * einbezogen wird wieder.
 		 * 
-		 * @return {@code matchingIntervallNach} in Sekunden.
+		 * @return {@code matchingIntervallNach}.
 		 */
 		public long getMatchingIntervallNach() {
 			assert matchingIntervallNach >= 0;
@@ -216,7 +216,7 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 		 * Gibt das Intervall vor der Ganglinie, welches beim Pattern-Matching
 		 * einbezogen wird wieder.
 		 * 
-		 * @return {@code matchingIntervallVor} in Sekunden.
+		 * @return {@code matchingIntervallVor}.
 		 */
 		public long getMatchingIntervallVor() {
 			assert matchingIntervallVor >= 0;
@@ -226,7 +226,7 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 		/**
 		 * Gibt den Wert der Eigenschaft {@code matchingSchrittweite} wieder.
 		 * 
-		 * @return {@code matchingSchrittweite} in Sekunden.
+		 * @return {@code matchingSchrittweite}.
 		 */
 		public long getMatchingSchrittweite() {
 			assert matchingSchrittweite > 0;
@@ -245,8 +245,7 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 		}
 
 		/**
-		 * Gibt die maximale Anzahl von Ganglinien für den Ereignistyp
-		 * wieder.
+		 * Gibt die maximale Anzahl von Ganglinien für den Ereignistyp wieder.
 		 * 
 		 * @return {@code maxGanglinien}.
 		 */
@@ -277,10 +276,9 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 		}
 
 		/**
-		 * Gibt den Abstand der Stützstellen in generierten Ganglinien
-		 * wieder.
+		 * Gibt den Abstand der Stützstellen in generierten Ganglinien wieder.
 		 * 
-		 * @return {@code stuetzstellenAbstand} in Sekunden.
+		 * @return {@code stuetzstellenAbstand}.
 		 */
 		public long getStuetzstellenAbstand() {
 			assert stuetzstellenAbstand > 0;
@@ -291,7 +289,7 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 		 * Gibt die Schrittweite beim Vergleichen mittels komplexer
 		 * Abstandsberechnung wieder.
 		 * 
-		 * @return {@code vergleichsSchrittweite} in Sekunden.
+		 * @return {@code vergleichsSchrittweite}.
 		 */
 		public long getVergleichsSchrittweite() {
 			assert vergleichsSchrittweite > 0;
@@ -304,7 +302,7 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 		 * @param darstellungsverfahren
 		 *            der neue Wert von {@code darstellungsverfahren}.
 		 */
-		public void setDarstellungsverfahren(int darstellungsverfahren) {
+		public void setDarstellungsverfahren(final int darstellungsverfahren) {
 			this.darstellungsverfahren = darstellungsverfahren;
 		}
 
@@ -314,7 +312,7 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 		 * @param ganglinienTyp
 		 *            der neue Wert von {@code ganglinienTyp}.
 		 */
-		public void setGanglinienTyp(int ganglinienTyp) {
+		public void setGanglinienTyp(final int ganglinienTyp) {
 			this.ganglinienTyp = ganglinienTyp;
 		}
 
@@ -324,7 +322,7 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 		 * @param matchingIntervallNach
 		 *            der neue Wert von {@code matchingIntervallNach}.
 		 */
-		public void setMatchingIntervallNach(long matchingIntervallNach) {
+		public void setMatchingIntervallNach(final long matchingIntervallNach) {
 			this.matchingIntervallNach = matchingIntervallNach;
 		}
 
@@ -334,7 +332,7 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 		 * @param matchingIntervallVor
 		 *            der neue Wert von {@code matchingIntervallVor}.
 		 */
-		public void setMatchingIntervallVor(long matchingIntervallVor) {
+		public void setMatchingIntervallVor(final long matchingIntervallVor) {
 			this.matchingIntervallVor = matchingIntervallVor;
 		}
 
@@ -344,7 +342,7 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 		 * @param matchingSchrittweite
 		 *            der neue Wert von {@code matchingSchrittweite}.
 		 */
-		public void setMatchingSchrittweite(long matchingSchrittweite) {
+		public void setMatchingSchrittweite(final long matchingSchrittweite) {
 			this.matchingSchrittweite = matchingSchrittweite;
 		}
 
@@ -354,7 +352,7 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 		 * @param maxAbstand
 		 *            der neue Wert von {@code maxAbstand}.
 		 */
-		public void setMaxAbstand(int maxAbstand) {
+		public void setMaxAbstand(final int maxAbstand) {
 			this.maxAbstand = maxAbstand;
 		}
 
@@ -364,7 +362,7 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 		 * @param maxGanglinien
 		 *            der neue Wert von {@code maxGanglinien}.
 		 */
-		public void setMaxGanglinien(long maxGanglinien) {
+		public void setMaxGanglinien(final long maxGanglinien) {
 			this.maxGanglinien = maxGanglinien;
 		}
 
@@ -374,7 +372,7 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 		 * @param maxMatchingFehler
 		 *            der neue Wert von {@code maxMatchingFehler}.
 		 */
-		public void setMaxMatchingFehler(int maxMatchingFehler) {
+		public void setMaxMatchingFehler(final int maxMatchingFehler) {
 			this.maxMatchingFehler = maxMatchingFehler;
 		}
 
@@ -384,7 +382,7 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 		 * @param maxWichtungsfaktor
 		 *            der neue Wert von {@code maxWichtungsfaktor}.
 		 */
-		public void setMaxWichtungsfaktor(int maxWichtungsfaktor) {
+		public void setMaxWichtungsfaktor(final int maxWichtungsfaktor) {
 			this.maxWichtungsfaktor = maxWichtungsfaktor;
 		}
 
@@ -394,7 +392,7 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 		 * @param stuetzstellenAbstand
 		 *            der neue Wert von {@code stuetzstellenAbstand}.
 		 */
-		public void setStuetzstellenAbstand(long stuetzstellenAbstand) {
+		public void setStuetzstellenAbstand(final long stuetzstellenAbstand) {
 			this.stuetzstellenAbstand = stuetzstellenAbstand;
 		}
 
@@ -404,7 +402,7 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 		 * @param vergleichsSchrittweite
 		 *            der neue Wert von {@code vergleichsSchrittweite}.
 		 */
-		public void setVergleichsSchrittweite(long vergleichsSchrittweite) {
+		public void setVergleichsSchrittweite(final long vergleichsSchrittweite) {
 			this.vergleichsSchrittweite = vergleichsSchrittweite;
 		}
 
@@ -444,7 +442,7 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 		 * @param datenStatus
 		 *            der neue Status
 		 */
-		protected void setDatenStatus(Status datenStatus) {
+		protected void setDatenStatus(final Status datenStatus) {
 			this.datenStatus = datenStatus;
 		}
 	}
@@ -461,11 +459,12 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 	 * @param ereignisTyp
 	 *            ein Ereignistyp.
 	 */
-	public PdGanglinienModellAutomatischesLernenEreignis(EreignisTyp ereignisTyp) {
+	public PdGanglinienModellAutomatischesLernenEreignis(
+			final EreignisTyp ereignisTyp) {
 		super(ereignisTyp);
 
 		if (atg == null) {
-			DataModel modell = ObjektFactory.getInstanz().getVerbindung()
+			final DataModel modell = ObjektFactory.getInstanz().getVerbindung()
 					.getDataModel();
 			atg = modell
 					.getAttributeGroup(ATG_GANGLINIEN_MODELL_AUTOMATISCHES_LERNEN_EREIGNIS);
@@ -496,12 +495,12 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 	 * 
 	 * @see de.bsvrz.sys.funclib.bitctrl.modell.Datensatz#setDaten(de.bsvrz.dav.daf.main.ResultData)
 	 */
-	public void setDaten(ResultData result) {
+	public void setDaten(final ResultData result) {
 		check(result);
 
-		Daten datum = new Daten();
+		final Daten datum = new Daten();
 		if (result.hasData()) {
-			Data daten = result.getData();
+			final Data daten = result.getData();
 			ReferenceArray feld;
 
 			feld = daten.getReferenceArray("AlgAusschlussliste");
@@ -559,8 +558,8 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 	 * @see de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatensatz#konvertiere(de.bsvrz.sys.funclib.bitctrl.modell.Datum)
 	 */
 	@Override
-	protected Data konvertiere(Daten datum) {
-		Data daten = erzeugeSendeCache();
+	protected Data konvertiere(final Daten datum) {
+		final Data daten = erzeugeSendeCache();
 		ReferenceArray feld;
 
 		feld = daten.getReferenceArray("AlgAusschlussliste");
