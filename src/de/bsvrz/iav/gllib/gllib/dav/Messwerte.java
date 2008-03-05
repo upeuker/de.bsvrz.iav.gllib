@@ -29,8 +29,8 @@ package de.bsvrz.iav.gllib.gllib.dav;
 import de.bsvrz.sys.funclib.bitctrl.util.dav.Umrechung;
 
 /**
- * Für Messquerschnitte angepasste Stützstelle, die die Werte QKfz,
- * QLkw, VLkw und VPkw für den Zeitstempel enthält.
+ * Für Messquerschnitte angepasste Stützstelle, die die Werte QKfz, QLkw, VLkw
+ * und VPkw für den Zeitstempel enthält.
  * <p>
  * <strong>Abkürzungen:</strong>
  * <ul>
@@ -45,7 +45,7 @@ import de.bsvrz.sys.funclib.bitctrl.util.dav.Umrechung;
  */
 public class Messwerte {
 
-	/** Konstante für einen undefinierten Wert. */
+	/** Konstante für einen undefinierten Wert ({@value}). */
 	public static final double UNDEFINIERT = -2147483.648;
 
 	/** Wert für die Verkehrsstärke der Lkw. */
@@ -90,7 +90,8 @@ public class Messwerte {
 	 * @param vLkw
 	 *            Geschwindigkeit Lkw
 	 */
-	public Messwerte(Double qKfz, Double qLkw, Double vPkw, Double vLkw) {
+	public Messwerte(final Double qKfz, final Double qLkw, final Double vPkw,
+			final Double vLkw) {
 		this(qKfz, qLkw, vPkw, vLkw, 2.0f, 0.01f);
 	}
 
@@ -110,8 +111,8 @@ public class Messwerte {
 	 * @param k2
 	 *            Parameter für die Berechnung von QB
 	 */
-	Messwerte(Double qKfz, Double qLkw, Double vPkw, Double vLkw, float k1,
-			float k2) {
+	Messwerte(final Double qKfz, final Double qLkw, final Double vPkw,
+			final Double vLkw, final float k1, final float k2) {
 		if (qKfz != null && !qKfz.equals(UNDEFINIERT)) {
 			this.qKfz = qKfz;
 		} else {
@@ -140,15 +141,15 @@ public class Messwerte {
 	}
 
 	/**
-	 * Zwei Stützstellen sind identisch, wenn beide den selben Zeitstempel
-	 * und die selben Werte haben.
+	 * Zwei Stützstellen sind identisch, wenn beide den selben Zeitstempel und
+	 * die selben Werte haben.
 	 * 
 	 * {@inheritDoc}
 	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (obj instanceof Messwerte) {
 			Messwerte s;
 			boolean gleich;
@@ -186,8 +187,8 @@ public class Messwerte {
 	}
 
 	/**
-	 * Gibt den Wert für QB zurück. Diese Property ist read-only, da
-	 * sie aus den in der Ganglinie gesicherten Werten berechnet wird.
+	 * Gibt den Wert für QB zurück. Diese Property ist read-only, da sie aus den
+	 * in der Ganglinie gesicherten Werten berechnet wird.
 	 * 
 	 * @return Wert für QB
 	 */
@@ -214,8 +215,8 @@ public class Messwerte {
 	}
 
 	/**
-	 * Gibt den Wert für QPkw zurück. Diese Property ist read-only, da
-	 * sie aus den in der Ganglinie gesicherten Werten berechnet wird.
+	 * Gibt den Wert für QPkw zurück. Diese Property ist read-only, da sie aus
+	 * den in der Ganglinie gesicherten Werten berechnet wird.
 	 * 
 	 * @return Wert für QPkw
 	 */
@@ -224,8 +225,8 @@ public class Messwerte {
 	}
 
 	/**
-	 * Gibt den Wert für VKfz zurück. Diese Property ist read-only, da
-	 * sie aus den in der Ganglinie gesicherten Werten berechnet wird.
+	 * Gibt den Wert für VKfz zurück. Diese Property ist read-only, da sie aus
+	 * den in der Ganglinie gesicherten Werten berechnet wird.
 	 * 
 	 * @return Wert für VKfz
 	 */
