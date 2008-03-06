@@ -86,9 +86,6 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 		 */
 		private int ganglinienTyp;
 
-		/** Abstand der Stützstellen in generierten Ganglinien. */
-		private long stuetzstellenAbstand;
-
 		/**
 		 * Das Intervall nach der Ganglinie, welches beim Pattern-Matching
 		 * einbezogen wird.
@@ -146,7 +143,6 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 			klon.maxGanglinien = maxGanglinien;
 			klon.maxMatchingFehler = maxMatchingFehler;
 			klon.maxWichtungsfaktor = maxWichtungsfaktor;
-			klon.stuetzstellenAbstand = stuetzstellenAbstand;
 			klon.vergleichsSchrittweite = vergleichsSchrittweite;
 			klon.setZeitstempel(getZeitstempel());
 
@@ -276,16 +272,6 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 		}
 
 		/**
-		 * Gibt den Abstand der Stützstellen in generierten Ganglinien wieder.
-		 * 
-		 * @return {@code stuetzstellenAbstand}.
-		 */
-		public long getStuetzstellenAbstand() {
-			assert stuetzstellenAbstand > 0;
-			return stuetzstellenAbstand;
-		}
-
-		/**
 		 * Gibt die Schrittweite beim Vergleichen mittels komplexer
 		 * Abstandsberechnung wieder.
 		 * 
@@ -387,16 +373,6 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 		}
 
 		/**
-		 * Legt den Wert der Eigenschaft {@code stuetzstellenAbstand} fest.
-		 * 
-		 * @param stuetzstellenAbstand
-		 *            der neue Wert von {@code stuetzstellenAbstand}.
-		 */
-		public void setStuetzstellenAbstand(final long stuetzstellenAbstand) {
-			this.stuetzstellenAbstand = stuetzstellenAbstand;
-		}
-
-		/**
 		 * Legt den Wert der Eigenschaft {@code vergleichsSchrittweite} fest.
 		 * 
 		 * @param vergleichsSchrittweite
@@ -427,7 +403,6 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 			s += ", maxGanglinien=" + maxGanglinien;
 			s += ", maxMatchingFehler=" + maxMatchingFehler;
 			s += ", maxWichtungsfaktor=" + maxWichtungsfaktor;
-			s += ", stuetzstellenAbstand=" + stuetzstellenAbstand;
 			s += ", vergleichsSchrittweite=" + vergleichsSchrittweite;
 			s += ", bezugsereignistypen=" + bezugsereignistypen;
 			s += ", ausschlussliste=" + ausschlussliste;
@@ -541,8 +516,6 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 			datum.setVergleichsSchrittweite(daten.getUnscaledValue(
 					"AlgVergleichsSchrittweite").longValue()
 					* MILLIS_PER_SECOND);
-			datum.setStuetzstellenAbstand(daten.getUnscaledValue(
-					"AlgStützstellenAbstand").longValue());
 		}
 
 		datum.setDatenStatus(Datum.Status.getStatus(result.getDataState()));
@@ -595,8 +568,6 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 				datum.getMaxWichtungsfaktor());
 		daten.getUnscaledValue("AlgVergleichsSchrittweite").set(
 				datum.getVergleichsSchrittweite() / MILLIS_PER_SECOND);
-		daten.getUnscaledValue("AlgStützstellenAbstand").set(
-				datum.getStuetzstellenAbstand());
 
 		return daten;
 	}
