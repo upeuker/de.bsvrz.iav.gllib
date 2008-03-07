@@ -85,7 +85,7 @@ public class PdGanglinienModellAutomatischesLernen extends
 		 */
 		@Override
 		public Daten clone() {
-			Daten klon = new Daten();
+			final Daten klon = new Daten();
 
 			klon.aktualisierungsintervall = aktualisierungsintervall;
 			klon.datenMindestalter = datenMindestalter;
@@ -104,7 +104,6 @@ public class PdGanglinienModellAutomatischesLernen extends
 		 * @return das aktuelle Aktualisierungsintervall in Tagen.
 		 */
 		public long getAktualisierungsintervall() {
-			assert aktualisierungsintervall > 0;
 			return aktualisierungsintervall;
 		}
 
@@ -115,7 +114,6 @@ public class PdGanglinienModellAutomatischesLernen extends
 		 * @return das aktuelle Datenmindestalter in Tagen.
 		 */
 		public long getDatenMindestalter() {
-			assert aktualisierungsintervall > 0;
 			return datenMindestalter;
 		}
 
@@ -135,7 +133,6 @@ public class PdGanglinienModellAutomatischesLernen extends
 		 * @return die aktuelle maximale Wichtung.
 		 */
 		public int getMaximalWichtung() {
-			assert maximalWichtung > 0;
 			return maximalWichtung;
 		}
 
@@ -146,7 +143,6 @@ public class PdGanglinienModellAutomatischesLernen extends
 		 * @return der aktuelle maximale Vergleichsabstand in Prozent.
 		 */
 		public int getMaxVergleichsAbstand() {
-			assert maxVergleichsAbstand > 0;
 			return maxVergleichsAbstand;
 		}
 
@@ -157,7 +153,8 @@ public class PdGanglinienModellAutomatischesLernen extends
 		 * @param aktualisierungsintervall
 		 *            das neue Aktualisierungsintervall in Tagen.
 		 */
-		public void setAktualisierungsintervall(long aktualisierungsintervall) {
+		public void setAktualisierungsintervall(
+				final long aktualisierungsintervall) {
 			this.aktualisierungsintervall = aktualisierungsintervall;
 		}
 
@@ -168,32 +165,30 @@ public class PdGanglinienModellAutomatischesLernen extends
 		 * @param datenMindestalter
 		 *            das neue Datenmindestalter in Tagen.
 		 */
-		public void setDatenMindestalter(long datenMindestalter) {
+		public void setDatenMindestalter(final long datenMindestalter) {
 			this.datenMindestalter = datenMindestalter;
 		}
 
 		/**
 		 * Maximaler Wichtungsfaktor der historischen Ganglinien bei der
-		 * Verschmelzung mit Analyseganglinien. Das Gewicht muss größer 0
-		 * sein.
+		 * Verschmelzung mit Analyseganglinien. Das Gewicht muss größer 0 sein.
 		 * 
 		 * @param maximalWichtung
 		 *            die neue maximale Wichtung.
 		 */
-		public void setMaximalWichtung(int maximalWichtung) {
+		public void setMaximalWichtung(final int maximalWichtung) {
 			this.maximalWichtung = maximalWichtung;
 		}
 
 		/**
 		 * Wenn dieses Abstandsmaß beim zyklischen Archivieren und Vergleichen
 		 * von Ganglinien überschritten wird, wird eine Meldung erzeugt. Der
-		 * Wert muss größer als 1 sein. Werte über 100 Prozent
-		 * sind erlaubt.
+		 * Wert muss größer als 1 sein. Werte über 100 Prozent sind erlaubt.
 		 * 
 		 * @param maxVergleichsAbstand
 		 *            der neue maximale Vergleichsabstand in Prozent.
 		 */
-		public void setMaxVergleichsAbstand(int maxVergleichsAbstand) {
+		public void setMaxVergleichsAbstand(final int maxVergleichsAbstand) {
 			this.maxVergleichsAbstand = maxVergleichsAbstand;
 		}
 
@@ -224,7 +219,7 @@ public class PdGanglinienModellAutomatischesLernen extends
 		 * @param datenStatus
 		 *            der neue Status
 		 */
-		protected void setDatenStatus(Status datenStatus) {
+		protected void setDatenStatus(final Status datenStatus) {
 			this.datenStatus = datenStatus;
 		}
 
@@ -244,11 +239,11 @@ public class PdGanglinienModellAutomatischesLernen extends
 	 *            Organisationseinheit.
 	 */
 	public PdGanglinienModellAutomatischesLernen(
-			ApplikationGanglinienPrognose appGanglinie) {
+			final ApplikationGanglinienPrognose appGanglinie) {
 		super(appGanglinie);
 
 		if (atg == null) {
-			DataModel modell = ObjektFactory.getInstanz().getVerbindung()
+			final DataModel modell = ObjektFactory.getInstanz().getVerbindung()
 					.getDataModel();
 			atg = modell
 					.getAttributeGroup(ATG_GANGLINIEN_MODELL_AUTOMATISCHES_LERNEN);
@@ -279,12 +274,12 @@ public class PdGanglinienModellAutomatischesLernen extends
 	 * 
 	 * @see de.bsvrz.sys.funclib.bitctrl.modell.Datensatz#setDaten(de.bsvrz.dav.daf.main.ResultData)
 	 */
-	public void setDaten(ResultData result) {
+	public void setDaten(final ResultData result) {
 		check(result);
 
-		Daten datum = new Daten();
+		final Daten datum = new Daten();
 		if (result.hasData()) {
-			Data daten = result.getData();
+			final Data daten = result.getData();
 
 			datum.setAktualisierungsintervall(daten.getUnscaledValue(
 					"AlgAktualisierungsintervall").longValue());
@@ -309,8 +304,8 @@ public class PdGanglinienModellAutomatischesLernen extends
 	 * @see de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatensatz#konvertiere(de.bsvrz.sys.funclib.bitctrl.modell.Datum)
 	 */
 	@Override
-	protected Data konvertiere(Daten datum) {
-		Data daten = erzeugeSendeCache();
+	protected Data konvertiere(final Daten datum) {
+		final Data daten = erzeugeSendeCache();
 
 		daten.getUnscaledValue("AlgAktualisierungsintervall").set(
 				datum.getAktualisierungsintervall());
