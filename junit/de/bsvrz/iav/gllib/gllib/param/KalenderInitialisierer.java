@@ -75,9 +75,6 @@ public final class KalenderInitialisierer implements StandardApplication {
 	/** Versionsangabe. */
 	public static final String APP_VERSION = "1.0.0";
 
-	/** Timeout von einer Minute für das Senden von Parameterdaten. */
-	private static final long TIMEOUT = 60 * 1000; // 1 Minute
-
 	/**
 	 * Startet die Applikation.
 	 * <p>
@@ -91,7 +88,7 @@ public final class KalenderInitialisierer implements StandardApplication {
 	 * @param args
 	 *            die Startparameter.
 	 */
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		StandardApplicationRunner.run(new KalenderInitialisierer(), args);
 	}
 
@@ -113,7 +110,8 @@ public final class KalenderInitialisierer implements StandardApplication {
 	 * 
 	 * @see de.bsvrz.sys.funclib.application.StandardApplication#initialize(de.bsvrz.dav.daf.main.ClientDavInterface)
 	 */
-	public void initialize(ClientDavInterface connection) throws Exception {
+	public void initialize(final ClientDavInterface connection)
+			throws Exception {
 		ObjektFactory factory;
 
 		factory = ObjektFactory.getInstanz();
@@ -145,7 +143,8 @@ public final class KalenderInitialisierer implements StandardApplication {
 	 * 
 	 * @see de.bsvrz.sys.funclib.application.StandardApplication#parseArguments(de.bsvrz.sys.funclib.commandLineArgs.ArgumentList)
 	 */
-	public void parseArguments(ArgumentList argumentList) throws Exception {
+	public void parseArguments(final ArgumentList argumentList)
+			throws Exception {
 		if (argumentList.hasArgument("-reset")) {
 			argumentList.fetchArgument("-reset=");
 			reset = true;
@@ -170,7 +169,7 @@ public final class KalenderInitialisierer implements StandardApplication {
 	 * @throws DatensendeException
 	 *             wenn ein Parameter nicht gesendet werden kann.
 	 */
-	private void anlegenEreignis(String ereignisName, int prioritaet)
+	private void anlegenEreignis(final String ereignisName, final int prioritaet)
 			throws ConfigurationChangeException, AnmeldeException,
 			DatensendeException {
 		SystemKalenderEintrag ske;
@@ -192,7 +191,7 @@ public final class KalenderInitialisierer implements StandardApplication {
 		skeParam.anmeldenSender();
 		skeDatum = skeParam.erzeugeDatum();
 		skeDatum.setDefinition("ske" + ereignisName + ":=" + ereignisName);
-		skeParam.sendeDaten(skeDatum, TIMEOUT);
+		skeParam.sendeDaten(skeDatum);
 		System.out.println("Systemkalendereintrag " + ereignisName
 				+ " angelegt.");
 
@@ -203,7 +202,7 @@ public final class KalenderInitialisierer implements StandardApplication {
 		typParam.anmeldenSender();
 		typDatum = typParam.erzeugeDatum();
 		typDatum.setPrioritaet(prioritaet);
-		typParam.sendeDaten(typDatum, TIMEOUT);
+		typParam.sendeDaten(typDatum);
 		System.out.println("Ereignistyp " + ereignisName + " angelegt.");
 
 		erg = Ereignis.anlegen("ereignis." + ereignisName.toLowerCase(),
@@ -220,7 +219,7 @@ public final class KalenderInitialisierer implements StandardApplication {
 		ergDatum.setSystemKalenderEintrag(ske);
 		ergDatum.getVerkehrlicheGueltigkeit().add(vg);
 		ergDatum.setQuelle("Initialisierung");
-		ergParam.sendeDaten(ergDatum, TIMEOUT);
+		ergParam.sendeDaten(ergDatum);
 		System.out.println("Ereignis " + ereignisName + " angelegt.");
 	}
 
@@ -245,19 +244,19 @@ public final class KalenderInitialisierer implements StandardApplication {
 		modell = verbindung.getDataModel();
 
 		menge = aoe.getMutableSet("Ereignisse");
-		for (SystemObject so : menge.getElements()) {
+		for (final SystemObject so : menge.getElements()) {
 			System.out.println("Entferne aus Menge " + so);
 			menge.remove(so);
 		}
 
 		menge = aoe.getMutableSet("EreignisTypen");
-		for (SystemObject so : menge.getElements()) {
+		for (final SystemObject so : menge.getElements()) {
 			System.out.println("Entferne aus Menge " + so);
 			menge.remove(so);
 		}
 
 		menge = aoe.getMutableSet("SystemKalenderEinträge");
-		for (SystemObject so : menge.getElements()) {
+		for (final SystemObject so : menge.getElements()) {
 			System.out.println("Entferne aus Menge " + so);
 			menge.remove(so);
 		}
@@ -269,7 +268,7 @@ public final class KalenderInitialisierer implements StandardApplication {
 		typ = modell.getType("typ.ereignisTyp");
 		objekte = modell.getObjects(null, Collections.singleton(typ),
 				ObjectTimeSpecification.valid());
-		for (SystemObject so : objekte) {
+		for (final SystemObject so : objekte) {
 			DynamicObject dyn;
 
 			dyn = (DynamicObject) so;
@@ -280,7 +279,7 @@ public final class KalenderInitialisierer implements StandardApplication {
 		typ = modell.getType("typ.ereignis");
 		objekte = modell.getObjects(null, Collections.singleton(typ),
 				ObjectTimeSpecification.valid());
-		for (SystemObject so : objekte) {
+		for (final SystemObject so : objekte) {
 			DynamicObject dyn;
 
 			dyn = (DynamicObject) so;
@@ -291,7 +290,7 @@ public final class KalenderInitialisierer implements StandardApplication {
 		typ = modell.getType("typ.systemKalenderEintrag");
 		objekte = modell.getObjects(null, Collections.singleton(typ),
 				ObjectTimeSpecification.valid());
-		for (SystemObject so : objekte) {
+		for (final SystemObject so : objekte) {
 			DynamicObject dyn;
 
 			dyn = (DynamicObject) so;

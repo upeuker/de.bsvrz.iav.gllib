@@ -73,9 +73,6 @@ import de.bsvrz.sys.funclib.debug.Debug;
  */
 public final class Ganglinienprognose implements DatensatzUpdateListener {
 
-	/** Timeout von 60 Sekunden für das Senden der Prognoseanfrage. */
-	private static final long TIMEOUT = 60 * 1000;
-
 	/** Das Singleton. */
 	private static Ganglinienprognose singleton;
 
@@ -137,7 +134,7 @@ public final class Ganglinienprognose implements DatensatzUpdateListener {
 
 		try {
 			odAnfrage.anmeldenSender(aspAnfrage);
-		} catch (AnmeldeException ex) {
+		} catch (final AnmeldeException ex) {
 			log
 					.error(
 							"Anmeldung zum Senden von Anfragen an die Ganglinienprognose konnte nicht durchgeführt werden",
@@ -210,7 +207,7 @@ public final class Ganglinienprognose implements DatensatzUpdateListener {
 		datum.setAbsender((Applikation) factory.getModellobjekt(klient));
 		datum.setAbsenderZeichen(absenderZeichen);
 		datum.addAll(anfragen);
-		odAnfrage.sendeDaten(aspAnfrage, datum, TIMEOUT);
+		odAnfrage.sendeDaten(aspAnfrage, datum);
 
 		log.fine("Anfrage \"" + absenderZeichen + "\" wurde gesendet");
 	}
@@ -223,9 +220,9 @@ public final class Ganglinienprognose implements DatensatzUpdateListener {
 	 */
 	protected synchronized void fireAntwort(
 			final OdPrognoseGanglinienAntwort.Daten datum) {
-		GlProgAntwortEvent e = new GlProgAntwortEvent(this, datum);
+		final GlProgAntwortEvent e = new GlProgAntwortEvent(this, datum);
 
-		for (GlProgAntwortListener l : listeners
+		for (final GlProgAntwortListener l : listeners
 				.getListeners(GlProgAntwortListener.class)) {
 			l.antwortEingetroffen(e);
 		}
