@@ -46,6 +46,8 @@ import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
  * 
  * @author BitCtrl Systems GmbH, Schumann
  * @version $Id$
+ * @todo Parameter defLueckenSchliessen wieder entfernen, auﬂer beim
+ *       Verschmelzen
  */
 public final class GanglinienMQOperationen {
 

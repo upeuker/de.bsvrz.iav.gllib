@@ -73,8 +73,9 @@ public class PdGanglinienModellAutomatischesLernen extends
 		private int maximalWichtung;
 
 		/**
-		 * Wenn dieses Abstandsmaß beim zyklischen Archivieren und Vergleichen
-		 * von Ganglinien überschritten wird, wird eine Meldung erzeugt.
+		 * Wenn dieses Abstandsmaß (in Prozent) beim zyklischen Archivieren und
+		 * Vergleichen von Ganglinien überschritten wird, wird eine Meldung
+		 * erzeugt.
 		 */
 		private int maxVergleichsAbstand;
 
@@ -171,7 +172,7 @@ public class PdGanglinienModellAutomatischesLernen extends
 
 		/**
 		 * Maximaler Wichtungsfaktor der historischen Ganglinien bei der
-		 * Verschmelzung mit Analyseganglinien. Das Gewicht muss größer 0 sein.
+		 * Verschmelzung mit Analyseganglinien.
 		 * 
 		 * @param maximalWichtung
 		 *            die neue maximale Wichtung.
@@ -182,8 +183,7 @@ public class PdGanglinienModellAutomatischesLernen extends
 
 		/**
 		 * Wenn dieses Abstandsmaß beim zyklischen Archivieren und Vergleichen
-		 * von Ganglinien überschritten wird, wird eine Meldung erzeugt. Der
-		 * Wert muss größer als 1 sein. Werte über 100 Prozent sind erlaubt.
+		 * von Ganglinien überschritten wird, wird eine Meldung erzeugt.
 		 * 
 		 * @param maxVergleichsAbstand
 		 *            der neue maximale Vergleichsabstand in Prozent.

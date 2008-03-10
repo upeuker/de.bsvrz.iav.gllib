@@ -46,6 +46,8 @@ import com.bitctrl.util.Interval;
  * 
  * @author BitCtrl Systems GmbH, Schumann
  * @version $Id$
+ * @todo Parameter defLueckenSchliessen wieder entfernen, auﬂer beim
+ *       Verschmelzen
  */
 public final class GanglinienOperationen {
 
