@@ -27,7 +27,6 @@
 package de.bsvrz.iav.gllib.gllib.modell.parameter;
 
 import static com.bitctrl.Constants.MILLIS_PER_SECOND;
-
 import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dav.daf.main.config.AttributeGroup;
@@ -65,9 +64,8 @@ public class PdGanglinienModellPrognose extends
 		private int auswahlMethode;
 
 		/**
-		 * Intervall in die Vergangenheit, was berücksichtigt wird.
-		 * 
-		 * @todo überlappt sich mit {@link #patternMatchingOffset}
+		 * Intervall in die Vergangenheit, welches beim Pattern-Matching
+		 * berücksichtigt wird.
 		 */
 		private long matchingIntervall;
 
@@ -80,7 +78,10 @@ public class PdGanglinienModellPrognose extends
 		/** Der Zeitraum der mittelfristigen Prognose. */
 		private long patternMatchingHorizont;
 
-		/** Offset um den beim Pattern-Matching verschoben wird. */
+		/**
+		 * Offset um das beim Pattern-Matching nach vorn und hinten verschoben
+		 * wird.
+		 */
 		private long patternMatchingOffset;
 
 		/**
@@ -103,7 +104,7 @@ public class PdGanglinienModellPrognose extends
 		 */
 		@Override
 		public Daten clone() {
-			Daten klon = new Daten();
+			final Daten klon = new Daten();
 
 			klon.datenStatus = datenStatus;
 			klon.auswahlMethode = auswahlMethode;
@@ -187,7 +188,7 @@ public class PdGanglinienModellPrognose extends
 		 * @param auswahlMethode
 		 *            der neue Wert von {@code auswahlMethode}.
 		 */
-		public void setAuswahlMethode(int auswahlMethode) {
+		public void setAuswahlMethode(final int auswahlMethode) {
 			this.auswahlMethode = auswahlMethode;
 		}
 
@@ -197,7 +198,7 @@ public class PdGanglinienModellPrognose extends
 		 * @param matchingIntervall
 		 *            der neue Wert von {@code matchingIntervall}.
 		 */
-		public void setMatchingIntervall(long matchingIntervall) {
+		public void setMatchingIntervall(final long matchingIntervall) {
 			this.matchingIntervall = matchingIntervall;
 		}
 
@@ -207,7 +208,8 @@ public class PdGanglinienModellPrognose extends
 		 * @param maxDauerZyklischePrognose
 		 *            der neue Wert von {@code maxDauerZyklischePrognose}.
 		 */
-		public void setMaxDauerZyklischePrognose(long maxDauerZyklischePrognose) {
+		public void setMaxDauerZyklischePrognose(
+				final long maxDauerZyklischePrognose) {
 			this.maxDauerZyklischePrognose = maxDauerZyklischePrognose;
 		}
 
@@ -217,7 +219,7 @@ public class PdGanglinienModellPrognose extends
 		 * @param maxMatchingFehler
 		 *            der neue Wert von {@code maxMatchingFehler}.
 		 */
-		public void setMaxMatchingFehler(int maxMatchingFehler) {
+		public void setMaxMatchingFehler(final int maxMatchingFehler) {
 			this.maxMatchingFehler = maxMatchingFehler;
 		}
 
@@ -227,7 +229,8 @@ public class PdGanglinienModellPrognose extends
 		 * @param patternMatchingHorizont
 		 *            der neue Wert von {@code patternMatchingHorizont}.
 		 */
-		public void setPatternMatchingHorizont(long patternMatchingHorizont) {
+		public void setPatternMatchingHorizont(
+				final long patternMatchingHorizont) {
 			this.patternMatchingHorizont = patternMatchingHorizont;
 		}
 
@@ -237,7 +240,7 @@ public class PdGanglinienModellPrognose extends
 		 * @param patternMatchingOffset
 		 *            der neue Wert von {@code patternMatchingOffset}.
 		 */
-		public void setPatternMatchingOffset(long patternMatchingOffset) {
+		public void setPatternMatchingOffset(final long patternMatchingOffset) {
 			this.patternMatchingOffset = patternMatchingOffset;
 		}
 
@@ -270,7 +273,7 @@ public class PdGanglinienModellPrognose extends
 		 * @param datenStatus
 		 *            der neue Status
 		 */
-		protected void setDatenStatus(Status datenStatus) {
+		protected void setDatenStatus(final Status datenStatus) {
 			this.datenStatus = datenStatus;
 		}
 
@@ -288,11 +291,11 @@ public class PdGanglinienModellPrognose extends
 	 * @param mq
 	 *            ein Messquerschnitt
 	 */
-	public PdGanglinienModellPrognose(MessQuerschnittAllgemein mq) {
+	public PdGanglinienModellPrognose(final MessQuerschnittAllgemein mq) {
 		super(mq);
 
 		if (atg == null) {
-			DataModel modell = ObjektFactory.getInstanz().getVerbindung()
+			final DataModel modell = ObjektFactory.getInstanz().getVerbindung()
 					.getDataModel();
 			atg = modell.getAttributeGroup(ATG_GANGLINIEN_MODELL_PROGNOSE);
 			assert atg != null;
@@ -322,12 +325,12 @@ public class PdGanglinienModellPrognose extends
 	 * 
 	 * @see de.bsvrz.sys.funclib.bitctrl.modell.Datensatz#setDaten(de.bsvrz.dav.daf.main.ResultData)
 	 */
-	public void setDaten(ResultData result) {
+	public void setDaten(final ResultData result) {
 		check(result);
 
-		Daten datum = new Daten();
+		final Daten datum = new Daten();
 		if (result.hasData()) {
-			Data daten = result.getData();
+			final Data daten = result.getData();
 
 			datum.setAuswahlMethode(daten.getUnscaledValue("GLAuswahlMethode")
 					.intValue());
@@ -361,8 +364,8 @@ public class PdGanglinienModellPrognose extends
 	 * @see de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatensatz#konvertiere(de.bsvrz.sys.funclib.bitctrl.modell.Datum)
 	 */
 	@Override
-	protected Data konvertiere(Daten datum) {
-		Data daten = erzeugeSendeCache();
+	protected Data konvertiere(final Daten datum) {
+		final Data daten = erzeugeSendeCache();
 
 		daten.getUnscaledValue("GLAuswahlMethode").set(
 				datum.getAuswahlMethode());
