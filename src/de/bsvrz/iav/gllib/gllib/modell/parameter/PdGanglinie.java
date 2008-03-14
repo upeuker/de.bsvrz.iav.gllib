@@ -68,44 +68,35 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.util.List#add(java.lang.Object)
 		 */
-		public boolean add(GanglinieMQ o) {
+		public boolean add(final GanglinieMQ o) {
 			return ganglinien.add(o);
 		}
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.util.List#add(int, java.lang.Object)
 		 */
-		public void add(int index, GanglinieMQ element) {
+		public void add(final int index, final GanglinieMQ element) {
 			ganglinien.add(index, element);
 		}
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.util.List#addAll(java.util.Collection)
 		 */
-		public boolean addAll(Collection<? extends GanglinieMQ> c) {
+		public boolean addAll(final Collection<? extends GanglinieMQ> c) {
 			return ganglinien.addAll(c);
 		}
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.util.List#addAll(int, java.util.Collection)
 		 */
-		public boolean addAll(int index, Collection<? extends GanglinieMQ> c) {
+		public boolean addAll(final int index,
+				final Collection<? extends GanglinieMQ> c) {
 			return ganglinien.addAll(index, c);
 		}
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.util.List#clear()
 		 */
 		public void clear() {
 			ganglinien.clear();
@@ -115,12 +106,10 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 		 * Erzeugt eine flache Kopie.
 		 * 
 		 * {@inheritDoc}
-		 * 
-		 * @see de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatum#clone()
 		 */
 		@Override
 		public Daten clone() {
-			Daten klon = new Daten();
+			final Daten klon = new Daten();
 
 			klon.datenStatus = datenStatus;
 			klon.ganglinien.addAll(ganglinien);
@@ -131,35 +120,27 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.util.List#contains(java.lang.Object)
 		 */
-		public boolean contains(Object o) {
+		public boolean contains(final Object o) {
 			return ganglinien.contains(o);
 		}
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.util.List#containsAll(java.util.Collection)
 		 */
-		public boolean containsAll(Collection<?> c) {
+		public boolean containsAll(final Collection<?> c) {
 			return ganglinien.containsAll(c);
 		}
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.util.List#get(int)
 		 */
-		public GanglinieMQ get(int index) {
+		public GanglinieMQ get(final int index) {
 			return ganglinien.get(index);
 		}
 
 		/**
-		 * {@inheritDoc}.<br>
-		 * 
-		 * @see de.bsvrz.sys.funclib.bitctrl.modell.Datum#getDatenStatus()
+		 * {@inheritDoc}
 		 */
 		public Status getDatenStatus() {
 			return datenStatus;
@@ -167,17 +148,13 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.util.List#indexOf(java.lang.Object)
 		 */
-		public int indexOf(Object o) {
+		public int indexOf(final Object o) {
 			return ganglinien.indexOf(o);
 		}
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.util.List#isEmpty()
 		 */
 		public boolean isEmpty() {
 			return ganglinien.isEmpty();
@@ -185,8 +162,6 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.util.List#iterator()
 		 */
 		public Iterator<GanglinieMQ> iterator() {
 			return ganglinien.iterator();
@@ -194,17 +169,13 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.util.List#lastIndexOf(java.lang.Object)
 		 */
-		public int lastIndexOf(Object o) {
+		public int lastIndexOf(final Object o) {
 			return ganglinien.lastIndexOf(o);
 		}
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.util.List#listIterator()
 		 */
 		public ListIterator<GanglinieMQ> listIterator() {
 			return ganglinien.listIterator();
@@ -212,62 +183,48 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.util.List#listIterator(int)
 		 */
-		public ListIterator<GanglinieMQ> listIterator(int index) {
+		public ListIterator<GanglinieMQ> listIterator(final int index) {
 			return ganglinien.listIterator(index);
 		}
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.util.List#remove(int)
 		 */
-		public GanglinieMQ remove(int index) {
+		public GanglinieMQ remove(final int index) {
 			return ganglinien.remove(index);
 		}
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.util.List#remove(java.lang.Object)
 		 */
-		public boolean remove(Object o) {
+		public boolean remove(final Object o) {
 			return ganglinien.remove(o);
 		}
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.util.List#removeAll(java.util.Collection)
 		 */
-		public boolean removeAll(Collection<?> c) {
+		public boolean removeAll(final Collection<?> c) {
 			return ganglinien.removeAll(c);
 		}
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.util.List#retainAll(java.util.Collection)
 		 */
-		public boolean retainAll(Collection<?> c) {
+		public boolean retainAll(final Collection<?> c) {
 			return ganglinien.retainAll(c);
 		}
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.util.List#set(int, java.lang.Object)
 		 */
-		public GanglinieMQ set(int index, GanglinieMQ element) {
+		public GanglinieMQ set(final int index, final GanglinieMQ element) {
 			return ganglinien.set(index, element);
 		}
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.util.List#size()
 		 */
 		public int size() {
 			return ganglinien.size();
@@ -275,17 +232,13 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.util.List#subList(int, int)
 		 */
-		public List<GanglinieMQ> subList(int fromIndex, int toIndex) {
+		public List<GanglinieMQ> subList(final int fromIndex, final int toIndex) {
 			return ganglinien.subList(fromIndex, toIndex);
 		}
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.util.List#toArray()
 		 */
 		public Object[] toArray() {
 			return ganglinien.toArray();
@@ -293,17 +246,13 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.util.List#toArray(T[])
 		 */
-		public <T> T[] toArray(T[] a) {
+		public <T> T[] toArray(final T[] a) {
 			return ganglinien.toArray(a);
 		}
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.lang.Object#toString()
 		 */
 		@Override
 		public String toString() {
@@ -324,7 +273,7 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 		 * @param datenStatus
 		 *            der neue Status
 		 */
-		protected void setDatenStatus(Status datenStatus) {
+		protected void setDatenStatus(final Status datenStatus) {
 			this.datenStatus = datenStatus;
 		}
 
@@ -342,11 +291,11 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 	 * @param mq
 	 *            ein Messquerschnitt
 	 */
-	public PdGanglinie(MessQuerschnittAllgemein mq) {
+	public PdGanglinie(final MessQuerschnittAllgemein mq) {
 		super(mq);
 
 		if (atg == null) {
-			DataModel modell = ObjektFactory.getInstanz().getVerbindung()
+			final DataModel modell = ObjektFactory.getInstanz().getVerbindung()
 					.getDataModel();
 			atg = modell.getAttributeGroup(ATG_GANGLINIE);
 			assert atg != null;
@@ -376,10 +325,10 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 	 * 
 	 * @see de.bsvrz.sys.funclib.bitctrl.modell.Datensatz#setDaten(de.bsvrz.dav.daf.main.ResultData)
 	 */
-	public void setDaten(ResultData result) {
+	public void setDaten(final ResultData result) {
 		check(result);
 
-		Daten datum = new Daten();
+		final Daten datum = new Daten();
 		if (result.hasData()) {
 			Array ganglinien;
 
@@ -462,7 +411,7 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 	 * @see de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatensatz#konvertiere(de.bsvrz.sys.funclib.bitctrl.modell.Datum)
 	 */
 	@Override
-	protected Data konvertiere(Daten datum) {
+	protected Data konvertiere(final Daten datum) {
 		Data daten;
 		Array ganglinien;
 		int i;
@@ -472,7 +421,7 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 		ganglinien = daten.getArray("Ganglinie");
 		ganglinien.setLength(datum.size());
 		i = 0;
-		for (GanglinieMQ g : datum) {
+		for (final GanglinieMQ g : datum) {
 			Array stuetzstellen;
 
 			ganglinien.getItem(i).getReferenceValue("EreignisTyp")
@@ -498,10 +447,10 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 					g.getBSplineOrdnung());
 
 			stuetzstellen = ganglinien.getItem(i).getArray("Stützstelle");
-			List<Stuetzstelle<Messwerte>> liste = g.getStuetzstellen();
+			final List<Stuetzstelle<Messwerte>> liste = g.getStuetzstellen();
 			int j = 0;
 			stuetzstellen.setLength(liste.size());
-			for (Stuetzstelle<Messwerte> s : liste) {
+			for (final Stuetzstelle<Messwerte> s : liste) {
 				stuetzstellen.getItem(j).getTimeValue("Zeit").setMillis(
 						s.getZeitstempel());
 

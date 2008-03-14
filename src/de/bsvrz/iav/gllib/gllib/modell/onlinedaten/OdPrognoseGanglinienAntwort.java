@@ -79,7 +79,7 @@ public class OdPrognoseGanglinienAntwort extends
 		 *            die PID eines Aspekts.
 		 */
 		private Aspekte(final String pid) {
-			DataModel modell = ObjektFactory.getInstanz().getVerbindung()
+			final DataModel modell = ObjektFactory.getInstanz().getVerbindung()
 					.getDataModel();
 			aspekt = modell.getAspect(pid);
 			assert aspekt != null;
@@ -122,8 +122,6 @@ public class OdPrognoseGanglinienAntwort extends
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.util.Collection#add(java.lang.Object)
 		 */
 		public boolean add(final GanglinieMQ o) {
 			return ganglinien.add(o);
@@ -131,8 +129,6 @@ public class OdPrognoseGanglinienAntwort extends
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.util.Collection#addAll(java.util.Collection)
 		 */
 		public boolean addAll(final Collection<? extends GanglinieMQ> c) {
 			return ganglinien.addAll(c);
@@ -140,8 +136,6 @@ public class OdPrognoseGanglinienAntwort extends
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.util.Collection#clear()
 		 */
 		public void clear() {
 			ganglinien.clear();
@@ -152,12 +146,10 @@ public class OdPrognoseGanglinienAntwort extends
 		 * Es wird eine flache Kopie zurückgegeben.
 		 * 
 		 * {@inheritDoc}
-		 * 
-		 * @see java.lang.Object#clone()
 		 */
 		@Override
 		public Daten clone() {
-			Daten klon = new Daten();
+			final Daten klon = new Daten();
 
 			klon.setZeitstempel(getZeitstempel());
 			klon.datenStatus = datenStatus;
@@ -169,8 +161,6 @@ public class OdPrognoseGanglinienAntwort extends
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.util.Collection#contains(java.lang.Object)
 		 */
 		public boolean contains(final Object o) {
 			return ganglinien.contains(o);
@@ -178,8 +168,6 @@ public class OdPrognoseGanglinienAntwort extends
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.util.Collection#containsAll(java.util.Collection)
 		 */
 		public boolean containsAll(final Collection<?> c) {
 			return ganglinien.containsAll(c);
@@ -198,9 +186,7 @@ public class OdPrognoseGanglinienAntwort extends
 		}
 
 		/**
-		 * {@inheritDoc}.<br>
-		 * 
-		 * @see de.bsvrz.sys.funclib.bitctrl.modell.Datum#getDatenStatus()
+		 * {@inheritDoc}
 		 */
 		public Status getDatenStatus() {
 			return datenStatus;
@@ -208,8 +194,6 @@ public class OdPrognoseGanglinienAntwort extends
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.util.Collection#isEmpty()
 		 */
 		public boolean isEmpty() {
 			return ganglinien.isEmpty();
@@ -217,8 +201,6 @@ public class OdPrognoseGanglinienAntwort extends
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.util.Collection#iterator()
 		 */
 		public Iterator<GanglinieMQ> iterator() {
 			return ganglinien.iterator();
@@ -226,8 +208,6 @@ public class OdPrognoseGanglinienAntwort extends
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.util.Collection#remove(java.lang.Object)
 		 */
 		public boolean remove(final Object o) {
 			return ganglinien.remove(o);
@@ -235,8 +215,6 @@ public class OdPrognoseGanglinienAntwort extends
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.util.Collection#removeAll(java.util.Collection)
 		 */
 		public boolean removeAll(final Collection<?> c) {
 			return ganglinien.removeAll(c);
@@ -244,8 +222,6 @@ public class OdPrognoseGanglinienAntwort extends
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.util.Collection#retainAll(java.util.Collection)
 		 */
 		public boolean retainAll(final Collection<?> c) {
 			return ganglinien.retainAll(c);
@@ -267,8 +243,6 @@ public class OdPrognoseGanglinienAntwort extends
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.util.Collection#size()
 		 */
 		public int size() {
 			return ganglinien.size();
@@ -276,8 +250,6 @@ public class OdPrognoseGanglinienAntwort extends
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.util.Collection#toArray()
 		 */
 		public Object[] toArray() {
 			return ganglinien.toArray();
@@ -285,8 +257,6 @@ public class OdPrognoseGanglinienAntwort extends
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.util.Collection#toArray(T[])
 		 */
 		public <T> T[] toArray(final T[] a) {
 			return ganglinien.toArray(a);
@@ -294,8 +264,6 @@ public class OdPrognoseGanglinienAntwort extends
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see java.lang.Object#toString()
 		 */
 		@Override
 		public String toString() {
@@ -315,7 +283,7 @@ public class OdPrognoseGanglinienAntwort extends
 		 * @param datenStatus
 		 *            der neue Status
 		 */
-		protected void setDatenStatus(Status datenStatus) {
+		protected void setDatenStatus(final Status datenStatus) {
 			this.datenStatus = datenStatus;
 		}
 
@@ -338,7 +306,7 @@ public class OdPrognoseGanglinienAntwort extends
 		super(app);
 
 		if (atg == null) {
-			DataModel modell = ObjektFactory.getInstanz().getVerbindung()
+			final DataModel modell = ObjektFactory.getInstanz().getVerbindung()
 					.getDataModel();
 			atg = modell.getAttributeGroup(ATG_PROGNOSE_GANGLINIEN_ANTWORT);
 			assert atg != null;
@@ -361,8 +329,8 @@ public class OdPrognoseGanglinienAntwort extends
 	 */
 	@Override
 	public Collection<Aspect> getAspekte() {
-		Set<Aspect> aspekte = new HashSet<Aspect>();
-		for (Aspekt a : Aspekte.values()) {
+		final Set<Aspect> aspekte = new HashSet<Aspect>();
+		for (final Aspekt a : Aspekte.values()) {
 			aspekte.add(a.getAspekt());
 		}
 		return aspekte;
@@ -385,10 +353,10 @@ public class OdPrognoseGanglinienAntwort extends
 	public void setDaten(final ResultData result) {
 		check(result);
 
-		Daten datum = new Daten();
+		final Daten datum = new Daten();
 		if (result.hasData()) {
 			Array ganglinien;
-			Data daten = result.getData();
+			final Data daten = result.getData();
 			Interval prognoseZeitraum;
 
 			datum.setAbsenderZeichen(daten.getTextValue("AbsenderZeichen")
@@ -474,7 +442,7 @@ public class OdPrognoseGanglinienAntwort extends
 	 */
 	@Override
 	protected Data konvertiere(final Daten datum) {
-		Data daten = erzeugeSendeCache();
+		final Data daten = erzeugeSendeCache();
 
 		Array ganglinien;
 		int i;
@@ -485,7 +453,7 @@ public class OdPrognoseGanglinienAntwort extends
 		ganglinien = daten.getArray("PrognoseGanglinie");
 		ganglinien.setLength(datum.size());
 		i = 0;
-		for (GanglinieMQ g : datum) {
+		for (final GanglinieMQ g : datum) {
 			Array stuetzstellen;
 			List<Stuetzstelle<Messwerte>> liste;
 
