@@ -34,7 +34,8 @@ import org.junit.Test;
  * Testet die Verwendung einer Ganglinie.
  * 
  * @author BitCtrl Systems GmbH, Schumann
- * @version $Id$
+ * @version $Id: GanglinienOperationenTest.java 7661 2008-03-20 16:33:42Z
+ *          Schumann $
  */
 
 public class GanglinienOperationenTest {
@@ -228,7 +229,7 @@ public class GanglinienOperationenTest {
 		g2.put(10L, 30.0);
 		g2.put(20L, 10.0);
 
-		assertEquals(0, GanglinienOperationen.basisabstand(g1, g2));
+		assertEquals(69, GanglinienOperationen.basisabstand(g1, g2));
 	}
 
 	/**
@@ -242,13 +243,13 @@ public class GanglinienOperationenTest {
 		g1 = new Ganglinie<Double>();
 		g1.put(0L, 10.0);
 		g1.put(10L, 20.0);
-		g1.put(30L, 30.0);
+		g1.put(20L, 30.0);
 
 		g2 = new Ganglinie<Double>();
 		g2.put(0L, 20.0);
 		g2.put(10L, 30.0);
-		g2.put(30L, 10.0);
+		g2.put(20L, 10.0);
 
-		assertEquals(0, GanglinienOperationen.komplexerAbstand(g1, g2, 15L));
+		assertEquals(69, GanglinienOperationen.komplexerAbstand(g1, g2, 10L));
 	}
 }

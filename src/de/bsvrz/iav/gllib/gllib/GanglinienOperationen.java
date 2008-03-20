@@ -161,7 +161,8 @@ public final class GanglinienOperationen {
 
 	/**
 	 * Berechnet den Abstand zweier Ganglinien mit Hilfe des
-	 * Basisabstandsverfahren.
+	 * Basisabstandsverfahren. Es wir der Abstand anhand der vervollständigten
+	 * Stützstellenmenge bestimmt.
 	 * 
 	 * @param g1
 	 *            Erste Ganglinie
@@ -739,26 +740,6 @@ public final class GanglinienOperationen {
 	}
 
 	/**
-	 * Bestimmt die vereinigte Menge der Stützstellen beider Ganglinien.
-	 * 
-	 * @param g1
-	 *            Erste Ganglinie
-	 * @param g2
-	 *            Zweite Ganglinie
-	 * @return Menge von Stützstellenreferenzen in Form von Zeitstempeln
-	 */
-	private static LinkedList<Long> vervollstaendigeStuetzstellen(
-			final Ganglinie<Double> g1, final Ganglinie<Double> g2) {
-		SortedSet<Long> zeitstempel;
-
-		zeitstempel = new TreeSet<Long>();
-		zeitstempel.addAll(g1.keySet());
-		zeitstempel.addAll(g2.keySet());
-
-		return new LinkedList<Long>(zeitstempel);
-	}
-
-	/**
 	 * Konstruktor verstecken.
 	 */
 	private GanglinienOperationen() {
@@ -810,6 +791,26 @@ public final class GanglinienOperationen {
 		}
 		return (fehler * 100)
 				/ (Math.sqrt(summe / (zeitstempel.size() - undefinierte)));
+	}
+
+	/**
+	 * Bestimmt die vereinigte Menge der Stützstellen beider Ganglinien.
+	 * 
+	 * @param g1
+	 *            Erste Ganglinie
+	 * @param g2
+	 *            Zweite Ganglinie
+	 * @return Menge von Stützstellenreferenzen in Form von Zeitstempeln
+	 */
+	private static LinkedList<Long> vervollstaendigeStuetzstellen(
+			final Ganglinie<Double> g1, final Ganglinie<Double> g2) {
+		SortedSet<Long> zeitstempel;
+
+		zeitstempel = new TreeSet<Long>();
+		zeitstempel.addAll(g1.keySet());
+		zeitstempel.addAll(g2.keySet());
+
+		return new LinkedList<Long>(zeitstempel);
 	}
 
 }
