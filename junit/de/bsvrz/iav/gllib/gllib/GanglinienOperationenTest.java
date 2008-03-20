@@ -210,4 +210,45 @@ public class GanglinienOperationenTest {
 		assertEquals(soll.getStuetzstellen(), ist.getStuetzstellen());
 	}
 
+	/**
+	 * Testet die Berechnungs des Abstands zweier Ganglinien mit Hilfe des
+	 * Basisabstandsverfahrens.
+	 */
+	@Test
+	public void testBasisabstand() {
+		Ganglinie<Double> g1, g2;
+
+		g1 = new Ganglinie<Double>();
+		g1.put(0L, 10.0);
+		g1.put(10L, 20.0);
+		g1.put(20L, 30.0);
+
+		g2 = new Ganglinie<Double>();
+		g2.put(0L, 20.0);
+		g2.put(10L, 30.0);
+		g2.put(20L, 10.0);
+
+		assertEquals(0, GanglinienOperationen.basisabstand(g1, g2));
+	}
+
+	/**
+	 * Testet die Berechnungs des Abstands zweier Ganglinien mit Hilfe des
+	 * komplexen Abstandsverfahrens.
+	 */
+	@Test
+	public void testKomplexerAbstand() {
+		Ganglinie<Double> g1, g2;
+
+		g1 = new Ganglinie<Double>();
+		g1.put(0L, 10.0);
+		g1.put(10L, 20.0);
+		g1.put(30L, 30.0);
+
+		g2 = new Ganglinie<Double>();
+		g2.put(0L, 20.0);
+		g2.put(10L, 30.0);
+		g2.put(30L, 10.0);
+
+		assertEquals(0, GanglinienOperationen.komplexerAbstand(g1, g2, 15L));
+	}
 }

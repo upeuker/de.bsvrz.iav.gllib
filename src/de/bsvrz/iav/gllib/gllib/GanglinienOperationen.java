@@ -26,7 +26,6 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -172,10 +171,8 @@ public final class GanglinienOperationen {
 	 */
 	public static int basisabstand(final Ganglinie<Double> g1,
 			final Ganglinie<Double> g2) {
-		Polyline p1, p2;
-		Queue<Long> zeitstempel;
-		double fehler, summe;
-		int undefinierte;
+		final Polyline p1, p2;
+		final Queue<Long> zeitstempel;
 
 		p1 = new Polyline();
 		p1.setStuetzstellen(g1.getStuetzstellen());
@@ -184,44 +181,8 @@ public final class GanglinienOperationen {
 		p2.setStuetzstellen(g2.getStuetzstellen());
 		p2.initialisiere();
 
-		// Quadratischen Fehler bestimmen
-		summe = 0;
-		undefinierte = 0;
 		zeitstempel = vervollstaendigeStuetzstellen(g1, g2);
-		while (!zeitstempel.isEmpty()) {
-			long z;
-
-			z = zeitstempel.poll();
-			if (p1.get(z).getWert() != null && p2.get(z).getWert() != null) {
-				double x;
-
-				x = p2.get(z).getWert() - p1.get(z).getWert();
-				summe += x * x;
-			} else {
-				// Undefinierte Stützstellen werden nicht berücksichtigt
-				undefinierte++;
-			}
-		}
-		fehler = Math.sqrt(summe / (zeitstempel.size() - undefinierte));
-
-		// Prozentualen Fehler bestimmen
-		summe = 0;
-		zeitstempel = vervollstaendigeStuetzstellen(g1, g2);
-		while (!zeitstempel.isEmpty()) {
-			long z;
-
-			z = zeitstempel.poll();
-			if (p1.get(z).getWert() != null && p2.get(z).getWert() != null) {
-				double x;
-
-				x = (p1.get(z).getWert() + p2.get(z).getWert()) / 2;
-				summe += x * x;
-			}
-		}
-		fehler = (fehler * 100)
-				/ (Math.sqrt(summe / (zeitstempel.size() - undefinierte)));
-
-		return (int) Math.round(fehler);
+		return (int) Math.round(fehler(p1, p2, zeitstempel));
 	}
 
 	/**
@@ -344,11 +305,9 @@ public final class GanglinienOperationen {
 	 */
 	public static int komplexerAbstand(final Ganglinie<Double> g1,
 			final Ganglinie<Double> g2, final long intervallBreite) {
-		Polyline p1, p2;
-		List<Long> zeitstempel;
-		double fehler, summe;
+		final Polyline p1, p2;
+		final Queue<Long> zeitstempel;
 		long start, ende;
-		int undefinierte;
 
 		p1 = new Polyline();
 		p1.setStuetzstellen(g1.getStuetzstellen());
@@ -370,44 +329,13 @@ public final class GanglinienOperationen {
 		}
 
 		// Haltepunkte bestimmen
-		zeitstempel = new ArrayList<Long>();
+		zeitstempel = new LinkedList<Long>();
 		for (long i = start; i < ende; i += intervallBreite) {
 			zeitstempel.add(i);
 		}
 		zeitstempel.add(ende);
 
-		// Quadratischen Fehler bestimmen
-		summe = 0;
-		undefinierte = 0;
-		for (final long z : zeitstempel) {
-			if (p1.get(z).getWert() != null && p2.get(z).getWert() != null) {
-				double x;
-
-				x = p2.get(z).getWert() - p1.get(z).getWert();
-				summe += x * x;
-			} else {
-				undefinierte++;
-			}
-		}
-		fehler = Math.sqrt(summe / (zeitstempel.size() - undefinierte));
-
-		// Prozentualen Fehler bestimmen
-		summe = 0;
-		undefinierte = 0;
-		for (final long z : zeitstempel) {
-			if (p1.get(z).getWert() != null && p2.get(z).getWert() != null) {
-				double x;
-
-				x = (p1.get(z).getWert() + p2.get(z).getWert()) / 2;
-				summe += x * x;
-			} else {
-				undefinierte++;
-			}
-		}
-		fehler = (fehler * 100)
-				/ (Math.sqrt(summe / (zeitstempel.size() - undefinierte)));
-
-		return (int) Math.round(fehler);
+		return (int) Math.round(fehler(p1, p2, zeitstempel));
 	}
 
 	/**
@@ -835,6 +763,53 @@ public final class GanglinienOperationen {
 	 */
 	private GanglinienOperationen() {
 		// nichts
+	}
+
+	/**
+	 * Bestimmt den prozentualen Fehler (Abstand) zweier Polylinien anhand
+	 * gegebener Messpunkte.
+	 * 
+	 * @param p1
+	 *            die erste Polylinie.
+	 * @param p2
+	 *            die zweite Polylinie.
+	 * @param zeitstempel
+	 *            die "Messpunkte"
+	 * @return der prozentuale Fehler.
+	 */
+	private static double fehler(final Polyline p1, final Polyline p2,
+			final Queue<Long> zeitstempel) {
+		double fehler, summe;
+		int undefinierte;
+
+		// Quadratischen Fehler bestimmen
+		summe = 0;
+		undefinierte = 0;
+		for (final long z : zeitstempel) {
+			if (p1.get(z).getWert() != null && p2.get(z).getWert() != null) {
+				double x;
+
+				x = p2.get(z).getWert() - p1.get(z).getWert();
+				summe += x * x;
+			} else {
+				// Undefinierte Stützstellen werden nicht berücksichtigt
+				undefinierte++;
+			}
+		}
+		fehler = Math.sqrt(summe / (zeitstempel.size() - undefinierte));
+
+		// Prozentualen Fehler bestimmen
+		summe = 0;
+		for (final long z : zeitstempel) {
+			if (p1.get(z).getWert() != null && p2.get(z).getWert() != null) {
+				double x;
+
+				x = (p1.get(z).getWert() + p2.get(z).getWert()) / 2;
+				summe += x * x;
+			}
+		}
+		return (fehler * 100)
+				/ (Math.sqrt(summe / (zeitstempel.size() - undefinierte)));
 	}
 
 }
