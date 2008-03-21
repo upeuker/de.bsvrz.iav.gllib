@@ -66,15 +66,6 @@ import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
  */
 public final class KalenderInitialisierer implements StandardApplication {
 
-	/** Applikationsname. */
-	public static final String APP_NAME = "Segment 5 Intelligente Analyseverfahren, SWE 5.1 Ganglinienprognose (Kalenderinitialisierung)";
-
-	/** Copyright. */
-	public static final String APP_COPYRIGHT = "Copyright (C) 2007 BitCtrl Systems GmbH";
-
-	/** Versionsangabe. */
-	public static final String APP_VERSION = "1.0.0";
-
 	/**
 	 * Startet die Applikation.
 	 * <p>
