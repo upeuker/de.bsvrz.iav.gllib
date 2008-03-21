@@ -24,7 +24,7 @@
  * mailto: info@bitctrl.de
  */
 
-package de.bsvrz.iav.gllib.gllib.param;
+package de.bsvrz.iav.gllib.gllib;
 
 import de.bsvrz.iav.gllib.gllib.Stuetzstelle;
 import de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ;

@@ -24,7 +24,7 @@
  * mailto: info@bitctrl.de
  */
 
-package de.bsvrz.iav.gllib.gllib.param;
+package de.bsvrz.iav.gllib.gllib;
 
 import java.util.Collection;
 import java.util.Collections;
