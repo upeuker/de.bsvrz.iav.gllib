@@ -17,5 +17,4 @@ Export-Package: de.bsvrz.iav.gllib.gllib,
  de.bsvrz.iav.gllib.gllib.modell.onlinedaten,
  de.bsvrz.iav.gllib.gllib.modell.parameter
 Bundle-ClassPath: de.bsvrz.iav.gllib.jar
-Eclipse-LazyStart: true
-Bundle-Activator: de.bsvrz.iav.gllib.eclipse.GanglinienprognosePlugin
+Eclipse-LazyStart: false
