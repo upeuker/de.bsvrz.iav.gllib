@@ -40,6 +40,7 @@ import de.bsvrz.sys.funclib.bitctrl.modell.DatensatzUpdateEvent;
 import de.bsvrz.sys.funclib.bitctrl.modell.DatensatzUpdateListener;
 import de.bsvrz.sys.funclib.bitctrl.modell.DatensendeException;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
+import de.bsvrz.sys.funclib.bitctrl.modell.Datensatz.Status;
 import de.bsvrz.sys.funclib.bitctrl.modell.ganglinien.objekte.ApplikationGanglinienPrognose;
 import de.bsvrz.sys.funclib.bitctrl.modell.systemmodellglobal.objekte.Applikation;
 import de.bsvrz.sys.funclib.debug.Debug;
@@ -153,6 +154,15 @@ public final class Ganglinienprognose implements DatensatzUpdateListener {
 	public void addAntwortListener(final GlProgAntwortListener listener) {
 		listeners.add(GlProgAntwortListener.class, listener);
 		log.fine("Neuer Listener für Prognoseantworten angemeldet", listener);
+	}
+
+	/**
+	 * Fragt, ob die Ganglinienprognose Anfragen entgegennimmt.
+	 * 
+	 * @return {@code true}, wenn der Kalender verwendet werden kann.
+	 */
+	public boolean isBereit() {
+		return odAnfrage.getStatusSendesteuerung(aspAnfrage) == Status.START;
 	}
 
 	/**
