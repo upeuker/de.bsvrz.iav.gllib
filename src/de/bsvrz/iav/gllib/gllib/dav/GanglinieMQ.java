@@ -159,6 +159,25 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
+	 * Gibt die Approximation zur Datenverteilerapproximation zurück.
+	 * 
+	 * @return die Approximation.
+	 * @see #approximationDaK
+	 */
+	private Approximation<Double> erzeugeApproximation() {
+		switch (approximationDaK) {
+		case APPROX_BSPLINE:
+			return new BSpline(bSplineOrdnung);
+		case APPROX_CUBICSPLINE:
+			return new CubicSpline();
+		case APPROX_POLYLINE:
+			return new Polyline();
+		default:
+			return new BSpline((byte) 5);
+		}
+	}
+
+	/**
 	 * Gibt die Anzahl der bisherigen Verschmelzungen beim automatischen Lernen
 	 * zurück.
 	 * 
@@ -437,8 +456,10 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 		gVLkw = getGanglinieVLkw();
 
 		return new Stuetzstelle<Messwerte>(zeitstempel, new Messwerte(gQKfz
-				.get(zeitstempel), gQLkw.get(zeitstempel), gVPkw
-				.get(zeitstempel), gVLkw.get(zeitstempel), k1, k2));
+				.getStuetzstelle(zeitstempel).getWert(), gQLkw.getStuetzstelle(
+				zeitstempel).getWert(), gVPkw.getStuetzstelle(zeitstempel)
+				.getWert(), gVLkw.getStuetzstelle(zeitstempel).getWert(), k1,
+				k2));
 	}
 
 	/**
@@ -746,25 +767,6 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 		}
 		result += "]";
 		return result;
-	}
-
-	/**
-	 * Gibt die Approximation zur Datenverteilerapproximation zurück.
-	 * 
-	 * @return die Approximation.
-	 * @see #approximationDaK
-	 */
-	private Approximation<Double> erzeugeApproximation() {
-		switch (approximationDaK) {
-		case APPROX_BSPLINE:
-			return new BSpline(bSplineOrdnung);
-		case APPROX_CUBICSPLINE:
-			return new CubicSpline();
-		case APPROX_POLYLINE:
-			return new Polyline();
-		default:
-			return new BSpline((byte) 5);
-		}
 	}
 
 }
