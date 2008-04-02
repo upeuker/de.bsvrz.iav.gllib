@@ -26,7 +26,6 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
-import de.bsvrz.iav.gllib.gllib.Stuetzstelle;
 import de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ;
 import de.bsvrz.iav.gllib.gllib.dav.Messwerte;
 import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.objekte.MessQuerschnittAllgemein;
@@ -76,7 +75,7 @@ public final class GanglinienFactory {
 		 * @param pid
 		 *            die PID des Ereignistyps.
 		 */
-		private Typ(String pid) {
+		private Typ(final String pid) {
 			this.pid = pid;
 		}
 
@@ -126,8 +125,8 @@ public final class GanglinienFactory {
 	 *            der gewünschte Abstand Stützstellen in Millisekunden.
 	 * @return die generierte Ganglinie.
 	 */
-	public GanglinieMQ erzeugeGanglinie(MessQuerschnittAllgemein mq,
-			long abstand) {
+	public GanglinieMQ erzeugeGanglinie(final MessQuerschnittAllgemein mq,
+			final long abstand) {
 		GanglinieMQ g;
 		long t;
 		VerkehrsDatenKurzZeitMqGenerator generator;
@@ -177,7 +176,8 @@ public final class GanglinienFactory {
 	 * @deprecated Muss noch implementiert werden!!
 	 */
 	@Deprecated
-	public GanglinieMQ erzeugeGanglinie(Typ typ, MessQuerschnittAllgemein mq) {
+	public GanglinieMQ erzeugeGanglinie(final Typ typ,
+			final MessQuerschnittAllgemein mq) {
 		GanglinieMQ g;
 		switch (typ) {
 		case Montag:
