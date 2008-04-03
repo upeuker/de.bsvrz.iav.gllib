@@ -51,6 +51,31 @@ import com.bitctrl.util.Interval;
 public final class GanglinienOperationen {
 
 	/**
+	 * Konvertiert eine Ganglinie in einen lesbaren Text. Dazu wird zwischen
+	 * jeder Stützstelle einfach ein Zeilenbruch eingefügt. Enthält die
+	 * Ganglinie keine Stützstellen wird eine kurze Notiz ausgegeben.
+	 * 
+	 * @param g
+	 *            eine Ganglinie.
+	 * @return ein String der jede Stützstelle auf eine eigene Zeile schreibt.
+	 */
+	public static String formatierterText(final Ganglinie<?> g) {
+		String txt;
+
+		txt = "Intervall: " + g.getIntervall();
+		txt += "\nApproximation: " + g.getApproximation();
+		for (final Stuetzstelle<?> s : g.getStuetzstellen()) {
+			txt += "\n" + s;
+		}
+
+		if (g.size() == 0) {
+			txt += "\nKeine Stützstellen vorhanden.";
+		}
+
+		return txt;
+	}
+
+	/**
 	 * Addiert zwei Ganglinien, indem die Werte der vervollständigten
 	 * Stützstellenmenge addiert werden. Die beiden Ganglinien werden dabei
 	 * nicht verändert.

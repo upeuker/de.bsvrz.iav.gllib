@@ -188,10 +188,6 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
-	 * Gibt eine Approximation ohne Stützstellen zurück. Der Typ der
-	 * Approximation ist der, der gesetzt wurde. Die Approximation kann jedoch
-	 * nicht zum bestimmen zum Stützstellen verwendet werden.
-	 * 
 	 * {@inheritDoc}
 	 * 
 	 * @deprecated Die Approximation der einzelnen Größen kann mit
@@ -245,7 +241,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 		Ganglinie<Double> g;
 
 		g = new Ganglinie<Double>();
-		for (Map.Entry<Long, Messwerte> e : entrySet()) {
+		for (final Map.Entry<Long, Messwerte> e : entrySet()) {
 			g.put(e.getKey(), e.getValue().getQB());
 		}
 		g.setApproximation(erzeugeApproximation());
@@ -263,7 +259,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 		Ganglinie<Double> g;
 
 		g = new Ganglinie<Double>();
-		for (Map.Entry<Long, Messwerte> e : entrySet()) {
+		for (final Map.Entry<Long, Messwerte> e : entrySet()) {
 			g.put(e.getKey(), e.getValue().getQKfz());
 		}
 		g.setApproximation(erzeugeApproximation());
@@ -281,7 +277,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 		Ganglinie<Double> g;
 
 		g = new Ganglinie<Double>();
-		for (Map.Entry<Long, Messwerte> e : entrySet()) {
+		for (final Map.Entry<Long, Messwerte> e : entrySet()) {
 			g.put(e.getKey(), e.getValue().getQLkw());
 		}
 		g.setApproximation(erzeugeApproximation());
@@ -299,7 +295,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 		Ganglinie<Double> g;
 
 		g = new Ganglinie<Double>();
-		for (Map.Entry<Long, Messwerte> e : entrySet()) {
+		for (final Map.Entry<Long, Messwerte> e : entrySet()) {
 			g.put(e.getKey(), e.getValue().getQPkw());
 		}
 		g.setApproximation(erzeugeApproximation());
@@ -317,7 +313,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 		Ganglinie<Double> g;
 
 		g = new Ganglinie<Double>();
-		for (Map.Entry<Long, Messwerte> e : entrySet()) {
+		for (final Map.Entry<Long, Messwerte> e : entrySet()) {
 			g.put(e.getKey(), e.getValue().getVKfz());
 		}
 		g.setApproximation(erzeugeApproximation());
@@ -336,7 +332,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 		Ganglinie<Double> g;
 
 		g = new Ganglinie<Double>();
-		for (Map.Entry<Long, Messwerte> e : entrySet()) {
+		for (final Map.Entry<Long, Messwerte> e : entrySet()) {
 			g.put(e.getKey(), e.getValue().getVLkw());
 		}
 		g.setApproximation(erzeugeApproximation());
@@ -354,7 +350,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 		Ganglinie<Double> g;
 
 		g = new Ganglinie<Double>();
-		for (Map.Entry<Long, Messwerte> e : entrySet()) {
+		for (final Map.Entry<Long, Messwerte> e : entrySet()) {
 			g.put(e.getKey(), e.getValue().getVPkw());
 		}
 		g.setApproximation(erzeugeApproximation());
@@ -441,7 +437,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 * @see #setPrognoseZeitraum(Interval)
 	 */
 	@Override
-	public Stuetzstelle<Messwerte> getStuetzstelle(long zeitstempel) {
+	public Stuetzstelle<Messwerte> getStuetzstelle(final long zeitstempel) {
 		final Ganglinie<Double> gQKfz, gQLkw, gVPkw, gVLkw;
 
 		if (prognoseZeitraum != null && !prognoseZeitraum.contains(zeitstempel)) {
@@ -472,7 +468,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 		List<Stuetzstelle<Messwerte>> liste;
 
 		liste = new ArrayList<Stuetzstelle<Messwerte>>();
-		for (long t : keySet()) {
+		for (final long t : keySet()) {
 			if (prognoseZeitraum != null && !prognoseZeitraum.contains(t)) {
 				continue;
 			}
@@ -489,13 +485,14 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 * @see #setPrognoseZeitraum(Interval)
 	 */
 	@Override
-	public List<Stuetzstelle<Messwerte>> getStuetzstellen(Interval intervall) {
+	public List<Stuetzstelle<Messwerte>> getStuetzstellen(
+			final Interval intervall) {
 		SortedMap<Long, Messwerte> menge;
 		List<Stuetzstelle<Messwerte>> liste;
 
 		menge = subMap(intervall.getStart(), intervall.getEnd() + 1);
 		liste = new ArrayList<Stuetzstelle<Messwerte>>();
-		for (long t : menge.keySet()) {
+		for (final long t : menge.keySet()) {
 			if (prognoseZeitraum != null && !prognoseZeitraum.contains(t)) {
 				continue;
 			}
@@ -543,7 +540,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 */
 	@Override
 	@Deprecated
-	public boolean isValid(Interval intervall) {
+	public boolean isValid(final Interval intervall) {
 		throw new UnsupportedOperationException(
 				"Es müssen die Methode isValid() an den "
 						+ "einzelnen Ganglinien für Q, V und QB abgefragt werden.");
@@ -557,7 +554,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 */
 	@Override
 	@Deprecated
-	public boolean isValid(long zeitstempel) {
+	public boolean isValid(final long zeitstempel) {
 		throw new UnsupportedOperationException(
 				"Es müssen die Methode isValid() an den "
 						+ "einzelnen Ganglinien für Q, V und QB abgefragt werden.");
@@ -572,7 +569,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 * @param anzahlVerschmelzungen
 	 *            Anzahl der Verschmelzungen
 	 */
-	public void setAnzahlVerschmelzungen(long anzahlVerschmelzungen) {
+	public void setAnzahlVerschmelzungen(final long anzahlVerschmelzungen) {
 		this.anzahlVerschmelzungen = anzahlVerschmelzungen;
 	}
 
@@ -584,7 +581,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 */
 	@Deprecated
 	@Override
-	public void setApproximation(Approximation<Messwerte> approximation) {
+	public void setApproximation(final Approximation<Messwerte> approximation) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -597,7 +594,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 *            {@link #APPROX_CUBICSPLINE}, {@link #APPROX_BSPLINE} oder
 	 *            {@link #APPROX_UNBESTIMMT}.
 	 */
-	public void setApproximationDaK(int approximationDaK) {
+	public void setApproximationDaK(final int approximationDaK) {
 		if (approximationDaK != APPROX_BSPLINE
 				&& approximationDaK != APPROX_CUBICSPLINE
 				&& approximationDaK != APPROX_POLYLINE
@@ -615,7 +612,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 * @param bSplineOrdnung
 	 *            die neue Ordnung des B-Spline.
 	 */
-	public void setBSplineOrdnung(int bSplineOrdnung) {
+	public void setBSplineOrdnung(final int bSplineOrdnung) {
 		this.bSplineOrdnung = bSplineOrdnung;
 	}
 
@@ -628,7 +625,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 * @param ereignisTyp
 	 *            PID des Ereignistyp
 	 */
-	public void setEreignisTyp(EreignisTyp ereignisTyp) {
+	public void setEreignisTyp(final EreignisTyp ereignisTyp) {
 		this.ereignisTyp = ereignisTyp;
 	}
 
@@ -638,13 +635,13 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 * @param k1
 	 *            der parameter k1
 	 */
-	public void setK1(float k1) {
+	public void setK1(final float k1) {
 		final SortedMap<Long, Messwerte> neu;
 
 		this.k1 = k1;
 
 		neu = new TreeMap<Long, Messwerte>();
-		for (Map.Entry<Long, Messwerte> e : entrySet()) {
+		for (final Map.Entry<Long, Messwerte> e : entrySet()) {
 			neu.put(e.getKey(), new Messwerte(e.getValue().getQKfz(), e
 					.getValue().getQLkw(), e.getValue().getVPkw(), e.getValue()
 					.getVLkw(), k1, k2));
@@ -659,13 +656,13 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 * @param k2
 	 *            der parameter k2
 	 */
-	public void setK2(float k2) {
+	public void setK2(final float k2) {
 		final SortedMap<Long, Messwerte> neu;
 
 		this.k2 = k2;
 
 		neu = new TreeMap<Long, Messwerte>();
-		for (Map.Entry<Long, Messwerte> e : entrySet()) {
+		for (final Map.Entry<Long, Messwerte> e : entrySet()) {
 			neu.put(e.getKey(), new Messwerte(e.getValue().getQKfz(), e
 					.getValue().getQLkw(), e.getValue().getVPkw(), e.getValue()
 					.getVLkw(), k1, k2));
@@ -683,7 +680,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 * @param letzteVerschmelzung
 	 *            die neue Anzahl der Verschmelzungen.
 	 */
-	public void setLetzteVerschmelzung(long letzteVerschmelzung) {
+	public void setLetzteVerschmelzung(final long letzteVerschmelzung) {
 		this.letzteVerschmelzung = letzteVerschmelzung;
 	}
 
@@ -693,7 +690,8 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 * @param messQuerschnitt
 	 *            ein Messquerschnitt.
 	 */
-	public void setMessQuerschnitt(MessQuerschnittAllgemein messQuerschnitt) {
+	public void setMessQuerschnitt(
+			final MessQuerschnittAllgemein messQuerschnitt) {
 		this.messQuerschnitt = messQuerschnitt;
 	}
 
@@ -706,7 +704,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 * @param prognoseZeitraum
 	 *            ein Intervall.
 	 */
-	public void setPrognoseZeitraum(Interval prognoseZeitraum) {
+	public void setPrognoseZeitraum(final Interval prognoseZeitraum) {
 		this.prognoseZeitraum = prognoseZeitraum;
 	}
 
@@ -720,7 +718,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 *            <code>true</code>, wenn diese Ganglinie eine
 	 *            Referenzganglinie sein soll, sonst <code>false</code>
 	 */
-	public void setReferenz(boolean referenz) {
+	public void setReferenz(final boolean referenz) {
 		this.referenz = referenz;
 	}
 
@@ -733,7 +731,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 * @param typ
 	 *            der Typ der Ganglinie.
 	 */
-	public void setTyp(int typ) {
+	public void setTyp(final int typ) {
 		this.typ = typ;
 	}
 

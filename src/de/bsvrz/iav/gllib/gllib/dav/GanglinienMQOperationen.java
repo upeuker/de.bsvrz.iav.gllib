@@ -31,9 +31,11 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import com.bitctrl.util.Interval;
+import com.bitctrl.util.Timestamp;
 
 import de.bsvrz.iav.gllib.gllib.Ganglinie;
 import de.bsvrz.iav.gllib.gllib.GanglinienOperationen;
+import de.bsvrz.iav.gllib.gllib.Stuetzstelle;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
 
 /**
@@ -50,6 +52,75 @@ import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
  *       Verschmelzen
  */
 public final class GanglinienMQOperationen {
+
+	/**
+	 * Konvertiert eine Ganglinie in einen lesbaren Text. Dazu werden die
+	 * Stützstelle in einer einfachen Texttabelle ausgegeben. Enthält die
+	 * Ganglinie keine Stützstellen wird eine kurze Notiz ausgegeben.
+	 * 
+	 * @param g
+	 *            eine Ganglinie.
+	 * @return ein String der jede Stützstelle auf eine eigene Zeile schreibt.
+	 */
+	public static String formatierterText(final GanglinieMQ g) {
+		String txt;
+
+		txt = "Messquerschnitt: " + g.getMessQuerschnitt();
+		txt += "\nEreignistyp: " + g.getEreignisTyp();
+		txt += "\nTyp: ";
+		switch (g.getTyp()) {
+		case GanglinieMQ.TYP_ABSOLUT:
+			txt += "absolute Ganglinie";
+			break;
+		case GanglinieMQ.TYP_ADDITIV:
+			txt += "relative Ganglinie (additiv)";
+			break;
+		case GanglinieMQ.TYP_MULTIPLIKATIV:
+			txt += "relative Ganglinie (multiplikativ)";
+			break;
+		default:
+			txt += "fehlerhafte Angabe";
+			break;
+		}
+		txt += "\nAnzahl Verschmelzungen: " + g.getAnzahlVerschmelzungen();
+		txt += "\nLetzte Verschmelzung: "
+				+ Timestamp.absoluteTime(g.getLetzteVerschmelzung());
+		txt += "\nReferenzganglinie: " + g.isReferenz();
+		txt += "\nIntervall: " + g.getIntervall();
+		txt += "\nApproximation: ";
+		switch (g.getApproximationDaK()) {
+		case GanglinieMQ.APPROX_BSPLINE:
+			txt += "B-Spline, Ordnung " + g.getBSplineOrdnung();
+			break;
+		case GanglinieMQ.APPROX_CUBICSPLINE:
+			txt += "Cubic-Spline";
+			break;
+		case GanglinieMQ.APPROX_POLYLINE:
+			txt += "Polyline";
+			break;
+		case GanglinieMQ.APPROX_UNBESTIMMT:
+			txt += "unbestimmt";
+			break;
+		default:
+			txt += "fehlerhafte Angabe";
+			break;
+		}
+
+		if (g.size() == 0) {
+			txt += "\nKeine Stützstellen vorhanden.";
+		} else {
+			txt += "\nZeitpunkt\t\tQKfz\tQLkw\tVPkw\tVLkw\n";
+			for (final Stuetzstelle<Messwerte> s : g.getStuetzstellen()) {
+				txt += Timestamp.absoluteTime(s.getZeitstempel()) + "\t";
+				txt += s.getWert().getQKfz() + "\t";
+				txt += s.getWert().getQLkw() + "\t";
+				txt += s.getWert().getVPkw() + "\t";
+				txt += s.getWert().getVLkw() + "\n";
+			}
+		}
+
+		return txt;
+	}
 
 	/**
 	 * Addiert zwei Ganglinien, indem die Werte der vervollständigten

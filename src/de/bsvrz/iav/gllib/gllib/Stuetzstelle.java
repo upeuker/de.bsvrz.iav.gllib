@@ -26,21 +26,20 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
-import java.text.DateFormat;
-import java.util.Date;
+import com.bitctrl.util.Timestamp;
 
 /**
- * Repräsentiert eine allgemeine Stützstelle für Ganglinien
- * bestehend aus Zeitstempel und Wert. Die Stützstellen können nach
- * den Zeitstempeln sortiert werden. Ist der Wert einer Stützstelle
- * <em>undefiniert</em> ({@code null}), so ist auch das Intervall bis zur
- * vorherigen und nächsten Stützstelle <em>undefiniert</em>.
+ * Repräsentiert eine allgemeine Stützstelle für Ganglinien bestehend aus
+ * Zeitstempel und Wert. Die Stützstellen können nach den Zeitstempeln sortiert
+ * werden. Ist der Wert einer Stützstelle <em>undefiniert</em> ({@code null}),
+ * so ist auch das Intervall bis zur vorherigen und nächsten Stützstelle
+ * <em>undefiniert</em>.
  * <p>
- * <strong>Hinweis:</strong> Die natürliche Ordnung der Stützstellen
- * ist <em>nicht</em> konsistent mit der Gleichheit. Zwei Stützstellen
- * sind gleich, wenn sie in Zeitstempel und Wert übereinstimmen. Die
- * natürliche Ordung hingegen bassiert ausschließlich auf den
- * Zeitstempeln und ignoriert die Werte.
+ * <strong>Hinweis:</strong> Die natürliche Ordnung der Stützstellen ist
+ * <em>nicht</em> konsistent mit der Gleichheit. Zwei Stützstellen sind
+ * gleich, wenn sie in Zeitstempel und Wert übereinstimmen. Die natürliche
+ * Ordung hingegen bassiert ausschließlich auf den Zeitstempeln und ignoriert
+ * die Werte.
  * 
  * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
@@ -56,13 +55,13 @@ public class Stuetzstelle<T> implements Comparable<Stuetzstelle<T>> {
 	private final long zeitstempel;
 
 	/**
-	 * Initialisierung. Für den Wert wird <code>null</code>
-	 * (=undefiniert) angenommen.
+	 * Initialisierung. Für den Wert wird <code>null</code> (=undefiniert)
+	 * angenommen.
 	 * 
 	 * @param zeitstempel
 	 *            Zeitstempel
 	 */
-	public Stuetzstelle(long zeitstempel) {
+	public Stuetzstelle(final long zeitstempel) {
 		this(zeitstempel, null);
 	}
 
@@ -74,23 +73,22 @@ public class Stuetzstelle<T> implements Comparable<Stuetzstelle<T>> {
 	 * @param wert
 	 *            Wert oder {@code null} für "undefiniert"
 	 */
-	public Stuetzstelle(long zeitstempel, T wert) {
+	public Stuetzstelle(final long zeitstempel, final T wert) {
 		this.zeitstempel = zeitstempel;
 		this.wert = wert;
 	}
 
 	/**
-	 * Eine Stützstelle ist kleiner bzw größer, wenn der
-	 * Zeitstempel kleiner bzw größer ist.
+	 * Eine Stützstelle ist kleiner bzw größer, wenn der Zeitstempel kleiner bzw
+	 * größer ist.
 	 * 
 	 * @param stuetzstelle
 	 *            Eine Stützstelle zum Vergleichen
-	 * @return -1, 0 oder +1, wenn der Zeitstempel dieser Stützstelle
-	 *         kleiner, gleich oder größer als die Stützstelle
-	 *         im Parameter ist
+	 * @return -1, 0 oder +1, wenn der Zeitstempel dieser Stützstelle kleiner,
+	 *         gleich oder größer als die Stützstelle im Parameter ist
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
-	public int compareTo(Stuetzstelle<T> stuetzstelle) {
+	public int compareTo(final Stuetzstelle<T> stuetzstelle) {
 		if (zeitstempel < stuetzstelle.zeitstempel) {
 			return -1;
 		} else if (zeitstempel > stuetzstelle.zeitstempel) {
@@ -101,15 +99,15 @@ public class Stuetzstelle<T> implements Comparable<Stuetzstelle<T>> {
 	}
 
 	/**
-	 * Zwei Stützstellen sind identisch, wenn beide den selben Zeitstempel
-	 * und Wert haben.
+	 * Zwei Stützstellen sind identisch, wenn beide den selben Zeitstempel und
+	 * Wert haben.
 	 * 
 	 * {@inheritDoc}
 	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (obj instanceof Stuetzstelle) {
 			Stuetzstelle<?> s;
 
@@ -148,10 +146,9 @@ public class Stuetzstelle<T> implements Comparable<Stuetzstelle<T>> {
 	 */
 	@Override
 	public String toString() {
-		return getClass().getSimpleName()
-				+ "[zeitstempel="
-				+ DateFormat.getDateTimeInstance()
-						.format(new Date(zeitstempel)) + ", wert=" + wert + "]";
+		return getClass().getSimpleName() + "[zeitstempel="
+				+ Timestamp.absoluteTime(zeitstempel) + ", wert=" + wert
+				+ "]";
 	}
 
 }
