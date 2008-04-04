@@ -256,6 +256,16 @@ public class OdPrognoseGanglinienAnfrage extends
 		}
 
 		/**
+		 * setzt den aktuellen Datenstatus.
+		 * 
+		 * @param datenStatus
+		 *            der neue Status
+		 */
+		protected void setDatenStatus(final Status datenStatus) {
+			this.datenStatus = datenStatus;
+		}
+
+		/**
 		 * {@inheritDoc}
 		 */
 		public int size() {
@@ -290,16 +300,6 @@ public class OdPrognoseGanglinienAnfrage extends
 			s += ", Anzahl der Teilanfragen=" + anfragen.size();
 
 			return s + "]";
-		}
-
-		/**
-		 * setzt den aktuellen Datenstatus.
-		 * 
-		 * @param datenStatus
-		 *            der neue Status
-		 */
-		protected void setDatenStatus(final Status datenStatus) {
-			this.datenStatus = datenStatus;
 		}
 
 	}
@@ -363,6 +363,33 @@ public class OdPrognoseGanglinienAnfrage extends
 	/**
 	 * {@inheritDoc}
 	 * 
+	 * @see de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatensatz#konvertiere(de.bsvrz.sys.funclib.bitctrl.modell.Datum)
+	 */
+	@Override
+	protected Data konvertiere(final Daten datum) {
+		final Data daten = erzeugeSendeCache();
+
+		Array feld;
+		int i;
+
+		daten.getReferenceValue("absenderId").setSystemObject(
+				datum.getAbsender().getSystemObject());
+		daten.getTextValue("AbsenderZeichen").setText(
+				datum.getAbsenderZeichen());
+
+		feld = daten.getArray("PrognoseGanglinienAnfrage");
+		feld.setLength(datum.size());
+		i = 0;
+		for (final GlProgAnfrage anfrage : datum) {
+			anfrage.getDaten(feld.getItem(i++));
+		}
+
+		return daten;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
 	 * @see de.bsvrz.sys.funclib.bitctrl.modell.Datensatz#setDaten(de.bsvrz.dav.daf.main.ResultData)
 	 */
 	public void setDaten(final ResultData result) {
@@ -394,33 +421,6 @@ public class OdPrognoseGanglinienAnfrage extends
 		setDatum(result.getDataDescription().getAspect(), datum);
 		fireDatensatzAktualisiert(result.getDataDescription().getAspect(),
 				datum.clone());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatensatz#konvertiere(de.bsvrz.sys.funclib.bitctrl.modell.Datum)
-	 */
-	@Override
-	protected Data konvertiere(final Daten datum) {
-		final Data daten = erzeugeSendeCache();
-
-		Array feld;
-		int i;
-
-		daten.getReferenceValue("absenderId").setSystemObject(
-				datum.getAbsender().getSystemObject());
-		daten.getTextValue("AbsenderZeichen").setText(
-				datum.getAbsenderZeichen());
-
-		feld = daten.getArray("PrognoseGanglinienAnfrage");
-		feld.setLength(datum.size());
-		i = 0;
-		for (final GlProgAnfrage anfrage : datum) {
-			anfrage.getDaten(feld.getItem(i));
-		}
-
-		return daten;
 	}
 
 }
