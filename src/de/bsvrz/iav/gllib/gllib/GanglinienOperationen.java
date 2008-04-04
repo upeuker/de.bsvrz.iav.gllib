@@ -354,6 +354,11 @@ public final class GanglinienOperationen {
 			ende = g2.lastKey();
 		}
 
+		if (start > ende) {
+			// Die beiden Ganglinienintervalle überschneiden sich nicht.
+			return Integer.MAX_VALUE;
+		}
+
 		// Haltepunkte bestimmen
 		zeitstempel = new LinkedList<Long>();
 		for (long i = start; i < ende; i += intervallBreite) {
@@ -803,6 +808,10 @@ public final class GanglinienOperationen {
 			}
 		}
 		fehler = Math.sqrt(summe / (zeitstempel.size() - undefinierte));
+		if (fehler == Double.NaN) {
+			// Die beiden Ganglinienintevalle überschneiden sich nicht.
+			return Double.POSITIVE_INFINITY;
+		}
 
 		// Prozentualen Fehler bestimmen
 		summe = 0;

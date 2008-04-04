@@ -198,7 +198,7 @@ public final class GanglinienMQOperationen {
 	 * @return Abstand nach dem Basisabstandsverfahren
 	 */
 	public static int basisabstand(final GanglinieMQ g1, final GanglinieMQ g2) {
-		int fehlerQKfz, fehlerQLkw, fehlerVPkw, fehlerVLkw;
+		double fehlerQKfz, fehlerQLkw, fehlerVPkw, fehlerVLkw;
 
 		fehlerQKfz = GanglinienOperationen.basisabstand(g1.getGanglinieQKfz(),
 				g2.getGanglinieQKfz());
@@ -209,7 +209,7 @@ public final class GanglinienMQOperationen {
 		fehlerVLkw = GanglinienOperationen.basisabstand(g1.getGanglinieVLkw(),
 				g2.getGanglinieVLkw());
 
-		return (fehlerQKfz + fehlerQLkw + fehlerVLkw + fehlerVPkw) / 4;
+		return (int) ((fehlerQKfz + fehlerQLkw + fehlerVLkw + fehlerVPkw) / 4);
 	}
 
 	/**
@@ -266,7 +266,7 @@ public final class GanglinienMQOperationen {
 			final GanglinieMQ g2, final int intervalle) {
 		assert g1.getMessQuerschnitt().equals(g2.getMessQuerschnitt()) : "Die Ganglinien müssen zum gleichen Messquerschnitt gehören.";
 
-		int fehlerQKfz, fehlerQLkw, fehlerVPkw, fehlerVLkw;
+		double fehlerQKfz, fehlerQLkw, fehlerVPkw, fehlerVLkw;
 
 		fehlerQKfz = GanglinienOperationen.komplexerAbstand(g1
 				.getGanglinieQKfz(), g2.getGanglinieQKfz(), intervalle);
@@ -277,7 +277,7 @@ public final class GanglinienMQOperationen {
 		fehlerVLkw = GanglinienOperationen.komplexerAbstand(g1
 				.getGanglinieVLkw(), g2.getGanglinieVLkw(), intervalle);
 
-		return (fehlerQKfz + fehlerQLkw + fehlerVLkw + fehlerVPkw) / 4;
+		return (int) ((fehlerQKfz + fehlerQLkw + fehlerVLkw + fehlerVPkw) / 4);
 	}
 
 	/**
@@ -297,7 +297,7 @@ public final class GanglinienMQOperationen {
 			final GanglinieMQ g2, final long intervallBreite) {
 		assert g1.getMessQuerschnitt().equals(g2.getMessQuerschnitt()) : "Die Ganglinien müssen zum gleichen Messquerschnitt gehören.";
 
-		int fehlerQKfz, fehlerQLkw, fehlerVPkw, fehlerVLkw;
+		double fehlerQKfz, fehlerQLkw, fehlerVPkw, fehlerVLkw;
 
 		fehlerQKfz = GanglinienOperationen.komplexerAbstand(g1
 				.getGanglinieQKfz(), g2.getGanglinieQKfz(), intervallBreite);
@@ -308,7 +308,7 @@ public final class GanglinienMQOperationen {
 		fehlerVLkw = GanglinienOperationen.komplexerAbstand(g1
 				.getGanglinieQLkw(), g2.getGanglinieVLkw(), intervallBreite);
 
-		return (fehlerQKfz + fehlerQLkw + fehlerVLkw + fehlerVPkw) / 4;
+		return (int) ((fehlerQKfz + fehlerQLkw + fehlerVLkw + fehlerVPkw) / 4);
 	}
 
 	/**
