@@ -83,8 +83,7 @@ public class GlProgAnfrage {
 	 * Defaultwerten belegt.
 	 * 
 	 * @param mq
-	 *            der Messquerschnitt für den eine Ganglinie angefragt
-	 *            wird.
+	 *            der Messquerschnitt für den eine Ganglinie angefragt wird.
 	 * @param prognoseZeitraum
 	 *            der Zeitraum der Prognose.
 	 * @param nurLangfristigeAuswahl
@@ -99,8 +98,7 @@ public class GlProgAnfrage {
 	 * Generiert eine Anfrage.
 	 * 
 	 * @param mq
-	 *            der Messquerschnitt für den eine Ganglinie angefragt
-	 *            wird.
+	 *            der Messquerschnitt für den eine Ganglinie angefragt wird.
 	 * @param prognoseZeitraum
 	 *            der Zeitraum der Prognose.
 	 * @param nurLangfristigeAuswahl
@@ -108,14 +106,12 @@ public class GlProgAnfrage {
 	 * @param zyklischePrognose
 	 *            Soll eine zyklische Prognose erstellt werden?
 	 * @param pruefIntervall
-	 *            Spätestens nach dieser Zeit in Sekunden Prognose
-	 *            prüfen.
+	 *            Spätestens nach dieser Zeit in Sekunden Prognose prüfen.
 	 * @param schwelle
 	 *            Maximale &Auml;nderung in Prozent zwischen zwei zyklischen
 	 *            Prognosen.
 	 * @param sendeIntervall
-	 *            Spätestens nach dieser Zeit in Sekunden Prognose
-	 *            publizieren.
+	 *            Spätestens nach dieser Zeit in Sekunden Prognose publizieren.
 	 */
 	public GlProgAnfrage(MessQuerschnittAllgemein mq,
 			Interval prognoseZeitraum, boolean nurLangfristigeAuswahl,
@@ -208,8 +204,7 @@ public class GlProgAnfrage {
 	}
 
 	/**
-	 * Gibt den Messquerschnitt für den eine Ganglinie angefragt wird
-	 * zurück.
+	 * Gibt den Messquerschnitt für den eine Ganglinie angefragt wird zurück.
 	 * 
 	 * @return Ein Messquerschnitt
 	 */
@@ -230,8 +225,7 @@ public class GlProgAnfrage {
 	}
 
 	/**
-	 * Spätestens nach dieser Zeit in Sekunden wird die Prognose
-	 * geprüft.
+	 * Spätestens nach dieser Zeit in Sekunden wird die Prognose geprüft.
 	 * <p>
 	 * TODO: Was wird nach dieser Zeit geprüft?
 	 * 
@@ -255,9 +249,9 @@ public class GlProgAnfrage {
 	}
 
 	/**
-	 * Spätestens nach dieser Zeit in Sekunden wird eine Prognose
-	 * publiziert. Die Ganglinie wird nach dieser Zeit auch publiziert, wenn sie
-	 * sich nicht geändert hat.
+	 * Spätestens nach dieser Zeit in Sekunden wird eine Prognose publiziert.
+	 * Die Ganglinie wird nach dieser Zeit auch publiziert, wenn sie sich nicht
+	 * geändert hat.
 	 * 
 	 * @return Zyklus des Publizierens in Sekunden
 	 * @see #isZyklischePrognose()
@@ -280,8 +274,7 @@ public class GlProgAnfrage {
 	 * handelt.
 	 * 
 	 * @return {@code true}, wenn die Prognose zyklisch wiederholt wird und
-	 *         {@code false}, wenn die Prognose nur einmal durchgeführt
-	 *         wird
+	 *         {@code false}, wenn die Prognose nur einmal durchgeführt wird
 	 * @see #getPruefIntervall()
 	 * @see #getSchwelle()
 	 * @see #getSendeIntervall()
@@ -332,17 +325,16 @@ public class GlProgAnfrage {
 			prognoseZeitraum = new Interval(start, ende);
 		} // Wenn Intervall ungültig, dann bleibt es null
 
-		if (daten.getUnscaledValue("NurLangfristigeAuswahl").getText().equals(
-				"Ja")) {
-			nurLangfristigeAuswahl = true;
-		} else {
+		if (daten.getUnscaledValue("NurLangfristigeAuswahl").intValue() == 0) {
 			nurLangfristigeAuswahl = false;
+		} else {
+			nurLangfristigeAuswahl = true;
 		}
 
-		if (daten.getUnscaledValue("ZyklischePrognose").getText().equals("Ja")) {
-			zyklischePrognose = true;
-		} else {
+		if (daten.getUnscaledValue("ZyklischePrognose").intValue() == 0) {
 			zyklischePrognose = false;
+		} else {
+			zyklischePrognose = true;
 		}
 
 		ereignisTypen.clear();
