@@ -26,6 +26,8 @@
 
 package de.bsvrz.iav.gllib.gllib.modell.parameter;
 
+import com.bitctrl.util.CronPattern;
+
 import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.ResultData;
 import de.bsvrz.dav.daf.main.config.AttributeGroup;
@@ -58,7 +60,7 @@ public class PdGanglinienModellAutomatischesLernen extends
 		 * Gibt an, in welchen Zeitabständen der Lernvorgang gestartet werden
 		 * soll.
 		 */
-		private long aktualisierungsintervall;
+		private CronPattern aktualisierungsintervall;
 
 		/**
 		 * Mindestalter der Analysewerte, die im automatischen Lernen
@@ -104,7 +106,7 @@ public class PdGanglinienModellAutomatischesLernen extends
 		 * 
 		 * @return das aktuelle Aktualisierungsintervall in Tagen.
 		 */
-		public long getAktualisierungsintervall() {
+		public CronPattern getAktualisierungsintervall() {
 			return aktualisierungsintervall;
 		}
 
@@ -155,7 +157,7 @@ public class PdGanglinienModellAutomatischesLernen extends
 		 *            das neue Aktualisierungsintervall in Tagen.
 		 */
 		public void setAktualisierungsintervall(
-				final long aktualisierungsintervall) {
+				final CronPattern aktualisierungsintervall) {
 			this.aktualisierungsintervall = aktualisierungsintervall;
 		}
 
@@ -281,8 +283,10 @@ public class PdGanglinienModellAutomatischesLernen extends
 		if (result.hasData()) {
 			final Data daten = result.getData();
 
-			datum.setAktualisierungsintervall(daten.getUnscaledValue(
-					"AlgAktualisierungsintervall").longValue());
+			datum
+					.setAktualisierungsintervall(new CronPattern(daten
+							.getUnscaledValue("AlgAktualisierungsintervall")
+							.getText()));
 			datum.setDatenMindestalter(daten.getUnscaledValue(
 					"AlgDatenMindestalter").longValue());
 			datum.setMaximalWichtung(daten.getUnscaledValue(
@@ -307,8 +311,8 @@ public class PdGanglinienModellAutomatischesLernen extends
 	protected Data konvertiere(final Daten datum) {
 		final Data daten = erzeugeSendeCache();
 
-		daten.getUnscaledValue("AlgAktualisierungsintervall").set(
-				datum.getAktualisierungsintervall());
+		daten.getTextValue("AlgAktualisierungsintervall").setText(
+				datum.getAktualisierungsintervall().getPattern());
 		daten.getUnscaledValue("AlgDatenMindestalter").set(
 				datum.getDatenMindestalter());
 		daten.getUnscaledValue("AlgMaximalWichtung").set(
