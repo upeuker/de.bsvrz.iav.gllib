@@ -69,12 +69,6 @@ public class PdGanglinienModellAutomatischesLernen extends
 		private long datenMindestalter;
 
 		/**
-		 * Maximaler Wichtungsfaktor der historischen Ganglinien bei der
-		 * Verschmelzung mit Analyseganglinien.
-		 */
-		private int maximalWichtung;
-
-		/**
 		 * Wenn dieses Abstandsmaß (in Prozent) beim zyklischen Archivieren und
 		 * Vergleichen von Ganglinien überschritten wird, wird eine Meldung
 		 * erzeugt.
@@ -92,7 +86,6 @@ public class PdGanglinienModellAutomatischesLernen extends
 
 			klon.aktualisierungsintervall = aktualisierungsintervall;
 			klon.datenMindestalter = datenMindestalter;
-			klon.maximalWichtung = maximalWichtung;
 			klon.maxVergleichsAbstand = maxVergleichsAbstand;
 			klon.datenStatus = datenStatus;
 			klon.setZeitstempel(getZeitstempel());
@@ -130,16 +123,6 @@ public class PdGanglinienModellAutomatischesLernen extends
 		}
 
 		/**
-		 * Maximaler Wichtungsfaktor der historischen Ganglinien bei der
-		 * Verschmelzung mit Analyseganglinien.
-		 * 
-		 * @return die aktuelle maximale Wichtung.
-		 */
-		public int getMaximalWichtung() {
-			return maximalWichtung;
-		}
-
-		/**
 		 * Wenn dieses Abstandsmaß beim zyklischen Archivieren und Vergleichen
 		 * von Ganglinien überschritten wird, wird eine Meldung erzeugt.
 		 * 
@@ -173,17 +156,6 @@ public class PdGanglinienModellAutomatischesLernen extends
 		}
 
 		/**
-		 * Maximaler Wichtungsfaktor der historischen Ganglinien bei der
-		 * Verschmelzung mit Analyseganglinien.
-		 * 
-		 * @param maximalWichtung
-		 *            die neue maximale Wichtung.
-		 */
-		public void setMaximalWichtung(final int maximalWichtung) {
-			this.maximalWichtung = maximalWichtung;
-		}
-
-		/**
 		 * Wenn dieses Abstandsmaß beim zyklischen Archivieren und Vergleichen
 		 * von Ganglinien überschritten wird, wird eine Meldung erzeugt.
 		 * 
@@ -208,7 +180,6 @@ public class PdGanglinienModellAutomatischesLernen extends
 			s += ", datenStatus=" + getDatenStatus();
 			s += ", aktualisierungsintervall=" + aktualisierungsintervall;
 			s += ", datenMindestalter=" + datenMindestalter;
-			s += ", maximalWichtung=" + maximalWichtung;
 			s += ", maxVergleichsAbstand=" + maxVergleichsAbstand;
 			s += "]";
 
@@ -283,14 +254,10 @@ public class PdGanglinienModellAutomatischesLernen extends
 		if (result.hasData()) {
 			final Data daten = result.getData();
 
-			datum
-					.setAktualisierungsintervall(new CronPattern(daten
-							.getUnscaledValue("AlgAktualisierungsintervall")
-							.getText()));
+			datum.setAktualisierungsintervall(new CronPattern(daten
+					.getTextValue("AlgAktualisierungsintervall").getText()));
 			datum.setDatenMindestalter(daten.getUnscaledValue(
 					"AlgDatenMindestalter").longValue());
-			datum.setMaximalWichtung(daten.getUnscaledValue(
-					"AlgMaximalWichtung").intValue());
 			datum.setMaxVergleichsAbstand(daten.getUnscaledValue(
 					"AlgMaxVergleichsAbstand").intValue());
 		}
@@ -315,8 +282,6 @@ public class PdGanglinienModellAutomatischesLernen extends
 				datum.getAktualisierungsintervall().getPattern());
 		daten.getUnscaledValue("AlgDatenMindestalter").set(
 				datum.getDatenMindestalter());
-		daten.getUnscaledValue("AlgMaximalWichtung").set(
-				datum.getMaximalWichtung());
 		daten.getUnscaledValue("AlgMaxVergleichsAbstand").set(
 				datum.getMaxVergleichsAbstand());
 

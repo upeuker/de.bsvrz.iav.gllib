@@ -69,9 +69,6 @@ public class PdGanglinienModellPrognose extends
 		 */
 		private long matchingIntervall;
 
-		/** Maximale Dauer einer zyklischen Prognose. */
-		private long maxDauerZyklischePrognose;
-
 		/** Maximaler Fehler beim Pattern-Matching. */
 		private int maxMatchingFehler;
 
@@ -91,7 +88,6 @@ public class PdGanglinienModellPrognose extends
 			datenStatus = Datum.Status.DATEN;
 			auswahlMethode = WAHRSCHEINLICHSTE_GANGLINIE;
 			matchingIntervall = 60 * 60 * 1000; // 1 Stunde
-			maxDauerZyklischePrognose = 30 * 24 * 60 * 60 * 1000; // 1 Monat
 			maxMatchingFehler = 25;
 			patternMatchingHorizont = 2 * 60 * 60 * 1000; // 2 Stunden
 			patternMatchingOffset = 15 * 60 * 1000; // 15 Minuten
@@ -109,7 +105,6 @@ public class PdGanglinienModellPrognose extends
 			klon.datenStatus = datenStatus;
 			klon.auswahlMethode = auswahlMethode;
 			klon.matchingIntervall = matchingIntervall;
-			klon.maxDauerZyklischePrognose = maxDauerZyklischePrognose;
 			klon.maxMatchingFehler = maxMatchingFehler;
 			klon.patternMatchingHorizont = patternMatchingHorizont;
 			klon.patternMatchingOffset = patternMatchingOffset;
@@ -143,16 +138,6 @@ public class PdGanglinienModellPrognose extends
 		 */
 		public long getMatchingIntervall() {
 			return matchingIntervall;
-		}
-
-		/**
-		 * Gibt den Wert der Eigenschaft {@code maxDauerZyklischePrognose}
-		 * wieder.
-		 * 
-		 * @return {@code maxDauerZyklischePrognose}.
-		 */
-		public long getMaxDauerZyklischePrognose() {
-			return maxDauerZyklischePrognose;
 		}
 
 		/**
@@ -203,17 +188,6 @@ public class PdGanglinienModellPrognose extends
 		}
 
 		/**
-		 * Legt den Wert der Eigenschaft {@code maxDauerZyklischePrognose} fest.
-		 * 
-		 * @param maxDauerZyklischePrognose
-		 *            der neue Wert von {@code maxDauerZyklischePrognose}.
-		 */
-		public void setMaxDauerZyklischePrognose(
-				final long maxDauerZyklischePrognose) {
-			this.maxDauerZyklischePrognose = maxDauerZyklischePrognose;
-		}
-
-		/**
 		 * Legt den Wert der Eigenschaft {@code maxMatchingFehler} fest.
 		 * 
 		 * @param maxMatchingFehler
@@ -258,7 +232,6 @@ public class PdGanglinienModellPrognose extends
 			s += ", datenStatus=" + getDatenStatus();
 			s += ", auswahlMethode=" + auswahlMethode;
 			s += ", matchingIntervall=" + matchingIntervall;
-			s += ", maxDauerZyklischePrognose=" + maxDauerZyklischePrognose;
 			s += ", maxMatchingFehler=" + maxMatchingFehler;
 			s += ", patternMatchingHorizont=" + patternMatchingHorizont;
 			s += ", patternMatchingOffset=" + patternMatchingOffset;
@@ -345,10 +318,6 @@ public class PdGanglinienModellPrognose extends
 					* MILLIS_PER_SECOND);
 			datum.setMaxMatchingFehler(daten.getUnscaledValue(
 					"GLMaximalerMatchingFehler").intValue());
-			// TODO fehlendes Attribut GLMaximaleDauerZyklischePrognose im DaK
-			// datum.setMaxDauerZyklischePrognose(daten.getUnscaledValue(
-			// "GLMaximaleDauerZyklischePrognose").longValue()
-			// MILLIS_PER_SEKUNDE);
 		}
 
 		datum.setDatenStatus(Datum.Status.getStatus(result.getDataState()));
@@ -377,9 +346,6 @@ public class PdGanglinienModellPrognose extends
 				datum.getPatternMatchingOffset() / MILLIS_PER_SECOND);
 		daten.getUnscaledValue("GLMaximalerMatchingFehler").set(
 				datum.getMaxMatchingFehler());
-		// TODO fehlendes Attribut GLMaximaleDauerZyklischePrognose im DaK
-		// daten.getUnscaledValue("GLMaximaleDauerZyklischePrognose").set(
-		// datum.getMaxDauerZyklischePrognose() / MILLIS_PER_SEKUNDE);
 
 		return daten;
 	}
