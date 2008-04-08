@@ -64,7 +64,13 @@ public class EreignisFactory {
 		EREIGNISTYP,
 
 		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
-		TAG
+		TAG,
+
+		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		STARTZEIT,
+
+		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		ENDZEIT
 	}
 
 	/** Enthält die Spaltennamen der Tabelle. */
@@ -195,7 +201,7 @@ public class EreignisFactory {
 			final EreignisTyp ereignisTyp;
 			final Ereignis ereignis;
 			final int tag;
-			long start;
+			final long start, ende;
 			final Interval intervall;
 			final Calendar calendar;
 			String pid;
@@ -212,14 +218,17 @@ public class EreignisFactory {
 					.name()), Ereignis.PRAEFIX_PID);
 			tag = rs.getInt(Ereignisse.TAG.name());
 			calendar = Calendar.getInstance();
-			calendar.set(Calendar.HOUR_OF_DAY, 0);
+			calendar.add(Calendar.DAY_OF_YEAR, tag);
+			calendar.set(Calendar.HOUR_OF_DAY, rs.getInt(Ereignisse.STARTZEIT
+					.name()));
 			calendar.set(Calendar.MINUTE, 0);
 			calendar.set(Calendar.SECOND, 0);
 			calendar.set(Calendar.MILLISECOND, 0);
-			calendar.add(Calendar.DAY_OF_YEAR, tag);
 			start = calendar.getTimeInMillis();
-			calendar.add(Calendar.DAY_OF_YEAR, 1);
-			intervall = new Interval(start, calendar.getTimeInMillis());
+			calendar.set(Calendar.HOUR_OF_DAY, rs.getInt(Ereignisse.ENDZEIT
+					.name()));
+			ende = calendar.getTimeInMillis();
+			intervall = new Interval(start, ende);
 			ereignis = kalender.anlegenEreignis(pid, ereignisTyp.getName(), "",
 					ereignisTyp, intervall, "");
 			ereignisse.add(ereignis);
