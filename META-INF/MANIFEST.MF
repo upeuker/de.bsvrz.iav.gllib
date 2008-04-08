@@ -17,6 +17,7 @@ Export-Package: de.bsvrz.iav.gllib.gllib;
    de.bsvrz.iav.gllib.gllib.dav,
    de.bsvrz.sys.funclib.commandLineArgs",
  de.bsvrz.iav.gllib.gllib.dav,
+ de.bsvrz.iav.gllib.gllib.junit,
  de.bsvrz.iav.gllib.gllib.modell;uses:="de.bsvrz.sys.funclib.bitctrl.modell,de.bsvrz.dav.daf.main.config",
  de.bsvrz.iav.gllib.gllib.modell.objekte;uses:="de.bsvrz.sys.funclib.bitctrl.modell,de.bsvrz.dav.daf.main.config",
  de.bsvrz.iav.gllib.gllib.modell.onlinedaten;
