@@ -93,7 +93,8 @@ public class GlProgAnfrage {
 	public GlProgAnfrage(final MessQuerschnittAllgemein mq,
 			final Interval prognoseZeitraum,
 			final boolean nurLangfristigeAuswahl) {
-		this(mq, prognoseZeitraum, nurLangfristigeAuswahl, false, 1, 0, 1);
+		this(mq, prognoseZeitraum, nurLangfristigeAuswahl, false,
+				Constants.MILLIS_PER_SECOND, 0, Constants.MILLIS_PER_SECOND);
 	}
 
 	/**
