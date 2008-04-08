@@ -240,11 +240,13 @@ public class GanglinienOperationenTest {
 		Ganglinie<Double> g1, g2;
 
 		g1 = new Ganglinie<Double>();
+		g1.setApproximation(new Polyline());
 		g1.put(0L, 10.0);
 		g1.put(10L, 20.0);
 		g1.put(20L, 30.0);
 
 		g2 = new Ganglinie<Double>();
+		g2.setApproximation(new Polyline());
 		g2.put(0L, 20.0);
 		g2.put(10L, 30.0);
 		g2.put(20L, 10.0);
