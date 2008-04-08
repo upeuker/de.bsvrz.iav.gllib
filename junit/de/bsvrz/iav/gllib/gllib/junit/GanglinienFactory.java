@@ -68,7 +68,10 @@ public class GanglinienFactory {
 		TYP,
 
 		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
-		APPROXIMATION;
+		APPROXIMATION,
+
+		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		REFERENZ;
 
 	}
 
@@ -271,6 +274,7 @@ public class GanglinienFactory {
 			g.setTyp(rsGl.getInt(Ganglinien.TYP.name()));
 			g.setApproximationDaK(rsGl.getInt(Ganglinien.APPROXIMATION.name()));
 			g.setLetzteVerschmelzung(factory.getVerbindung().getTime());
+			g.setReferenz(rsGl.getBoolean(Ganglinien.REFERENZ.name()));
 
 			statSt = connection.createStatement();
 			if (tag == ERSTER_TAG) {
