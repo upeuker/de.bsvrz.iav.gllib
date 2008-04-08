@@ -331,16 +331,16 @@ public final class GanglinienOperationen {
 	 */
 	public static int komplexerAbstand(final Ganglinie<Double> g1,
 			final Ganglinie<Double> g2, final long intervallBreite) {
-		final Polyline p1, p2;
+		// final Polyline p1, p2;
 		final Queue<Long> zeitstempel;
 		long start, ende;
 
-		p1 = new Polyline();
-		p1.setStuetzstellen(g1.getStuetzstellen());
-		p1.initialisiere();
-		p2 = new Polyline();
-		p2.setStuetzstellen(g2.getStuetzstellen());
-		p2.initialisiere();
+		// p1 = new Polyline();
+		// p1.setStuetzstellen(g1.getStuetzstellen());
+		// p1.initialisiere();
+		// p2 = new Polyline();
+		// p2.setStuetzstellen(g2.getStuetzstellen());
+		// p2.initialisiere();
 
 		// Zu betrachtendes Intervall und Intervallbreite bestimmen
 		if (g1.firstKey() < g2.firstKey()) {
@@ -366,7 +366,8 @@ public final class GanglinienOperationen {
 		}
 		zeitstempel.add(ende);
 
-		return (int) Math.round(fehler(p1, p2, zeitstempel));
+		return (int) Math.round(fehler(g1.getApproximation(), g2
+				.getApproximation(), zeitstempel));
 	}
 
 	/**
@@ -777,19 +778,19 @@ public final class GanglinienOperationen {
 	}
 
 	/**
-	 * Bestimmt den prozentualen Fehler (Abstand) zweier Polylinien anhand
+	 * Bestimmt den prozentualen Fehler (Abstand) zweier Approximationen anhand
 	 * gegebener Messpunkte.
 	 * 
-	 * @param p1
-	 *            die erste Polylinie.
-	 * @param p2
-	 *            die zweite Polylinie.
+	 * @param approx1
+	 *            die erste Approximation.
+	 * @param approx2
+	 *            die zweite Approximation.
 	 * @param zeitstempel
 	 *            die "Messpunkte"
 	 * @return der prozentuale Fehler.
 	 */
-	private static double fehler(final Polyline p1, final Polyline p2,
-			final Queue<Long> zeitstempel) {
+	private static double fehler(final Approximation<Double> approx1,
+			final Approximation<Double> approx2, final Queue<Long> zeitstempel) {
 		double fehler, summe;
 		int undefinierte;
 
@@ -797,10 +798,11 @@ public final class GanglinienOperationen {
 		summe = 0;
 		undefinierte = 0;
 		for (final long z : zeitstempel) {
-			if (p1.get(z).getWert() != null && p2.get(z).getWert() != null) {
+			if (approx1.get(z).getWert() != null
+					&& approx2.get(z).getWert() != null) {
 				double x;
 
-				x = p2.get(z).getWert() - p1.get(z).getWert();
+				x = approx2.get(z).getWert() - approx1.get(z).getWert();
 				summe += x * x;
 			} else {
 				// Undefinierte Stützstellen werden nicht berücksichtigt
@@ -816,10 +818,11 @@ public final class GanglinienOperationen {
 		// Prozentualen Fehler bestimmen
 		summe = 0;
 		for (final long z : zeitstempel) {
-			if (p1.get(z).getWert() != null && p2.get(z).getWert() != null) {
+			if (approx1.get(z).getWert() != null
+					&& approx2.get(z).getWert() != null) {
 				double x;
 
-				x = (p1.get(z).getWert() + p2.get(z).getWert()) / 2;
+				x = (approx1.get(z).getWert() + approx2.get(z).getWert()) / 2;
 				summe += x * x;
 			}
 		}

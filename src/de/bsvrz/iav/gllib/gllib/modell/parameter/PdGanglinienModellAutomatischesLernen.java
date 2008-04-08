@@ -26,6 +26,7 @@
 
 package de.bsvrz.iav.gllib.gllib.modell.parameter;
 
+import com.bitctrl.Constants;
 import com.bitctrl.util.CronPattern;
 
 import de.bsvrz.dav.daf.main.Data;
@@ -77,8 +78,6 @@ public class PdGanglinienModellAutomatischesLernen extends
 
 		/**
 		 * {@inheritDoc}
-		 * 
-		 * @see de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatum#clone()
 		 */
 		@Override
 		public Daten clone() {
@@ -97,7 +96,7 @@ public class PdGanglinienModellAutomatischesLernen extends
 		 * Gibt an, in welchen Zeitabständen der Lernvorgang gestartet werden
 		 * soll.
 		 * 
-		 * @return das aktuelle Aktualisierungsintervall in Tagen.
+		 * @return das aktuelle Aktualisierungsintervall in Cron-Syntax.
 		 */
 		public CronPattern getAktualisierungsintervall() {
 			return aktualisierungsintervall;
@@ -107,16 +106,14 @@ public class PdGanglinienModellAutomatischesLernen extends
 		 * Mindestalter der Analysewerte, die im automatischen Lernen
 		 * verarbeitet werden.
 		 * 
-		 * @return das aktuelle Datenmindestalter in Tagen.
+		 * @return das aktuelle Datenmindestalter.
 		 */
 		public long getDatenMindestalter() {
 			return datenMindestalter;
 		}
 
 		/**
-		 * {@inheritDoc}.<br>
-		 * 
-		 * @see de.bsvrz.sys.funclib.bitctrl.modell.Datum#getDatenStatus()
+		 * {@inheritDoc}
 		 */
 		public Status getDatenStatus() {
 			return datenStatus;
@@ -137,7 +134,7 @@ public class PdGanglinienModellAutomatischesLernen extends
 		 * soll.
 		 * 
 		 * @param aktualisierungsintervall
-		 *            das neue Aktualisierungsintervall in Tagen.
+		 *            das neue Aktualisierungsintervall in Cron-Syntax.
 		 */
 		public void setAktualisierungsintervall(
 				final CronPattern aktualisierungsintervall) {
@@ -149,7 +146,7 @@ public class PdGanglinienModellAutomatischesLernen extends
 		 * verarbeitet werden.
 		 * 
 		 * @param datenMindestalter
-		 *            das neue Datenmindestalter in Tagen.
+		 *            das neue Datenmindestalter.
 		 */
 		public void setDatenMindestalter(final long datenMindestalter) {
 			this.datenMindestalter = datenMindestalter;
@@ -257,7 +254,8 @@ public class PdGanglinienModellAutomatischesLernen extends
 			datum.setAktualisierungsintervall(new CronPattern(daten
 					.getTextValue("AlgAktualisierungsintervall").getText()));
 			datum.setDatenMindestalter(daten.getUnscaledValue(
-					"AlgDatenMindestalter").longValue());
+					"AlgDatenMindestalter").longValue()
+					* Constants.MILLIS_PER_DAY);
 			datum.setMaxVergleichsAbstand(daten.getUnscaledValue(
 					"AlgMaxVergleichsAbstand").intValue());
 		}
@@ -281,7 +279,7 @@ public class PdGanglinienModellAutomatischesLernen extends
 		daten.getTextValue("AlgAktualisierungsintervall").setText(
 				datum.getAktualisierungsintervall().getPattern());
 		daten.getUnscaledValue("AlgDatenMindestalter").set(
-				datum.getDatenMindestalter());
+				datum.getDatenMindestalter() / Constants.MILLIS_PER_DAY);
 		daten.getUnscaledValue("AlgMaxVergleichsAbstand").set(
 				datum.getMaxVergleichsAbstand());
 
