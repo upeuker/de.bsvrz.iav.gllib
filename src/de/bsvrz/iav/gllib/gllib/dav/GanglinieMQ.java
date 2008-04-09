@@ -26,15 +26,14 @@
 
 package de.bsvrz.iav.gllib.gllib.dav;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
 import com.bitctrl.util.Interval;
+import com.bitctrl.util.Timestamp;
 
 import de.bsvrz.iav.gllib.gllib.Approximation;
 import de.bsvrz.iav.gllib.gllib.BSpline;
@@ -751,8 +750,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 		result += ", referenz=" + referenz;
 		result += ", anzahlVerschmelzungen=" + anzahlVerschmelzungen;
 		result += ", letzteVerschmelzung="
-				+ DateFormat.getDateInstance().format(
-						new Date(letzteVerschmelzung));
+				+ Timestamp.absoluteTime(letzteVerschmelzung);
 		result += ", typ=" + typ;
 		result += ", approximationDaK=" + getApproximationDaK();
 		result += ", prognoseZeitraum=" + prognoseZeitraum;
