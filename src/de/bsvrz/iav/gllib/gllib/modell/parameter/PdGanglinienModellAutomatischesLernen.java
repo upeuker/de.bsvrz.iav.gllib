@@ -28,6 +28,7 @@ package de.bsvrz.iav.gllib.gllib.modell.parameter;
 
 import com.bitctrl.Constants;
 import com.bitctrl.util.CronPattern;
+import com.bitctrl.util.Timestamp;
 
 import de.bsvrz.dav.daf.main.Data;
 import de.bsvrz.dav.daf.main.ResultData;
@@ -176,7 +177,9 @@ public class PdGanglinienModellAutomatischesLernen extends
 			s += "zeitpunkt=" + getZeitpunkt();
 			s += ", datenStatus=" + getDatenStatus();
 			s += ", aktualisierungsintervall=" + aktualisierungsintervall;
-			s += ", datenMindestalter=" + datenMindestalter;
+			s += ", datenMindestalter="
+					+ Timestamp.relativeTime(datenMindestalter) + " ("
+					+ datenMindestalter + ")";
 			s += ", maxVergleichsAbstand=" + maxVergleichsAbstand;
 			s += "]";
 
@@ -251,8 +254,17 @@ public class PdGanglinienModellAutomatischesLernen extends
 		if (result.hasData()) {
 			final Data daten = result.getData();
 
-			datum.setAktualisierungsintervall(new CronPattern(daten
-					.getTextValue("AlgAktualisierungsintervall").getText()));
+			try {
+				datum
+						.setAktualisierungsintervall(new CronPattern(daten
+								.getTextValue("AlgAktualisierungsintervall")
+								.getText()));
+			} catch (final IllegalArgumentException ex) {
+				datum.setAktualisierungsintervall(null);
+			} catch (final UnsupportedOperationException ex) {
+				// TODO Diesen Fall entfernen, wenn CronPattern alles kann
+				datum.setAktualisierungsintervall(null);
+			}
 			datum.setDatenMindestalter(daten.getUnscaledValue(
 					"AlgDatenMindestalter").longValue()
 					* Constants.MILLIS_PER_DAY);
@@ -276,8 +288,12 @@ public class PdGanglinienModellAutomatischesLernen extends
 	protected Data konvertiere(final Daten datum) {
 		final Data daten = erzeugeSendeCache();
 
-		daten.getTextValue("AlgAktualisierungsintervall").setText(
-				datum.getAktualisierungsintervall().getPattern());
+		if (datum.getAktualisierungsintervall() != null) {
+			daten.getTextValue("AlgAktualisierungsintervall").setText(
+					datum.getAktualisierungsintervall().getPattern());
+		} else {
+			daten.getTextValue("AlgAktualisierungsintervall").setText("");
+		}
 		daten.getUnscaledValue("AlgDatenMindestalter").set(
 				datum.getDatenMindestalter() / Constants.MILLIS_PER_DAY);
 		daten.getUnscaledValue("AlgMaxVergleichsAbstand").set(

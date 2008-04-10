@@ -87,47 +87,44 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	/** Der Messquerschnitt, zu dem die Ganglinie gehört. */
 	private MessQuerschnittAllgemein messQuerschnitt;
 
-	/** Parameter für die Berechnung von QB. */
-	private float k1;
+	/** Parameter für die Berechnung von QB, Standard ist {@value}. */
+	private float k1 = 2.0f;
 
-	/** Parameter für die Berechnung von QB. */
-	private float k2;
+	/** Parameter für die Berechnung von QB, Standard ist {@value}. */
+	private float k2 = 0.01f;
 
-	/** Zeitpunkt der letzten Verschmelzung. */
-	private long letzteVerschmelzung;
+	/**
+	 * Zeitpunkt der letzten Verschmelzung, Standard ist der Zeitstempel der
+	 * Instanzierung.
+	 */
+	private long letzteVerschmelzung = System.currentTimeMillis();
 
-	/** Anzahl der Verschmelzung mit anderen Ganglinien. */
-	private long anzahlVerschmelzungen;
+	/** Anzahl der Verschmelzung mit anderen Ganglinien, Standard ist {@value}. */
+	private long anzahlVerschmelzungen = 1;
 
-	/** Identifier für das mit der Ganglinie verknüpfte Ereignis. */
-	private EreignisTyp ereignisTyp;
+	/**
+	 * Identifier für das mit der Ganglinie verknüpfte Ereignis, Standard ist
+	 * {@value}.
+	 */
+	private EreignisTyp ereignisTyp = null;
 
-	/** Flag, ob die Ganglinie eine Referenzganglinie darstellt. */
-	private boolean referenz;
+	/**
+	 * Flag, ob die Ganglinie eine Referenzganglinie darstellt, Standard ist
+	 * {@value}.
+	 */
+	private boolean referenz = false;
 
-	/** Typ der Ganglinie. */
-	private int typ;
+	/** Typ der Ganglinie, Standard ist {@link #TYP_ABSOLUT}. */
+	private int typ = TYP_ABSOLUT;
 
-	/** Art der Approximation. */
-	private int approximationDaK;
+	/** Art der Approximation, Standard ist {@link #APPROX_BSPLINE}. */
+	private int approximationDaK = APPROX_BSPLINE;
 
-	/** Ordnung des B-Spline. */
-	private int bSplineOrdnung;
+	/** Ordnung des B-Spline, Standard ist {@link #APPROX_STANDARD_ORDNUNG}. */
+	private int bSplineOrdnung = APPROX_STANDARD_ORDNUNG;
 
 	/** Das Intervall für das die Ganglinie prognostiziert wird. */
 	private Interval prognoseZeitraum;
-
-	/**
-	 * Konstruiert eine Ganglinie ohne Stützstellen. Die Ganglinie ist absolut
-	 * und verwendet als Approximation den B-Spline mit Ordnung 5.
-	 */
-	public GanglinieMQ() {
-		k1 = 2.0f;
-		k2 = 0.01f;
-		typ = TYP_ABSOLUT;
-		approximationDaK = APPROX_BSPLINE;
-		bSplineOrdnung = APPROX_STANDARD_ORDNUNG;
-	}
 
 	/**
 	 * Kopiert die St&uumltzstellen, das Approximationsverfahren und alle

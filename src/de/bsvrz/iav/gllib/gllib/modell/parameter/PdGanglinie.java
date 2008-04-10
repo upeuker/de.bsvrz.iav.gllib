@@ -255,6 +255,23 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 		 * {@inheritDoc}
 		 */
 		@Override
+		public boolean equals(final Object obj) {
+			if (this == obj) {
+				return true;
+			}
+			if (obj instanceof PdGanglinie.Daten) {
+				PdGanglinie.Daten datum;
+
+				datum = (PdGanglinie.Daten) obj;
+				return ganglinien.equals(datum.ganglinien);
+			}
+			return false;
+		}
+
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
 		public String toString() {
 			String s;
 

@@ -169,6 +169,7 @@ public class GanglinienFactory {
 	 *     ereignistyp VARCHAR(50) NOT NULL,
 	 *     typ INTEGER DEFAULT 0 NOT NULL,
 	 *     approximation INTEGER DEFAULT 1 NOT NULL,
+	 *     referenz BOOLEAN DEFAULT false NOT NULL,
 	 * 
 	 *     PRIMARY KEY (id),
 	 *     FOREIGN KEY (ereignistyp) REFERENCES ereignistypen(ereignistyp)
@@ -194,6 +195,9 @@ public class GanglinienFactory {
 	 * 
 	 * Der Tag ist eine relative Angabe in Bezug auf heute = 0.
 	 * 
+	 * @param tag
+	 *            der Tag dessen Ganglinien verwendet werden sollen: heute 0,
+	 *            gestern -1 usw.
 	 * @return die Ganglinienliste die angelegt wurde.
 	 * @throws SQLException
 	 *             bei einem Datenbankfehler.
@@ -203,8 +207,8 @@ public class GanglinienFactory {
 	 *             bei einem Fehler beim Daten senden.
 	 * @see #getGanglinienTestdaten(int)
 	 */
-	public List<GanglinieMQ> anlegenGanglinien() throws SQLException,
-			AnmeldeException, DatensendeException {
+	public List<GanglinieMQ> anlegenGanglinien(final int tag)
+			throws SQLException, AnmeldeException, DatensendeException {
 		final PdGanglinie param;
 		PdGanglinie.Daten datum;
 
@@ -218,7 +222,7 @@ public class GanglinienFactory {
 			System.exit(-1);
 		}
 
-		datum = getGanglinienTestdaten(ERSTER_TAG);
+		datum = getGanglinienTestdaten(tag);
 		param.sendeDaten(datum);
 
 		log.info("Ganglinien gesendet.");

@@ -691,6 +691,11 @@ public final class GanglinienOperationen {
 		SortedMap<Long, Double> stuetzstellen;
 		long intervall, t0;
 
+		if (g.size() < 2) {
+			throw new IllegalArgumentException(
+					"Die Ganglinie muss mindestens zwei Stützstellen besitzen.");
+		}
+
 		t0 = Long.MIN_VALUE;
 		intervall = 0;
 		stuetzstellen = new TreeMap<Long, Double>();

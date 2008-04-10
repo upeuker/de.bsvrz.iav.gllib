@@ -162,6 +162,8 @@ public class EreignisFactory {
 	 * CREATE TABLE ereignisse (
 	 *     ereignistyp VARCHAR(50) NOT NULL,
 	 *     tag INTEGER NOT NULL,
+	 *     startzeit INTEGER DEFAULT 0 NOT NULL,
+	 *     endzeit INTEGER DEFAULT 24 NOT NULL,
 	 * 
 	 *     FOREIGN KEY (ereignistyp) REFERENCES ereignistypen(ereignistyp)
 	 * );
@@ -251,7 +253,7 @@ public class EreignisFactory {
 	 *     ausschluss VARCHAR(50),
 	 *     typ INTEGER DEFAULT 0 NOT NULL,	
 	 *     vergleichsschrittweite BIGINT DEFAULT 60000 NOT NULL,
-	 *     max_abstand INTEGER DEFAULT 10 NOT NULL,
+	 *     max_abstand INTEGER DEFAULT 100 NOT NULL,
 	 *     max_matchingfehler INTEGER DEFAULT 15 NOT NULL,
 	 *     matchingschrittweite BIGINT DEFAULT 60000 NOT NULL,	
 	 *     matchingintervall_vor BIGINT DEFAULT 21600000 NOT NULL,
