@@ -33,7 +33,6 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import com.bitctrl.util.Interval;
-import com.bitctrl.util.Timestamp;
 
 import de.bsvrz.iav.gllib.gllib.Approximation;
 import de.bsvrz.iav.gllib.gllib.BSpline;
@@ -737,28 +736,30 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	@Override
 	public String toString() {
 		String result;
-		List<Stuetzstelle<Messwerte>> liste;
+		// List<Stuetzstelle<Messwerte>> liste;
 
-		liste = getStuetzstellen();
+		// liste = getStuetzstellen();
 
-		result = getClass().getSimpleName() + "[";
-		result += "messQuerschnitt=" + messQuerschnitt;
-		result += ", ereignisTyp=" + ereignisTyp;
-		result += ", referenz=" + referenz;
-		result += ", anzahlVerschmelzungen=" + anzahlVerschmelzungen;
-		result += ", letzteVerschmelzung="
-				+ Timestamp.absoluteTime(letzteVerschmelzung);
-		result += ", typ=" + typ;
-		result += ", approximationDaK=" + getApproximationDaK();
-		result += ", prognoseZeitraum=" + prognoseZeitraum;
-		result += ", Anzahl Stützstellen=" + size();
-		if (size() > 10) {
-			result += ", erste Stützstelle=" + liste.get(0);
-			result += ", letzte Stützstelle=" + liste.get(liste.size() - 1);
-		} else {
-			result += ", stuetzstellen=" + liste;
-		}
-		result += "]";
+		result = getClass().getSimpleName() + "[\n";
+		result += GanglinienMQOperationen.formatierterText(this);
+		// result += "messQuerschnitt=" + messQuerschnitt;
+		// result += ", ereignisTyp=" + ereignisTyp;
+		// result += ", referenz=" + referenz;
+		// result += ", anzahlVerschmelzungen=" + anzahlVerschmelzungen;
+		// result += ", letzteVerschmelzung="
+		// + Timestamp.absoluteTime(letzteVerschmelzung);
+		// result += ", typ=" + typ;
+		// result += ", approximationDaK=" + getApproximationDaK();
+		// result += ", prognoseZeitraum=" + prognoseZeitraum;
+		// result += ", Anzahl Stützstellen=" + size();
+		// if (size() > 10) {
+		// result += ", erste Stützstelle=" + liste.get(0);
+		// result += ", letzte Stützstelle=" + liste.get(liste.size() - 1);
+		// } else {
+		// result += ", stuetzstellen=" + liste;
+		// }
+		result += "\n]";
+
 		return result;
 	}
 

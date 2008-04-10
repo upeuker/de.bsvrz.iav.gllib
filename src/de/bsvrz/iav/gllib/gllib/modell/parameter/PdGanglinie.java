@@ -278,7 +278,7 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 			s = getClass().getSimpleName() + "[";
 			s += "zeitpunkt=" + getZeitpunkt();
 			s += ", datenStatus=" + getDatenStatus();
-			s += ", Anzahl Ganglinien=" + ganglinien.size();
+			s += ", ganglinien=" + ganglinien;
 			s += "]";
 
 			return s;
