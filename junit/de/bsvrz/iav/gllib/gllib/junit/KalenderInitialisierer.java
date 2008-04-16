@@ -26,14 +26,14 @@
 
 package de.bsvrz.iav.gllib.gllib.junit;
 
+import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Collection;
 import java.util.Collections;
 
 import com.bitctrl.util.jar.JarTools;
+import com.bitctrl.util.logging.LoggerTools;
 
 import de.bsvrz.dav.daf.main.ClientDavInterface;
-import de.bsvrz.dav.daf.main.Data;
-import de.bsvrz.dav.daf.main.config.AttributeGroup;
 import de.bsvrz.dav.daf.main.config.ConfigurationAuthority;
 import de.bsvrz.dav.daf.main.config.ConfigurationChangeException;
 import de.bsvrz.dav.daf.main.config.DataModel;
@@ -64,7 +64,8 @@ import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
  * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
  */
-public final class KalenderInitialisierer implements StandardApplication {
+public final class KalenderInitialisierer implements StandardApplication,
+		UncaughtExceptionHandler {
 
 	/**
 	 * Startet die Applikation.
@@ -101,8 +102,7 @@ public final class KalenderInitialisierer implements StandardApplication {
 	 * 
 	 * @see de.bsvrz.sys.funclib.application.StandardApplication#initialize(de.bsvrz.dav.daf.main.ClientDavInterface)
 	 */
-	public void initialize(final ClientDavInterface connection)
-			throws Exception {
+	public void initialize(final ClientDavInterface connection) {
 		ObjektFactory factory;
 
 		factory = ObjektFactory.getInstanz();
@@ -112,19 +112,22 @@ public final class KalenderInitialisierer implements StandardApplication {
 		kalender = (Kalender) factory.getModellobjekt(connection
 				.getLocalConfigurationAuthority());
 
-		if (reset) {
-			reset();
+		try {
+			if (reset) {
+				reset();
+			}
+
+			anlegenEreignis("Montag", 10);
+			anlegenEreignis("Dienstag", 10);
+			anlegenEreignis("Mittwoch", 10);
+			anlegenEreignis("Donnerstag", 10);
+			anlegenEreignis("Freitag", 10);
+			anlegenEreignis("Samstag", 15);
+			anlegenEreignis("Sonntag", 30);
+			anlegenEreignis("Ostersonntag", 100);
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
-
-		anlegenEreignis("Montag", 10);
-		anlegenEreignis("Dienstag", 10);
-		anlegenEreignis("Mittwoch", 10);
-		anlegenEreignis("Donnerstag", 10);
-		anlegenEreignis("Freitag", 10);
-		anlegenEreignis("Samstag", 15);
-		anlegenEreignis("Sonntag", 30);
-		anlegenEreignis("Ostersonntag", 100);
-
 		System.out.println("READY.");
 		System.exit(0);
 	}
@@ -136,6 +139,7 @@ public final class KalenderInitialisierer implements StandardApplication {
 	 */
 	public void parseArguments(final ArgumentList argumentList)
 			throws Exception {
+		Thread.setDefaultUncaughtExceptionHandler(this);
 		if (argumentList.hasArgument("-reset")) {
 			argumentList.fetchArgument("-reset=");
 			reset = true;
@@ -224,8 +228,6 @@ public final class KalenderInitialisierer implements StandardApplication {
 		DataModel modell;
 		SystemObjectType typ;
 		Collection<SystemObject> objekte;
-		AttributeGroup atg;
-		Data daten;
 		ConfigurationAuthority aoe;
 		MutableSet menge;
 		ClientDavInterface verbindung;
@@ -251,10 +253,6 @@ public final class KalenderInitialisierer implements StandardApplication {
 			System.out.println("Entferne aus Menge " + so);
 			menge.remove(so);
 		}
-
-		atg = modell.getAttributeGroup("atg.ereignisTypEigenschaften");
-		daten = verbindung.createData(atg);
-		daten.getArray("ZusätzlicheAttribute").setLength(0);
 
 		typ = modell.getType("typ.ereignisTyp");
 		objekte = modell.getObjects(null, Collections.singleton(typ),
@@ -288,6 +286,15 @@ public final class KalenderInitialisierer implements StandardApplication {
 			System.out.println("Invalidiere " + dyn);
 			dyn.invalidate();
 		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void uncaughtException(Thread t, Throwable e) {
+		System.err.println("Der Thread " + t
+				+ " hat sich unerwartet beendet:\n"
+				+ LoggerTools.getStackTrace(e));
 	}
 
 }

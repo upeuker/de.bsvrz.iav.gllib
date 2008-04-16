@@ -24,11 +24,11 @@ source ../../../skripte-bash/einstellungen.sh
 ################################################################################
 
 # Applikation starten
-java $jvmArgs -cp ../de.bsvrz.iav.gllib-runtime.jar \
-	de.bsvrz.iav.gllib.gllib.KalenderInitialisierer \
+java $jvmArgs -cp ../de.bsvrz.iav.gllib-runtime.jar:../de.bsvrz.iav.gllib-test.jar \
+	de.bsvrz.iav.gllib.gllib.junit.KalenderInitialisierer \
 	$dav1 \
 	-debugLevelFileText=all \
-	-debugLevelStdErrText=off \
+	-debugLevelStdErrText=all \
 	-debugSetLoggerAndLevel=:warning \
 	-debugSetLoggerAndLevel=de.bsvrz.iav:config \
 	$optional \
