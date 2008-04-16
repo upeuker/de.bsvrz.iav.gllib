@@ -24,8 +24,9 @@
  * mailto: info@bitctrl.de
  */
 
-package de.bsvrz.iav.gllib.gllib;
+package de.bsvrz.iav.gllib.gllib.junit;
 
+import de.bsvrz.iav.gllib.gllib.Stuetzstelle;
 import de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ;
 import de.bsvrz.iav.gllib.gllib.dav.Messwerte;
 import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.objekte.MessQuerschnittAllgemein;
@@ -36,7 +37,8 @@ import de.bsvrz.sys.funclib.bitctrl.test.zufallsdaten.verkehr.VerkehrsDatenKurzZ
  * Erzeugt für bestimmte Ereignistypen je eine Ganglinie.
  * 
  * @author BitCtrl Systems GmbH, Falko Schumann
- * @version $Id$
+ * @version $Id: ZufallsganglinienFactory.java 8374 2008-04-16 18:24:43Z
+ *          Schumann $
  */
 public final class ZufallsganglinienFactory {
 
