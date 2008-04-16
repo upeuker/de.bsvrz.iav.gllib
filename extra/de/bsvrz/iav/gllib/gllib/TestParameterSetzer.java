@@ -53,6 +53,17 @@ import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
  */
 public final class TestParameterSetzer implements StandardApplication {
 
+	/** Die PIDs der Standardereignistypen Montag bis Sonntag und Ostermontag. */
+	private final String[] PID_EREIGNISTYPEN = new String[] {
+			EreignisTyp.PRAEFIX_PID + "montag",
+			EreignisTyp.PRAEFIX_PID + "dienstag",
+			EreignisTyp.PRAEFIX_PID + "mittwoch",
+			EreignisTyp.PRAEFIX_PID + "donnerstag",
+			EreignisTyp.PRAEFIX_PID + "freitag",
+			EreignisTyp.PRAEFIX_PID + "samstag",
+			EreignisTyp.PRAEFIX_PID + "sonntag",
+			EreignisTyp.PRAEFIX_PID + "ostermontag" };
+
 	/**
 	 * Startet die Applikation.
 	 * 
@@ -78,13 +89,13 @@ public final class TestParameterSetzer implements StandardApplication {
 	public void initialize(ClientDavInterface connection) {
 		ObjektFactory factory;
 		List<SystemObjekt> objekte;
-		GanglinienFactory ganglinien;
+		ZufallsganglinienFactory ganglinien;
 
 		factory = ObjektFactory.getInstanz();
 		factory.setVerbindung(connection);
 		factory.registerStandardFactories();
 
-		ganglinien = GanglinienFactory.getInstance();
+		ganglinien = ZufallsganglinienFactory.getInstance();
 
 		objekte = factory
 				.bestimmeModellobjekte(VerkehrsModellTypen.MESSQUERSCHNITTALLGEMEIN
@@ -99,12 +110,11 @@ public final class TestParameterSetzer implements StandardApplication {
 			try {
 				param.anmeldenSender();
 				datum = param.erzeugeDatum();
-				for (GanglinienFactory.Typ typ : GanglinienFactory.Typ.values()) {
+				for (String typ : PID_EREIGNISTYPEN) {
 					GanglinieMQ g;
 					EreignisTyp ereignisTyp;
 
-					ereignisTyp = (EreignisTyp) factory.bestimmeModellobjekte(
-							typ.getPid()).get(0);
+					ereignisTyp = (EreignisTyp) factory.getModellobjekt(typ);
 					g = ganglinien.erzeugeGanglinie(mq, 60 * 60 * 1000);
 					g.setEreignisTyp(ereignisTyp);
 					datum.add(g);

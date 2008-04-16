@@ -38,69 +38,19 @@ import de.bsvrz.sys.funclib.bitctrl.test.zufallsdaten.verkehr.VerkehrsDatenKurzZ
  * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
  */
-public final class GanglinienFactory {
-
-	/**
-	 * Die Ereignistypen, für die Ganglinien erzeugt werden können.
-	 */
-	public enum Typ {
-
-		/** Der Wochentag Montag. */
-		Montag("ereignisTyp.montag"),
-
-		/** Der Wochentag Dienstag. */
-		Dienstag("ereignisTyp.dienstag"),
-
-		/** Der Wochentag Mittwoch. */
-		Mittwoch("ereignisTyp.mittwoch"),
-
-		/** Der Wochentag Donnerstag. */
-		Donnerstag("ereignisTyp.donnerstag"),
-
-		/** Der Wochentag Freitag. */
-		Freitag("ereignisTyp.freitag"),
-
-		/** Der Wochentag Samstag. */
-		Samstag("ereignisTyp.samstag"),
-
-		/** Der Wochentag Sonntag. */
-		Sonntag("ereignisTyp.sonntag");
-
-		/** Die Eigenschaft {@code pid}. */
-		private String pid;
-
-		/**
-		 * Initialisiert das Objekt.
-		 * 
-		 * @param pid
-		 *            die PID des Ereignistyps.
-		 */
-		private Typ(final String pid) {
-			this.pid = pid;
-		}
-
-		/**
-		 * Gibt die PID des Ereignistyps zurück.
-		 * 
-		 * @return die PID.
-		 */
-		public String getPid() {
-			return pid;
-		}
-
-	}
+public final class ZufallsganglinienFactory {
 
 	/** Die Eigenschaft {@code singleton}. */
-	private static GanglinienFactory singleton;
+	private static ZufallsganglinienFactory singleton;
 
 	/**
 	 * Gibt das Singleton der Factory zurück.
 	 * 
 	 * @return die Ganglinienfactory.
 	 */
-	public static GanglinienFactory getInstance() {
+	public static ZufallsganglinienFactory getInstance() {
 		if (singleton == null) {
-			singleton = new GanglinienFactory();
+			singleton = new ZufallsganglinienFactory();
 		}
 		return singleton;
 	}
@@ -108,7 +58,7 @@ public final class GanglinienFactory {
 	/**
 	 * Konstruktor verstecken.
 	 */
-	private GanglinienFactory() {
+	private ZufallsganglinienFactory() {
 		// nix
 	}
 
@@ -159,67 +109,6 @@ public final class GanglinienFactory {
 
 			t += abstand;
 		}
-
-		return g;
-	}
-
-	/**
-	 * Erzeugt eine neue Ganglinie für den angegebenen Ereignistyp.
-	 * 
-	 * @todo Die verschiedenen Ganglinien generieren.
-	 * @param typ
-	 *            ein Ereignistyp.
-	 * @param mq
-	 *            der Messquerschnitt, für den die Ganglinie sein soll.
-	 * @return die Ganglinie.
-	 * @todo Implementieren.
-	 * @deprecated Muss noch implementiert werden!!
-	 */
-	@Deprecated
-	public GanglinieMQ erzeugeGanglinie(final Typ typ,
-			final MessQuerschnittAllgemein mq) {
-		GanglinieMQ g;
-		switch (typ) {
-		case Montag:
-			g = erzeugeMontag();
-			break;
-		case Dienstag:
-			g = erzeugeMontag();
-			break;
-		case Mittwoch:
-			g = erzeugeMontag();
-			break;
-		case Donnerstag:
-			g = erzeugeMontag();
-			break;
-		case Freitag:
-			g = erzeugeMontag();
-			break;
-		case Samstag:
-			g = erzeugeMontag();
-			break;
-		case Sonntag:
-			g = erzeugeMontag();
-			break;
-		default:
-			throw new IllegalStateException("Die Factory kann für den Typ '"
-					+ typ + "' keine Ganglinie erzeugen.");
-		}
-
-		g.setMessQuerschnitt(mq);
-		return g;
-	}
-
-	/**
-	 * Erzeugt eine Ganglinie für den Ereignistyp Montag.
-	 * 
-	 * @todo Implementieren
-	 * @return die Ganglinie;
-	 */
-	private GanglinieMQ erzeugeMontag() {
-		GanglinieMQ g;
-
-		g = new GanglinieMQ();
 
 		return g;
 	}
