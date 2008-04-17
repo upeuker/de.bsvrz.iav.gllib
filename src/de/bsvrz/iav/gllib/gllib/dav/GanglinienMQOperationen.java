@@ -419,11 +419,14 @@ public final class GanglinienMQOperationen {
 	 * @param intervall
 	 *            das Intervall, in dem die Ganglinien innerhalb des Offsets
 	 *            verschoben werden.
-	 * @return der Index der Ganglinie mit dem kleinsten Abstand.
+	 * @param maxFehler
+	 *            der maximal erlaubte Fehler.
+	 * @return der Index der Ganglinie mit dem kleinsten Abstand oder {@code -1},
+	 *         wenn der kleinste Abstand größer als {@code maxFehler} ist.
 	 */
 	public static int patternMatching(final GanglinieMQ referenz,
 			final List<GanglinieMQ> liste, long offsetVor,
-			final long offsetNach, final long intervall) {
+			final long offsetNach, final long intervall, final int maxFehler) {
 		HashMap<Integer, Double> fehler;
 		int index;
 		long start, ende; // Start und Ende des Pattern-Matching-Intervalls
@@ -461,6 +464,9 @@ public final class GanglinienMQOperationen {
 					index = e.getKey();
 				}
 			}
+		}
+		if (fehler.get(index) > maxFehler) {
+			return -1;
 		}
 		return index;
 	}

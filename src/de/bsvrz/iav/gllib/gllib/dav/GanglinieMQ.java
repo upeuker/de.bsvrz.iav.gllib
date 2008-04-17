@@ -502,6 +502,9 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 * Gibt den Ganglinientyp zurück.
 	 * 
 	 * @return der Typ der Ganglinie.
+	 * @see #TYP_ABSOLUT
+	 * @see #TYP_ADDITIV
+	 * @see #TYP_MULTIPLIKATIV
 	 */
 	public int getTyp() {
 		return typ;
