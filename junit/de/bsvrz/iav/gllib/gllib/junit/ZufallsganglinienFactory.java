@@ -37,8 +37,7 @@ import de.bsvrz.sys.funclib.bitctrl.test.zufallsdaten.verkehr.VerkehrsDatenKurzZ
  * Erzeugt für bestimmte Ereignistypen je eine Ganglinie.
  * 
  * @author BitCtrl Systems GmbH, Falko Schumann
- * @version $Id: ZufallsganglinienFactory.java 8374 2008-04-16 18:24:43Z
- *          Schumann $
+ * @version $Id$
  */
 public final class ZufallsganglinienFactory {
 

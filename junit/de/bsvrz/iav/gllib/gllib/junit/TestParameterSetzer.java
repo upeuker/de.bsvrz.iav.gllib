@@ -54,7 +54,7 @@ import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
 public final class TestParameterSetzer implements StandardApplication {
 
 	/** Die PIDs der Standardereignistypen Montag bis Sonntag und Ostermontag. */
-	private final String[] PID_EREIGNISTYPEN = new String[] {
+	private final String[] pidEreignistypen = new String[] {
 			EreignisTyp.PRAEFIX_PID + "montag",
 			EreignisTyp.PRAEFIX_PID + "dienstag",
 			EreignisTyp.PRAEFIX_PID + "mittwoch",
@@ -70,7 +70,7 @@ public final class TestParameterSetzer implements StandardApplication {
 	 * @param args
 	 *            die Startparameter.
 	 */
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		StandardApplicationRunner.run(new TestParameterSetzer(), args);
 	}
 
@@ -86,7 +86,7 @@ public final class TestParameterSetzer implements StandardApplication {
 	 * 
 	 * @see de.bsvrz.sys.funclib.application.StandardApplication#initialize(de.bsvrz.dav.daf.main.ClientDavInterface)
 	 */
-	public void initialize(ClientDavInterface connection) {
+	public void initialize(final ClientDavInterface connection) {
 		ObjektFactory factory;
 		List<SystemObjekt> objekte;
 		ZufallsganglinienFactory ganglinien;
@@ -100,7 +100,7 @@ public final class TestParameterSetzer implements StandardApplication {
 		objekte = factory
 				.bestimmeModellobjekte(VerkehrsModellTypen.MESSQUERSCHNITTALLGEMEIN
 						.getPid());
-		for (SystemObjekt so : objekte) {
+		for (final SystemObjekt so : objekte) {
 			MessQuerschnittAllgemein mq;
 			PdGanglinie param;
 			PdGanglinie.Daten datum;
@@ -110,7 +110,7 @@ public final class TestParameterSetzer implements StandardApplication {
 			try {
 				param.anmeldenSender();
 				datum = param.erzeugeDatum();
-				for (String typ : PID_EREIGNISTYPEN) {
+				for (final String typ : pidEreignistypen) {
 					GanglinieMQ g;
 					EreignisTyp ereignisTyp;
 
@@ -121,11 +121,11 @@ public final class TestParameterSetzer implements StandardApplication {
 				}
 				param.sendeDaten(datum, 60 * 1000);
 				System.out.println("Ganglinien für " + mq + " gesendet.");
-			} catch (AnmeldeException ex) {
+			} catch (final AnmeldeException ex) {
 				System.err
 						.println("Kann mich nicht zum Senden der Ganglinien für "
 								+ mq + " anmelden.");
-			} catch (DatensendeException ex) {
+			} catch (final DatensendeException ex) {
 				System.err.println("Kann Ganglinien für " + mq
 						+ " nicht senden.");
 			}
@@ -142,7 +142,8 @@ public final class TestParameterSetzer implements StandardApplication {
 	 * 
 	 * @see de.bsvrz.sys.funclib.application.StandardApplication#parseArguments(de.bsvrz.sys.funclib.commandLineArgs.ArgumentList)
 	 */
-	public void parseArguments(ArgumentList argumentList) throws Exception {
+	public void parseArguments(final ArgumentList argumentList)
+			throws Exception {
 		// TODO Auto-generated method stub
 
 	}
