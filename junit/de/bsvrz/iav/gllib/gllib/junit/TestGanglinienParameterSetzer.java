@@ -51,7 +51,7 @@ import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
  * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
  */
-public final class TestParameterSetzer implements StandardApplication {
+public final class TestGanglinienParameterSetzer implements StandardApplication {
 
 	/** Die PIDs der Standardereignistypen Montag bis Sonntag und Ostermontag. */
 	private final String[] pidEreignistypen = new String[] {
@@ -62,7 +62,7 @@ public final class TestParameterSetzer implements StandardApplication {
 			EreignisTyp.PRAEFIX_PID + "freitag",
 			EreignisTyp.PRAEFIX_PID + "samstag",
 			EreignisTyp.PRAEFIX_PID + "sonntag",
-			EreignisTyp.PRAEFIX_PID + "ostermontag" };
+			EreignisTyp.PRAEFIX_PID + "ostersonntag" };
 
 	/**
 	 * Startet die Applikation.
@@ -71,13 +71,14 @@ public final class TestParameterSetzer implements StandardApplication {
 	 *            die Startparameter.
 	 */
 	public static void main(final String[] args) {
-		StandardApplicationRunner.run(new TestParameterSetzer(), args);
+		StandardApplicationRunner
+				.run(new TestGanglinienParameterSetzer(), args);
 	}
 
 	/**
 	 * Initialisiert die Applikation.
 	 */
-	private TestParameterSetzer() {
+	private TestGanglinienParameterSetzer() {
 		JarTools.printVersionInfo(getClass());
 	}
 

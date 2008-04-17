@@ -109,7 +109,7 @@ public final class GanglinienMQOperationen {
 		if (g.size() == 0) {
 			txt += "\nKeine Stützstellen vorhanden.";
 		} else {
-			txt += "\nZeitpunkt\t\tQKfz\tQLkw\tVPkw\tVLkw\n";
+			txt += "\nZeitpunkt\tQKfz\tQLkw\tVPkw\tVLkw\n";
 			for (final Stuetzstelle<Messwerte> s : g.getStuetzstellen()) {
 				txt += Timestamp.absoluteTime(s.getZeitstempel()) + "\t";
 				txt += s.getWert().getQKfz() + "\t";
