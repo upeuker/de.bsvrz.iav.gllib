@@ -46,7 +46,7 @@ import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
 
 /**
  * Setzt für alle Messquerschnitte den Parameter mit der Ganglinienliste. Es
- * wird je eine Ganglinie für jeden Wochentag angelegt.
+ * wird je eine Ganglinie für jeden Wochentag und Ostermontag angelegt.
  * 
  * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
@@ -83,8 +83,6 @@ public final class TestParameterSetzer implements StandardApplication {
 
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @see de.bsvrz.sys.funclib.application.StandardApplication#initialize(de.bsvrz.dav.daf.main.ClientDavInterface)
 	 */
 	public void initialize(final ClientDavInterface connection) {
 		ObjektFactory factory;
@@ -138,14 +136,13 @@ public final class TestParameterSetzer implements StandardApplication {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Es werden keine zusätzlichen Kommandozeilenargumente verwendet.
 	 * 
-	 * @see de.bsvrz.sys.funclib.application.StandardApplication#parseArguments(de.bsvrz.sys.funclib.commandLineArgs.ArgumentList)
+	 * {@inheritDoc}
 	 */
 	public void parseArguments(final ArgumentList argumentList)
 			throws Exception {
-		// TODO Auto-generated method stub
-
+		// nix
 	}
 
 }

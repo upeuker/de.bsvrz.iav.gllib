@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/de.bsvrz.iav.gllib/junit/de/bsvrz/iav/gllib/gllib/junit/KalenderInitialisierer.java"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="1"/>
+</listAttribute>
+<booleanAttribute key="org.eclipse.debug.core.appendEnvironmentVariables" value="true"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="de.bsvrz.iav.gllib.gllib.junit.KalenderInitialisierer"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-datenverteiler=Lodur.local:8083&#13;-benutzer=Tester&#13;-authentifizierung=${workspace_loc}/VRZ3BaWue/skripte-bash/passwd&#13;-debugLevelFileText=all&#10;-debugLevelStdErrText=all&#10;-debugSetLoggerAndLevel=:warning&#10;-debugSetLoggerAndLevel=de.bsvrz.iav:config&#13;-reset"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="de.bsvrz.iav.gllib"/>
+</launchConfiguration>
