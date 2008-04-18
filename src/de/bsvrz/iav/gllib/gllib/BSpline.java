@@ -58,19 +58,20 @@ public class BSpline extends AbstractApproximation<Double> {
 	 * @param ordnung
 	 *            die Ordnung des Bspline.
 	 */
-	public BSpline(int ordnung) {
+	public BSpline(final int ordnung) {
 		this.ordnung = ordnung;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public Stuetzstelle<Double> get(long zeitstempel) {
+	public Stuetzstelle<Double> get(final long zeitstempel) {
 		double t0, f;
 		Stuetzstelle<Double> s;
 
-		if ((zeitstempel < getStuetzstellen().get(0).getZeitstempel() || zeitstempel > getStuetzstellen()
-				.get(getStuetzstellen().size() - 1).getZeitstempel())) {
+		if (getStuetzstellen().size() == 0
+				|| (zeitstempel < getStuetzstellen().get(0).getZeitstempel() || zeitstempel > getStuetzstellen()
+						.get(getStuetzstellen().size() - 1).getZeitstempel())) {
 			// Zeitstempel liegt außerhalb der Ganglinie
 			return new Stuetzstelle<Double>(zeitstempel, null);
 		}
@@ -163,7 +164,7 @@ public class BSpline extends AbstractApproximation<Double> {
 	 * @see de.bsvrz.iav.gllib.gllib.Approximation#integral(com.bitctrl.util.Interval)
 	 * @see #INTEGRATIONSINTERVALL
 	 */
-	public double integral(Interval intervall) {
+	public double integral(final Interval intervall) {
 		Polyline polyline;
 
 		polyline = new Polyline();
@@ -178,7 +179,7 @@ public class BSpline extends AbstractApproximation<Double> {
 	 * @param ordnung
 	 *            Ordnung
 	 */
-	public void setOrdnung(byte ordnung) {
+	public void setOrdnung(final byte ordnung) {
 		if (ordnung < 1 || ordnung > getStuetzstellen().size()) {
 			throw new IllegalArgumentException(
 					"Die Ordnung muss zwischen 1 und der Anzahl der definierten Stützstellen liegen.");
@@ -202,7 +203,7 @@ public class BSpline extends AbstractApproximation<Double> {
 	 *            Eine Stelle im Intervall des Parameters t
 	 * @return Die berechnete Stützstelle
 	 */
-	private Stuetzstelle<Double> bspline(double t0) {
+	private Stuetzstelle<Double> bspline(final double t0) {
 		double bx, by;
 		int i;
 
@@ -240,7 +241,7 @@ public class BSpline extends AbstractApproximation<Double> {
 	 *            Wert im Intervall des Parameters t
 	 * @return Das Gewicht der i-ten Stützstelle
 	 */
-	private double n(int i, int m, double t0) {
+	private double n(final int i, final int m, final double t0) {
 		double n; // Gewicht
 		double a, b; // Erster und zweiter Summand
 		int an, bn; // Nenner des ersten und zweiten Summanden
@@ -285,7 +286,7 @@ public class BSpline extends AbstractApproximation<Double> {
 	 *            Ein Zeitstempel
 	 * @return Die dazugehörige Intervallposition
 	 */
-	private double zeitstempelNachT(long zeitstempel) {
+	private double zeitstempelNachT(final long zeitstempel) {
 		double t0;
 
 		t0 = zeitstempel;

@@ -63,23 +63,17 @@ public class PdGanglinienModellPrognose extends
 		/** Die Auswahlmethode, wenn Pattern-Matching nicht geht. */
 		private int auswahlMethode;
 
-		/**
-		 * Intervall in die Vergangenheit, welches beim Pattern-Matching
-		 * berücksichtigt wird.
-		 */
+		/** Der Offset um den beim Pattern-Matching verschoben wird. */
+		private long patternMatchingOffset;
+
+		/** Die Schrittweite in der beim Pattern-Matching verschoben wird. */
 		private long matchingIntervall;
 
-		/** Maximaler Fehler beim Pattern-Matching. */
+		/** Der maximaler Fehler beim Pattern-Matching. */
 		private int maxMatchingFehler;
 
-		/** Der Zeitraum der mittelfristigen Prognose. */
+		/** Der Horizont der mittelfristigen Prognose (Pattern-Matching). */
 		private long patternMatchingHorizont;
-
-		/**
-		 * Offset um das beim Pattern-Matching nach vorn und hinten verschoben
-		 * wird.
-		 */
-		private long patternMatchingOffset;
 
 		/**
 		 * Initialisiert das Datum mit Standardwerten.
@@ -114,25 +108,25 @@ public class PdGanglinienModellPrognose extends
 		}
 
 		/**
-		 * Gibt den Wert der Eigenschaft {@code auswahlMethode} wieder.
+		 * Gibt die Auswahlmethode zurück, die verwendet wird, wenn
+		 * Pattern-Matching nicht geht.
 		 * 
-		 * @return {@code auswahlMethode}.
+		 * @return die Auswahlmethode für die Rückfallebene.
 		 */
 		public int getAuswahlMethode() {
 			return auswahlMethode;
 		}
 
 		/**
-		 * {@inheritDoc}.<br>
-		 * 
-		 * @see de.bsvrz.sys.funclib.bitctrl.modell.Datum#getDatenStatus()
+		 * {@inheritDoc}
 		 */
 		public Status getDatenStatus() {
 			return datenStatus;
 		}
 
 		/**
-		 * Gibt den Wert der Eigenschaft {@code matchingIntervall} wieder.
+		 * Gibt das Intervall in die Vergangenheit, welches beim
+		 * Pattern-Matching berücksichtigt wird.
 		 * 
 		 * @return {@code matchingIntervall}.
 		 */
@@ -168,11 +162,13 @@ public class PdGanglinienModellPrognose extends
 		}
 
 		/**
-		 * Legt den Wert der Eigenschaft {@code auswahlMethode} fest.
+		 * Legt die Auswahlmethode fest, die verwendet wird, wenn
+		 * Pattern-Matching nicht geht.
 		 * 
 		 * @param auswahlMethode
-		 *            der neue Wert von {@code auswahlMethode}.
+		 *            die Auswahlmethode für die Rückfallebene.
 		 */
+
 		public void setAuswahlMethode(final int auswahlMethode) {
 			this.auswahlMethode = auswahlMethode;
 		}

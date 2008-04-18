@@ -30,6 +30,7 @@ import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Collection;
 import java.util.Collections;
 
+import com.bitctrl.Constants;
 import com.bitctrl.util.jar.JarTools;
 import com.bitctrl.util.logging.LoggerTools;
 
@@ -42,6 +43,8 @@ import de.bsvrz.dav.daf.main.config.MutableSet;
 import de.bsvrz.dav.daf.main.config.ObjectTimeSpecification;
 import de.bsvrz.dav.daf.main.config.SystemObject;
 import de.bsvrz.dav.daf.main.config.SystemObjectType;
+import de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ;
+import de.bsvrz.iav.gllib.gllib.modell.parameter.PdGanglinienModellAutomatischesLernenEreignis;
 import de.bsvrz.sys.funclib.application.StandardApplication;
 import de.bsvrz.sys.funclib.application.StandardApplicationRunner;
 import de.bsvrz.sys.funclib.bitctrl.modell.AnmeldeException;
@@ -125,7 +128,7 @@ public final class KalenderInitialisierer implements StandardApplication,
 			anlegenEreignis("Samstag", 15);
 			anlegenEreignis("Sonntag", 30);
 			anlegenEreignis("Ostersonntag", 100);
-		} catch (Exception ex) {
+		} catch (final Exception ex) {
 			ex.printStackTrace();
 		}
 		System.out.println("READY.");
@@ -176,6 +179,8 @@ public final class KalenderInitialisierer implements StandardApplication,
 		PdEreignisTypParameter.Daten typDatum;
 		PdEreignisParameter ergParam;
 		PdEreignisParameter.Daten ergDatum;
+		PdGanglinienModellAutomatischesLernenEreignis lernParam;
+		PdGanglinienModellAutomatischesLernenEreignis.Daten lernDatum;
 		VerkehrlicheGueltigkeit vg;
 
 		ske = SystemKalenderEintrag.anlegen(
@@ -198,6 +203,21 @@ public final class KalenderInitialisierer implements StandardApplication,
 		typDatum = typParam.erzeugeDatum();
 		typDatum.setPrioritaet(prioritaet);
 		typParam.sendeDaten(typDatum);
+		lernParam = typ
+				.getParameterDatensatz(PdGanglinienModellAutomatischesLernenEreignis.class);
+		lernParam.anmeldenSender();
+		lernDatum = lernParam.erzeugeDatum();
+		lernDatum.setDarstellungsverfahren(GanglinieMQ.APPROX_POLYLINE);
+		lernDatum.setGanglinienTyp(GanglinieMQ.TYP_ABSOLUT);
+		lernDatum.setMatchingIntervallNach(15 * Constants.MILLIS_PER_MINUTE);
+		lernDatum.setMatchingIntervallVor(15 * Constants.MILLIS_PER_MINUTE);
+		lernDatum.setMatchingSchrittweite(Constants.MILLIS_PER_MINUTE);
+		lernDatum.setMaxAbstand(75);
+		lernDatum.setMaxGanglinien(10);
+		lernDatum.setMaxMatchingFehler(75);
+		lernDatum.setMaxWichtungsfaktor(3);
+		lernDatum.setVergleichsSchrittweite(15 * Constants.MILLIS_PER_MINUTE);
+		lernParam.sendeDaten(lernDatum);
 		System.out.println("Ereignistyp " + ereignisName + " angelegt.");
 
 		erg = Ereignis.anlegen("ereignis." + ereignisName.toLowerCase(),
@@ -291,7 +311,7 @@ public final class KalenderInitialisierer implements StandardApplication,
 	/**
 	 * {@inheritDoc}
 	 */
-	public void uncaughtException(Thread t, Throwable e) {
+	public void uncaughtException(final Thread t, final Throwable e) {
 		System.err.println("Der Thread " + t
 				+ " hat sich unerwartet beendet:\n"
 				+ LoggerTools.getStackTrace(e));
