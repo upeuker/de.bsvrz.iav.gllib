@@ -613,20 +613,25 @@ public final class GanglinienOperationen {
 	 * möglich, wenn sich die Stützstellenmengen nicht überschneiden. Berühren
 	 * sich die beiden Ganglinien wird im Berührungspunkt er Mittelwert der
 	 * beiden Stützstellen gebildet.
+	 * <p>
+	 * Wird der maximale Abstand der beiden Ganglinien überschritten, ist der
+	 * Bereich zwischen den Ganglinien undefiniert.
 	 * 
 	 * @param g1
 	 *            Erste Ganglinie
 	 * @param g2
 	 *            Zweite Ganglinie
+	 * @param maxAbstand
+	 *            der maximale Abstand der beiden Ganglinien.
 	 * @return Konkatenation der beiden Ganglinien
 	 */
 	public static Ganglinie<Double> verbinde(final Ganglinie<Double> g1,
-			final Ganglinie<Double> g2) {
+			final Ganglinie<Double> g2, final long maxAbstand) {
 		if (g1.getIntervall().intersect(g2.getIntervall())) {
 			throw new IllegalArgumentException();
 		}
 
-		Ganglinie<Double> g;
+		final Ganglinie<Double> g;
 
 		g = new Ganglinie<Double>();
 		g.putAll(g1);
@@ -643,6 +648,26 @@ public final class GanglinienOperationen {
 				}
 			} else {
 				g.put(t, g2.get(t));
+			}
+		}
+
+		if (g1.lastKey() < g2.firstKey()) {
+			// g1 liegt vor g2
+
+			final long abstand;
+
+			abstand = g2.firstKey() - g1.lastKey();
+			if (abstand > maxAbstand) {
+				g.put(g1.lastKey() + abstand / 2, null);
+			}
+		} else {
+			// g2 liegt vor g1
+
+			final long abstand;
+
+			abstand = g1.firstKey() - g2.lastKey();
+			if (abstand > maxAbstand) {
+				g.put(g2.lastKey() + abstand / 2, null);
 			}
 		}
 

@@ -513,25 +513,30 @@ public final class GanglinienMQOperationen {
 	 * sich die beiden Ganglinien wird im Berührungspunkt er Mittelwert der
 	 * beiden Stützstellen gebildet. Die Metainformationen der ersten Ganglinien
 	 * werden in die Ergebnisganglinie kopiert.
+	 * <p>
+	 * Wird der maximale Abstand der beiden Ganglinien überschritten, ist der
+	 * Bereich zwischen den Ganglinien undefiniert.
 	 * 
 	 * @param g1
 	 *            Erste Ganglinie
 	 * @param g2
 	 *            Zweite Ganglinie
+	 * @param maxAbstand
+	 *            der maximale Abstand der beiden Ganglinien.
 	 * @return Konkatenation der beiden Ganglinien
 	 */
 	public static GanglinieMQ verbinde(final GanglinieMQ g1,
-			final GanglinieMQ g2) {
+			final GanglinieMQ g2, final long maxAbstand) {
 		final Ganglinie<Double> gQKfz, gQLkw, gVPkw, gVLkw;
 
 		gQKfz = GanglinienOperationen.verbinde(g1.getGanglinieQKfz(), g2
-				.getGanglinieQKfz());
+				.getGanglinieQKfz(), maxAbstand);
 		gQLkw = GanglinienOperationen.verbinde(g1.getGanglinieQLkw(), g2
-				.getGanglinieQLkw());
+				.getGanglinieQLkw(), maxAbstand);
 		gVPkw = GanglinienOperationen.verbinde(g1.getGanglinieVPkw(), g2
-				.getGanglinieVPkw());
+				.getGanglinieVPkw(), maxAbstand);
 		gVLkw = GanglinienOperationen.verbinde(g1.getGanglinieVLkw(), g2
-				.getGanglinieVLkw());
+				.getGanglinieVLkw(), maxAbstand);
 
 		return kopiereMetaDaten(zusammenfuehren(gQKfz, gQLkw, gVPkw, gVLkw), g1);
 	}
