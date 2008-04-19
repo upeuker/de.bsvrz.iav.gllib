@@ -27,6 +27,7 @@
 package de.bsvrz.iav.gllib.gllib.junit;
 
 import static com.bitctrl.Constants.MILLIS_PER_HOUR;
+import static org.junit.Assert.assertFalse;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -216,12 +217,9 @@ public class GanglinienFactory {
 		param.anmeldenSender();
 		datum = param.abrufenDatum();
 
-		if (datum.isValid() && datum.size() > 0) {
-			log.severe("Am Testmessquerschnitt " + mq
-					+ " sind bereits Ganglinien vorhanden.");
-			System.exit(-1);
-		}
-
+		assertFalse("Am Testmessquerschnitt " + mq
+				+ " sind bereits Ganglinien vorhanden.", datum.isValid()
+				&& datum.size() > 0);
 		datum = getGanglinienTestdaten(tag);
 		param.sendeDaten(datum);
 
