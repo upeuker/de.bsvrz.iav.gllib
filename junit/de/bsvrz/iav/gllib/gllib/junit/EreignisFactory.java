@@ -219,7 +219,7 @@ public class EreignisFactory {
 			tag = rs.getInt(Ereignisse.TAG.name());
 			pid = DavTools.generierePID(rs.getString(Ereignistypen.EREIGNISTYP
 					.name())
-					+ "Tag_" + tag, Ereignis.PRAEFIX_PID);
+					+ "Tag" + tag, Ereignis.PRAEFIX_PID);
 			calendar = Calendar.getInstance();
 			calendar.add(Calendar.DAY_OF_YEAR, tag);
 			calendar.set(Calendar.HOUR_OF_DAY, rs.getInt(Ereignisse.STARTZEIT
@@ -386,7 +386,7 @@ public class EreignisFactory {
 			tag = rs.getInt(Ereignisse.TAG.name());
 			pid = DavTools.generierePID(rs.getString(Ereignisse.EREIGNISTYP
 					.name())
-					+ "Tag_" + tag, Ereignis.PRAEFIX_PID);
+					+ "Tag" + tag, Ereignis.PRAEFIX_PID);
 			ereignis = (Ereignis) factory.getModellobjekt(pid);
 			if (ereignis != null) {
 				kalender.loeschen(ereignis);
