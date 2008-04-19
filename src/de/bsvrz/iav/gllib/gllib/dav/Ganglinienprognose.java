@@ -157,11 +157,20 @@ public final class Ganglinienprognose implements DatensatzUpdateListener {
 	}
 
 	/**
-	 * Fragt, ob die Ganglinienprognose Anfragen entgegennimmt.
+	 * Fragt, ob die Ganglinienprognose Anfragen entgegennimmt. Wenn die
+	 * Sendesteuerung noch nicht geantwortet hat, wartet die Methode maximal 30
+	 * Sekunden. Hat die Sendesteuerung schon geantwortet, entsteht keine
+	 * Verzögerung.
 	 * 
 	 * @return {@code true}, wenn der Kalender verwendet werden kann.
 	 */
 	public boolean isBereit() {
+		for (int i = 0; i < 300; i++) {
+			if (odAnfrage.getStatusSendesteuerung(aspAnfrage) != null) {
+				break;
+			}
+			ObjektFactory.getInstanz().getVerbindung().sleep(100);
+		}
 		return odAnfrage.getStatusSendesteuerung(aspAnfrage) == Status.START;
 	}
 

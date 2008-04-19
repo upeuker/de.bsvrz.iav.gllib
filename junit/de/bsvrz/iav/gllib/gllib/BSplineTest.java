@@ -145,36 +145,4 @@ public class BSplineTest {
 		}
 	}
 
-	// TODO Kommentar entfernen
-	// /**
-	// * Prüft ob bei Anfrage einer Stützstelle auch der richtige
-	// * Zeitstempel kommt. Beim B-Spline ist dies nicht trivial. Dieser Test
-	// * arbeitet mit einer zufälligen Ganglinie.
-	// */
-	// @Test
-	// public void testGetB() {
-	// Ganglinie g;
-	// BSpline spline;
-	//
-	// g = new Ganglinie();
-	// for (int i = 0; i < 100; i++) {
-	// long x = (long) (Math.random() * 1000);
-	// double y = (int) (Math.random() * 1000);
-	// g.setStuetzstelle(x, y);
-	// }
-	//
-	// spline = new BSpline();
-	// spline.setStuetzstellen(g.getStuetzstellen());
-	// spline.initialisiere();
-	//
-	// // Rechnen
-	// for (byte k = 1; k < 10; k++) {
-	// spline.setOrdnung(k);
-	// for (long t = g.getIntervall().start; t <= g.getIntervall().ende; t += 1)
-	// {
-	// assertEquals(t, spline.get(t).getZeitstempel());
-	// }
-	// }
-	// }
-
 }
