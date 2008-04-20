@@ -26,9 +26,9 @@
 
 package de.bsvrz.iav.gllib.gllib.dav;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import com.bitctrl.util.Interval;
 import com.bitctrl.util.Timestamp;
@@ -405,6 +405,15 @@ public final class GanglinienMQOperationen {
 	 * Führt das Pattern-Matching einer Menge von Ganglinien mit einer
 	 * Referenzganglinie aus. Ergebnis ist die Ganglinie aus der Menge mit dem
 	 * geringsten Abstand zur Referenzganglinie.
+	 * <p>
+	 * Bei der Abstandsberechnung wird die Referenzganglinie im Offset in den
+	 * durch {@code intervall} vorgegebenen Schrittweite durchgeschoben. Der
+	 * Gesamtabstand der Referenzganglinie zur aktuellen Testganglinie ergibt
+	 * sich aus dem Durchschnitt der Abstände beim verschieben.
+	 * <p>
+	 * Ergebnis ist der Index der Ganglinie mit dem geringsten Abstand. Wird der
+	 * maximal Abstand bei allen Ganglinien überschritten, gibt es kein
+	 * Ergebnis.
 	 * 
 	 * @param referenz
 	 *            die Referenzganglinie.
@@ -422,53 +431,118 @@ public final class GanglinienMQOperationen {
 	 * @param maxFehler
 	 *            der maximal erlaubte Fehler.
 	 * @return der Index der Ganglinie mit dem kleinsten Abstand oder {@code -1},
-	 *         wenn der kleinste Abstand größer als {@code maxFehler} ist.
+	 *         wenn es keine passende Ganglinie gibt.
 	 */
-	public static int patternMatching(final GanglinieMQ referenz,
+	public static int patternMatchingIndex(final GanglinieMQ referenz,
 			final List<GanglinieMQ> liste, long offsetVor,
 			final long offsetNach, final long intervall, final int maxFehler) {
-		HashMap<Integer, Double> fehler;
-		int index;
-		long start, ende; // Start und Ende des Pattern-Matching-Intervalls
+		final SortedMap<Double, Integer> fehler; // Mapping: Abstand -> Index
+		final long start, ende;
 
-		fehler = new HashMap<Integer, Double>();
+		fehler = new TreeMap<Double, Integer>();
+
+		// Start und Ende des Pattern-Matching-Intervalls
 		start = referenz.getIntervall().getStart() - offsetVor;
-		ende = referenz.getIntervall().getEnd() + offsetNach;
+		ende = referenz.getIntervall().getStart() + offsetNach;
 
 		// Abstände der Ganglinien bestimmen
 		for (int i = 0; i < liste.size(); i++) {
-			GanglinieMQ g, ref;
+			final GanglinieMQ g, ref;
 			double abstand;
 			int tests;
 
 			ref = referenz.clone();
-			GanglinienMQOperationen.verschiebe(ref, -offsetVor);
+			verschiebe(ref, -offsetVor);
 			g = liste.get(i);
 			abstand = 0;
 			tests = 0;
 			for (long j = start; j <= ende; j += intervall) {
-				GanglinienMQOperationen.verschiebe(ref, intervall);
+				verschiebe(ref, intervall);
 				abstand += basisabstand(ref, g);
 				tests++;
 			}
-			fehler.put(i, abstand / tests);
+
+			abstand = abstand / tests;
+			if (abstand <= maxFehler) {
+				fehler.put(abstand, i);
+			}
 		}
 
-		// Ganglinie mit dem kleinsten Abstand bestimmen
-		index = -1;
-		for (final Entry<Integer, Double> e : fehler.entrySet()) {
-			if (index == -1) {
-				index = e.getKey();
-			} else {
-				if (e.getValue() < fehler.get(index)) {
-					index = e.getKey();
+		// Die erste Ganglinie ist die mit dem geringsten Abstand
+		if (fehler.size() > 0) {
+			return fehler.get(fehler.firstKey());
+		}
+		return -1;
+	}
+
+	/**
+	 * Führt das Pattern-Matching einer Menge von Ganglinien mit einer
+	 * Referenzganglinie aus. Ergebnis ist die Ganglinie aus der Menge mit dem
+	 * geringsten Abstand zur Referenzganglinie.
+	 * <p>
+	 * Zusätzlich zu der Liste von Vergleichsganglinien wird jede dieser
+	 * Ganglinien im angegebenen Offset in {@code intervall} Schritten
+	 * verschoben. Jede dieser so entstanden Ganglinien wird ebenfalls mit der
+	 * Referenzganglinie verglichen.
+	 * <p>
+	 * Ergebnis ist die vorgegebene oder erzeugte Ganglinie mit dem geringsten
+	 * Abstand. Wird der maximal Abstand bei allen Ganglinien überschritten,
+	 * gibt es kein Ergebnis.
+	 * 
+	 * @param referenz
+	 *            die Referenzganglinie.
+	 * @param liste
+	 *            die Liste von zu vergleichenden Ganglinien.
+	 * @param offsetVor
+	 *            der Offset, in dem die Ganglinien nach vorn verschoben werden
+	 *            kann.
+	 * @param offsetNach
+	 *            der Offset, in dem die Ganglinien nach hinten verschoben
+	 *            werden kann.
+	 * @param intervall
+	 *            das Intervall, in dem die Ganglinien innerhalb des Offsets
+	 *            verschoben werden.
+	 * @param maxFehler
+	 *            der maximal erlaubte Fehler.
+	 * @return der Index der Ganglinie mit dem kleinsten Abstand oder
+	 *         {@code null}, wenn es keine passende Ganglinie gibt.
+	 */
+	public static GanglinieMQ patternMatchingGanglinie(
+			final GanglinieMQ referenz, final List<GanglinieMQ> liste,
+			long offsetVor, final long offsetNach, final long intervall,
+			final int maxFehler) {
+		final SortedMap<Double, GanglinieMQ> fehler;
+
+		fehler = new TreeMap<Double, GanglinieMQ>();
+
+		// Alle Testganglinien durchlaufen
+		for (GanglinieMQ vergleich : liste) {
+			final long start, ende;
+			final GanglinieMQ g;
+
+			// Start und Ende des Pattern-Matching-Intervalls
+			g = vergleich.clone();
+			start = g.getIntervall().getStart() - offsetVor;
+			ende = g.getIntervall().getStart() + offsetNach;
+
+			// Alle verschobenen Ganglinien mit Abstand erfassen
+			verschiebe(g, -offsetVor);
+			for (long j = start; j <= ende; j += intervall) {
+				final double abstand;
+
+				verschiebe(g, intervall);
+				abstand = basisabstand(referenz, g);
+				if (abstand <= maxFehler) {
+					fehler.put(abstand, g.clone());
 				}
 			}
 		}
-		if (fehler.get(index) > maxFehler) {
-			return -1;
+
+		// Die erste Ganglinie ist die mit dem geringsten Abstand
+		if (fehler.size() > 0) {
+			return fehler.get(fehler.firstKey());
 		}
-		return index;
+		return null;
 	}
 
 	/**
