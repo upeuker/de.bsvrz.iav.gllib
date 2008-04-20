@@ -34,7 +34,11 @@ import org.junit.Test;
 import com.bitctrl.util.Interval;
 
 /**
- * Fü;hrt die Testfälle nach der Prüfspezifikation aus.
+ * Führt den Prüffall 6 "Cut-Operation" laut Prüfspezifikation aus.
+ * <p>
+ * Aus einer Ganglinie wird ein Teilintervall rausgeschnitten. Auf der linken
+ * Seit liegt eine Stützstelle direkt auf der Intervallgrenze und auf der
+ * rechten Seite nicht. AUf der rechten Seite muss der Wert interpoliert werden.
  * 
  * @author BitCtrl Systems GmbH, Schumann
  * @version $Id$
@@ -42,7 +46,14 @@ import com.bitctrl.util.Interval;
 public class Prueffall6 {
 
 	/**
-	 * Führt den Testfall 6 "Cut-Operation" aus.
+	 * Aus einer Ganglinie im Intervall 5 bis 80 Minuten wird das Teilintervall
+	 * 20 bis 70 herausgeschnitten. Für die linke Intervallseite (20) existiert
+	 * eine Stützstelle in der Ganglinie. Für die rechte Seite des
+	 * Teilintervalls (70) existiert keine Stützstelle.
+	 * <p>
+	 * Im Ergebnis umfasst die herausgeschnitte Ganglinie das gewünschte
+	 * Intervall. Die Stützstelle am linken Rand wird aus der Originalganglinie
+	 * übernommen. Die Stützstelle an der rechten Seite wird interpoliert.
 	 */
 	@Test
 	public void testfall6() {
