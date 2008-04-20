@@ -26,6 +26,10 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import com.bitctrl.Constants;
 import com.bitctrl.util.Interval;
 
 /**
@@ -36,7 +40,7 @@ import com.bitctrl.util.Interval;
  */
 public class BSpline extends AbstractApproximation<Double> {
 
-	/** Das Breite der Teilintervalle beim Integrieren: eine Minute. */
+	/** Die Breite der Teilintervalle beim Integrieren: eine Minute. */
 	public static final long INTEGRATIONSINTERVALL = 60 * 1000;
 
 	/** Die Ordnung des B-Splines. */
@@ -44,6 +48,9 @@ public class BSpline extends AbstractApproximation<Double> {
 
 	/** Grenzstellen der Interpolationsintervalle, aufsteigend sortiert. */
 	private int[] t;
+
+	/** Cacht die bereits berechneten Minutenwerte der Approximation. */
+	private final Map<Long, Double> cache;
 
 	/**
 	 * Erzeugt einen B-Spline mit der Ordnung 5.
@@ -60,6 +67,7 @@ public class BSpline extends AbstractApproximation<Double> {
 	 */
 	public BSpline(final int ordnung) {
 		this.ordnung = ordnung;
+		cache = new HashMap<Long, Double>();
 	}
 
 	/**
@@ -74,6 +82,11 @@ public class BSpline extends AbstractApproximation<Double> {
 						.get(getStuetzstellen().size() - 1).getZeitstempel())) {
 			// Zeitstempel liegt außerhalb der Ganglinie
 			return new Stuetzstelle<Double>(zeitstempel, null);
+		}
+
+		// Wenn Zeitstempel im Cache, dann kann die Berechnung umgangen werden.
+		if (cache.containsKey(zeitstempel)) {
+			return new Stuetzstelle<Double>(zeitstempel, cache.get(zeitstempel));
 		}
 
 		// TODO Wird dieses IF-ELSE benötigt?
@@ -108,13 +121,18 @@ public class BSpline extends AbstractApproximation<Double> {
 			}
 			t0 += f;
 			s = bspline(t0);
+
+			// Wenn der Zeitstempel auf eine volle Minute fällt, dann cachen.
+			if (s.getZeitstempel() % Constants.MILLIS_PER_MINUTE == 0) {
+				cache.put(s.getZeitstempel(), s.getWert().doubleValue());
+			}
 		}
 
 		return s;
 	}
 
 	/**
-	 * Gibt die Ordgung des B-Splines zurück.
+	 * Gibt die Ordnung des B-Splines zurück.
 	 * 
 	 * @return Ordnung
 	 */
@@ -128,10 +146,11 @@ public class BSpline extends AbstractApproximation<Double> {
 	 * Ist die Ordnung des B-Spline größer als die Anzahl der Stützstellen, dann
 	 * wird die Ordnung auf die Stützstellenanzahl reduziert.
 	 * 
-	 * 
 	 * {@inheritDoc}
 	 */
 	public void initialisiere() {
+		cache.clear();
+
 		if (getStuetzstellen().size() == 0) {
 			return;
 		}
