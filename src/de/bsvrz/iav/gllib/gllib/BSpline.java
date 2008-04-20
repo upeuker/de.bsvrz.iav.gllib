@@ -37,6 +37,7 @@ import com.bitctrl.util.Interval;
  * 
  * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
+ * @todo Optimieren: Cache testen, get() nur auf Sekunden genau ausführen
  */
 public class BSpline extends AbstractApproximation<Double> {
 
