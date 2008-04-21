@@ -28,11 +28,19 @@ package de.bsvrz.iav.gllib.gllib;
 
 import static com.bitctrl.Constants.MILLIS_PER_HOUR;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
+
+import com.bitctrl.Constants;
+import com.bitctrl.util.Timestamp;
+
+import de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ;
+import de.bsvrz.iav.gllib.gllib.dav.Messwerte;
+import de.bsvrz.iav.gllib.gllib.junit.ZufallsganglinienFactory;
 
 /**
  * Testet die Approximation einer Ganglinie mit Hilfe eines B-Spline.
@@ -145,4 +153,98 @@ public class BSplineTest {
 		}
 	}
 
+	/**
+	 * Macht einen Performance-Test mit einer zufälligen Ganglinie mit
+	 * Double-Stützstellen. Das Ergebnis wird nur auf der Konsole ausgegeben.
+	 */
+	@Test
+	public void performance() {
+		final Ganglinie<Double> g;
+		final BSpline bspline;
+		long zeitstempel;
+		int i;
+
+		System.out.println("Starte Test für einfache Ganglinie ...");
+
+		g = ZufallsganglinienFactory.getInstance().erzeugeGanglinie(
+				Constants.MILLIS_PER_MINUTE);
+		assertEquals("Die Anzahl der Stützstellen muss stimmen.", 1441, g
+				.size());
+
+		System.out.println("B-Spline: delta=" + BSpline.DELTA);
+		bspline = new BSpline(5);
+		g.setApproximation(bspline);
+
+		zeitstempel = System.currentTimeMillis();
+		i = 0;
+		for (long t = 0; t <= Constants.MILLIS_PER_DAY; t += Constants.MILLIS_PER_MINUTE) {
+			Stuetzstelle<Double> s;
+
+			s = g.getStuetzstelle(t);
+			assertEquals(
+					"Der Zeitstempel der berechneten Stützstelle muss mit der Anfrage übereinstimmen.",
+					t, s.getZeitstempel());
+			assertTrue("Der Stützstellenwert darf nicht null sein.", s
+					.getWert() != null);
+			// System.out.println(s);
+			++i;
+		}
+		zeitstempel = System.currentTimeMillis() - zeitstempel;
+		System.out.println("Berechnung von " + i + " Stützstellen in "
+				+ Timestamp.relativeTime(zeitstempel));
+
+		System.out.println("Durchschnittliche Menge Iterationen: "
+				+ BSpline.getIterationen());
+
+	}
+
+	/**
+	 * Macht einen Performance-Test mit einer zufälligen
+	 * Messquerschnittsfanglinie mit Double-Stützstellen. Das Ergebnis wird nur
+	 * auf der Konsole ausgegeben.
+	 */
+	@Test
+	public void performanceMQ() {
+		final GanglinieMQ g;
+		long zeitstempel;
+		int i;
+
+		System.out.println("Starte Test für Messquerschnittsganglinie ...");
+
+		g = ZufallsganglinienFactory.getInstance().erzeugeGanglinie(null,
+				Constants.MILLIS_PER_HOUR);
+		assertEquals("Die Anzahl der Stützstellen muss stimmen.", 25, g.size());
+
+		System.out.println("B-Spline: delta=" + BSpline.DELTA);
+		g.setApproximationDaK(GanglinieMQ.APPROX_BSPLINE);
+		g.setBSplineOrdnung(5);
+
+		zeitstempel = System.currentTimeMillis();
+		i = 0;
+		for (long t = 0; t <= Constants.MILLIS_PER_DAY; t += 15 * Constants.MILLIS_PER_MINUTE) {
+			Stuetzstelle<Messwerte> s;
+
+			s = g.getStuetzstelle(t);
+			assertEquals(
+					"Der Zeitstempel der berechneten Stützstelle muss mit der Anfrage übereinstimmen.",
+					t, s.getZeitstempel());
+			assertTrue("Der Stützstellenwert QKfz darf nicht null sein.", s
+					.getWert().getQKfz() != null);
+			assertTrue("Der Stützstellenwert QLkw darf nicht null sein.", s
+					.getWert().getQLkw() != null);
+			assertTrue("Der Stützstellenwert VPkw darf nicht null sein.", s
+					.getWert().getVPkw() != null);
+			assertTrue("Der Stützstellenwert VLkw darf nicht null sein.", s
+					.getWert().getVLkw() != null);
+			// System.out.println(s);
+			++i;
+		}
+		zeitstempel = System.currentTimeMillis() - zeitstempel;
+		System.out.println("Berechnung von " + i + " Stützstellen in "
+				+ Timestamp.relativeTime(zeitstempel));
+
+		System.out.println("Durchschnittliche Menge Iterationen: "
+				+ BSpline.getIterationen());
+
+	}
 }

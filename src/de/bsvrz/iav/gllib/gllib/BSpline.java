@@ -31,15 +31,54 @@ import java.util.Map;
 
 import com.bitctrl.Constants;
 import com.bitctrl.util.Interval;
+import com.bitctrl.util.Timestamp;
+
+import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
  * Approximation einer Ganglinie mit Hilfe eines B-Splines beliebiger Ordung.
  * 
  * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
- * @todo Optimieren: Cache testen, get() nur auf Sekunden genau ausführen
+ * @todo Optimierung entfernen oder lassen?
  */
 public class BSpline extends AbstractApproximation<Double> {
+
+	/**
+	 * Die maximale Differenz ({@value}) zwischen Näherungswert und Zielwert.
+	 * 
+	 * @see #get(long)
+	 */
+	public static final long DELTA = 1000;
+
+	/**
+	 * Flag, ob die Optimierung der iterativen Näherung ein oder ausgeschalten
+	 * ist. Wenn {@code true}, dann wird die Schrittweite nicht nur
+	 * verkleinert, sondern auch wieder vergrößert, wenn sich die Iteration vom
+	 * Zielwert entfernt.
+	 * 
+	 * @see #get(long)
+	 */
+	public static final boolean OPTIMIERUNG = false;
+
+	/**
+	 * Der Durchschnitt der bisher notwendigen Iterationen pro Aufruf von
+	 * {@link #get(long)}.
+	 */
+	private static long iterationen = 0;
+
+	/**
+	 * Gibt den Durchschnitt der bisher notwendigen Iterationen pro Aufruf von
+	 * {@link #get(long)} zurück.
+	 * 
+	 * @return die durchschnittliche Anzahl von Iterationen.
+	 */
+	static long getIterationen() {
+		return iterationen;
+	}
+
+	/** Der Logger der Klasse. */
+	private final Debug log = Debug.getLogger();
 
 	/** Die Breite der Teilintervalle beim Integrieren: eine Minute. */
 	public static final long INTEGRATIONSINTERVALL = 60 * 1000;
@@ -72,9 +111,18 @@ public class BSpline extends AbstractApproximation<Double> {
 	}
 
 	/**
+	 * Da der B-Spline wegen der Wichtung der Punkte nicht den Stützstellenwert
+	 * berechnet, der tatsächlich gesucht ist, muss sich ihm mit einem
+	 * iterativen Verfahren angenähert werden.
+	 * 
 	 * {@inheritDoc}
+	 * 
+	 * @see #DELTA
+	 * @see #OPTIMIERUNG
 	 */
 	public Stuetzstelle<Double> get(final long zeitstempel) {
+		final long firstdelta;
+		long i;
 		double t0, f;
 		Stuetzstelle<Double> s;
 
@@ -83,11 +131,6 @@ public class BSpline extends AbstractApproximation<Double> {
 						.get(getStuetzstellen().size() - 1).getZeitstempel())) {
 			// Zeitstempel liegt außerhalb der Ganglinie
 			return new Stuetzstelle<Double>(zeitstempel, null);
-		}
-
-		// Wenn Zeitstempel im Cache, dann kann die Berechnung umgangen werden.
-		if (cache.containsKey(zeitstempel)) {
-			return new Stuetzstelle<Double>(zeitstempel, cache.get(zeitstempel));
 		}
 
 		// TODO Wird dieses IF-ELSE benötigt?
@@ -110,7 +153,20 @@ public class BSpline extends AbstractApproximation<Double> {
 		s = bspline(t0);
 		f = zeitstempelNachT(zeitstempel)
 				- zeitstempelNachT(s.getZeitstempel());
+
+		firstdelta = zeitstempel - s.getZeitstempel();
+		i = 0;
 		while (s.getZeitstempel() != zeitstempel) {
+			long delta;
+
+			++i;
+			delta = Math.abs(zeitstempel - s.getZeitstempel());
+
+			if (delta < DELTA) {
+				s = new Stuetzstelle<Double>(zeitstempel, s.getWert());
+				break;
+			}
+
 			if (s.getZeitstempel() > zeitstempel) {
 				if (f > 0) {
 					f /= -2;
@@ -120,6 +176,9 @@ public class BSpline extends AbstractApproximation<Double> {
 					f /= -2;
 				}
 			}
+			if (OPTIMIERUNG && Math.abs(f) < zeitstempelNachT(delta) / 10) {
+				f *= 2;
+			}
 			t0 += f;
 			s = bspline(t0);
 
@@ -127,6 +186,20 @@ public class BSpline extends AbstractApproximation<Double> {
 			if (s.getZeitstempel() % Constants.MILLIS_PER_MINUTE == 0) {
 				cache.put(s.getZeitstempel(), s.getWert().doubleValue());
 			}
+		}
+
+		iterationen = (iterationen + i) / 2;
+
+		if (firstdelta > 0) {
+			log.fine("positiv, delta="
+					+ Timestamp.relativeTime(Math.abs(firstdelta))
+					+ ", gesucht=" + Timestamp.relativeTime(zeitstempel) + ", "
+					+ i + " benötigte Schritte");
+		} else {
+			log.fine("negativ, delta="
+					+ Timestamp.relativeTime(Math.abs(firstdelta))
+					+ ", gesucht=" + Timestamp.relativeTime(zeitstempel) + ", "
+					+ i + " benötigte Schritte");
 		}
 
 		return s;

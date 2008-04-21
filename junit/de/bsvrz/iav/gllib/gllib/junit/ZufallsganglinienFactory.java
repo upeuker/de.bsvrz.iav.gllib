@@ -26,6 +26,11 @@
 
 package de.bsvrz.iav.gllib.gllib.junit;
 
+import java.util.Random;
+
+import com.bitctrl.Constants;
+
+import de.bsvrz.iav.gllib.gllib.Ganglinie;
 import de.bsvrz.iav.gllib.gllib.Stuetzstelle;
 import de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ;
 import de.bsvrz.iav.gllib.gllib.dav.Messwerte;
@@ -114,4 +119,27 @@ public final class ZufallsganglinienFactory {
 		return g;
 	}
 
+	/**
+	 * Erzeugt eine Ganglinien mit zufälligen Stützstellen.
+	 * 
+	 * @param abstand
+	 *            der gewünschte Abstand Stützstellen in Millisekunden.
+	 * @return die generierte Ganglinie.
+	 */
+	public Ganglinie<Double> erzeugeGanglinie(final long abstand) {
+		Ganglinie<Double> g;
+		Random generator;
+
+		g = new Ganglinie<Double>();
+
+		generator = new Random();
+		for (long t = 0; t <= Constants.MILLIS_PER_DAY; t += abstand) {
+			Double wert;
+
+			wert = generator.nextDouble() * 1000;
+			g.setStuetzstelle(new Stuetzstelle<Double>(t, wert));
+		}
+
+		return g;
+	}
 }
