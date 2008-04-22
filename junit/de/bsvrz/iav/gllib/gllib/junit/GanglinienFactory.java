@@ -244,7 +244,7 @@ public class GanglinienFactory {
 		final ResultSet rsGl;
 		final PdGanglinie.Daten datum;
 		final PdGanglinie glParam;
-
+		Integer ersterTag;
 		String sql;
 
 		factory = ObjektFactory.getInstanz();
@@ -254,6 +254,7 @@ public class GanglinienFactory {
 		statGl = connection.createStatement();
 		sql = "SELECT * FROM ganglinien";
 		rsGl = statGl.executeQuery(sql);
+		ersterTag = null;
 		while (rsGl.next()) {
 			final int id;
 			final String pid;
@@ -261,7 +262,6 @@ public class GanglinienFactory {
 			final Statement statSt;
 			final ResultSet rsSt;
 			final GanglinieMQ g;
-			Integer ersterTag;
 
 			id = rsGl.getInt(Ganglinien.ID.name());
 			pid = DavTools.generierePID(rsGl.getString(Ganglinien.EREIGNISTYP
@@ -280,13 +280,17 @@ public class GanglinienFactory {
 
 			statSt = connection.createStatement();
 			if (tag == ERSTER_TAG) {
-				sql = "SELECT * FROM stuetzstellen WHERE gl_id=" + id
-						+ " ORDER BY tag ASC";
+				if (ersterTag == null) {
+					sql = "SELECT * FROM stuetzstellen WHERE gl_id=" + id
+							+ " ORDER BY tag ASC";
+				} else {
+					sql = "SELECT * FROM stuetzstellen WHERE gl_id=" + id
+							+ " AND tag=" + ersterTag;
+				}
 			} else {
 				sql = "SELECT * FROM stuetzstellen WHERE gl_id=" + id
 						+ " AND tag=" + tag;
 			}
-			ersterTag = null;
 			rsSt = statSt.executeQuery(sql);
 			while (rsSt.next()) {
 				final long t;
@@ -319,7 +323,9 @@ public class GanglinienFactory {
 				g.put(t, new Messwerte(qKfz, qLkw, vPkw, vLkw));
 			}
 			statSt.close();
-			datum.add(g);
+			if (g.size() > 0) {
+				datum.add(g);
+			}
 		}
 		statGl.close();
 
