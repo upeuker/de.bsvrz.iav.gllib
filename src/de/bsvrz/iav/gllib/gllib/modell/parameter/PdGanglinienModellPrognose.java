@@ -69,7 +69,7 @@ public class PdGanglinienModellPrognose extends
 		/** Die Schrittweite in der beim Pattern-Matching verschoben wird. */
 		private long matchingIntervall;
 
-		/** Der maximaler Fehler beim Pattern-Matching. */
+		/** Der maximal erlaubte Fehler beim Pattern-Matching. */
 		private int maxMatchingFehler;
 
 		/** Der Horizont der mittelfristigen Prognose (Pattern-Matching). */
@@ -108,8 +108,9 @@ public class PdGanglinienModellPrognose extends
 		}
 
 		/**
-		 * Gibt die Auswahlmethode zurück, die verwendet wird, wenn
-		 * Pattern-Matching nicht geht.
+		 * Gibt die Auswahlmethode zurück, die verwendet wird, wenn das
+		 * Pattern-Matching kein Ergebnis liefert oder nicht verwendet werden
+		 * soll.
 		 * 
 		 * @return die Auswahlmethode für die Rückfallebene.
 		 */
@@ -125,45 +126,47 @@ public class PdGanglinienModellPrognose extends
 		}
 
 		/**
-		 * Gibt das Intervall in die Vergangenheit, welches beim
-		 * Pattern-Matching berücksichtigt wird.
+		 * Gibt die Schrittweite zurück, in der beim Pattern-Matching verschoben
+		 * wird.
 		 * 
-		 * @return {@code matchingIntervall}.
+		 * @return die Schrittweite.
 		 */
 		public long getMatchingIntervall() {
 			return matchingIntervall;
 		}
 
 		/**
-		 * Gibt den Wert der Eigenschaft {@code maxMatchingFehler} wieder.
+		 * Gibt den maximal erlaubten Fehler beim Pattern-Matching zurück.
 		 * 
-		 * @return {@code maxMatchingFehler}.
+		 * @return der maximale Fehler.
 		 */
 		public int getMaxMatchingFehler() {
 			return maxMatchingFehler;
 		}
 
 		/**
-		 * Gibt den Wert der Eigenschaft {@code patternMatchingHorizont} wieder.
+		 * Gibt den Horizont der mittelfristigen Prognose (Pattern-Matching)
+		 * zurück.
 		 * 
-		 * @return {@code patternMatchingHorizont}.
+		 * @return der Horizont.
 		 */
 		public long getPatternMatchingHorizont() {
 			return patternMatchingHorizont;
 		}
 
 		/**
-		 * Gibt den Wert der Eigenschaft {@code patternMatchingOffset} wieder.
+		 * Gibt den Offset zurück, um den beim Pattern-Matching verschoben wird.
 		 * 
-		 * @return {@code patternMatchingOffset}.
+		 * @return der Offset.
 		 */
 		public long getPatternMatchingOffset() {
 			return patternMatchingOffset;
 		}
 
 		/**
-		 * Legt die Auswahlmethode fest, die verwendet wird, wenn
-		 * Pattern-Matching nicht geht.
+		 * Legt die Auswahlmethode fest, die verwendet wird, wenn das
+		 * Pattern-Matching kein Ergebnis liefert oder nicht verwendet werden
+		 * soll.
 		 * 
 		 * @param auswahlMethode
 		 *            die Auswahlmethode für die Rückfallebene.
@@ -174,30 +177,32 @@ public class PdGanglinienModellPrognose extends
 		}
 
 		/**
-		 * Legt den Wert der Eigenschaft {@code matchingIntervall} fest.
+		 * Legt die Schrittweite fest, in der beim Pattern-Matching verschoben
+		 * wird.
 		 * 
 		 * @param matchingIntervall
-		 *            der neue Wert von {@code matchingIntervall}.
+		 *            die Schrittweite.
 		 */
 		public void setMatchingIntervall(final long matchingIntervall) {
 			this.matchingIntervall = matchingIntervall;
 		}
 
 		/**
-		 * Legt den Wert der Eigenschaft {@code maxMatchingFehler} fest.
+		 * Legt den maximal erlaubten Fehler beim Pattern-Matching fest.
 		 * 
 		 * @param maxMatchingFehler
-		 *            der neue Wert von {@code maxMatchingFehler}.
+		 *            der maximale Fehler.
 		 */
 		public void setMaxMatchingFehler(final int maxMatchingFehler) {
 			this.maxMatchingFehler = maxMatchingFehler;
 		}
 
 		/**
-		 * Legt den Wert der Eigenschaft {@code patternMatchingHorizont} fest.
+		 * Legt den Horizont der mittelfristigen Prognose (Pattern-Matching)
+		 * fest.
 		 * 
 		 * @param patternMatchingHorizont
-		 *            der neue Wert von {@code patternMatchingHorizont}.
+		 *            der Horizont.
 		 */
 		public void setPatternMatchingHorizont(
 				final long patternMatchingHorizont) {
@@ -205,10 +210,10 @@ public class PdGanglinienModellPrognose extends
 		}
 
 		/**
-		 * Legt den Wert der Eigenschaft {@code patternMatchingOffset} fest.
+		 * Legt den Offset fest, um den beim Pattern-Matching verschoben wird.
 		 * 
 		 * @param patternMatchingOffset
-		 *            der neue Wert von {@code patternMatchingOffset}.
+		 *            das Offset.
 		 */
 		public void setPatternMatchingOffset(final long patternMatchingOffset) {
 			this.patternMatchingOffset = patternMatchingOffset;
