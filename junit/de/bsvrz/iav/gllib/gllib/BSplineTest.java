@@ -31,14 +31,17 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.junit.Test;
 
 import com.bitctrl.Constants;
+import com.bitctrl.util.Interval;
 import com.bitctrl.util.Timestamp;
 
 import de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ;
+import de.bsvrz.iav.gllib.gllib.dav.GanglinienMQOperationen;
 import de.bsvrz.iav.gllib.gllib.dav.Messwerte;
 import de.bsvrz.iav.gllib.gllib.junit.ZufallsganglinienFactory;
 
@@ -61,7 +64,8 @@ public class BSplineTest {
 
 		stuetzstellen = new ArrayList<Stuetzstelle<Double>>();
 
-		// Nur eine Stützstelle
+		// Nur eine Stützstelle. Hier kann kein B-Spline bestimmt werden, also
+		// gibt es keine gültigen Stützstellen.
 		stuetzstellen
 				.add(new Stuetzstelle<Double>(100 * MILLIS_PER_HOUR, 30.0));
 		spline = new BSpline();
@@ -69,7 +73,7 @@ public class BSplineTest {
 		spline.setOrdnung((byte) 1);
 		spline.initialisiere();
 		assertEquals(new Stuetzstelle<Double>(0, null), spline.get(0));
-		assertEquals(new Stuetzstelle<Double>(100 * MILLIS_PER_HOUR, 30.0),
+		assertEquals(new Stuetzstelle<Double>(100 * MILLIS_PER_HOUR, null),
 				spline.get(100 * MILLIS_PER_HOUR));
 		assertEquals(new Stuetzstelle<Double>(120 * MILLIS_PER_HOUR, null),
 				spline.get(120 * MILLIS_PER_HOUR));
@@ -161,23 +165,35 @@ public class BSplineTest {
 	public void performance() {
 		final Ganglinie<Double> g;
 		final BSpline bspline;
+		final Calendar cal;
+		final Interval intervall;
 		long zeitstempel;
 		int i;
 
 		System.out.println("Starte Test für einfache Ganglinie ...");
 
+		cal = Calendar.getInstance();
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+
 		g = ZufallsganglinienFactory.getInstance().erzeugeGanglinie(
 				Constants.MILLIS_PER_MINUTE);
+		GanglinienOperationen.verschiebe(g, cal.getTimeInMillis());
 		assertEquals("Die Anzahl der Stützstellen muss stimmen.", 1441, g
 				.size());
 
-		System.out.println("B-Spline: delta=" + BSpline.DELTA);
 		bspline = new BSpline(5);
 		g.setApproximation(bspline);
 
 		zeitstempel = System.currentTimeMillis();
 		i = 0;
-		for (long t = 0; t <= Constants.MILLIS_PER_DAY; t += Constants.MILLIS_PER_MINUTE) {
+		intervall = new Interval(cal.getTimeInMillis(), cal.getTimeInMillis()
+				+ Constants.MILLIS_PER_DAY);
+		for (long t = intervall.getStart(); t <= intervall.getEnd(); t += Constants.MILLIS_PER_MINUTE) {
+			// for (long t = 0; t <= Constants.MILLIS_PER_DAY; t +=
+			// Constants.MILLIS_PER_MINUTE) {
 			Stuetzstelle<Double> s;
 
 			s = g.getStuetzstelle(t);
@@ -192,10 +208,6 @@ public class BSplineTest {
 		zeitstempel = System.currentTimeMillis() - zeitstempel;
 		System.out.println("Berechnung von " + i + " Stützstellen in "
 				+ Timestamp.relativeTime(zeitstempel));
-
-		System.out.println("Durchschnittliche Menge Iterationen: "
-				+ BSpline.getIterationen());
-
 	}
 
 	/**
@@ -206,22 +218,34 @@ public class BSplineTest {
 	@Test
 	public void performanceMQ() {
 		final GanglinieMQ g;
+		final Calendar cal;
+		final Interval intervall;
 		long zeitstempel;
 		int i;
 
 		System.out.println("Starte Test für Messquerschnittsganglinie ...");
 
+		cal = Calendar.getInstance();
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+
 		g = ZufallsganglinienFactory.getInstance().erzeugeGanglinie(null,
 				Constants.MILLIS_PER_HOUR);
+		GanglinienMQOperationen.verschiebe(g, cal.getTimeInMillis());
 		assertEquals("Die Anzahl der Stützstellen muss stimmen.", 25, g.size());
 
-		System.out.println("B-Spline: delta=" + BSpline.DELTA);
 		g.setApproximationDaK(GanglinieMQ.APPROX_BSPLINE);
 		g.setBSplineOrdnung(5);
 
 		zeitstempel = System.currentTimeMillis();
 		i = 0;
-		for (long t = 0; t <= Constants.MILLIS_PER_DAY; t += 15 * Constants.MILLIS_PER_MINUTE) {
+		intervall = new Interval(cal.getTimeInMillis(), cal.getTimeInMillis()
+				+ Constants.MILLIS_PER_DAY);
+		for (long t = intervall.getStart(); t <= intervall.getEnd(); t += Constants.MILLIS_PER_MINUTE) {
+			// for (long t = 0; t <= Constants.MILLIS_PER_DAY; t +=
+			// Constants.MILLIS_PER_MINUTE) {
 			Stuetzstelle<Messwerte> s;
 
 			s = g.getStuetzstelle(t);
@@ -242,9 +266,5 @@ public class BSplineTest {
 		zeitstempel = System.currentTimeMillis() - zeitstempel;
 		System.out.println("Berechnung von " + i + " Stützstellen in "
 				+ Timestamp.relativeTime(zeitstempel));
-
-		System.out.println("Durchschnittliche Menge Iterationen: "
-				+ BSpline.getIterationen());
-
 	}
 }

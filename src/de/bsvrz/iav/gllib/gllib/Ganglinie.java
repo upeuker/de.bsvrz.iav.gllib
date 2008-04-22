@@ -381,6 +381,7 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 			getIntervalle();
 			approximation.setStuetzstellen(getStuetzstellen());
 			approximation.initialisiere();
+			setApproximationAktuell(true);
 		}
 	}
 
@@ -391,7 +392,7 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	 * @return {@code true}, wenn Ganglinie und Approximation konform gehen und
 	 *         {@code false}, wenn die Approximation aktualisiert werden muss.
 	 */
-	private boolean isApproximationAktuell() {
+	protected boolean isApproximationAktuell() {
 		return approximationAktuell;
 	}
 
@@ -402,7 +403,7 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	 *            {@code false}, wenn die Approximation aktualisiert werden
 	 *            muss.
 	 */
-	private void setApproximationAktuell(final boolean approximationAktuell) {
+	protected void setApproximationAktuell(final boolean approximationAktuell) {
 		this.approximationAktuell = approximationAktuell;
 	}
 

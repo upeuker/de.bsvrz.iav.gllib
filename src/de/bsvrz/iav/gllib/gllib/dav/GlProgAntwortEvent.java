@@ -37,9 +37,8 @@ import de.bsvrz.iav.gllib.gllib.modell.onlinedaten.OdPrognoseGanglinienAntwort;
 import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.objekte.MessQuerschnittAllgemein;
 
 /**
- * Repräsentiert eine Antwortnachricht der Ganglinienprognose. Enthalten
- * sind für alle angefragten Messquerschnitte die prognostizuierten
- * Ganglinien.
+ * Repräsentiert eine Antwortnachricht der Ganglinienprognose. Enthalten sind
+ * für alle angefragten Messquerschnitte die prognostizuierten Ganglinien.
  * <p>
  * Hinweis: Dieses Event ist nicht Serialisierbar, da enthaltene Objekt nicht
  * serialisierbar sind.
@@ -53,7 +52,7 @@ public class GlProgAntwortEvent extends EventObject {
 	private static final long serialVersionUID = 1L;
 
 	/** Eine beliebige Zeichenkette die der Absender frei eingetragen kann. */
-	private String absenderZeichen;
+	private final String absenderZeichen;
 
 	/** Hash zum einfachen auffinden der passenden Ganglinie. */
 	private final Map<MessQuerschnittAllgemein, GanglinieMQ> prognosen;
@@ -66,20 +65,21 @@ public class GlProgAntwortEvent extends EventObject {
 	 * @param datum
 	 *            die anfragende Applikation.
 	 */
-	GlProgAntwortEvent(Object quelle, OdPrognoseGanglinienAntwort.Daten datum) {
+	GlProgAntwortEvent(final Object quelle,
+			final OdPrognoseGanglinienAntwort.Daten datum) {
 		super(quelle);
 		absenderZeichen = datum.getAbsenderZeichen();
 		prognosen = new HashMap<MessQuerschnittAllgemein, GanglinieMQ>();
-		for (GanglinieMQ g : datum) {
+		for (final GanglinieMQ g : datum) {
 			prognosen.put(g.getMessQuerschnitt(), g);
 		}
 	}
 
 	/**
-	 * Gibt das Zeichen des Absenders zurück. Der Text wurde bei der
-	 * Anfrage in die Anfragenachricht eingetragen und von der
-	 * Ganglinienprognose in die Antwort kopiert. Somit kann die anfragende
-	 * Applikation mehrere Anfragen unterscheiden.
+	 * Gibt das Zeichen des Absenders zurück. Der Text wurde bei der Anfrage in
+	 * die Anfragenachricht eingetragen und von der Ganglinienprognose in die
+	 * Antwort kopiert. Somit kann die anfragende Applikation mehrere Anfragen
+	 * unterscheiden.
 	 * 
 	 * @return das Absenderzeichen.
 	 */
@@ -89,6 +89,10 @@ public class GlProgAntwortEvent extends EventObject {
 
 	/**
 	 * Gibt die Menge der prognostizierten Ganglinien zurück.
+	 * <p>
+	 * <em>Hinweis:</em> Es werden nicht alle Eigenschaften der Ganglinie in
+	 * der Prognoseganglinie gesetzt. Gesetzt werden nur die Stütztstellen, das
+	 * Approximationsverfahren und der Messquerschnitt.
 	 * 
 	 * @return eine Menge von Ganglinien.
 	 */
@@ -108,12 +112,16 @@ public class GlProgAntwortEvent extends EventObject {
 
 	/**
 	 * Gibt die prognostizierte Ganglinie zu einem Messquerschnitt zurück.
+	 * <p>
+	 * <em>Hinweis:</em> Es werden nicht alle Eigenschaften der Ganglinie in
+	 * der Prognoseganglinie gesetzt. Gesetzt werden nur die Stütztstellen, das
+	 * Approximationsverfahren und der Messquerschnitt.
 	 * 
 	 * @param mq
 	 *            ein Messquerschnitt.
 	 * @return die Prognoseganglinie des Messquerschnitts.
 	 */
-	public GanglinieMQ getPrognose(MessQuerschnittAllgemein mq) {
+	public GanglinieMQ getPrognose(final MessQuerschnittAllgemein mq) {
 		GanglinieMQ ganglinie;
 
 		ganglinie = prognosen.get(mq);

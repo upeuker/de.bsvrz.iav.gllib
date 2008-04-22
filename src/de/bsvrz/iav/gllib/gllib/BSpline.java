@@ -26,21 +26,17 @@
 
 package de.bsvrz.iav.gllib.gllib;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.bitctrl.Constants;
 import com.bitctrl.util.Interval;
-import com.bitctrl.util.Timestamp;
-
-import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
  * Approximation einer Ganglinie mit Hilfe eines B-Splines beliebiger Ordung.
  * 
  * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
- * @todo Optimierung entfernen oder lassen?
  */
 public class BSpline extends AbstractApproximation<Double> {
 
@@ -52,33 +48,10 @@ public class BSpline extends AbstractApproximation<Double> {
 	public static final long DELTA = 1000;
 
 	/**
-	 * Flag, ob die Optimierung der iterativen Näherung ein oder ausgeschalten
-	 * ist. Wenn {@code true}, dann wird die Schrittweite nicht nur
-	 * verkleinert, sondern auch wieder vergrößert, wenn sich die Iteration vom
-	 * Zielwert entfernt.
-	 * 
-	 * @see #get(long)
+	 * Wenn die Optimierung eingeschalten ist, wird der B-Spline bei der
+	 * Initialisierung im Minutentakt ausgerechnet und als Polylinie gesichert.
 	 */
-	public static final boolean OPTIMIERUNG = false;
-
-	/**
-	 * Der Durchschnitt der bisher notwendigen Iterationen pro Aufruf von
-	 * {@link #get(long)}.
-	 */
-	private static long iterationen = 0;
-
-	/**
-	 * Gibt den Durchschnitt der bisher notwendigen Iterationen pro Aufruf von
-	 * {@link #get(long)} zurück.
-	 * 
-	 * @return die durchschnittliche Anzahl von Iterationen.
-	 */
-	static long getIterationen() {
-		return iterationen;
-	}
-
-	/** Der Logger der Klasse. */
-	private final Debug log = Debug.getLogger();
+	public static final boolean OPTIMIERUNG = true;
 
 	/** Die Breite der Teilintervalle beim Integrieren: eine Minute. */
 	public static final long INTEGRATIONSINTERVALL = 60 * 1000;
@@ -89,8 +62,8 @@ public class BSpline extends AbstractApproximation<Double> {
 	/** Grenzstellen der Interpolationsintervalle, aufsteigend sortiert. */
 	private int[] t;
 
-	/** Cacht die bereits berechneten Minutenwerte der Approximation. */
-	private final Map<Long, Double> cache;
+	/** Cacht die Interpolation der Approximation. */
+	private Polyline polyline;
 
 	/**
 	 * Erzeugt einen B-Spline mit der Ordnung 5.
@@ -107,22 +80,16 @@ public class BSpline extends AbstractApproximation<Double> {
 	 */
 	public BSpline(final int ordnung) {
 		this.ordnung = ordnung;
-		cache = new HashMap<Long, Double>();
 	}
 
 	/**
-	 * Da der B-Spline wegen der Wichtung der Punkte nicht den Stützstellenwert
-	 * berechnet, der tatsächlich gesucht ist, muss sich ihm mit einem
-	 * iterativen Verfahren angenähert werden.
-	 * 
 	 * {@inheritDoc}
-	 * 
-	 * @see #DELTA
-	 * @see #OPTIMIERUNG
 	 */
 	public Stuetzstelle<Double> get(final long zeitstempel) {
-		final long firstdelta;
-		long i;
+		if (OPTIMIERUNG) {
+			return polyline.get(zeitstempel);
+		}
+
 		double t0, f;
 		Stuetzstelle<Double> s;
 
@@ -133,7 +100,8 @@ public class BSpline extends AbstractApproximation<Double> {
 			return new Stuetzstelle<Double>(zeitstempel, null);
 		}
 
-		// TODO Wird dieses IF-ELSE benötigt?
+		// Da der B-Spline nicht die Enden enthalten muss, werden die erste und
+		// letzte Stützstelle einfach ausgeliefert.
 		if (getStuetzstellen().get(0).getZeitstempel() == zeitstempel) {
 			return getStuetzstellen().get(0);
 		} else if (getStuetzstellen().get(getStuetzstellen().size() - 1)
@@ -147,26 +115,12 @@ public class BSpline extends AbstractApproximation<Double> {
 			return new Stuetzstelle<Double>(zeitstempel, s.getWert());
 		}
 
-		// Da B-Spline nicht den gesuchten Wert liefert, muss sich ihm genähert
-		// werden
+		// Da B-Spline nicht den gesuchten Wert liefert, muss er erraten werden
 		t0 = zeitstempelNachT(zeitstempel);
 		s = bspline(t0);
 		f = zeitstempelNachT(zeitstempel)
-				- zeitstempelNachT(s.getZeitstempel());
-
-		firstdelta = zeitstempel - s.getZeitstempel();
-		i = 0;
-		while (s.getZeitstempel() != zeitstempel) {
-			long delta;
-
-			++i;
-			delta = Math.abs(zeitstempel - s.getZeitstempel());
-
-			if (delta < DELTA) {
-				s = new Stuetzstelle<Double>(zeitstempel, s.getWert());
-				break;
-			}
-
+				- zeitstempelNachT(s.getZeitstempel()); // Schrittweite
+		while (Math.abs(zeitstempel - s.getZeitstempel()) > DELTA) {
 			if (s.getZeitstempel() > zeitstempel) {
 				if (f > 0) {
 					f /= -2;
@@ -176,30 +130,8 @@ public class BSpline extends AbstractApproximation<Double> {
 					f /= -2;
 				}
 			}
-			if (OPTIMIERUNG && Math.abs(f) < zeitstempelNachT(delta) / 10) {
-				f *= 2;
-			}
 			t0 += f;
 			s = bspline(t0);
-
-			// Wenn der Zeitstempel auf eine volle Minute fällt, dann cachen.
-			if (s.getZeitstempel() % Constants.MILLIS_PER_MINUTE == 0) {
-				cache.put(s.getZeitstempel(), s.getWert().doubleValue());
-			}
-		}
-
-		iterationen = (iterationen + i) / 2;
-
-		if (firstdelta > 0) {
-			log.fine("positiv, delta="
-					+ Timestamp.relativeTime(Math.abs(firstdelta))
-					+ ", gesucht=" + Timestamp.relativeTime(zeitstempel) + ", "
-					+ i + " benötigte Schritte");
-		} else {
-			log.fine("negativ, delta="
-					+ Timestamp.relativeTime(Math.abs(firstdelta))
-					+ ", gesucht=" + Timestamp.relativeTime(zeitstempel) + ", "
-					+ i + " benötigte Schritte");
 		}
 
 		return s;
@@ -223,8 +155,6 @@ public class BSpline extends AbstractApproximation<Double> {
 	 * {@inheritDoc}
 	 */
 	public void initialisiere() {
-		cache.clear();
-
 		if (getStuetzstellen().size() == 0) {
 			return;
 		}
@@ -246,6 +176,34 @@ public class BSpline extends AbstractApproximation<Double> {
 				throw new IllegalStateException();
 			}
 		}
+
+		final List<Stuetzstelle<Double>> liste;
+		final long intervall, aufloesung;
+
+		intervall = getStuetzstellen().get(getStuetzstellen().size() - 1)
+				.getZeitstempel()
+				- getStuetzstellen().get(0).getZeitstempel();
+		aufloesung = intervall / Constants.MILLIS_PER_MINUTE;
+		if (aufloesung > 10000) {
+			System.err.println("Auflösung:" + aufloesung);
+		}
+		polyline = new Polyline();
+		liste = new ArrayList<Stuetzstelle<Double>>();
+		for (long i = 0; i <= aufloesung; i++) {
+			Stuetzstelle<Double> s;
+			double t1;
+
+			t1 = i;
+			t1 *= t[t.length - 1];
+			t1 /= aufloesung;
+
+			if (Double.isNaN(t1) || Double.isInfinite(t1)) {
+				continue;
+			}
+			s = bspline(t1);
+			liste.add(s);
+		}
+		polyline.setStuetzstellen(liste);
 	}
 
 	/**
@@ -258,11 +216,6 @@ public class BSpline extends AbstractApproximation<Double> {
 	 * @see #INTEGRATIONSINTERVALL
 	 */
 	public double integral(final Interval intervall) {
-		Polyline polyline;
-
-		polyline = new Polyline();
-		polyline.setStuetzstellen(interpoliere(INTEGRATIONSINTERVALL));
-
 		return polyline.integral(intervall);
 	}
 
@@ -298,7 +251,7 @@ public class BSpline extends AbstractApproximation<Double> {
 	 */
 	private Stuetzstelle<Double> bspline(final double t0) {
 		double bx, by;
-		int i;
+		final int i;
 
 		// Ränder der Ganglinie werden 1:1 übernommen
 		if (t0 <= t[0]) {
@@ -311,13 +264,11 @@ public class BSpline extends AbstractApproximation<Double> {
 		i = (int) t0 + ordnung - 1;
 		// for (int j = 0; j < p.length; j++) {
 		for (int j = i - ordnung + 1; j <= i; j++) {
-
-			double n;
+			final double n;
 
 			n = n(j, ordnung, t0);
 			bx += getStuetzstellen().get(j).getZeitstempel() * n;
 			by += getStuetzstellen().get(j).getWert().doubleValue() * n;
-
 		}
 
 		return new Stuetzstelle<Double>(Math.round(bx), by);

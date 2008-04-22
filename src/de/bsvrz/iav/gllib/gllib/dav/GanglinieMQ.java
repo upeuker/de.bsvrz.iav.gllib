@@ -125,6 +125,18 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	/** Das Intervall für das die Ganglinie prognostiziert wird. */
 	private Interval prognoseZeitraum;
 
+	/** Cache der Einzelganglinie. */
+	private Ganglinie<Double> gQKfz;
+
+	/** Cache der Einzelganglinie. */
+	private Ganglinie<Double> gQLkw;
+
+	/** Cache der Einzelganglinie. */
+	private Ganglinie<Double> gVPkw;
+
+	/** Cache der Einzelganglinie. */
+	private Ganglinie<Double> gVLkw;
+
 	/**
 	 * Kopiert die St&uumltzstellen, das Approximationsverfahren und alle
 	 * anderen Eigenschaften bis auf {@code approximationAktuell}. Der Wert für
@@ -433,7 +445,6 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 */
 	@Override
 	public Stuetzstelle<Messwerte> getStuetzstelle(final long zeitstempel) {
-		final Ganglinie<Double> gQKfz, gQLkw, gVPkw, gVLkw;
 
 		if (prognoseZeitraum != null && !prognoseZeitraum.contains(zeitstempel)) {
 			// Zeitstempel liegt nicht innerhalb der Prognoseganglinie
@@ -441,10 +452,13 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 					null, null, null, k1, k2));
 		}
 
-		gQKfz = getGanglinieQKfz();
-		gQLkw = getGanglinieQLkw();
-		gVPkw = getGanglinieVPkw();
-		gVLkw = getGanglinieVLkw();
+		if (!isApproximationAktuell()) {
+			gQKfz = getGanglinieQKfz();
+			gQLkw = getGanglinieQLkw();
+			gVPkw = getGanglinieVPkw();
+			gVLkw = getGanglinieVLkw();
+			setApproximationAktuell(true);
+		}
 
 		return new Stuetzstelle<Messwerte>(zeitstempel, new Messwerte(gQKfz
 				.getStuetzstelle(zeitstempel).getWert(), gQLkw.getStuetzstelle(
@@ -739,28 +753,9 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	@Override
 	public String toString() {
 		String result;
-		// List<Stuetzstelle<Messwerte>> liste;
-
-		// liste = getStuetzstellen();
 
 		result = getClass().getSimpleName() + "[\n";
 		result += GanglinienMQOperationen.formatierterText(this);
-		// result += "messQuerschnitt=" + messQuerschnitt;
-		// result += ", ereignisTyp=" + ereignisTyp;
-		// result += ", referenz=" + referenz;
-		// result += ", anzahlVerschmelzungen=" + anzahlVerschmelzungen;
-		// result += ", letzteVerschmelzung="
-		// + Timestamp.absoluteTime(letzteVerschmelzung);
-		// result += ", typ=" + typ;
-		// result += ", approximationDaK=" + getApproximationDaK();
-		// result += ", prognoseZeitraum=" + prognoseZeitraum;
-		// result += ", Anzahl Stützstellen=" + size();
-		// if (size() > 10) {
-		// result += ", erste Stützstelle=" + liste.get(0);
-		// result += ", letzte Stützstelle=" + liste.get(liste.size() - 1);
-		// } else {
-		// result += ", stuetzstellen=" + liste;
-		// }
 		result += "\n]";
 
 		return result;
