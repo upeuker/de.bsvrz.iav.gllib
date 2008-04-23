@@ -184,9 +184,6 @@ public class BSpline extends AbstractApproximation<Double> {
 				.getZeitstempel()
 				- getStuetzstellen().get(0).getZeitstempel();
 		aufloesung = intervall / Constants.MILLIS_PER_MINUTE;
-		if (aufloesung > 10000) {
-			System.err.println("Auflösung:" + aufloesung);
-		}
 		polyline = new Polyline();
 		liste = new ArrayList<Stuetzstelle<Double>>();
 		for (long i = 0; i <= aufloesung; i++) {
