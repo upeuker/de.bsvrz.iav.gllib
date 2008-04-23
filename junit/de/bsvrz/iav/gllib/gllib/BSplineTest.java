@@ -170,7 +170,8 @@ public class BSplineTest {
 		long zeitstempel;
 		int i;
 
-		System.out.println("Starte Test für einfache Ganglinie ...");
+		System.out
+				.println("Starte Performancetest B-Spline für einfache Ganglinie ...");
 
 		cal = Calendar.getInstance();
 		cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -179,10 +180,9 @@ public class BSplineTest {
 		cal.set(Calendar.MILLISECOND, 0);
 
 		g = ZufallsganglinienFactory.getInstance().erzeugeGanglinie(
-				Constants.MILLIS_PER_MINUTE);
+				Constants.MILLIS_PER_HOUR / 20);
 		GanglinienOperationen.verschiebe(g, cal.getTimeInMillis());
-		assertEquals("Die Anzahl der Stützstellen muss stimmen.", 1441, g
-				.size());
+		assertEquals("Die Anzahl der Stützstellen muss stimmen.", 481, g.size());
 
 		bspline = new BSpline(5);
 		g.setApproximation(bspline);
@@ -223,7 +223,8 @@ public class BSplineTest {
 		long zeitstempel;
 		int i;
 
-		System.out.println("Starte Test für Messquerschnittsganglinie ...");
+		System.out
+				.println("Starte Performancetest B-Spline für Messquerschnittsganglinie ...");
 
 		cal = Calendar.getInstance();
 		cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -267,4 +268,5 @@ public class BSplineTest {
 		System.out.println("Berechnung von " + i + " Stützstellen in "
 				+ Timestamp.relativeTime(zeitstempel));
 	}
+
 }

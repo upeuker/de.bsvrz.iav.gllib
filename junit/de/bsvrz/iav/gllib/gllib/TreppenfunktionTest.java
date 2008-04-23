@@ -27,11 +27,18 @@
 package de.bsvrz.iav.gllib.gllib;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Calendar;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import com.bitctrl.Constants;
 import com.bitctrl.util.Interval;
+import com.bitctrl.util.Timestamp;
+
+import de.bsvrz.iav.gllib.gllib.junit.ZufallsganglinienFactory;
 
 /**
  * Testet die Approximation einer Ganglinie mit Hilfe einer Treppenfunktion.
@@ -111,6 +118,59 @@ public class TreppenfunktionTest {
 		// Intervallgrenzen liegen nicht auf Stützstellen
 		intervall = new Interval(3500, 8500);
 		assertEquals(170000.0, treppe.integral(intervall));
+	}
+
+	/**
+	 * Macht einen Performance-Test mit einer zufälligen Ganglinie mit
+	 * Double-Stützstellen. Das Ergebnis wird nur auf der Konsole ausgegeben.
+	 */
+	@Test
+	public void performance() {
+		final Ganglinie<Double> g;
+		final Treppenfunktion treppe;
+		final Calendar cal;
+		final Interval intervall;
+		long zeitstempel;
+		int i;
+
+		System.out
+				.println("Starte Performancetest Treppenfunktion für einfache Ganglinie ...");
+
+		cal = Calendar.getInstance();
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+
+		g = ZufallsganglinienFactory.getInstance().erzeugeGanglinie(
+				Constants.MILLIS_PER_HOUR / 20);
+		GanglinienOperationen.verschiebe(g, cal.getTimeInMillis());
+		assertEquals("Die Anzahl der Stützstellen muss stimmen.", 481, g.size());
+
+		treppe = new Treppenfunktion();
+		g.setApproximation(treppe);
+
+		zeitstempel = System.currentTimeMillis();
+		i = 0;
+		intervall = new Interval(cal.getTimeInMillis(), cal.getTimeInMillis()
+				+ Constants.MILLIS_PER_DAY);
+		for (long t = intervall.getStart(); t <= intervall.getEnd(); t += Constants.MILLIS_PER_MINUTE) {
+			// for (long t = 0; t <= Constants.MILLIS_PER_DAY; t +=
+			// Constants.MILLIS_PER_MINUTE) {
+			Stuetzstelle<Double> s;
+
+			s = g.getStuetzstelle(t);
+			assertEquals(
+					"Der Zeitstempel der berechneten Stützstelle muss mit der Anfrage übereinstimmen.",
+					t, s.getZeitstempel());
+			assertTrue("Der Stützstellenwert darf nicht null sein.", s
+					.getWert() != null);
+			// System.out.println(s);
+			++i;
+		}
+		zeitstempel = System.currentTimeMillis() - zeitstempel;
+		System.out.println("Berechnung von " + i + " Stützstellen in "
+				+ Timestamp.relativeTime(zeitstempel));
 	}
 
 }
