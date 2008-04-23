@@ -82,7 +82,7 @@ public final class Ganglinienprognose implements DatensatzUpdateListener {
 	 * 
 	 * @return die Ganglinienprognose als Singleton.
 	 */
-	public static Ganglinienprognose getInstanz() {
+	public static synchronized Ganglinienprognose getInstanz() {
 		if (singleton == null) {
 			singleton = new Ganglinienprognose();
 		}
