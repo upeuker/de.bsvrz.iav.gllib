@@ -28,13 +28,9 @@ package de.bsvrz.iav.gllib.gllib.dav;
 
 import java.util.Collections;
 import java.util.EventObject;
-import java.util.HashSet;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
 
 import de.bsvrz.iav.gllib.gllib.modell.onlinedaten.OdPrognoseGanglinienAntwort;
-import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.objekte.MessQuerschnittAllgemein;
 
 /**
  * Repräsentiert eine Antwortnachricht der Ganglinienprognose. Enthalten sind
@@ -95,51 +91,6 @@ public class GlProgAntwortEvent extends EventObject {
 	 */
 	public List<GanglinieMQ> getGanglinien() {
 		return prognosen;
-	}
-
-	/**
-	 * Gibt die Menge der Messquerschnitte zurück, für die Ganglinien
-	 * prognostiziert wurden.
-	 * 
-	 * @return eine Menge von Messquerschnitten.
-	 * @deprecated siehe {@link #getPrognose(MessQuerschnittAllgemein)}
-	 */
-	@Deprecated
-	public Set<MessQuerschnittAllgemein> getMessquerschnitte() {
-		Set<MessQuerschnittAllgemein> menge;
-
-		menge = new HashSet<MessQuerschnittAllgemein>();
-		for (final GanglinieMQ g : prognosen) {
-			menge.add(g.getMessQuerschnitt());
-		}
-
-		return menge;
-	}
-
-	/**
-	 * Gibt die prognostizierte Ganglinie zu einem Messquerschnitt zurück.
-	 * <p>
-	 * <em>Hinweis:</em> Es werden nicht alle Eigenschaften der Ganglinie in
-	 * der Prognoseganglinie gesetzt. Gesetzt werden nur die Stütztstellen, das
-	 * Approximationsverfahren und der Messquerschnitt.
-	 * 
-	 * @param mq
-	 *            ein Messquerschnitt.
-	 * @return die Prognoseganglinie des Messquerschnitts.
-	 * @deprecated Die Antwort kann potentiell mehrere Ganglinien pro MQ
-	 *             liefern, deswegen ist diese Methode ungünstig.
-	 * @see #getGanglinien()
-	 */
-	@Deprecated
-	public GanglinieMQ getPrognose(final MessQuerschnittAllgemein mq) {
-		for (final GanglinieMQ g : prognosen) {
-			if (mq.equals(g.getMessQuerschnitt())) {
-				return g;
-			}
-		}
-
-		throw new NoSuchElementException(
-				"Für den Messquerschnitt wurde keine Prognoseganglinie angefragt.");
 	}
 
 	/**

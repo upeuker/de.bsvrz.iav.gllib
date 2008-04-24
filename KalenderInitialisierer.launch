@@ -8,6 +8,6 @@
 </listAttribute>
 <booleanAttribute key="org.eclipse.debug.core.appendEnvironmentVariables" value="true"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="de.bsvrz.iav.gllib.gllib.junit.KalenderInitialisierer"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-datenverteiler=10.44.44.12:8083&#13;&#10;-benutzer=Tester&#13;&#10;-authentifizierung=${workspace_loc}/VRZ3BaWue/skripte-bash/passwd&#13;&#10;-debugLevelFileText=all&#13;&#10;-debugLevelStdErrText=all&#13;&#10;-debugSetLoggerAndLevel=:warning&#13;&#10;-debugSetLoggerAndLevel=de.bsvrz.iav:config&#13;&#10;-reset"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-datenverteiler=192.168.1.137:8083&#13;&#10;-benutzer=Tester&#13;&#10;-authentifizierung=${workspace_loc}/VRZ3BaWue/skripte-bash/passwd&#13;&#10;-debugLevelFileText=all&#13;&#10;-debugLevelStdErrText=all&#13;&#10;-debugSetLoggerAndLevel=:warning&#13;&#10;-debugSetLoggerAndLevel=de.bsvrz.iav:config&#13;&#10;-reset"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="de.bsvrz.iav.gllib"/>
 </launchConfiguration>
