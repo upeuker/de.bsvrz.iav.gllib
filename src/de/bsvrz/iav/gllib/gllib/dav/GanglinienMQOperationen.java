@@ -457,9 +457,9 @@ public final class GanglinienMQOperationen {
 			abstand = 0;
 			tests = 0;
 			for (long j = start; j <= ende; j += intervall) {
-				verschiebe(ref, intervall);
 				abstand += basisabstand(ref, g);
 				tests++;
+				verschiebe(ref, intervall);
 			}
 
 			abstand = abstand / tests;
@@ -530,11 +530,11 @@ public final class GanglinienMQOperationen {
 			for (long j = start; j <= ende; j += intervall) {
 				final double abstand;
 
-				verschiebe(g, intervall);
 				abstand = basisabstand(referenz, g);
 				if (abstand <= maxFehler) {
 					fehler.put(abstand, g.clone());
 				}
+				verschiebe(g, intervall);
 			}
 		}
 

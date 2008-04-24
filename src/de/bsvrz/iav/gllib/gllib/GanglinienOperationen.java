@@ -534,9 +534,9 @@ public final class GanglinienOperationen {
 			abstand = 0;
 			tests = 0;
 			for (long j = start; j <= ende; j += intervall) {
-				GanglinienOperationen.verschiebe(ref, intervall);
 				abstand += basisabstand(ref, g);
 				tests++;
+				GanglinienOperationen.verschiebe(ref, intervall);
 			}
 
 			abstand = abstand / tests;
@@ -607,11 +607,11 @@ public final class GanglinienOperationen {
 			for (long j = start; j <= ende; j += intervall) {
 				final double abstand;
 
-				GanglinienOperationen.verschiebe(g, intervall);
 				abstand = basisabstand(referenz, g);
 				if (abstand <= maxFehler) {
 					fehler.put(abstand, g.clone());
 				}
+				GanglinienOperationen.verschiebe(g, intervall);
 			}
 		}
 
