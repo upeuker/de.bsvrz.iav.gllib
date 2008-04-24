@@ -43,7 +43,7 @@ public class Polyline extends AbstractApproximation<Double> {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Stuetzstelle<Double> get(long zeitstempel) {
+	public Stuetzstelle<Double> get(final long zeitstempel) {
 		Stuetzstelle<Double> s0, s1;
 		Double wert;
 		double x0, x1, y0, y1;
@@ -91,11 +91,12 @@ public class Polyline extends AbstractApproximation<Double> {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Die festgelegte Breite der Teilintervalle wird ignoriert, da sich das
+	 * Integral der Polylinie exakt bestimmen lässt.
 	 * 
-	 * @see de.bsvrz.iav.gllib.gllib.Approximation#integral(com.bitctrl.util.Interval)
+	 * {@inheritDoc}
 	 */
-	public double integral(Interval intervall) {
+	public double integral(final Interval intervall) {
 		final int start;
 		final int ende;
 		double flaeche = 0;

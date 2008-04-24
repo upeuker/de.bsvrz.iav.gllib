@@ -32,6 +32,7 @@ import static de.bsvrz.sys.funclib.bitctrl.math.RationaleZahl.multipliziere;
 import static de.bsvrz.sys.funclib.bitctrl.math.RationaleZahl.potenz;
 import static de.bsvrz.sys.funclib.bitctrl.math.RationaleZahl.subtrahiere;
 
+import com.bitctrl.Constants;
 import com.bitctrl.util.Interval;
 
 import de.bsvrz.sys.funclib.bitctrl.math.RationaleZahl;
@@ -47,14 +48,11 @@ import de.bsvrz.sys.funclib.bitctrl.math.algebra.Vektor;
  */
 public class CubicSpline extends AbstractApproximation<Double> {
 
-	/** Das Breite der Teilintervalle beim Integrieren: eine Minute. */
-	public static final long INTEGRATIONSINTERVALL = 60 * 1000;
-
 	/**
 	 * Faktor mit dem der Zeitstempel für das Rechnen verkleinert wird, um
-	 * numerische Fehler zu verkleinern: eine Minute.
+	 * numerische Fehler zu verkleinern, Standard: {@value}.
 	 */
-	private static final long FAKTOR = 60 * 1000;
+	private long faktor = Constants.MILLIS_PER_MINUTE;
 
 	/** Der erste Koeffizient des Polynoms. */
 	private RationaleZahl[] a;
@@ -74,7 +72,7 @@ public class CubicSpline extends AbstractApproximation<Double> {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Stuetzstelle<Double> get(long zeitstempel) {
+	public Stuetzstelle<Double> get(final long zeitstempel) {
 		if (getStuetzstellen().size() == 0
 				|| zeitstempel < getStuetzstellen().get(0).getZeitstempel()
 				|| zeitstempel > getStuetzstellen().get(
@@ -95,7 +93,7 @@ public class CubicSpline extends AbstractApproximation<Double> {
 	}
 
 	/**
-	 * Berechnet die Koeffizienten des Polynoms.
+	 * Berechnet die Koeffizienten des zugrundeliegenden Polynoms.
 	 */
 	public void initialisiere() {
 		int n;
@@ -122,9 +120,9 @@ public class CubicSpline extends AbstractApproximation<Double> {
 				h[i] = RationaleZahl.subtrahiere(
 						new RationaleZahl(getStuetzstellen().get(i + 1)
 								.getZeitstempel()
-								/ FAKTOR), new RationaleZahl(getStuetzstellen()
+								/ faktor), new RationaleZahl(getStuetzstellen()
 								.get(i).getZeitstempel()
-								/ FAKTOR));
+								/ faktor));
 			}
 		}
 
@@ -151,7 +149,7 @@ public class CubicSpline extends AbstractApproximation<Double> {
 				m.set(i - 1, i, m3);
 			}
 		}
-		Vektor c0 = Gauss.loeseLGS(m, v);
+		final Vektor c0 = Gauss.loeseLGS(m, v);
 		for (int i = 1; i < n - 1; i++) {
 			c[i] = c0.get(i - 1);
 		}
@@ -172,14 +170,13 @@ public class CubicSpline extends AbstractApproximation<Double> {
 	 * 
 	 * {@inheritDoc}
 	 * 
-	 * @see de.bsvrz.iav.gllib.gllib.Approximation#integral(com.bitctrl.util.Interval)
-	 * @see #INTEGRATIONSINTERVALL
+	 * @see #setIntegrationsintervall(long)
 	 */
-	public double integral(Interval intervall) {
+	public double integral(final Interval intervall) {
 		Polyline polyline;
 
 		polyline = new Polyline();
-		polyline.setStuetzstellen(interpoliere(INTEGRATIONSINTERVALL));
+		polyline.setStuetzstellen(interpoliere(getIntegrationsintervall()));
 
 		return polyline.integral(intervall);
 	}
@@ -199,7 +196,7 @@ public class CubicSpline extends AbstractApproximation<Double> {
 	 *            Zeitstempel der gesuchten Stützstelle
 	 * @return Die gesuchte Stützstelle
 	 */
-	private Stuetzstelle<Double> berechneStuetzstelle(long zeitstempel) {
+	private Stuetzstelle<Double> berechneStuetzstelle(final long zeitstempel) {
 		RationaleZahl r, x, xi;
 		int index;
 
@@ -211,8 +208,8 @@ public class CubicSpline extends AbstractApproximation<Double> {
 			}
 		}
 		xi = new RationaleZahl(getStuetzstellen().get(index).getZeitstempel()
-				/ FAKTOR);
-		x = new RationaleZahl(zeitstempel / FAKTOR);
+				/ faktor);
+		x = new RationaleZahl(zeitstempel / faktor);
 
 		r = a[index];
 		r = addiere(r, multipliziere(b[index], subtrahiere(x, xi)));
@@ -220,6 +217,33 @@ public class CubicSpline extends AbstractApproximation<Double> {
 		r = addiere(r, multipliziere(d[index], potenz(subtrahiere(x, xi), 3)));
 
 		return new Stuetzstelle<Double>(zeitstempel, r.doubleValue());
+	}
+
+	/**
+	 * Gibt den Faktor mit dem der Zeitstempel für das Rechnen verkleinert wird
+	 * zurück.
+	 * 
+	 * @return der Faktor
+	 * @see #setFaktor(long)
+	 */
+	public long getFaktor() {
+		return faktor;
+	}
+
+	/**
+	 * Legt den Faktor mit dem der Zeitstempel für das Rechnen verkleinert wird
+	 * fest. Der Faktor dient dazu den numerischen Fehler bei der
+	 * Initialisierung des Cubic-Splines zu verkleinern.
+	 * <p>
+	 * <em>Hinweis:</em> Wenn der Faktor geändert wird, muss anschließend
+	 * {@link #initialisiere()} aufgerufen werden, um die Änderung zu
+	 * übernehmen.
+	 * 
+	 * @param faktor
+	 *            the faktor to set
+	 */
+	public void setFaktor(final long faktor) {
+		this.faktor = faktor;
 	}
 
 }

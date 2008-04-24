@@ -29,11 +29,15 @@ package de.bsvrz.iav.gllib.gllib;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.bitctrl.Constants;
 import com.bitctrl.util.Interval;
 
 /**
  * Approximation einer Ganglinie mit Hilfe eines B-Splines beliebiger Ordung.
+ * Der B-Spline legt eine geglättete Kurve zwischen der ersten und letzten
+ * Stützstelle. Da hierbei sowohl der Stützstellenwert als auch der Zeitstempel
+ * der Stützstellen gewichtet wird, wird die Kurve mit einer Polylinie
+ * interpoliert. Das Intervall der Interpolation kann frei gewält werden,
+ * Standard ist eine Minute.
  * 
  * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
@@ -53,9 +57,6 @@ public class BSpline extends AbstractApproximation<Double> {
 	 */
 	public static final boolean OPTIMIERUNG = true;
 
-	/** Die Breite der Teilintervalle beim Integrieren: eine Minute. */
-	public static final long INTEGRATIONSINTERVALL = 60 * 1000;
-
 	/** Die Ordnung des B-Splines. */
 	private int ordnung;
 
@@ -64,6 +65,36 @@ public class BSpline extends AbstractApproximation<Double> {
 
 	/** Cacht die Interpolation der Approximation. */
 	private Polyline polyline;
+
+	/** Das Interpolationsintervall für die Polylinie, die den B-Spline cacht. */
+	private long interpolationsintervall;
+
+	/**
+	 * Gibt das Interpolationsintervall für die Polylinie, die den B-Spline
+	 * cacht, zurück.
+	 * 
+	 * @return das Interpolationsintervall.
+	 * @see #setInterpolationsintervall(long)
+	 */
+	public long getInterpolationsintervall() {
+		return interpolationsintervall;
+	}
+
+	/**
+	 * 
+	 * Legt das Interpolationsintervall für die Polylinie, die den B-Spline
+	 * cacht, fest.
+	 * <p>
+	 * <em>Hinweis:</em> Nach Änderung des Interpolationsintervalls muss
+	 * {@link #initialisiere()} aufgerufen werden, um die Änderung zu
+	 * übernehmen.
+	 * 
+	 * @param interpolationsintervall
+	 *            das Interpolationsintervall.
+	 */
+	public void setInterpolationsintervall(final long interpolationsintervall) {
+		this.interpolationsintervall = interpolationsintervall;
+	}
 
 	/**
 	 * Erzeugt einen B-Spline mit der Ordnung 5.
@@ -183,7 +214,7 @@ public class BSpline extends AbstractApproximation<Double> {
 		intervall = getStuetzstellen().get(getStuetzstellen().size() - 1)
 				.getZeitstempel()
 				- getStuetzstellen().get(0).getZeitstempel();
-		aufloesung = intervall / Constants.MILLIS_PER_MINUTE;
+		aufloesung = intervall / getInterpolationsintervall();
 		polyline = new Polyline();
 		liste = new ArrayList<Stuetzstelle<Double>>();
 		for (long i = 0; i <= aufloesung; i++) {
@@ -209,8 +240,7 @@ public class BSpline extends AbstractApproximation<Double> {
 	 * 
 	 * {@inheritDoc}
 	 * 
-	 * @see de.bsvrz.iav.gllib.gllib.Approximation#integral(com.bitctrl.util.Interval)
-	 * @see #INTEGRATIONSINTERVALL
+	 * @see #setIntegrationsintervall(long)
 	 */
 	public double integral(final Interval intervall) {
 		return polyline.integral(intervall);

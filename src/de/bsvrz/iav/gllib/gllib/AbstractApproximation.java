@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import com.bitctrl.Constants;
 import com.bitctrl.util.Interval;
 
 /**
@@ -44,6 +45,9 @@ import com.bitctrl.util.Interval;
  *            der Typ der Approximation.
  */
 public abstract class AbstractApproximation<T> implements Approximation<T> {
+
+	/** Das Breite der Teilintervalle beim Integrieren, Standard: {@value}. */
+	private long integrationsintervall = Constants.MILLIS_PER_MINUTE;
 
 	/** Liste der verwendeten Stützstellen. */
 	private final List<Stuetzstelle<T>> stuetzstellen;
@@ -57,8 +61,6 @@ public abstract class AbstractApproximation<T> implements Approximation<T> {
 
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @see de.bsvrz.iav.gllib.gllib.Approximation#getIntervall()
 	 */
 	public Interval getIntervall() {
 		return new Interval(stuetzstellen.get(0).getZeitstempel(),
@@ -67,8 +69,6 @@ public abstract class AbstractApproximation<T> implements Approximation<T> {
 
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @see de.bsvrz.iav.gllib.gllib.Approximation#getStuetzstellen()
 	 */
 	public List<Stuetzstelle<T>> getStuetzstellen() {
 		return Collections.unmodifiableList(stuetzstellen);
@@ -77,7 +77,7 @@ public abstract class AbstractApproximation<T> implements Approximation<T> {
 	/**
 	 * {@inheritDoc}
 	 */
-	public SortedSet<Stuetzstelle<T>> interpoliere(long intervallBreite) {
+	public SortedSet<Stuetzstelle<T>> interpoliere(final long intervallBreite) {
 		if (intervallBreite <= 0) {
 			throw new IllegalArgumentException(
 					"Intervallbreite muss größer null sein.");
@@ -118,7 +118,7 @@ public abstract class AbstractApproximation<T> implements Approximation<T> {
 	 * @return {@code true}, wenn der Wert der Approximation zum angegebenen
 	 *         Zeitpunkt definiert ist.
 	 */
-	public boolean isValid(long t) {
+	public boolean isValid(final long t) {
 		return stuetzstellen.get(0).getZeitstempel() <= t
 				&& t <= stuetzstellen.get(stuetzstellen.size() - 1)
 						.getZeitstempel();
@@ -130,9 +130,9 @@ public abstract class AbstractApproximation<T> implements Approximation<T> {
 	 * 
 	 * {@inheritDoc}
 	 */
-	public void setStuetzstellen(Collection<Stuetzstelle<T>> stuetzstellen) {
+	public void setStuetzstellen(final Collection<Stuetzstelle<T>> stuetzstellen) {
 		this.stuetzstellen.clear();
-		for (Stuetzstelle<T> s : stuetzstellen) {
+		for (final Stuetzstelle<T> s : stuetzstellen) {
 			if (s.getWert() != null) {
 				this.stuetzstellen.add(s);
 			}
@@ -149,7 +149,7 @@ public abstract class AbstractApproximation<T> implements Approximation<T> {
 	 * @return der Index der gefundenen Stützstelle oder {@code -1}, wenn es
 	 *         keine gibt.
 	 */
-	protected int findeStuetzstelleNach(long t) {
+	protected int findeStuetzstelleNach(final long t) {
 		int index, start, ende;
 		int mitte = 0;
 
@@ -195,7 +195,7 @@ public abstract class AbstractApproximation<T> implements Approximation<T> {
 	 * @return der Index der gefundenen Stützstelle oder {@code -1}, wenn es
 	 *         keine gibt.
 	 */
-	protected int findeStuetzstelleVor(long t) {
+	protected int findeStuetzstelleVor(final long t) {
 		int index, start, ende;
 		int mitte = 0;
 
@@ -230,6 +230,25 @@ public abstract class AbstractApproximation<T> implements Approximation<T> {
 		}
 
 		return index;
+	}
+
+	/**
+	 * Die Breite der Teilintervalle beim Integrieren zurück.
+	 * 
+	 * @return die Intervallbreite.
+	 */
+	public long getIntegrationsintervall() {
+		return integrationsintervall;
+	}
+
+	/**
+	 * Legt die Breite der Teilintervalle beim Integrieren fest.
+	 * 
+	 * @param integrationsintervall
+	 *            die Intervallbreite
+	 */
+	public void setIntegrationsintervall(final long integrationsintervall) {
+		this.integrationsintervall = integrationsintervall;
 	}
 
 }
