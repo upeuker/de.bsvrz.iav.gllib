@@ -31,6 +31,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Set;
 
 import com.bitctrl.util.Interval;
@@ -109,7 +110,7 @@ public class OdPrognoseGanglinienAntwort extends
 	 * Kapselt die Daten des Datensatzes.
 	 */
 	public static class Daten extends AbstractDatum implements
-			Collection<GanglinieMQ> {
+			List<GanglinieMQ> {
 
 		/** Eine beliebige Zeichenkette die der Absender frei eingetragen kann. */
 		private String absenderZeichen;
@@ -287,6 +288,76 @@ public class OdPrognoseGanglinienAntwort extends
 			return s + "]";
 		}
 
+		/**
+		 * {@inheritDoc}
+		 */
+		public void add(int index, GanglinieMQ element) {
+			ganglinien.add(index, element);
+		}
+
+		/**
+		 * {@inheritDoc}
+		 */
+		public boolean addAll(int index, Collection<? extends GanglinieMQ> c) {
+			return ganglinien.addAll(c);
+		}
+
+		/**
+		 * {@inheritDoc}
+		 */
+		public GanglinieMQ get(int index) {
+			return ganglinien.get(index);
+		}
+
+		/**
+		 * {@inheritDoc}
+		 */
+		public int indexOf(Object o) {
+			return ganglinien.indexOf(o);
+		}
+
+		/**
+		 * {@inheritDoc}
+		 */
+		public int lastIndexOf(Object o) {
+			return ganglinien.lastIndexOf(o);
+		}
+
+		/**
+		 * {@inheritDoc}
+		 */
+		public ListIterator<GanglinieMQ> listIterator() {
+			return ganglinien.listIterator();
+		}
+
+		/**
+		 * {@inheritDoc}
+		 */
+		public ListIterator<GanglinieMQ> listIterator(int index) {
+			return ganglinien.listIterator(index);
+		}
+
+		/**
+		 * {@inheritDoc}
+		 */
+		public GanglinieMQ remove(int index) {
+			return ganglinien.remove(index);
+		}
+
+		/**
+		 * {@inheritDoc}
+		 */
+		public GanglinieMQ set(int index, GanglinieMQ element) {
+			return ganglinien.set(index, element);
+		}
+
+		/**
+		 * {@inheritDoc}
+		 */
+		public List<GanglinieMQ> subList(int fromIndex, int toIndex) {
+			return ganglinien.subList(fromIndex, toIndex);
+		}
+
 	}
 
 	/** Die PID der Attributgruppe. */
@@ -315,8 +386,6 @@ public class OdPrognoseGanglinienAntwort extends
 
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @see de.bsvrz.sys.funclib.bitctrl.modell.Datensatz#erzeugeDatum()
 	 */
 	public Daten erzeugeDatum() {
 		return new Daten();
@@ -324,8 +393,6 @@ public class OdPrognoseGanglinienAntwort extends
 
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @see de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatensatz#getAspekte()
 	 */
 	@Override
 	public Collection<Aspect> getAspekte() {
@@ -338,8 +405,6 @@ public class OdPrognoseGanglinienAntwort extends
 
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @see de.bsvrz.sys.funclib.bitctrl.modell.Datensatz#getAttributGruppe()
 	 */
 	public AttributeGroup getAttributGruppe() {
 		return atg;
@@ -347,25 +412,23 @@ public class OdPrognoseGanglinienAntwort extends
 
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @see de.bsvrz.sys.funclib.bitctrl.modell.AbstractDatensatz#konvertiere(de.bsvrz.sys.funclib.bitctrl.modell.Datum)
 	 */
 	@Override
 	protected Data konvertiere(final Daten datum) {
 		final Data daten = erzeugeSendeCache();
-
-		Array ganglinien;
-		int i;
+		final Array ganglinien;
 
 		daten.getTextValue("AbsenderZeichen").setText(
 				datum.getAbsenderZeichen());
 
 		ganglinien = daten.getArray("PrognoseGanglinie");
 		ganglinien.setLength(datum.size());
-		i = 0;
-		for (final GanglinieMQ g : datum) {
-			Array stuetzstellen;
-			List<Stuetzstelle<Messwerte>> liste;
+		for (int i = 0; i < datum.size(); ++i) {
+			final Array stuetzstellen;
+			final List<Stuetzstelle<Messwerte>> liste;
+			final GanglinieMQ g;
+
+			g = datum.get(i);
 
 			// Allgemeines
 			ganglinien.getItem(i).getReferenceValue("Messquerschnitt")
@@ -420,7 +483,6 @@ public class OdPrognoseGanglinienAntwort extends
 							Messwerte.UNDEFINIERT);
 				}
 			}
-			i++;
 		}
 
 		return daten;
@@ -428,8 +490,6 @@ public class OdPrognoseGanglinienAntwort extends
 
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @see de.bsvrz.sys.funclib.bitctrl.modell.Datensatz#setDaten(de.bsvrz.dav.daf.main.ResultData)
 	 */
 	public void setDaten(final ResultData result) {
 		check(result);
@@ -442,10 +502,8 @@ public class OdPrognoseGanglinienAntwort extends
 
 			datum.setAbsenderZeichen(daten.getTextValue("AbsenderZeichen")
 					.getText());
-
-			datum.clear();
 			ganglinien = daten.getArray("PrognoseGanglinie");
-			for (int i = 0; i < ganglinien.getLength(); i++) {
+			for (int i = 0; i < ganglinien.getLength(); ++i) {
 				GanglinieMQ g;
 				Array feld;
 

@@ -27,9 +27,10 @@
 package de.bsvrz.iav.gllib.gllib.dav;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.EventObject;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
@@ -48,14 +49,14 @@ import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.objekte.MessQuerschnittAllgem
  */
 public class GlProgAntwortEvent extends EventObject {
 
-	/** Die Eigenschaft {@code serialVersionUID}. */
+	/** Die ID für die Serialisierung. */
 	private static final long serialVersionUID = 1L;
 
 	/** Eine beliebige Zeichenkette die der Absender frei eingetragen kann. */
 	private final String absenderZeichen;
 
-	/** Hash zum einfachen auffinden der passenden Ganglinie. */
-	private final Map<MessQuerschnittAllgemein, GanglinieMQ> prognosen;
+	/** Die Liste der Prognoseganglinien in der Antwort. */
+	private final List<GanglinieMQ> prognosen;
 
 	/**
 	 * Initialisiert interne Felder.
@@ -69,10 +70,7 @@ public class GlProgAntwortEvent extends EventObject {
 			final OdPrognoseGanglinienAntwort.Daten datum) {
 		super(quelle);
 		absenderZeichen = datum.getAbsenderZeichen();
-		prognosen = new HashMap<MessQuerschnittAllgemein, GanglinieMQ>();
-		for (final GanglinieMQ g : datum) {
-			prognosen.put(g.getMessQuerschnitt(), g);
-		}
+		prognosen = Collections.unmodifiableList(datum);
 	}
 
 	/**
@@ -97,7 +95,7 @@ public class GlProgAntwortEvent extends EventObject {
 	 * @return eine Menge von Ganglinien.
 	 */
 	public Collection<GanglinieMQ> getGanglinien() {
-		return prognosen.values();
+		return prognosen;
 	}
 
 	/**
@@ -105,9 +103,18 @@ public class GlProgAntwortEvent extends EventObject {
 	 * prognostiziert wurden.
 	 * 
 	 * @return eine Menge von Messquerschnitten.
+	 * @deprecated siehe {@link #getPrognose(MessQuerschnittAllgemein)}
 	 */
+	@Deprecated
 	public Set<MessQuerschnittAllgemein> getMessquerschnitte() {
-		return prognosen.keySet();
+		Set<MessQuerschnittAllgemein> menge;
+
+		menge = new HashSet<MessQuerschnittAllgemein>();
+		for (GanglinieMQ g : prognosen) {
+			menge.add(g.getMessQuerschnitt());
+		}
+
+		return menge;
 	}
 
 	/**
@@ -120,16 +127,20 @@ public class GlProgAntwortEvent extends EventObject {
 	 * @param mq
 	 *            ein Messquerschnitt.
 	 * @return die Prognoseganglinie des Messquerschnitts.
+	 * @deprecated Die Antwort kann potentiell mehrere Ganglinien pro MQ
+	 *             liefern, deswegen ist diese Methode ungünstig.
+	 * @see #getGanglinien()
 	 */
+	@Deprecated
 	public GanglinieMQ getPrognose(final MessQuerschnittAllgemein mq) {
-		GanglinieMQ ganglinie;
-
-		ganglinie = prognosen.get(mq);
-		if (ganglinie == null) {
-			throw new NoSuchElementException(
-					"Für den Messquerschnitt wurde keine Prognoseganglinie angefragt.");
+		for (GanglinieMQ g : prognosen) {
+			if (mq.equals(g.getMessQuerschnitt())) {
+				return g;
+			}
 		}
-		return ganglinie;
+
+		throw new NoSuchElementException(
+				"Für den Messquerschnitt wurde keine Prognoseganglinie angefragt.");
 	}
 
 	/**
