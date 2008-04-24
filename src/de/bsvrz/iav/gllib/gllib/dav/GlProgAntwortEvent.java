@@ -26,7 +26,6 @@
 
 package de.bsvrz.iav.gllib.gllib.dav;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.EventObject;
 import java.util.HashSet;
@@ -94,7 +93,7 @@ public class GlProgAntwortEvent extends EventObject {
 	 * 
 	 * @return eine Menge von Ganglinien.
 	 */
-	public Collection<GanglinieMQ> getGanglinien() {
+	public List<GanglinieMQ> getGanglinien() {
 		return prognosen;
 	}
 
@@ -110,7 +109,7 @@ public class GlProgAntwortEvent extends EventObject {
 		Set<MessQuerschnittAllgemein> menge;
 
 		menge = new HashSet<MessQuerschnittAllgemein>();
-		for (GanglinieMQ g : prognosen) {
+		for (final GanglinieMQ g : prognosen) {
 			menge.add(g.getMessQuerschnitt());
 		}
 
@@ -133,7 +132,7 @@ public class GlProgAntwortEvent extends EventObject {
 	 */
 	@Deprecated
 	public GanglinieMQ getPrognose(final MessQuerschnittAllgemein mq) {
-		for (GanglinieMQ g : prognosen) {
+		for (final GanglinieMQ g : prognosen) {
 			if (mq.equals(g.getMessQuerschnitt())) {
 				return g;
 			}
