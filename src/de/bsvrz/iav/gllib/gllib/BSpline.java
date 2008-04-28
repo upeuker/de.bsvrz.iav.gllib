@@ -29,6 +29,7 @@ package de.bsvrz.iav.gllib.gllib;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.bitctrl.Constants;
 import com.bitctrl.util.Interval;
 
 /**
@@ -111,6 +112,7 @@ public class BSpline extends AbstractApproximation<Double> {
 	 */
 	public BSpline(final int ordnung) {
 		this.ordnung = ordnung;
+		interpolationsintervall = Constants.MILLIS_PER_MINUTE;
 	}
 
 	/**

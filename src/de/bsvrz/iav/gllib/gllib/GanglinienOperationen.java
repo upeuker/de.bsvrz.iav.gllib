@@ -44,8 +44,6 @@ import com.bitctrl.util.Interval;
  * 
  * @author BitCtrl Systems GmbH, Schumann
  * @version $Id$
- * @todo Parameter defLueckenSchliessen wieder entfernen, außer beim
- *       Verschmelzen
  */
 public final class GanglinienOperationen {
 
@@ -83,14 +81,10 @@ public final class GanglinienOperationen {
 	 *            Erste Ganglinie
 	 * @param g2
 	 *            Zweite Ganglinie
-	 * @param defLueckenSchliessen
-	 *            wenn {@code true}, dann wird bei nur einem undefinierten
-	 *            Operanden der definierte Operand als Ergebnis angenommen. Wenn
-	 *            {@code false} dann ist das Ergebnis ebenfalls undefiniert.
 	 * @return Die "Summe" der beiden Ganglinien
 	 */
 	public static Ganglinie<Double> addiere(final Ganglinie<Double> g1,
-			final Ganglinie<Double> g2, final boolean defLueckenSchliessen) {
+			final Ganglinie<Double> g2) {
 		Ganglinie<Double> g;
 		Polyline p1, p2;
 		Queue<Long> zeitstempel;
@@ -112,25 +106,46 @@ public final class GanglinienOperationen {
 		g = new Ganglinie<Double>();
 		zeitstempel = vervollstaendigeStuetzstellen(g1, g2);
 
-		while (!zeitstempel.isEmpty()) {
-			long z;
-
-			z = zeitstempel.poll();
-
+		for (long z : zeitstempel) {
 			if (g1.isValid(z) && g2.isValid(z)) {
+				// irgendwas + irgendwas = irgendwas
 				g.put(z, p1.get(z).getWert() + p2.get(z).getWert());
-			} else if (defLueckenSchliessen) {
-				// undefiniert # irgendwas = irgendwas
-				if (g1.isValid(z)) {
-					g.put(z, p1.get(z).getWert());
-				} else if (g2.isValid(z)) {
-					g.put(z, p2.get(z).getWert());
+			} else if (g1.isValid(z) && p2.getStuetzstellen().size() > 0) {
+				Stuetzstelle<Double> erste, letzte;
+
+				erste = p2.getStuetzstellen().get(0);
+				letzte = p2.getStuetzstellen().get(
+						p2.getStuetzstellen().size() - 1);
+
+				if (z < erste.getZeitstempel()) {
+					// irgendwas + undefiniert = irgendwas, am Anfang
+					g.put(z, p1.get(z).getWert() + erste.getWert());
+				} else if (z > letzte.getZeitstempel()) {
+					// irgendwas + undefiniert = irgendwas, am Ende
+					g.put(z, p1.get(z).getWert() + letzte.getWert());
 				} else {
-					// beide Operanden sind undefiniert
+					// irgendwas + undefiniert = undefiniert, in der Mitte
+					g.put(z, null);
+				}
+			} else if (g2.isValid(z) && p1.getStuetzstellen().size() > 0) {
+				Stuetzstelle<Double> erste, letzte;
+
+				erste = p1.getStuetzstellen().get(0);
+				letzte = p1.getStuetzstellen().get(
+						p1.getStuetzstellen().size() - 1);
+
+				if (z < erste.getZeitstempel()) {
+					// undefiniert + irgendwas = irgendwas, am Anfang
+					g.put(z, p2.get(z).getWert() + erste.getWert());
+				} else if (z > letzte.getZeitstempel()) {
+					// undefiniert + irgendwas = irgendwas, am Ende
+					g.put(z, p2.get(z).getWert() + letzte.getWert());
+				} else {
+					// undefiniert + irgendwas = undefiniert, in der Mitte
 					g.put(z, null);
 				}
 			} else {
-				// undefiniert # irgendwas = undefiniert
+				// undefiniert + irgendwas = undefiniert
 				g.put(z, null);
 			}
 		}
@@ -219,14 +234,10 @@ public final class GanglinienOperationen {
 	 *            Erste Ganglinie
 	 * @param g2
 	 *            Zweite Ganglinie
-	 * @param defLueckenSchliessen
-	 *            wenn {@code true}, dann wird bei nur einem undefinierten
-	 *            Operanden der definierte Operand als Ergebnis angenommen. Wenn
-	 *            {@code false} dann ist das Ergebnis ebenfalls undefiniert.
 	 * @return Das "Produkt" der beiden Ganglinien
 	 */
 	public static Ganglinie<Double> dividiere(final Ganglinie<Double> g1,
-			final Ganglinie<Double> g2, final boolean defLueckenSchliessen) {
+			final Ganglinie<Double> g2) {
 		Ganglinie<Double> g;
 		Polyline p1, p2;
 		Queue<Long> zeitstempel;
@@ -248,6 +259,68 @@ public final class GanglinienOperationen {
 		g = new Ganglinie<Double>();
 		zeitstempel = vervollstaendigeStuetzstellen(g1, g2);
 
+		for (long z : zeitstempel) {
+			Double a, b, c;
+
+			if (g1.isValid(z) && g2.isValid(z)) {
+				// irgendwas + irgendwas = irgendwas
+				a = p1.get(z).getWert();
+				b = p2.get(z).getWert();
+			} else if (g1.isValid(z) && p2.getStuetzstellen().size() > 0) {
+				Stuetzstelle<Double> erste, letzte;
+
+				erste = p2.getStuetzstellen().get(0);
+				letzte = p2.getStuetzstellen().get(
+						p2.getStuetzstellen().size() - 1);
+
+				if (z < erste.getZeitstempel()) {
+					// irgendwas + undefiniert = irgendwas, am Anfang
+					a = p1.get(z).getWert();
+					b = erste.getWert();
+				} else if (z > letzte.getZeitstempel()) {
+					// irgendwas + undefiniert = irgendwas, am Ende
+					a = p1.get(z).getWert();
+					b = letzte.getWert();
+				} else {
+					// irgendwas + undefiniert = undefiniert, in der Mitte
+					a = b = null;
+				}
+			} else if (g2.isValid(z) && p1.getStuetzstellen().size() > 0) {
+				Stuetzstelle<Double> erste, letzte;
+
+				erste = p1.getStuetzstellen().get(0);
+				letzte = p1.getStuetzstellen().get(
+						p1.getStuetzstellen().size() - 1);
+
+				if (z < erste.getZeitstempel()) {
+					// undefiniert + irgendwas = irgendwas, am Anfang
+					a = p2.get(z).getWert();
+					b = erste.getWert();
+				} else if (z > letzte.getZeitstempel()) {
+					// undefiniert + irgendwas = irgendwas, am Ende
+					a = p2.get(z).getWert();
+					b = letzte.getWert();
+				} else {
+					// undefiniert + irgendwas = undefiniert, in der Mitte
+					a = b = null;
+				}
+			} else {
+				// undefiniert + irgendwas = undefiniert
+				a = b = null;
+			}
+
+			if (a != null && b != null) {
+				c = a / b;
+				if (Double.isNaN(c)) {
+					g.put(z, null);
+				} else {
+					g.put(z, c);
+				}
+			} else {
+				g.put(z, null);
+			}
+		}
+
 		while (!zeitstempel.isEmpty()) {
 			long z;
 
@@ -262,16 +335,6 @@ public final class GanglinienOperationen {
 					g.put(z, null);
 				} else {
 					g.put(z, x);
-				}
-			} else if (defLueckenSchliessen) {
-				// undefiniert # irgendwas = irgendwas
-				if (g1.isValid(z)) {
-					g.put(z, p1.get(z).getWert());
-				} else if (g2.isValid(z)) {
-					g.put(z, p2.get(z).getWert());
-				} else {
-					// beide Operanden sind undefiniert
-					g.put(z, null);
 				}
 			} else {
 				// undefiniert # irgendwas = undefiniert
@@ -378,14 +441,10 @@ public final class GanglinienOperationen {
 	 *            Erste Ganglinie
 	 * @param g2
 	 *            Zweite Ganglinie
-	 * @param defLueckenSchliessen
-	 *            wenn {@code true}, dann wird bei nur einem undefinierten
-	 *            Operanden der definierte Operand als Ergebnis angenommen. Wenn
-	 *            {@code false} dann ist das Ergebnis ebenfalls undefiniert.
 	 * @return Das "Produkt" der beiden Ganglinien
 	 */
 	public static Ganglinie<Double> multipliziere(final Ganglinie<Double> g1,
-			final Ganglinie<Double> g2, final boolean defLueckenSchliessen) {
+			final Ganglinie<Double> g2) {
 		Ganglinie<Double> g;
 		Polyline p1, p2;
 		Queue<Long> zeitstempel;
@@ -407,25 +466,46 @@ public final class GanglinienOperationen {
 		g = new Ganglinie<Double>();
 		zeitstempel = vervollstaendigeStuetzstellen(g1, g2);
 
-		while (!zeitstempel.isEmpty()) {
-			long z;
-
-			z = zeitstempel.poll();
-
+		for (long z : zeitstempel) {
 			if (g1.isValid(z) && g2.isValid(z)) {
+				// irgendwas * irgendwas = irgendwas
 				g.put(z, p1.get(z).getWert() * p2.get(z).getWert());
-			} else if (defLueckenSchliessen) {
-				// undefiniert # irgendwas = irgendwas
-				if (g1.isValid(z)) {
-					g.put(z, p1.get(z).getWert());
-				} else if (g2.isValid(z)) {
-					g.put(z, p2.get(z).getWert());
+			} else if (g1.isValid(z) && p2.getStuetzstellen().size() > 0) {
+				Stuetzstelle<Double> erste, letzte;
+
+				erste = p2.getStuetzstellen().get(0);
+				letzte = p2.getStuetzstellen().get(
+						p2.getStuetzstellen().size() - 1);
+
+				if (z < erste.getZeitstempel()) {
+					// irgendwas * undefiniert = irgendwas, am Anfang
+					g.put(z, p1.get(z).getWert() * erste.getWert());
+				} else if (z > letzte.getZeitstempel()) {
+					// irgendwas * undefiniert = irgendwas, am Ende
+					g.put(z, p1.get(z).getWert() * letzte.getWert());
 				} else {
-					// beide Operanden sind undefiniert
+					// irgendwas * undefiniert = undefiniert, in der Mitte
+					g.put(z, null);
+				}
+			} else if (g2.isValid(z) && p1.getStuetzstellen().size() > 0) {
+				Stuetzstelle<Double> erste, letzte;
+
+				erste = p1.getStuetzstellen().get(0);
+				letzte = p1.getStuetzstellen().get(
+						p1.getStuetzstellen().size() - 1);
+
+				if (z < erste.getZeitstempel()) {
+					// undefiniert * irgendwas = irgendwas, am Anfang
+					g.put(z, p2.get(z).getWert() * erste.getWert());
+				} else if (z > letzte.getZeitstempel()) {
+					// undefiniert * irgendwas = irgendwas, am Ende
+					g.put(z, p2.get(z).getWert() * letzte.getWert());
+				} else {
+					// undefiniert * irgendwas = undefiniert, in der Mitte
 					g.put(z, null);
 				}
 			} else {
-				// undefiniert # irgendwas = undefiniert
+				// undefiniert * irgendwas = undefiniert
 				g.put(z, null);
 			}
 		}
@@ -631,14 +711,10 @@ public final class GanglinienOperationen {
 	 *            Erste Ganglinie
 	 * @param g2
 	 *            Zweite Ganglinie
-	 * @param defLueckenSchliessen
-	 *            wenn {@code true}, dann wird bei nur einem undefinierten
-	 *            Operanden der definierte Operand als Ergebnis angenommen. Wenn
-	 *            {@code false} dann ist das Ergebnis ebenfalls undefiniert.
 	 * @return Die "Differenz" der beiden Ganglinien
 	 */
 	public static Ganglinie<Double> subtrahiere(final Ganglinie<Double> g1,
-			final Ganglinie<Double> g2, final boolean defLueckenSchliessen) {
+			final Ganglinie<Double> g2) {
 		Ganglinie<Double> g;
 		Polyline p1, p2;
 		Queue<Long> zeitstempel;
@@ -660,25 +736,46 @@ public final class GanglinienOperationen {
 		g = new Ganglinie<Double>();
 		zeitstempel = vervollstaendigeStuetzstellen(g1, g2);
 
-		while (!zeitstempel.isEmpty()) {
-			long z;
-
-			z = zeitstempel.poll();
-
+		for (long z : zeitstempel) {
 			if (g1.isValid(z) && g2.isValid(z)) {
+				// irgendwas - irgendwas = irgendwas
 				g.put(z, p1.get(z).getWert() - p2.get(z).getWert());
-			} else if (defLueckenSchliessen) {
-				// undefiniert # irgendwas = irgendwas
-				if (g1.isValid(z)) {
-					g.put(z, p1.get(z).getWert());
-				} else if (g2.isValid(z)) {
-					g.put(z, p2.get(z).getWert());
+			} else if (g1.isValid(z) && p2.getStuetzstellen().size() > 0) {
+				Stuetzstelle<Double> erste, letzte;
+
+				erste = p2.getStuetzstellen().get(0);
+				letzte = p2.getStuetzstellen().get(
+						p2.getStuetzstellen().size() - 1);
+
+				if (z < erste.getZeitstempel()) {
+					// irgendwas - undefiniert = irgendwas, am Anfang
+					g.put(z, p1.get(z).getWert() - erste.getWert());
+				} else if (z > letzte.getZeitstempel()) {
+					// irgendwas - undefiniert = irgendwas, am Ende
+					g.put(z, p1.get(z).getWert() - letzte.getWert());
 				} else {
-					// beide Operanden sind undefiniert
+					// irgendwas + undefiniert = undefiniert, in der Mitte
+					g.put(z, null);
+				}
+			} else if (g2.isValid(z) && p1.getStuetzstellen().size() > 0) {
+				Stuetzstelle<Double> erste, letzte;
+
+				erste = p1.getStuetzstellen().get(0);
+				letzte = p1.getStuetzstellen().get(
+						p1.getStuetzstellen().size() - 1);
+
+				if (z < erste.getZeitstempel()) {
+					// undefiniert - irgendwas = irgendwas, am Anfang
+					g.put(z, p2.get(z).getWert() - erste.getWert());
+				} else if (z > letzte.getZeitstempel()) {
+					// undefiniert - irgendwas = irgendwas, am Ende
+					g.put(z, p2.get(z).getWert() - letzte.getWert());
+				} else {
+					// undefiniert - irgendwas = undefiniert, in der Mitte
 					g.put(z, null);
 				}
 			} else {
-				// undefiniert # irgendwas = undefiniert
+				// undefiniert - irgendwas = undefiniert
 				g.put(z, null);
 			}
 		}
@@ -707,7 +804,8 @@ public final class GanglinienOperationen {
 	public static Ganglinie<Double> verbinde(final Ganglinie<Double> g1,
 			final Ganglinie<Double> g2, final long maxAbstand) {
 		if (g1.getIntervall().intersect(g2.getIntervall())) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException(
+					"Die zu verbindenden Ganglinien dürfen sicht überschneiden.");
 		}
 
 		final Ganglinie<Double> g;
@@ -830,15 +928,10 @@ public final class GanglinienOperationen {
 	 *            die Ganglinie die verschmolzen wird.
 	 * @param gewicht
 	 *            das Gewicht der zweiten Ganglinie.
-	 * @param defLueckenSchliessen
-	 *            wenn {@code true}, dann wird bei nur einem undefinierten
-	 *            Operanden der definierte Operand als Ergebnis angenommen. Wenn
-	 *            {@code false} dann ist das Ergebnis ebenfalls undefiniert.
 	 * @return das Ergebnis der Verschmelzung.
 	 */
 	public static Ganglinie<Double> verschmelze(final Ganglinie<Double> g1,
-			final Ganglinie<Double> g2, final long gewicht,
-			final boolean defLueckenSchliessen) {
+			final Ganglinie<Double> g2, final long gewicht) {
 		Ganglinie<Double> g;
 		Polyline p1, p2;
 		Queue<Long> zeitstempel;
@@ -860,7 +953,7 @@ public final class GanglinienOperationen {
 			if (g1.isValid(z) && g2.isValid(z)) {
 				g.put(z, (p1.get(z).getWert() + p2.get(z).getWert() * gewicht)
 						/ (gewicht + 1));
-			} else if (defLueckenSchliessen) {
+			} else {
 				// undefiniert # irgendwas = irgendwas
 				if (g1.isValid(z)) {
 					g.put(z, p1.get(z).getWert());
@@ -870,9 +963,6 @@ public final class GanglinienOperationen {
 					// beide Operanden sind undefiniert
 					g.put(z, null);
 				}
-			} else {
-				// undefiniert # irgendwas = undefiniert
-				g.put(z, null);
 			}
 		}
 

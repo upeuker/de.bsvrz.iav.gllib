@@ -48,8 +48,6 @@ import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
  * 
  * @author BitCtrl Systems GmbH, Schumann
  * @version $Id$
- * @todo Parameter defLueckenSchliessen wieder entfernen, außer beim
- *       Verschmelzen
  */
 public final class GanglinienMQOperationen {
 
@@ -132,27 +130,22 @@ public final class GanglinienMQOperationen {
 	 *            Erste Ganglinie
 	 * @param g2
 	 *            Zweite Ganglinie
-	 * @param defLueckenSchliessen
-	 *            wenn {@code true}, dann wird bei nur einem undefinierten
-	 *            Operanden der definierte Operand als Ergebnis angenommen. Wenn
-	 *            {@code false} dann ist das Ergebnis ebenfalls undefiniert.
 	 * @return Die "Summe" der beiden Ganglinien
 	 */
-	public static GanglinieMQ addiere(final GanglinieMQ g1,
-			final GanglinieMQ g2, final boolean defLueckenSchliessen) {
+	public static GanglinieMQ addiere(final GanglinieMQ g1, final GanglinieMQ g2) {
 		final Ganglinie<Double> gQKfz;
 		final Ganglinie<Double> gQLkw;
 		final Ganglinie<Double> gVPkw;
 		final Ganglinie<Double> gVLkw;
 
 		gQKfz = GanglinienOperationen.addiere(g1.getGanglinieQKfz(), g2
-				.getGanglinieQKfz(), defLueckenSchliessen);
+				.getGanglinieQKfz());
 		gQLkw = GanglinienOperationen.addiere(g1.getGanglinieQLkw(), g2
-				.getGanglinieQLkw(), defLueckenSchliessen);
+				.getGanglinieQLkw());
 		gVPkw = GanglinienOperationen.addiere(g1.getGanglinieVPkw(), g2
-				.getGanglinieVPkw(), defLueckenSchliessen);
+				.getGanglinieVPkw());
 		gVLkw = GanglinienOperationen.addiere(g1.getGanglinieVLkw(), g2
-				.getGanglinieVLkw(), defLueckenSchliessen);
+				.getGanglinieVLkw());
 
 		return kopiereMetaDaten(zusammenfuehren(gQKfz, gQLkw, gVPkw, gVLkw), g1);
 	}
@@ -222,14 +215,10 @@ public final class GanglinienMQOperationen {
 	 *            Erste Ganglinie
 	 * @param g2
 	 *            Zweite Ganglinie
-	 * @param defLueckenSchliessen
-	 *            wenn {@code true}, dann wird bei nur einem undefinierten
-	 *            Operanden der definierte Operand als Ergebnis angenommen. Wenn
-	 *            {@code false} dann ist das Ergebnis ebenfalls undefiniert.
 	 * @return Das "Produkt" der beiden Ganglinien
 	 */
 	public static GanglinieMQ dividiere(final GanglinieMQ g1,
-			final GanglinieMQ g2, final boolean defLueckenSchliessen) {
+			final GanglinieMQ g2) {
 		final Ganglinie<Double> gQKfz;
 		final Ganglinie<Double> gQLkw;
 		final Ganglinie<Double> gVPkw;
@@ -238,13 +227,13 @@ public final class GanglinienMQOperationen {
 		assert g1.getMessQuerschnitt().equals(g2.getMessQuerschnitt()) : "Die Ganglinien müssen zum gleichen Messquerschnitt gehören.";
 
 		gQKfz = GanglinienOperationen.dividiere(g1.getGanglinieQKfz(), g2
-				.getGanglinieQKfz(), defLueckenSchliessen);
+				.getGanglinieQKfz());
 		gQLkw = GanglinienOperationen.dividiere(g1.getGanglinieQLkw(), g2
-				.getGanglinieQLkw(), defLueckenSchliessen);
+				.getGanglinieQLkw());
 		gVPkw = GanglinienOperationen.dividiere(g1.getGanglinieVPkw(), g2
-				.getGanglinieVPkw(), defLueckenSchliessen);
+				.getGanglinieVPkw());
 		gVLkw = GanglinienOperationen.dividiere(g1.getGanglinieVLkw(), g2
-				.getGanglinieVLkw(), defLueckenSchliessen);
+				.getGanglinieVLkw());
 
 		return kopiereMetaDaten(zusammenfuehren(gQKfz, gQLkw, gVPkw, gVLkw), g1);
 	}
@@ -349,27 +338,23 @@ public final class GanglinienMQOperationen {
 	 *            Erste Ganglinie
 	 * @param g2
 	 *            Zweite Ganglinie
-	 * @param defLueckenSchliessen
-	 *            wenn {@code true}, dann wird bei nur einem undefinierten
-	 *            Operanden der definierte Operand als Ergebnis angenommen. Wenn
-	 *            {@code false} dann ist das Ergebnis ebenfalls undefiniert.
 	 * @return Das "Produkt" der beiden Ganglinien
 	 */
 	public static GanglinieMQ multipliziere(final GanglinieMQ g1,
-			final GanglinieMQ g2, final boolean defLueckenSchliessen) {
+			final GanglinieMQ g2) {
 		final Ganglinie<Double> gQKfz;
 		final Ganglinie<Double> gQLkw;
 		final Ganglinie<Double> gVPkw;
 		final Ganglinie<Double> gVLkw;
 
 		gQKfz = GanglinienOperationen.multipliziere(g1.getGanglinieQKfz(), g2
-				.getGanglinieQKfz(), defLueckenSchliessen);
+				.getGanglinieQKfz());
 		gQLkw = GanglinienOperationen.multipliziere(g1.getGanglinieQLkw(), g2
-				.getGanglinieQLkw(), defLueckenSchliessen);
+				.getGanglinieQLkw());
 		gVPkw = GanglinienOperationen.multipliziere(g1.getGanglinieVPkw(), g2
-				.getGanglinieVPkw(), defLueckenSchliessen);
+				.getGanglinieVPkw());
 		gVLkw = GanglinienOperationen.multipliziere(g1.getGanglinieVLkw(), g2
-				.getGanglinieVLkw(), defLueckenSchliessen);
+				.getGanglinieVLkw());
 
 		return kopiereMetaDaten(zusammenfuehren(gQKfz, gQLkw, gVPkw, gVLkw), g1);
 	}
@@ -555,27 +540,23 @@ public final class GanglinienMQOperationen {
 	 *            Erste Ganglinie
 	 * @param g2
 	 *            Zweite Ganglinie
-	 * @param defLueckenSchliessen
-	 *            wenn {@code true}, dann wird bei nur einem undefinierten
-	 *            Operanden der definierte Operand als Ergebnis angenommen. Wenn
-	 *            {@code false} dann ist das Ergebnis ebenfalls undefiniert.
 	 * @return Die "Differenz" der beiden Ganglinien
 	 */
 	public static GanglinieMQ subtrahiere(final GanglinieMQ g1,
-			final GanglinieMQ g2, final boolean defLueckenSchliessen) {
+			final GanglinieMQ g2) {
 		final Ganglinie<Double> gQKfz;
 		final Ganglinie<Double> gQLkw;
 		final Ganglinie<Double> gVPkw;
 		final Ganglinie<Double> gVLkw;
 
 		gQKfz = GanglinienOperationen.subtrahiere(g1.getGanglinieQKfz(), g2
-				.getGanglinieQKfz(), defLueckenSchliessen);
+				.getGanglinieQKfz());
 		gQLkw = GanglinienOperationen.subtrahiere(g1.getGanglinieQLkw(), g2
-				.getGanglinieQLkw(), defLueckenSchliessen);
+				.getGanglinieQLkw());
 		gVPkw = GanglinienOperationen.subtrahiere(g1.getGanglinieVPkw(), g2
-				.getGanglinieVPkw(), defLueckenSchliessen);
+				.getGanglinieVPkw());
 		gVLkw = GanglinienOperationen.subtrahiere(g1.getGanglinieVLkw(), g2
-				.getGanglinieVLkw(), defLueckenSchliessen);
+				.getGanglinieVLkw());
 
 		return kopiereMetaDaten(zusammenfuehren(gQKfz, gQLkw, gVPkw, gVLkw), g1);
 	}
@@ -687,26 +668,21 @@ public final class GanglinienMQOperationen {
 	 *            die historische Ganglinie die verschmolzen wird.
 	 * @param gewicht
 	 *            das Gewicht der zweiten Ganglinie.
-	 * @param defLueckenSchliessen
-	 *            wenn {@code true}, dann wird bei nur einem undefinierten
-	 *            Operanden der definierte Operand als Ergebnis angenommen. Wenn
-	 *            {@code false} dann ist das Ergebnis ebenfalls undefiniert.
 	 * @return das Ergebnis der Verschmelzung.
 	 */
 	public static GanglinieMQ verschmelze(final GanglinieMQ ganglinie,
-			final GanglinieMQ historGl, final long gewicht,
-			final boolean defLueckenSchliessen) {
+			final GanglinieMQ historGl, final long gewicht) {
 		final long zeitstempel;
 		final Ganglinie<Double> gQKfz, gQLkw, gVPkw, gVLkw;
 
 		gQKfz = GanglinienOperationen.verschmelze(ganglinie.getGanglinieQKfz(),
-				historGl.getGanglinieQKfz(), gewicht, defLueckenSchliessen);
+				historGl.getGanglinieQKfz(), gewicht);
 		gQLkw = GanglinienOperationen.verschmelze(ganglinie.getGanglinieQLkw(),
-				historGl.getGanglinieQLkw(), gewicht, defLueckenSchliessen);
+				historGl.getGanglinieQLkw(), gewicht);
 		gVPkw = GanglinienOperationen.verschmelze(ganglinie.getGanglinieVPkw(),
-				historGl.getGanglinieVPkw(), gewicht, defLueckenSchliessen);
+				historGl.getGanglinieVPkw(), gewicht);
 		gVLkw = GanglinienOperationen.verschmelze(ganglinie.getGanglinieVLkw(),
-				historGl.getGanglinieVLkw(), gewicht, defLueckenSchliessen);
+				historGl.getGanglinieVLkw(), gewicht);
 
 		historGl.clear();
 		historGl.putAll(zusammenfuehren(gQKfz, gQLkw, gVPkw, gVLkw));
