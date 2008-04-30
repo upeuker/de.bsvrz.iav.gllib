@@ -95,7 +95,7 @@ public class GanglinienOperationenTest {
 		ist = GanglinienOperationen.dividiere(g1, g2);
 
 		soll = new Ganglinie<Double>();
-		soll.put(0L, null);
+		soll.put(0L, 0.0);
 		soll.put(10L, 0.5);
 		soll.put(30L, 0.75);
 		soll.put(40L, 0.6666666666666666);
@@ -121,20 +121,18 @@ public class GanglinienOperationenTest {
 		g1.put(90L, 10.0);
 
 		g2 = new Ganglinie<Double>();
-		g2.put(10L, 20.0);
-		g2.put(30L, 40.0);
-		g2.put(70L, 0.0);
+		g2.put(30L, 20.0);
+		g2.put(40L, 40.0);
+		g2.put(60L, 0.0);
 		g2.put(90L, 20.0);
 
 		ist = GanglinienOperationen.multipliziere(g1, g2);
 
 		soll = new Ganglinie<Double>();
 		soll.put(0L, 20.0);
-		soll.put(10L, 200.0);
-		soll.put(30L, 1200.0);
-		soll.put(40L, 600.0);
-		soll.put(60L, 400.0);
-		soll.put(70L, 0.0);
+		soll.put(30L, 600.0);
+		soll.put(40L, 800.0);
+		soll.put(60L, 0.0);
 		soll.put(90L, 200.0);
 
 		assertEquals(soll.getStuetzstellen(), ist.getStuetzstellen());

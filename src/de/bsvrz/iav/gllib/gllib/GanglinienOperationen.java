@@ -106,7 +106,7 @@ public final class GanglinienOperationen {
 		g = new Ganglinie<Double>();
 		zeitstempel = vervollstaendigeStuetzstellen(g1, g2);
 
-		for (long z : zeitstempel) {
+		for (final long z : zeitstempel) {
 			if (g1.isValid(z) && g2.isValid(z)) {
 				// irgendwas + irgendwas = irgendwas
 				g.put(z, p1.get(z).getWert() + p2.get(z).getWert());
@@ -259,11 +259,11 @@ public final class GanglinienOperationen {
 		g = new Ganglinie<Double>();
 		zeitstempel = vervollstaendigeStuetzstellen(g1, g2);
 
-		for (long z : zeitstempel) {
+		for (final long z : zeitstempel) {
 			Double a, b, c;
 
 			if (g1.isValid(z) && g2.isValid(z)) {
-				// irgendwas + irgendwas = irgendwas
+				// irgendwas / irgendwas = irgendwas
 				a = p1.get(z).getWert();
 				b = p2.get(z).getWert();
 			} else if (g1.isValid(z) && p2.getStuetzstellen().size() > 0) {
@@ -274,15 +274,15 @@ public final class GanglinienOperationen {
 						p2.getStuetzstellen().size() - 1);
 
 				if (z < erste.getZeitstempel()) {
-					// irgendwas + undefiniert = irgendwas, am Anfang
+					// irgendwas / undefiniert = irgendwas, am Anfang
 					a = p1.get(z).getWert();
 					b = erste.getWert();
 				} else if (z > letzte.getZeitstempel()) {
-					// irgendwas + undefiniert = irgendwas, am Ende
+					// irgendwas / undefiniert = irgendwas, am Ende
 					a = p1.get(z).getWert();
 					b = letzte.getWert();
 				} else {
-					// irgendwas + undefiniert = undefiniert, in der Mitte
+					// irgendwas / undefiniert = undefiniert, in der Mitte
 					a = b = null;
 				}
 			} else if (g2.isValid(z) && p1.getStuetzstellen().size() > 0) {
@@ -293,7 +293,7 @@ public final class GanglinienOperationen {
 						p1.getStuetzstellen().size() - 1);
 
 				if (z < erste.getZeitstempel()) {
-					// undefiniert + irgendwas = irgendwas, am Anfang
+					// undefiniert / irgendwas = irgendwas, am Anfang
 					a = p2.get(z).getWert();
 					b = erste.getWert();
 				} else if (z > letzte.getZeitstempel()) {
@@ -311,33 +311,12 @@ public final class GanglinienOperationen {
 
 			if (a != null && b != null) {
 				c = a / b;
-				if (Double.isNaN(c)) {
+				if (Double.isNaN(c) || Double.isInfinite(c)) {
 					g.put(z, null);
 				} else {
 					g.put(z, c);
 				}
 			} else {
-				g.put(z, null);
-			}
-		}
-
-		while (!zeitstempel.isEmpty()) {
-			long z;
-
-			z = zeitstempel.poll();
-
-			if (g1.isValid(z) && g2.isValid(z)) {
-				double x;
-
-				x = p1.get(z).getWert() / p2.get(z).getWert();
-				if (x == Double.NaN || x == Double.NEGATIVE_INFINITY
-						|| x == Double.POSITIVE_INFINITY) {
-					g.put(z, null);
-				} else {
-					g.put(z, x);
-				}
-			} else {
-				// undefiniert # irgendwas = undefiniert
 				g.put(z, null);
 			}
 		}
@@ -466,7 +445,7 @@ public final class GanglinienOperationen {
 		g = new Ganglinie<Double>();
 		zeitstempel = vervollstaendigeStuetzstellen(g1, g2);
 
-		for (long z : zeitstempel) {
+		for (final long z : zeitstempel) {
 			if (g1.isValid(z) && g2.isValid(z)) {
 				// irgendwas * irgendwas = irgendwas
 				g.put(z, p1.get(z).getWert() * p2.get(z).getWert());
@@ -673,7 +652,7 @@ public final class GanglinienOperationen {
 		fehler = new TreeMap<Double, Ganglinie<Double>>();
 
 		// Alle Testganglinien durchlaufen
-		for (Ganglinie<Double> vergleich : liste) {
+		for (final Ganglinie<Double> vergleich : liste) {
 			final long start, ende;
 			final Ganglinie<Double> g;
 
@@ -736,7 +715,7 @@ public final class GanglinienOperationen {
 		g = new Ganglinie<Double>();
 		zeitstempel = vervollstaendigeStuetzstellen(g1, g2);
 
-		for (long z : zeitstempel) {
+		for (final long z : zeitstempel) {
 			if (g1.isValid(z) && g2.isValid(z)) {
 				// irgendwas - irgendwas = irgendwas
 				g.put(z, p1.get(z).getWert() - p2.get(z).getWert());
