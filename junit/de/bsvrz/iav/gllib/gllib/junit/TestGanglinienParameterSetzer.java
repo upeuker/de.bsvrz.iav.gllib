@@ -64,6 +64,9 @@ public final class TestGanglinienParameterSetzer implements StandardApplication 
 			EreignisTyp.PRAEFIX_PID + "sonntag",
 			EreignisTyp.PRAEFIX_PID + "ostersonntag" };
 
+	/** Liste von PIDs von Messquerschnitten, die parametriert werden sollen. */
+	private String[] objektPids;
+
 	/**
 	 * Startet die Applikation.
 	 * 
@@ -96,14 +99,23 @@ public final class TestGanglinienParameterSetzer implements StandardApplication 
 
 		ganglinien = ZufallsganglinienFactory.getInstance();
 
-		objekte = factory
-				.bestimmeModellobjekte(VerkehrsModellTypen.MESSQUERSCHNITTALLGEMEIN
-						.getPid());
+		if (objektPids != null) {
+			objekte = factory.bestimmeModellobjekte(objektPids);
+		} else {
+			objekte = factory
+					.bestimmeModellobjekte(VerkehrsModellTypen.MESSQUERSCHNITTALLGEMEIN
+							.getPid());
+		}
 		for (final SystemObjekt so : objekte) {
 			MessQuerschnittAllgemein mq;
 			PdGanglinie param;
 			PdGanglinie.Daten datum;
 
+			if (!(so instanceof MessQuerschnittAllgemein)) {
+				throw new IllegalStateException(
+						so
+								+ " ist kein Messquerschnitt. Es können nur Messquerschnitte bearbeitet werden.");
+			}
 			mq = (MessQuerschnittAllgemein) so;
 			param = mq.getParameterDatensatz(PdGanglinie.class);
 			try {
@@ -137,13 +149,22 @@ public final class TestGanglinienParameterSetzer implements StandardApplication 
 	}
 
 	/**
-	 * Es werden keine zusätzlichen Kommandozeilenargumente verwendet.
+	 * Folgende Parameter werden unterstützt.
+	 * <ul>
+	 * <li><code>-objekte</code>: Die PIDs der Messquerschnitte die
+	 * parametriert werden sollen. Mehrere PIDs können als kommagetrennte Liste
+	 * angegeben werden (ohne Leerzeichen). Fehlt der Parameter, werden alle
+	 * Messquerschnitte parametriert.</li>
+	 * </ul>
 	 * 
 	 * {@inheritDoc}
 	 */
 	public void parseArguments(final ArgumentList argumentList)
 			throws Exception {
-		// nix
+		if (argumentList.hasArgument("-objekte")) {
+			objektPids = argumentList.fetchArgument("-objekte=")
+					.asNonEmptyString().split(",");
+		}
 	}
 
 }
