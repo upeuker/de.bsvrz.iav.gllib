@@ -194,7 +194,7 @@ public class BSpline extends AbstractApproximation<Double> {
 
 		if (getStuetzstellen().size() < getOrdnung()) {
 			// Ordnung größer als Anzahl der Stützstellen, Ordung anpassen
-			setOrdnung((byte) getStuetzstellen().size());
+			setOrdnung(getStuetzstellen().size());
 		}
 
 		t = new int[getStuetzstellen().size() + ordnung];
@@ -254,7 +254,7 @@ public class BSpline extends AbstractApproximation<Double> {
 	 * @param ordnung
 	 *            Ordnung
 	 */
-	public void setOrdnung(final byte ordnung) {
+	public void setOrdnung(final int ordnung) {
 		if (ordnung < 1 || ordnung > getStuetzstellen().size()) {
 			throw new IllegalArgumentException(
 					"Die Ordnung muss zwischen 1 und der Anzahl der definierten Stützstellen liegen.");
