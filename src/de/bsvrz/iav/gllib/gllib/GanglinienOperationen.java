@@ -136,10 +136,10 @@ public final class GanglinienOperationen {
 
 				if (z < erste.getZeitstempel()) {
 					// undefiniert + irgendwas = irgendwas, am Anfang
-					g.put(z, p2.get(z).getWert() + erste.getWert());
+					g.put(z, erste.getWert() + p2.get(z).getWert());
 				} else if (z > letzte.getZeitstempel()) {
 					// undefiniert + irgendwas = irgendwas, am Ende
-					g.put(z, p2.get(z).getWert() + letzte.getWert());
+					g.put(z, letzte.getWert() + p2.get(z).getWert());
 				} else {
 					// undefiniert + irgendwas = undefiniert, in der Mitte
 					g.put(z, null);
@@ -294,12 +294,12 @@ public final class GanglinienOperationen {
 
 				if (z < erste.getZeitstempel()) {
 					// undefiniert / irgendwas = irgendwas, am Anfang
-					a = p2.get(z).getWert();
-					b = erste.getWert();
+					a = erste.getWert();
+					b = p2.get(z).getWert();
 				} else if (z > letzte.getZeitstempel()) {
 					// undefiniert + irgendwas = irgendwas, am Ende
-					a = p2.get(z).getWert();
-					b = letzte.getWert();
+					a = letzte.getWert();
+					b = p2.get(z).getWert();
 				} else {
 					// undefiniert + irgendwas = undefiniert, in der Mitte
 					a = b = null;
@@ -475,10 +475,10 @@ public final class GanglinienOperationen {
 
 				if (z < erste.getZeitstempel()) {
 					// undefiniert * irgendwas = irgendwas, am Anfang
-					g.put(z, p2.get(z).getWert() * erste.getWert());
+					g.put(z, erste.getWert() * p2.get(z).getWert());
 				} else if (z > letzte.getZeitstempel()) {
 					// undefiniert * irgendwas = irgendwas, am Ende
-					g.put(z, p2.get(z).getWert() * letzte.getWert());
+					g.put(z, letzte.getWert() * p2.get(z).getWert());
 				} else {
 					// undefiniert * irgendwas = undefiniert, in der Mitte
 					g.put(z, null);
@@ -745,10 +745,10 @@ public final class GanglinienOperationen {
 
 				if (z < erste.getZeitstempel()) {
 					// undefiniert - irgendwas = irgendwas, am Anfang
-					g.put(z, p2.get(z).getWert() - erste.getWert());
+					g.put(z, erste.getWert() - p2.get(z).getWert());
 				} else if (z > letzte.getZeitstempel()) {
 					// undefiniert - irgendwas = irgendwas, am Ende
-					g.put(z, p2.get(z).getWert() - letzte.getWert());
+					g.put(z, letzte.getWert() - p2.get(z).getWert());
 				} else {
 					// undefiniert - irgendwas = undefiniert, in der Mitte
 					g.put(z, null);

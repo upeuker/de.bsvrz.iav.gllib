@@ -54,22 +54,29 @@ public class GanglinienOperationenTest {
 		g1.put(90L, 10.0);
 
 		g2 = new Ganglinie<Double>();
-		g2.put(10L, 20.0);
+		g2.put(20L, 50.0);
 		g2.put(30L, 40.0);
-		g2.put(70L, 0.0);
+		g2.put(60L, 10.0);
+		g2.put(90L, 40.0);
+		g2.put(100L, 30.0);
 
 		ist = GanglinienOperationen.addiere(g1, g2);
 
 		soll = new Ganglinie<Double>();
-		soll.put(0L, 20.0);
-		soll.put(10L, 30.0);
+		soll.put(0L, 50.0);
+		soll.put(20L, 70.0);
 		soll.put(30L, 70.0);
 		soll.put(40L, 50.0);
 		soll.put(60L, 50.0);
-		soll.put(70L, 30.0);
-		soll.put(90L, 10.0);
+		soll.put(90L, 50.0);
+		soll.put(100L, 40.0);
 
-		assertEquals(soll.getStuetzstellen(), ist.getStuetzstellen());
+		assertEquals("Die Anzahl der Stützstellen muss übereinstimmen.", soll
+				.size(), ist.size());
+		for (final Long t : soll.keySet()) {
+			assertEquals("Der Stützstellenwert für " + t
+					+ " muss übereinstimmen.", soll.get(t), ist.get(t));
+		}
 	}
 
 	/**
@@ -87,23 +94,29 @@ public class GanglinienOperationenTest {
 		g1.put(90L, 10.0);
 
 		g2 = new Ganglinie<Double>();
-		g2.put(10L, 20.0);
+		g2.put(20L, 50.0);
 		g2.put(30L, 40.0);
-		g2.put(70L, 0.0);
-		g2.put(90L, 20.0);
+		g2.put(60L, 10.0);
+		g2.put(90L, 40.0);
+		g2.put(100L, 30.0);
 
 		ist = GanglinienOperationen.dividiere(g1, g2);
 
 		soll = new Ganglinie<Double>();
 		soll.put(0L, 0.0);
-		soll.put(10L, 0.5);
+		soll.put(20L, 0.4);
 		soll.put(30L, 0.75);
-		soll.put(40L, 0.6666666666666666);
+		soll.put(40L, 0.6666666666);
 		soll.put(60L, 4.0);
-		soll.put(70L, null);
-		soll.put(90L, 0.5);
+		soll.put(90L, 0.25);
+		soll.put(100L, 0.3333333333);
 
-		assertEquals(soll.getStuetzstellen(), ist.getStuetzstellen());
+		assertEquals("Die Anzahl der Stützstellen muss übereinstimmen.", soll
+				.size(), ist.size());
+		for (final Long t : soll.keySet()) {
+			assertEquals("Der Stützstellenwert für " + t
+					+ " muss übereinstimmen.", soll.get(t), ist.get(t));
+		}
 	}
 
 	/**
@@ -114,28 +127,36 @@ public class GanglinienOperationenTest {
 		Ganglinie<Double> g1, g2, ist, soll;
 
 		g1 = new Ganglinie<Double>();
-		g1.put(0L, 1.0);
+		g1.put(0L, 0.0);
 		g1.put(30L, 30.0);
 		g1.put(40L, 20.0);
 		g1.put(60L, 40.0);
 		g1.put(90L, 10.0);
 
 		g2 = new Ganglinie<Double>();
-		g2.put(30L, 20.0);
-		g2.put(40L, 40.0);
-		g2.put(60L, 0.0);
-		g2.put(90L, 20.0);
+		g2.put(20L, 50.0);
+		g2.put(30L, 40.0);
+		g2.put(60L, 10.0);
+		g2.put(90L, 40.0);
+		g2.put(100L, 30.0);
 
 		ist = GanglinienOperationen.multipliziere(g1, g2);
 
 		soll = new Ganglinie<Double>();
-		soll.put(0L, 20.0);
-		soll.put(30L, 600.0);
-		soll.put(40L, 800.0);
-		soll.put(60L, 0.0);
-		soll.put(90L, 200.0);
+		soll.put(0L, 0.0);
+		soll.put(20L, 1000.0);
+		soll.put(30L, 1200.0);
+		soll.put(40L, 600.0);
+		soll.put(60L, 400.0);
+		soll.put(90L, 400.0);
+		soll.put(100L, 300.0);
 
-		assertEquals(soll.getStuetzstellen(), ist.getStuetzstellen());
+		assertEquals("Die Anzahl der Stützstellen muss übereinstimmen.", soll
+				.size(), ist.size());
+		for (final Long t : soll.keySet()) {
+			assertEquals("Der Stützstellenwert für " + t
+					+ " muss übereinstimmen.", soll.get(t), ist.get(t));
+		}
 	}
 
 	/**
@@ -153,23 +174,29 @@ public class GanglinienOperationenTest {
 		g1.put(90L, 10.0);
 
 		g2 = new Ganglinie<Double>();
-		g2.put(10L, 20.0);
+		g2.put(20L, 50.0);
 		g2.put(30L, 40.0);
-		g2.put(70L, 0.0);
-		g2.put(90L, 20.0);
+		g2.put(60L, 10.0);
+		g2.put(90L, 40.0);
+		g2.put(100L, 30.0);
 
 		ist = GanglinienOperationen.subtrahiere(g1, g2);
 
 		soll = new Ganglinie<Double>();
-		soll.put(0L, -20.0);
-		soll.put(10L, -10.0);
+		soll.put(0L, -50.0);
+		soll.put(20L, -30.0);
 		soll.put(30L, -10.0);
 		soll.put(40L, -10.0);
 		soll.put(60L, 30.0);
-		soll.put(70L, 30.0);
-		soll.put(90L, -10.0);
+		soll.put(90L, -30.0);
+		soll.put(100L, -20.0);
 
-		assertEquals(soll.getStuetzstellen(), ist.getStuetzstellen());
+		assertEquals("Die Anzahl der Stützstellen muss übereinstimmen.", soll
+				.size(), ist.size());
+		for (final Long t : soll.keySet()) {
+			assertEquals("Der Stützstellenwert für " + t
+					+ " muss übereinstimmen.", soll.get(t), ist.get(t));
+		}
 	}
 
 	/**
