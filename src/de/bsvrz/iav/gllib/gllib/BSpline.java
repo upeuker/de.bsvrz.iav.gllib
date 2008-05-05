@@ -32,6 +32,8 @@ import java.util.List;
 import com.bitctrl.Constants;
 import com.bitctrl.util.Interval;
 
+import de.bsvrz.sys.funclib.debug.Debug;
+
 /**
  * Approximation einer Ganglinie mit Hilfe eines B-Splines beliebiger Ordung.
  * Der B-Spline legt eine geglättete Kurve zwischen der ersten und letzten
@@ -69,6 +71,9 @@ public class BSpline extends AbstractApproximation<Double> {
 
 	/** Das Interpolationsintervall für die Polylinie, die den B-Spline cacht. */
 	private long interpolationsintervall;
+
+	/** Der Logger der Klasse. */
+	private final Debug log;
 
 	/**
 	 * Gibt das Interpolationsintervall für die Polylinie, die den B-Spline
@@ -111,6 +116,8 @@ public class BSpline extends AbstractApproximation<Double> {
 	 *            die Ordnung des Bspline.
 	 */
 	public BSpline(final int ordnung) {
+		log = Debug.getLogger();
+
 		this.ordnung = ordnung;
 		interpolationsintervall = Constants.MILLIS_PER_MINUTE;
 	}
@@ -194,6 +201,11 @@ public class BSpline extends AbstractApproximation<Double> {
 
 		if (getStuetzstellen().size() < getOrdnung()) {
 			// Ordnung größer als Anzahl der Stützstellen, Ordung anpassen
+			log
+					.info("Für die aktuelle Ordnung "
+							+ getOrdnung()
+							+ " sind nicht genügend Stützstellen vorhanden. Die Ordnung wird auf "
+							+ getStuetzstellen().size() + " herabgesetzt.");
 			setOrdnung(getStuetzstellen().size());
 		}
 
