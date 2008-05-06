@@ -294,7 +294,7 @@ public class OdPrognoseGanglinienAnfrage extends
 			String s = getClass().getName() + "[";
 
 			s += "zeitpunkt=" + getZeitpunkt();
-			s += ", valid=" + isValid();
+			s += ", datenStatus=" + getDatenStatus();
 			s += ", absender=" + absender;
 			s += ", absenderZeichen=" + absenderZeichen;
 			s += ", Anzahl der Teilanfragen=" + anfragen.size();

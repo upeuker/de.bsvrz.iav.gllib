@@ -38,7 +38,7 @@ import com.bitctrl.util.Interval;
  * <p>
  * Aus einer Ganglinie wird ein Teilintervall rausgeschnitten. Auf der linken
  * Seit liegt eine Stützstelle direkt auf der Intervallgrenze und auf der
- * rechten Seite nicht. AUf der rechten Seite muss der Wert interpoliert werden.
+ * rechten Seite nicht. Auf der rechten Seite muss der Wert interpoliert werden.
  * 
  * @author BitCtrl Systems GmbH, Schumann
  * @version $Id$
@@ -56,30 +56,31 @@ public class Prueffall6 {
 	 * übernommen. Die Stützstelle an der rechten Seite wird interpoliert.
 	 */
 	@Test
-	public void testfall6() {
-		Ganglinie<Double> g, erg;
+	public void testCutOperation() {
+		Ganglinie<Double> ist, soll;
 		Interval i;
 
-		g = new Ganglinie<Double>();
-		g.put(5 * MILLIS_PER_MINUTE, 35.0);
-		g.put(15 * MILLIS_PER_MINUTE, 20.0);
-		g.put(20 * MILLIS_PER_MINUTE, 30.0);
-		g.put(35 * MILLIS_PER_MINUTE, 10.0);
-		g.put(50 * MILLIS_PER_MINUTE, 25.0);
-		g.put(65 * MILLIS_PER_MINUTE, 20.0);
-		g.put(75 * MILLIS_PER_MINUTE, 30.0);
-		g.put(80 * MILLIS_PER_MINUTE, 20.0);
+		ist = new Ganglinie<Double>();
+		ist.put(5 * MILLIS_PER_MINUTE, 35.0);
+		ist.put(15 * MILLIS_PER_MINUTE, 20.0);
+		ist.put(20 * MILLIS_PER_MINUTE, 30.0);
+		ist.put(35 * MILLIS_PER_MINUTE, 10.0);
+		ist.put(50 * MILLIS_PER_MINUTE, 25.0);
+		ist.put(65 * MILLIS_PER_MINUTE, 20.0);
+		ist.put(75 * MILLIS_PER_MINUTE, 30.0);
+		ist.put(80 * MILLIS_PER_MINUTE, 20.0);
 
 		i = new Interval(20 * MILLIS_PER_MINUTE, 70 * MILLIS_PER_MINUTE);
-		g = GanglinienOperationen.auschneiden(g, i);
+		ist = GanglinienOperationen.auschneiden(ist, i);
 
-		erg = new Ganglinie<Double>();
-		erg.put(20 * MILLIS_PER_MINUTE, 30.0);
-		erg.put(35 * MILLIS_PER_MINUTE, 10.0);
-		erg.put(50 * MILLIS_PER_MINUTE, 25.0);
-		erg.put(65 * MILLIS_PER_MINUTE, 20.0);
-		erg.put(70 * MILLIS_PER_MINUTE, 25.0);
+		soll = new Ganglinie<Double>();
+		soll.put(20 * MILLIS_PER_MINUTE, 30.0);
+		soll.put(35 * MILLIS_PER_MINUTE, 10.0);
+		soll.put(50 * MILLIS_PER_MINUTE, 25.0);
+		soll.put(65 * MILLIS_PER_MINUTE, 20.0);
+		soll.put(70 * MILLIS_PER_MINUTE, 25.0);
 
-		assertEquals(erg.getStuetzstellen(), g.getStuetzstellen());
+		assertEquals(soll.getStuetzstellen(), ist.getStuetzstellen());
 	}
+
 }

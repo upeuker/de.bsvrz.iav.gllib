@@ -115,7 +115,7 @@ public class GanglinienOperationenTest {
 				.size(), ist.size());
 		for (final Long t : soll.keySet()) {
 			assertEquals("Der Stützstellenwert für " + t
-					+ " muss übereinstimmen.", soll.get(t), ist.get(t));
+					+ " muss übereinstimmen.", soll.get(t), ist.get(t), 0.00001);
 		}
 	}
 

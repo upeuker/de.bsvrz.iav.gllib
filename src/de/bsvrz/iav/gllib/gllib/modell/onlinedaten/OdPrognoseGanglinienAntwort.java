@@ -281,7 +281,7 @@ public class OdPrognoseGanglinienAntwort extends
 			String s = getClass().getName() + "[";
 
 			s += "zeitpunkt=" + getZeitpunkt();
-			s += ", valid=" + isValid();
+			s += ", datenStatus=" + getDatenStatus();
 			s += ", absenderZeichen=" + absenderZeichen;
 			s += ", ganglinien=" + ganglinien;
 
@@ -291,35 +291,36 @@ public class OdPrognoseGanglinienAntwort extends
 		/**
 		 * {@inheritDoc}
 		 */
-		public void add(int index, GanglinieMQ element) {
+		public void add(final int index, final GanglinieMQ element) {
 			ganglinien.add(index, element);
 		}
 
 		/**
 		 * {@inheritDoc}
 		 */
-		public boolean addAll(int index, Collection<? extends GanglinieMQ> c) {
+		public boolean addAll(final int index,
+				final Collection<? extends GanglinieMQ> c) {
 			return ganglinien.addAll(c);
 		}
 
 		/**
 		 * {@inheritDoc}
 		 */
-		public GanglinieMQ get(int index) {
+		public GanglinieMQ get(final int index) {
 			return ganglinien.get(index);
 		}
 
 		/**
 		 * {@inheritDoc}
 		 */
-		public int indexOf(Object o) {
+		public int indexOf(final Object o) {
 			return ganglinien.indexOf(o);
 		}
 
 		/**
 		 * {@inheritDoc}
 		 */
-		public int lastIndexOf(Object o) {
+		public int lastIndexOf(final Object o) {
 			return ganglinien.lastIndexOf(o);
 		}
 
@@ -333,28 +334,28 @@ public class OdPrognoseGanglinienAntwort extends
 		/**
 		 * {@inheritDoc}
 		 */
-		public ListIterator<GanglinieMQ> listIterator(int index) {
+		public ListIterator<GanglinieMQ> listIterator(final int index) {
 			return ganglinien.listIterator(index);
 		}
 
 		/**
 		 * {@inheritDoc}
 		 */
-		public GanglinieMQ remove(int index) {
+		public GanglinieMQ remove(final int index) {
 			return ganglinien.remove(index);
 		}
 
 		/**
 		 * {@inheritDoc}
 		 */
-		public GanglinieMQ set(int index, GanglinieMQ element) {
+		public GanglinieMQ set(final int index, final GanglinieMQ element) {
 			return ganglinien.set(index, element);
 		}
 
 		/**
 		 * {@inheritDoc}
 		 */
-		public List<GanglinieMQ> subList(int fromIndex, int toIndex) {
+		public List<GanglinieMQ> subList(final int fromIndex, final int toIndex) {
 			return ganglinien.subList(fromIndex, toIndex);
 		}
 

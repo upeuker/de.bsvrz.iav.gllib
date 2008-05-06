@@ -1,10 +1,23 @@
 @ECHO OFF
 
+
+REM ############################################################################
+REM Folgende Parameter müssen überprüft und evtl. angepasst werden.
+REM ############################################################################
+
+REM Der Klassenpfad für die Ganglinien-Bibliothek und deren JUnit-Testklassen.
 SET CP=..\de.bsvrz.iav.gllib-runtime.jar;..\de.bsvrz.iav.gllib-test.jar
 
+
+REM ############################################################################
+REM Ab hier muss nichts mehr angepasst werden.
+REM ############################################################################
+
 CHCP 1252
-TITLE JUnit-Test für SWE 5.4 Funktionen Fuzzy
+TITLE SWE 5.5 Funktionen Ganglinien (JUnit-Test)
 
 java -cp %CP% com.bitctrl.junit.TestRunner de.bsvrz.iav.gllib
 
-pause
+
+REM Nach dem Beenden warten, damit Meldungen gelesen werden können
+PAUSE
