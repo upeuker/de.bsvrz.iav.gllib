@@ -26,6 +26,8 @@
 
 package de.bsvrz.iav.gllib.gllib.junit;
 
+import static org.junit.Assert.assertNotNull;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -83,7 +85,7 @@ public class EreignisFactory {
 		PRIORITAET,
 
 		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
-		AUSSCHUSS,
+		AUSSCHLUSS,
 
 		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
 		TYP,
@@ -301,7 +303,7 @@ public class EreignisFactory {
 		rs = stat.executeQuery(sql);
 		while (rs.next()) {
 			final String name;
-			final EreignisTyp ereignisTyp;
+			final EreignisTyp ereignisTyp, auschluss;
 			final PdGanglinienModellAutomatischesLernenEreignis param;
 			final PdGanglinienModellAutomatischesLernenEreignis.Daten datum;
 			String pid;
@@ -343,6 +345,15 @@ public class EreignisFactory {
 					.getInt(Ereignistypen.MAX_WICHTUNGSFAKTOR.name()));
 			datum.setVergleichsSchrittweite(rs
 					.getLong(Ereignistypen.VERGLEICHSSCHRITTWEITE.name()));
+
+			pid = rs.getString(Ereignistypen.AUSSCHLUSS.name());
+			if (!rs.wasNull()) {
+				pid = DavTools.generierePID(pid, EreignisTyp.PRAEFIX_PID);
+				auschluss = (EreignisTyp) factory.getModellobjekt(pid);
+				assertNotNull(auschluss);
+				datum.getAusschlussliste().add(auschluss);
+			}
+
 			param.sendeDaten(datum);
 			log.info("Ereignistyp " + ereignisTyp + " angelegt.");
 		}
