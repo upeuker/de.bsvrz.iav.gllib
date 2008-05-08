@@ -26,6 +26,8 @@
 
 package de.bsvrz.iav.gllib.gllib.dav;
 
+import com.bitctrl.math.MathTools;
+
 import de.bsvrz.sys.funclib.bitctrl.util.dav.Umrechung;
 
 /**
@@ -142,11 +144,10 @@ public class Messwerte {
 
 	/**
 	 * Zwei Stützstellen sind identisch, wenn beide den selben Zeitstempel und
-	 * die selben Werte haben.
+	 * die selben Werte haben. Die Stützstellenwert müssen lediglich auf fünf
+	 * Kommastellen übereinstimmen.
 	 * 
 	 * {@inheritDoc}
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
 	public boolean equals(final Object obj) {
@@ -156,26 +157,26 @@ public class Messwerte {
 
 			s = (Messwerte) obj;
 
-			if (qKfz != null) {
-				gleich = qKfz.equals(s.qKfz);
+			if (qKfz != null && s.qKfz != null) {
+				gleich = MathTools.ca(qKfz, s.qKfz, 0.00001);
 			} else {
 				gleich = qKfz == s.qKfz;
 			}
 
-			if (qLkw != null) {
-				gleich &= qLkw.equals(s.qLkw);
+			if (qLkw != null && s.qLkw != null) {
+				gleich &= MathTools.ca(qLkw, s.qLkw, 0.00001);
 			} else {
 				gleich &= qLkw == s.qLkw;
 			}
 
-			if (vLkw != null) {
-				gleich &= vLkw.equals(s.vLkw);
+			if (vLkw != null && s.vLkw != null) {
+				gleich &= MathTools.ca(vLkw, s.vLkw, 0.00001);
 			} else {
 				gleich &= vLkw == s.vLkw;
 			}
 
-			if (vPkw != null) {
-				gleich &= vPkw.equals(s.vPkw);
+			if (vPkw != null && s.vPkw != null) {
+				gleich &= MathTools.ca(vPkw, s.vPkw, 0.00001);
 			} else {
 				gleich &= vPkw == s.vPkw;
 			}
@@ -254,10 +255,8 @@ public class Messwerte {
 
 	/**
 	 * Gibt ein Tupel (Zeitstempel, QKfz, QLkw, VPkw, VLkw) zurück.
-	 * <p>
-	 * {@inheritDoc}
 	 * 
-	 * @see java.lang.Object#toString()
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String toString() {
