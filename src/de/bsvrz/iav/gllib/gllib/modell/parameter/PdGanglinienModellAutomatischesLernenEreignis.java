@@ -192,6 +192,9 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 		 * Gibt den Wert der Eigenschaft {@code ganglinienTyp} wieder.
 		 * 
 		 * @return {@code ganglinienTyp}.
+		 * @see de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ#TYP_ABSOLUT
+		 * @see de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ#TYP_ADDITIV
+		 * @see de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ#TYP_MULTIPLIKATIV
 		 */
 		public int getGanglinienTyp() {
 			return ganglinienTyp;
@@ -297,6 +300,9 @@ public class PdGanglinienModellAutomatischesLernenEreignis
 		 * 
 		 * @param ganglinienTyp
 		 *            der neue Wert von {@code ganglinienTyp}.
+		 * @see de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ#TYP_ABSOLUT
+		 * @see de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ#TYP_ADDITIV
+		 * @see de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ#TYP_MULTIPLIKATIV
 		 */
 		public void setGanglinienTyp(final int ganglinienTyp) {
 			this.ganglinienTyp = ganglinienTyp;

@@ -756,7 +756,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 
 		result = getClass().getSimpleName() + "[\n";
 		result += GanglinienMQOperationen.formatierterText(this);
-		result += "\n]";
+		result += "]";
 
 		return result;
 	}
