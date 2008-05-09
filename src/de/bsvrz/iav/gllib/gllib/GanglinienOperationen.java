@@ -407,8 +407,8 @@ public final class GanglinienOperationen {
 		}
 		zeitstempel.add(ende);
 
-		return (int) Math.round(fehler(g1.getApproximation(), g2
-				.getApproximation(), zeitstempel));
+		return (int) Math.round(fehler(g1.getApproximation(),
+				g2.getApproximation(), zeitstempel));
 	}
 
 	/**
@@ -584,24 +584,19 @@ public final class GanglinienOperationen {
 		// Abstände der Ganglinien bestimmen
 		for (int i = 0; i < liste.size(); i++) {
 			final Ganglinie<Double> g, ref;
-			double abstand;
-			int tests;
 
 			ref = referenz.clone();
 			GanglinienOperationen.verschiebe(ref, -offsetVor);
 			g = liste.get(i);
-			abstand = 0;
-			tests = 0;
 			for (long j = start; j <= ende; j += intervall) {
-				abstand += basisabstand(ref, g);
-				tests++;
+				double abstand;
+				abstand = basisabstand(ref, g);
+				if (abstand <= maxFehler) {
+					fehler.put(abstand, i);
+				}
 				GanglinienOperationen.verschiebe(ref, intervall);
 			}
 
-			abstand = abstand / tests;
-			if (abstand <= maxFehler) {
-				fehler.put(abstand, i);
-			}
 		}
 
 		// Die erste Ganglinie ist die mit dem geringsten Abstand
