@@ -28,7 +28,12 @@ package de.bsvrz.iav.gllib.gllib;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Test;
+
+import com.bitctrl.Constants;
 
 /**
  * Testet die Verwendung einer Ganglinie.
@@ -71,8 +76,8 @@ public class GanglinienOperationenTest {
 		soll.put(90L, 50.0);
 		soll.put(100L, 40.0);
 
-		assertEquals("Die Anzahl der Stützstellen muss übereinstimmen.", soll
-				.size(), ist.size());
+		assertEquals("Die Anzahl der Stützstellen muss übereinstimmen.",
+				soll.size(), ist.size());
 		for (final Long t : soll.keySet()) {
 			assertEquals("Der Stützstellenwert für " + t
 					+ " muss übereinstimmen.", soll.get(t), ist.get(t));
@@ -111,8 +116,8 @@ public class GanglinienOperationenTest {
 		soll.put(90L, 0.25);
 		soll.put(100L, 0.3333333333);
 
-		assertEquals("Die Anzahl der Stützstellen muss übereinstimmen.", soll
-				.size(), ist.size());
+		assertEquals("Die Anzahl der Stützstellen muss übereinstimmen.",
+				soll.size(), ist.size());
 		for (final Long t : soll.keySet()) {
 			assertEquals("Der Stützstellenwert für " + t
 					+ " muss übereinstimmen.", soll.get(t), ist.get(t), 0.00001);
@@ -151,8 +156,8 @@ public class GanglinienOperationenTest {
 		soll.put(90L, 400.0);
 		soll.put(100L, 300.0);
 
-		assertEquals("Die Anzahl der Stützstellen muss übereinstimmen.", soll
-				.size(), ist.size());
+		assertEquals("Die Anzahl der Stützstellen muss übereinstimmen.",
+				soll.size(), ist.size());
 		for (final Long t : soll.keySet()) {
 			assertEquals("Der Stützstellenwert für " + t
 					+ " muss übereinstimmen.", soll.get(t), ist.get(t));
@@ -191,8 +196,8 @@ public class GanglinienOperationenTest {
 		soll.put(90L, -30.0);
 		soll.put(100L, -20.0);
 
-		assertEquals("Die Anzahl der Stützstellen muss übereinstimmen.", soll
-				.size(), ist.size());
+		assertEquals("Die Anzahl der Stützstellen muss übereinstimmen.",
+				soll.size(), ist.size());
 		for (final Long t : soll.keySet()) {
 			assertEquals("Der Stützstellenwert für " + t
 					+ " muss übereinstimmen.", soll.get(t), ist.get(t));
@@ -242,4 +247,195 @@ public class GanglinienOperationenTest {
 
 		assertEquals(69, GanglinienOperationen.komplexerAbstand(g1, g2, 10L));
 	}
+
+	/**
+	 * Testet das Pattern-Matching, welches die Ganglinie mit dem kleinsten
+	 * Abstand zurückgibt.
+	 */
+	@Test
+	public void testPatternMatchingGanglinie() {
+		final Ganglinie<Double> referenz, soll, ist;
+		final List<Ganglinie<Double>> liste;
+		Ganglinie<Double> g;
+
+		liste = new ArrayList<Ganglinie<Double>>();
+
+		g = new Ganglinie<Double>();
+		g.setApproximation(new Polyline());
+		g.put(0 * Constants.MILLIS_PER_MINUTE, 10.0);
+		g.put(10 * Constants.MILLIS_PER_MINUTE, 20.0);
+		g.put(20 * Constants.MILLIS_PER_MINUTE, 30.0);
+		liste.add(g);
+
+		g = new Ganglinie<Double>();
+		g.setApproximation(new Polyline());
+		g.put(0 * Constants.MILLIS_PER_MINUTE, 20.0);
+		g.put(10 * Constants.MILLIS_PER_MINUTE, 30.0);
+		g.put(20 * Constants.MILLIS_PER_MINUTE, 10.0);
+		liste.add(g);
+
+		g = new Ganglinie<Double>();
+		g.setApproximation(new Polyline());
+		g.put(0 * Constants.MILLIS_PER_MINUTE, 40.0);
+		g.put(10 * Constants.MILLIS_PER_MINUTE, 70.0);
+		g.put(20 * Constants.MILLIS_PER_MINUTE, 60.0);
+		liste.add(g);
+
+		referenz = new Ganglinie<Double>();
+		referenz.setApproximation(new Polyline());
+		referenz.put(0 * Constants.MILLIS_PER_MINUTE, 20.0);
+		referenz.put(10 * Constants.MILLIS_PER_MINUTE, 30.0);
+		referenz.put(20 * Constants.MILLIS_PER_MINUTE, 10.0);
+
+		soll = referenz;
+		ist = GanglinienOperationen.patternMatchingGanglinie(referenz, liste,
+				10 * Constants.MILLIS_PER_MINUTE,
+				10 * Constants.MILLIS_PER_MINUTE,
+				1 * Constants.MILLIS_PER_MINUTE, 0);
+		assertEquals(soll, ist);
+	}
+
+	/**
+	 * Testet das Pattern-Matching, welches die Ganglinie mit dem kleinsten
+	 * Abstand zurückgibt. Alle Ganglinien überschneiden sich nicht!
+	 */
+	@Test
+	public void testPatternMatchingGanglinieKeine() {
+		final Ganglinie<Double> referenz, soll, ist;
+		final List<Ganglinie<Double>> liste;
+		Ganglinie<Double> g;
+
+		liste = new ArrayList<Ganglinie<Double>>();
+
+		g = new Ganglinie<Double>();
+		g.setApproximation(new Polyline());
+		g.put(0 * Constants.MILLIS_PER_MINUTE, 10.0);
+		g.put(10 * Constants.MILLIS_PER_MINUTE, 20.0);
+		g.put(20 * Constants.MILLIS_PER_MINUTE, 30.0);
+		liste.add(g);
+
+		g = new Ganglinie<Double>();
+		g.setApproximation(new Polyline());
+		g.put(30 * Constants.MILLIS_PER_MINUTE, 20.0);
+		g.put(40 * Constants.MILLIS_PER_MINUTE, 30.0);
+		g.put(50 * Constants.MILLIS_PER_MINUTE, 10.0);
+		liste.add(g);
+
+		g = new Ganglinie<Double>();
+		g.setApproximation(new Polyline());
+		g.put(60 * Constants.MILLIS_PER_MINUTE, 40.0);
+		g.put(70 * Constants.MILLIS_PER_MINUTE, 70.0);
+		g.put(80 * Constants.MILLIS_PER_MINUTE, 60.0);
+		liste.add(g);
+
+		referenz = new Ganglinie<Double>();
+		referenz.setApproximation(new Polyline());
+		referenz.put(90 * Constants.MILLIS_PER_MINUTE, 20.0);
+		referenz.put(100 * Constants.MILLIS_PER_MINUTE, 30.0);
+		referenz.put(110 * Constants.MILLIS_PER_MINUTE, 10.0);
+
+		soll = null;
+		ist = GanglinienOperationen.patternMatchingGanglinie(referenz, liste,
+				5 * Constants.MILLIS_PER_MINUTE,
+				5 * Constants.MILLIS_PER_MINUTE,
+				1 * Constants.MILLIS_PER_MINUTE, 0);
+		assertEquals(soll, ist);
+	}
+
+	/**
+	 * Testet das Pattern-Matching, welches den Index der Ganglinie mit dem
+	 * kleinsten Abstand zurückgibt.
+	 */
+	@Test
+	public void testPatternMatchingIndex() {
+		final Ganglinie<Double> referenz;
+		final List<Ganglinie<Double>> liste;
+		final int soll, ist;
+		Ganglinie<Double> g;
+
+		liste = new ArrayList<Ganglinie<Double>>();
+
+		g = new Ganglinie<Double>();
+		g.setApproximation(new Polyline());
+		g.put(0 * Constants.MILLIS_PER_MINUTE, 10.0);
+		g.put(10 * Constants.MILLIS_PER_MINUTE, 20.0);
+		g.put(20 * Constants.MILLIS_PER_MINUTE, 30.0);
+		liste.add(g);
+
+		g = new Ganglinie<Double>();
+		g.setApproximation(new Polyline());
+		g.put(0 * Constants.MILLIS_PER_MINUTE, 20.0);
+		g.put(10 * Constants.MILLIS_PER_MINUTE, 30.0);
+		g.put(20 * Constants.MILLIS_PER_MINUTE, 10.0);
+		liste.add(g);
+
+		g = new Ganglinie<Double>();
+		g.setApproximation(new Polyline());
+		g.put(0 * Constants.MILLIS_PER_MINUTE, 40.0);
+		g.put(10 * Constants.MILLIS_PER_MINUTE, 70.0);
+		g.put(20 * Constants.MILLIS_PER_MINUTE, 60.0);
+		liste.add(g);
+
+		referenz = new Ganglinie<Double>();
+		referenz.setApproximation(new Polyline());
+		referenz.put(0 * Constants.MILLIS_PER_MINUTE, 20.0);
+		referenz.put(10 * Constants.MILLIS_PER_MINUTE, 30.0);
+		referenz.put(20 * Constants.MILLIS_PER_MINUTE, 10.0);
+
+		soll = 1;
+		ist = GanglinienOperationen.patternMatchingIndex(referenz, liste,
+				10 * Constants.MILLIS_PER_MINUTE,
+				10 * Constants.MILLIS_PER_MINUTE,
+				1 * Constants.MILLIS_PER_MINUTE, 0);
+		assertEquals(soll, ist);
+	}
+
+	/**
+	 * Testet das Pattern-Matching, welches den Index der Ganglinie mit dem
+	 * kleinsten Abstand zurückgibt. Alle Ganglinien überschneiden sich nicht!
+	 */
+	@Test
+	public void testPatternMatchingIndexKeine() {
+		final Ganglinie<Double> referenz;
+		final List<Ganglinie<Double>> liste;
+		final int soll, ist;
+		Ganglinie<Double> g;
+
+		liste = new ArrayList<Ganglinie<Double>>();
+
+		g = new Ganglinie<Double>();
+		g.setApproximation(new Polyline());
+		g.put(0 * Constants.MILLIS_PER_MINUTE, 10.0);
+		g.put(10 * Constants.MILLIS_PER_MINUTE, 20.0);
+		g.put(20 * Constants.MILLIS_PER_MINUTE, 30.0);
+		liste.add(g);
+
+		g = new Ganglinie<Double>();
+		g.setApproximation(new Polyline());
+		g.put(30 * Constants.MILLIS_PER_MINUTE, 20.0);
+		g.put(40 * Constants.MILLIS_PER_MINUTE, 30.0);
+		g.put(50 * Constants.MILLIS_PER_MINUTE, 10.0);
+		liste.add(g);
+
+		g = new Ganglinie<Double>();
+		g.setApproximation(new Polyline());
+		g.put(60 * Constants.MILLIS_PER_MINUTE, 40.0);
+		g.put(70 * Constants.MILLIS_PER_MINUTE, 70.0);
+		g.put(80 * Constants.MILLIS_PER_MINUTE, 60.0);
+		liste.add(g);
+
+		referenz = new Ganglinie<Double>();
+		referenz.setApproximation(new Polyline());
+		referenz.put(90 * Constants.MILLIS_PER_MINUTE, 20.0);
+		referenz.put(100 * Constants.MILLIS_PER_MINUTE, 30.0);
+		referenz.put(110 * Constants.MILLIS_PER_MINUTE, 10.0);
+
+		soll = -1;
+		ist = GanglinienOperationen.patternMatchingIndex(referenz, liste,
+				5 * Constants.MILLIS_PER_MINUTE,
+				5 * Constants.MILLIS_PER_MINUTE,
+				1 * Constants.MILLIS_PER_MINUTE, 0);
+		assertEquals(soll, ist);
+	}
+
 }

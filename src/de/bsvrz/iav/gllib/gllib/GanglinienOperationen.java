@@ -213,6 +213,7 @@ public final class GanglinienOperationen {
 			final Ganglinie<Double> g2) {
 		final Polyline p1, p2;
 		final Queue<Long> zeitstempel;
+		final double fehler;
 
 		p1 = new Polyline();
 		p1.setStuetzstellen(g1.getStuetzstellen());
@@ -222,7 +223,11 @@ public final class GanglinienOperationen {
 		p2.initialisiere();
 
 		zeitstempel = vervollstaendigeStuetzstellen(g1, g2);
-		return (int) Math.round(fehler(p1, p2, zeitstempel));
+		fehler = fehler(p1, p2, zeitstempel);
+		if (fehler < Double.POSITIVE_INFINITY) {
+			return (int) Math.round(fehler);
+		}
+		return Integer.MAX_VALUE;
 	}
 
 	/**
@@ -982,11 +987,12 @@ public final class GanglinienOperationen {
 				undefinierte++;
 			}
 		}
-		fehler = Math.sqrt(summe / (zeitstempel.size() - undefinierte));
-		if (fehler == Double.NaN) {
+
+		if (zeitstempel.size() - undefinierte == 0) {
 			// Die beiden Ganglinienintevalle überschneiden sich nicht.
 			return Double.POSITIVE_INFINITY;
 		}
+		fehler = Math.sqrt(summe / (zeitstempel.size() - undefinierte));
 
 		// Prozentualen Fehler bestimmen
 		summe = 0;
