@@ -53,31 +53,37 @@ import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.objekte.MessQuerschnittAllgem
  */
 public class GanglinieMQ extends Ganglinie<Messwerte> {
 
-	/** Die Attributgruppe, in der historische Ganglinien gesichert werden. */
+	/**
+	 * Die Attributgruppe, in der historische Ganglinien gesichert werden:
+	 * {@value}.
+	 */
 	public static final String ATG_GANGLINIE = "atg.ganglinie";
 
-	/** Datenkatalogkonstante für die unbestimmte Approximation. */
+	/** Datenkatalogkonstante für die unbestimmte Approximation: {@value}. */
 	public static final int APPROX_UNBESTIMMT = 0;
 
-	/** Datenkatalogkonstante für einen B-Spline. */
+	/** Datenkatalogkonstante für einen B-Spline: {@value}. */
 	public static final int APPROX_BSPLINE = 1;
 
-	/** Datenkatalogkonstante für einen Cubic-Spline. */
+	/** Datenkatalogkonstante für einen Cubic-Spline: {@value}. */
 	public static final int APPROX_CUBICSPLINE = 2;
 
-	/** Datenkatalogkonstante für eine Polylinie. */
+	/** Datenkatalogkonstante für eine Polylinie: {@value}. */
 	public static final int APPROX_POLYLINE = 3;
 
-	/** Standardordung der Approximation. Nur für B-Spline relevant. */
+	/** Standardordung der Approximation. Nur für B-Spline relevant: {@value}. */
 	public static final byte APPROX_STANDARD_ORDNUNG = 5;
 
-	/** Datenkatalogkonstante für eine absolute Ganglinie. */
+	/** Datenkatalogkonstante für eine absolute Ganglinie: {@value}. */
 	public static final int TYP_ABSOLUT = 0;
 
-	/** Datenkatalogkonstante für eine relative additive Ganglinie. */
+	/** Datenkatalogkonstante für eine relative additive Ganglinie: {@value}. */
 	public static final int TYP_ADDITIV = 1;
 
-	/** Datenkatalogkonstante für eine relative multiplikative Ganglinie. */
+	/**
+	 * Datenkatalogkonstante für eine relative multiplikative Ganglinie:
+	 * {@value}.
+	 */
 	public static final int TYP_MULTIPLIKATIV = 2;
 
 	/** Die Eigenschaft {@code serialVersionUID}. */
@@ -460,11 +466,11 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 			setApproximationAktuell(true);
 		}
 
-		return new Stuetzstelle<Messwerte>(zeitstempel, new Messwerte(gQKfz
-				.getStuetzstelle(zeitstempel).getWert(), gQLkw.getStuetzstelle(
-				zeitstempel).getWert(), gVPkw.getStuetzstelle(zeitstempel)
-				.getWert(), gVLkw.getStuetzstelle(zeitstempel).getWert(), k1,
-				k2));
+		return new Stuetzstelle<Messwerte>(zeitstempel, new Messwerte(
+				gQKfz.getStuetzstelle(zeitstempel).getWert(),
+				gQLkw.getStuetzstelle(zeitstempel).getWert(),
+				gVPkw.getStuetzstelle(zeitstempel).getWert(),
+				gVLkw.getStuetzstelle(zeitstempel).getWert(), k1, k2));
 	}
 
 	/**
@@ -654,9 +660,9 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 
 		neu = new TreeMap<Long, Messwerte>();
 		for (final Map.Entry<Long, Messwerte> e : entrySet()) {
-			neu.put(e.getKey(), new Messwerte(e.getValue().getQKfz(), e
-					.getValue().getQLkw(), e.getValue().getVPkw(), e.getValue()
-					.getVLkw(), k1, k2));
+			neu.put(e.getKey(), new Messwerte(e.getValue().getQKfz(),
+					e.getValue().getQLkw(), e.getValue().getVPkw(),
+					e.getValue().getVLkw(), k1, k2));
 		}
 		clear();
 		putAll(neu);
@@ -675,9 +681,9 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 
 		neu = new TreeMap<Long, Messwerte>();
 		for (final Map.Entry<Long, Messwerte> e : entrySet()) {
-			neu.put(e.getKey(), new Messwerte(e.getValue().getQKfz(), e
-					.getValue().getQLkw(), e.getValue().getVPkw(), e.getValue()
-					.getVLkw(), k1, k2));
+			neu.put(e.getKey(), new Messwerte(e.getValue().getQKfz(),
+					e.getValue().getQLkw(), e.getValue().getVPkw(),
+					e.getValue().getVLkw(), k1, k2));
 		}
 		clear();
 		putAll(neu);

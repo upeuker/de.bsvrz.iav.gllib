@@ -88,6 +88,9 @@ public class EreignisFactory {
 		AUSSCHLUSS,
 
 		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		BEZUG,
+
+		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
 		TYP,
 
 		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
@@ -211,27 +214,28 @@ public class EreignisFactory {
 			String pid;
 
 			// Ereignistyp bestimmen
-			pid = DavTools.generierePID(rs.getString(Ereignisse.EREIGNISTYP
-					.name()), EreignisTyp.PRAEFIX_PID);
+			pid = DavTools.generierePID(
+					rs.getString(Ereignisse.EREIGNISTYP.name()),
+					EreignisTyp.PRAEFIX_PID);
 			ereignisTyp = (EreignisTyp) factory.getModellobjekt(pid);
 			assert ereignisTyp != null : "Der Ereignistyp " + pid
 					+ " muss existieren.";
 
 			// Ereignis anlegen
 			tag = rs.getInt(Ereignisse.TAG.name());
-			pid = DavTools.generierePID(rs.getString(Ereignistypen.EREIGNISTYP
-					.name())
-					+ "Tag" + tag, Ereignis.PRAEFIX_PID);
+			pid = DavTools.generierePID(
+					rs.getString(Ereignistypen.EREIGNISTYP.name()) + "Tag"
+							+ tag, Ereignis.PRAEFIX_PID);
 			calendar = Calendar.getInstance();
 			calendar.add(Calendar.DAY_OF_YEAR, tag);
-			calendar.set(Calendar.HOUR_OF_DAY, rs.getInt(Ereignisse.STARTZEIT
-					.name()));
+			calendar.set(Calendar.HOUR_OF_DAY,
+					rs.getInt(Ereignisse.STARTZEIT.name()));
 			calendar.set(Calendar.MINUTE, 0);
 			calendar.set(Calendar.SECOND, 0);
 			calendar.set(Calendar.MILLISECOND, 0);
 			start = calendar.getTimeInMillis();
-			calendar.set(Calendar.HOUR_OF_DAY, rs.getInt(Ereignisse.ENDZEIT
-					.name()));
+			calendar.set(Calendar.HOUR_OF_DAY,
+					rs.getInt(Ereignisse.ENDZEIT.name()));
 			ende = calendar.getTimeInMillis();
 			intervall = new Interval(start, ende);
 			ereignis = kalender.anlegenEreignis(pid, ereignisTyp.getName(), "",
@@ -254,6 +258,7 @@ public class EreignisFactory {
 	 *     ereignistyp VARCHAR(50) NOT NULL,
 	 *     prioritaet INTEGER NOT NULL,
 	 *     ausschluss VARCHAR(50),
+	 *     bezug VARCHAR(50),
 	 *     typ INTEGER DEFAULT 0 NOT NULL,	
 	 *     vergleichsschrittweite BIGINT DEFAULT 60000 NOT NULL,
 	 *     max_abstand INTEGER DEFAULT 100 NOT NULL,
@@ -303,7 +308,7 @@ public class EreignisFactory {
 		rs = stat.executeQuery(sql);
 		while (rs.next()) {
 			final String name;
-			final EreignisTyp ereignisTyp, auschluss;
+			final EreignisTyp ereignisTyp, auschluss, bezug;
 			final PdGanglinienModellAutomatischesLernenEreignis param;
 			final PdGanglinienModellAutomatischesLernenEreignis.Daten datum;
 			String pid;
@@ -311,40 +316,32 @@ public class EreignisFactory {
 			name = rs.getString(Ereignistypen.EREIGNISTYP.name());
 
 			// Ereignistyp anlegen
-			pid = DavTools.generierePID(rs.getString(Ereignistypen.EREIGNISTYP
-					.name()), EreignisTyp.PRAEFIX_PID);
+			pid = DavTools.generierePID(
+					rs.getString(Ereignistypen.EREIGNISTYP.name()),
+					EreignisTyp.PRAEFIX_PID);
 			if (factory.getModellobjekt(pid) != null) {
 				log.severe("Der Ereignistyp " + pid
 						+ " darf für den Test noch nicht existieren.");
 				System.exit(-1);
 			}
-			ereignisTyp = kalender.anlegenEreignisTyp(pid, name, rs
-					.getInt(Ereignistypen.PRIORITAET.name()));
+			ereignisTyp = kalender.anlegenEreignisTyp(pid, name,
+					rs.getInt(Ereignistypen.PRIORITAET.name()));
 			ereignisTypen.add(ereignisTyp);
 
 			// Lernparameter für Ereignistyp setzen
-			param = ereignisTyp
-					.getParameterDatensatz(PdGanglinienModellAutomatischesLernenEreignis.class);
+			param = ereignisTyp.getParameterDatensatz(PdGanglinienModellAutomatischesLernenEreignis.class);
 			param.anmeldenSender();
 			datum = param.erzeugeDatum();
-			datum.setDarstellungsverfahren(rs
-					.getInt(Ereignistypen.DARSTELLUNGSVERFAHREN.name()));
+			datum.setDarstellungsverfahren(rs.getInt(Ereignistypen.DARSTELLUNGSVERFAHREN.name()));
 			datum.setGanglinienTyp(rs.getInt(Ereignistypen.TYP.name()));
-			datum.setMatchingIntervallNach(rs
-					.getLong(Ereignistypen.MATCHINGINTERVALL_NACH.name()));
-			datum.setMatchingIntervallVor(rs
-					.getLong(Ereignistypen.MATCHINGINTERVALL_VOR.name()));
-			datum.setMatchingSchrittweite(rs
-					.getLong(Ereignistypen.MATCHINGSCHRITTWEITE.name()));
+			datum.setMatchingIntervallNach(rs.getLong(Ereignistypen.MATCHINGINTERVALL_NACH.name()));
+			datum.setMatchingIntervallVor(rs.getLong(Ereignistypen.MATCHINGINTERVALL_VOR.name()));
+			datum.setMatchingSchrittweite(rs.getLong(Ereignistypen.MATCHINGSCHRITTWEITE.name()));
 			datum.setMaxAbstand(rs.getInt(Ereignistypen.MAX_ABSTAND.name()));
-			datum.setMaxGanglinien(rs.getInt(Ereignistypen.MAX_GANGLINIEN
-					.name()));
-			datum.setMaxMatchingFehler(rs
-					.getInt(Ereignistypen.MAX_MATCHINGFEHLER.name()));
-			datum.setMaxWichtungsfaktor(rs
-					.getInt(Ereignistypen.MAX_WICHTUNGSFAKTOR.name()));
-			datum.setVergleichsSchrittweite(rs
-					.getLong(Ereignistypen.VERGLEICHSSCHRITTWEITE.name()));
+			datum.setMaxGanglinien(rs.getInt(Ereignistypen.MAX_GANGLINIEN.name()));
+			datum.setMaxMatchingFehler(rs.getInt(Ereignistypen.MAX_MATCHINGFEHLER.name()));
+			datum.setMaxWichtungsfaktor(rs.getInt(Ereignistypen.MAX_WICHTUNGSFAKTOR.name()));
+			datum.setVergleichsSchrittweite(rs.getLong(Ereignistypen.VERGLEICHSSCHRITTWEITE.name()));
 
 			pid = rs.getString(Ereignistypen.AUSSCHLUSS.name());
 			if (!rs.wasNull()) {
@@ -352,6 +349,14 @@ public class EreignisFactory {
 				auschluss = (EreignisTyp) factory.getModellobjekt(pid);
 				assertNotNull(auschluss);
 				datum.getAusschlussliste().add(auschluss);
+			}
+
+			pid = rs.getString(Ereignistypen.BEZUG.name());
+			if (!rs.wasNull()) {
+				pid = DavTools.generierePID(pid, EreignisTyp.PRAEFIX_PID);
+				bezug = (EreignisTyp) factory.getModellobjekt(pid);
+				assertNotNull(bezug);
+				datum.getBezugsereignistypen().add(bezug);
 			}
 
 			param.sendeDaten(datum);
@@ -395,9 +400,9 @@ public class EreignisFactory {
 
 			// Ereignistyp bestimmen
 			tag = rs.getInt(Ereignisse.TAG.name());
-			pid = DavTools.generierePID(rs.getString(Ereignisse.EREIGNISTYP
-					.name())
-					+ "Tag" + tag, Ereignis.PRAEFIX_PID);
+			pid = DavTools.generierePID(
+					rs.getString(Ereignisse.EREIGNISTYP.name()) + "Tag" + tag,
+					Ereignis.PRAEFIX_PID);
 			ereignis = (Ereignis) factory.getModellobjekt(pid);
 			if (ereignis != null) {
 				kalender.loeschen(ereignis);
@@ -412,8 +417,9 @@ public class EreignisFactory {
 			final String pid;
 
 			// Ereignistyp bestimmen
-			pid = DavTools.generierePID(rs.getString(Ereignistypen.EREIGNISTYP
-					.name()), EreignisTyp.PRAEFIX_PID);
+			pid = DavTools.generierePID(
+					rs.getString(Ereignistypen.EREIGNISTYP.name()),
+					EreignisTyp.PRAEFIX_PID);
 			ereignisTyp = (EreignisTyp) factory.getModellobjekt(pid);
 			if (ereignisTyp != null) {
 				kalender.loeschen(ereignisTyp);
