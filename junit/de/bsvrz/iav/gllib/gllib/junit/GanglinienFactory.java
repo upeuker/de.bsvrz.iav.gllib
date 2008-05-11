@@ -34,6 +34,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
+import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -302,7 +304,14 @@ public class GanglinienFactory {
 					break;
 				}
 
-				t = rsSt.getLong(Stuetzstellen.STUNDE.name()) * MILLIS_PER_HOUR;
+				if (rsSt.getMetaData().getColumnType(
+						Stuetzstellen.STUNDE.ordinal() + 1) == Types.TIME) {
+					t = rsSt.getTime(Stuetzstellen.STUNDE.name()).getTime()
+							+ Calendar.getInstance().get(Calendar.ZONE_OFFSET);
+				} else {
+					t = rsSt.getLong(Stuetzstellen.STUNDE.name())
+							* MILLIS_PER_HOUR;
+				}
 				qKfz = rsSt.getDouble(Stuetzstellen.QKFZ.name());
 				if (rsSt.wasNull()) {
 					qKfz = null;
