@@ -37,6 +37,7 @@ import java.util.TreeSet;
 import java.util.Map.Entry;
 
 import com.bitctrl.util.Interval;
+import com.bitctrl.util.Timestamp;
 
 /**
  * Helferklasse mit den Operationen auf Ganglinien, deren Stützstellen
@@ -66,6 +67,9 @@ public final class GanglinienOperationen {
 		/** Der Abstand der Ergebnisganglinie zur Referenzganglinie. */
 		private final int abstand;
 
+		/** Der Offset um den die Ergebnisganglinie verschoben wurde. */
+		private final long offset;
+
 		/**
 		 * Erzeugt ein Pattern-Matching-Ergebnis.
 		 * 
@@ -76,12 +80,15 @@ public final class GanglinienOperationen {
 		 *            Vergleichsliste.
 		 * @param abstand
 		 *            der Abstand der Ergebnisganglinie zur Referenzganglinie.
+		 * @param offset
+		 *            der Offset um den die Ergebnisganglinie verschoben wurde.
 		 */
 		public PatternMatchingErgebnis(final T ganglinie, final int index,
-				final int abstand) {
+				final int abstand, final long offset) {
 			this.ganglinie = ganglinie;
 			this.index = index;
 			this.abstand = abstand;
+			this.offset = offset;
 		}
 
 		/**
@@ -113,6 +120,16 @@ public final class GanglinienOperationen {
 		}
 
 		/**
+		 * 
+		 * Gibt der Offset um den die Ergebnisganglinie verschoben wurde zurück.
+		 * 
+		 * @return der Offset der Ergebnisganglinie.
+		 */
+		public long getOffset() {
+			return offset;
+		}
+
+		/**
 		 * {@inheritDoc}
 		 */
 		public int compareTo(final PatternMatchingErgebnis<T> o) {
@@ -135,8 +152,8 @@ public final class GanglinienOperationen {
 				PatternMatchingErgebnis<?> pme;
 
 				pme = (PatternMatchingErgebnis<?>) obj;
-				return ganglinie.equals(pme.ganglinie) && index == index
-						&& abstand == abstand;
+				return ganglinie.equals(pme.ganglinie) && index == pme.index
+						&& abstand == pme.abstand && offset == pme.offset;
 			}
 
 			return false;
@@ -152,6 +169,7 @@ public final class GanglinienOperationen {
 			s = getClass() + "[";
 			s += "index=" + index;
 			s += ", abstand=" + abstand;
+			s += ", offset=" + Timestamp.relativeTime(offset);
 			s += ", ganglinie=" + ganglinie;
 			s += "]";
 
@@ -706,22 +724,18 @@ public final class GanglinienOperationen {
 		}
 
 		final SortedSet<PatternMatchingErgebnis<Ganglinie<Double>>> ergebnisse;
-		final long anzahlSchritte;
 
 		ergebnisse = new TreeSet<PatternMatchingErgebnis<Ganglinie<Double>>>();
-		anzahlSchritte = (offsetVor + offsetNach) / schrittweite + 1;
 		for (int i = 0; i < liste.size(); i++) {
-			final Ganglinie<Double> g;
-
-			g = liste.get(i).clone();
-			verschiebe(g, -offsetVor);
-			for (long j = 0; j < anzahlSchritte; ++j) {
+			for (long offset = -offsetVor; offset <= offsetNach; offset += schrittweite) {
 				int abstand;
+				final Ganglinie<Double> g;
 
+				g = liste.get(i).clone();
+				verschiebe(g, offset);
 				abstand = basisabstand(referenz, g);
 				ergebnisse.add(new PatternMatchingErgebnis<Ganglinie<Double>>(
-						g.clone(), i, abstand));
-				verschiebe(g, schrittweite);
+						g.clone(), i, abstand, offset));
 			}
 		}
 

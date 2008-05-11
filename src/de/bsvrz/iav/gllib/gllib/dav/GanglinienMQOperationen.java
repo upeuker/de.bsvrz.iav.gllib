@@ -437,22 +437,18 @@ public final class GanglinienMQOperationen {
 		}
 
 		final SortedSet<PatternMatchingErgebnis<GanglinieMQ>> ergebnisse;
-		final long anzahlSchritte;
 
 		ergebnisse = new TreeSet<PatternMatchingErgebnis<GanglinieMQ>>();
-		anzahlSchritte = (offsetVor + offsetNach) / schrittweite + 1;
 		for (int i = 0; i < liste.size(); i++) {
-			final GanglinieMQ g;
-
-			g = liste.get(i).clone();
-			verschiebe(g, -offsetVor);
-			for (long j = 0; j < anzahlSchritte; ++j) {
+			for (long offset = -offsetVor; offset <= offsetNach; offset += schrittweite) {
 				int abstand;
+				final GanglinieMQ g;
 
+				g = liste.get(i).clone();
+				verschiebe(g, offset);
 				abstand = basisabstand(referenz, g);
 				ergebnisse.add(new PatternMatchingErgebnis<GanglinieMQ>(
-						g.clone(), i, abstand));
-				verschiebe(g, schrittweite);
+						g.clone(), i, abstand, offset));
 			}
 		}
 
