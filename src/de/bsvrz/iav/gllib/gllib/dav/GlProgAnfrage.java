@@ -66,7 +66,7 @@ public class GlProgAnfrage {
 	private long pruefIntervall;
 
 	/** Maximale &Auml;nderung in Prozent zwischen zwei zyklischen Prognosen. */
-	private double schwelle;
+	private int schwelle;
 
 	/** Spätestens nach dieser Zeit eine Prognose publizieren. */
 	private long sendeIntervall;
@@ -120,7 +120,7 @@ public class GlProgAnfrage {
 			final Interval prognoseZeitraum,
 			final boolean nurLangfristigeAuswahl,
 			final boolean zyklischePrognose, final long pruefIntervall,
-			final double schwelle, final long sendeIntervall) {
+			final int schwelle, final long sendeIntervall) {
 		this();
 
 		this.messQuerschnitt = mq;
@@ -231,7 +231,7 @@ public class GlProgAnfrage {
 	 * @return Schwellwert in Prozent.
 	 * @see #isZyklischePrognose()
 	 */
-	public double getSchwelle() {
+	public int getSchwelle() {
 		return schwelle;
 	}
 
@@ -295,16 +295,12 @@ public class GlProgAnfrage {
 		Array feld;
 		long start, ende;
 
-		messQuerschnitt = (MessQuerschnittAllgemein) ObjektFactory.getInstanz()
-				.getModellobjekt(
-						daten.getReferenceValue("Messquerschnitt")
-								.getSystemObject());
-		pruefIntervall = daten.getScaledValue("Überprüfungsintervall")
-				.longValue()
+		messQuerschnitt = (MessQuerschnittAllgemein) ObjektFactory.getInstanz().getModellobjekt(
+				daten.getReferenceValue("Messquerschnitt").getSystemObject());
+		pruefIntervall = daten.getScaledValue("Überprüfungsintervall").longValue()
 				* Constants.MILLIS_PER_SECOND;
-		schwelle = daten.getScaledValue("Aktualisierungsschwelle").floatValue();
-		sendeIntervall = daten.getScaledValue("Aktualisierungsintervall")
-				.longValue()
+		schwelle = daten.getScaledValue("Aktualisierungsschwelle").intValue();
+		sendeIntervall = daten.getScaledValue("Aktualisierungsintervall").longValue()
 				* Constants.MILLIS_PER_SECOND;
 
 		start = daten.getTimeValue("ZeitpunktPrognoseBeginn").getMillis();
@@ -328,8 +324,8 @@ public class GlProgAnfrage {
 		ereignisTypen.clear();
 		feld = daten.getArray("EreignisTyp");
 		for (int i = 0; i < feld.getLength(); i++) {
-			ereignisTypen.add(new EreignisTyp(feld.getItem(i)
-					.asReferenceValue().getSystemObject()));
+			ereignisTypen.add(new EreignisTyp(
+					feld.getItem(i).asReferenceValue().getSystemObject()));
 		}
 	}
 
@@ -394,7 +390,7 @@ public class GlProgAnfrage {
 	 * @param schwelle
 	 *            die Schwelle.
 	 */
-	public void setSchwelle(final double schwelle) {
+	public void setSchwelle(final int schwelle) {
 		this.schwelle = schwelle;
 	}
 
