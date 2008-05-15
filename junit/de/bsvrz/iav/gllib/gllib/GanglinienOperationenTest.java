@@ -41,8 +41,7 @@ import de.bsvrz.iav.gllib.gllib.GanglinienOperationen.PatternMatchingErgebnis;
  * Testet die Verwendung einer Ganglinie.
  * 
  * @author BitCtrl Systems GmbH, Schumann
- * @version $Id: GanglinienOperationenTest.java 8834 2008-05-09 15:44:46Z
- *          Schumann $
+ * @version $Id$
  */
 
 public class GanglinienOperationenTest {
