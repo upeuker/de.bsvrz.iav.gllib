@@ -32,9 +32,11 @@ import javax.swing.event.EventListenerList;
 
 import de.bsvrz.dav.daf.main.config.Aspect;
 import de.bsvrz.dav.daf.main.config.ClientApplication;
+import de.bsvrz.iav.gllib.gllib.GlLibMsg;
 import de.bsvrz.iav.gllib.gllib.modell.GanglinienobjektFactory;
 import de.bsvrz.iav.gllib.gllib.modell.onlinedaten.OdPrognoseGanglinienAnfrage;
 import de.bsvrz.iav.gllib.gllib.modell.onlinedaten.OdPrognoseGanglinienAntwort;
+import de.bsvrz.sys.funclib.bitctrl.daf.LogTools;
 import de.bsvrz.sys.funclib.bitctrl.modell.AnmeldeException;
 import de.bsvrz.sys.funclib.bitctrl.modell.DatensatzUpdateEvent;
 import de.bsvrz.sys.funclib.bitctrl.modell.DatensatzUpdateListener;
@@ -118,31 +120,23 @@ public final class Ganglinienprognose implements DatensatzUpdateListener {
 		factory.registerStandardFactories();
 		factory.registerFactory(new GanglinienobjektFactory());
 
-		glProg = (ApplikationGanglinienPrognose) factory
-				.getModellobjekt(factory.getVerbindung()
-						.getLocalConfigurationAuthority());
+		glProg = (ApplikationGanglinienPrognose) factory.getModellobjekt(factory.getVerbindung().getLocalConfigurationAuthority());
 		aspAnfrage = OdPrognoseGanglinienAnfrage.Aspekte.Anfrage.getAspekt();
-		odAnfrage = glProg
-				.getOnlineDatensatz(OdPrognoseGanglinienAnfrage.class);
+		odAnfrage = glProg.getOnlineDatensatz(OdPrognoseGanglinienAnfrage.class);
 
-		klient = (Applikation) factory.getModellobjekt(factory.getVerbindung()
-				.getLocalApplicationObject());
+		klient = (Applikation) factory.getModellobjekt(factory.getVerbindung().getLocalApplicationObject());
 		aspAntwort = OdPrognoseGanglinienAntwort.Aspekte.Antwort.getAspekt();
-		odAntwort = klient
-				.getOnlineDatensatz(OdPrognoseGanglinienAntwort.class);
+		odAntwort = klient.getOnlineDatensatz(OdPrognoseGanglinienAntwort.class);
 		odAntwort.setSenke(aspAntwort, true);
 		odAntwort.addUpdateListener(aspAntwort, this);
 
 		try {
 			odAnfrage.anmeldenSender(aspAnfrage);
 		} catch (final AnmeldeException ex) {
-			log
-					.error(
-							"Anmeldung zum Senden von Anfragen an die Ganglinienprognose konnte nicht durchgeführt werden",
-							ex);
+			LogTools.log(log, GlLibMsg.ErrorAnmeldenSendenAnfrage, ex);
 		}
 
-		log.info("Schnittstelle zur Ganglinienprognose bereit.");
+		LogTools.log(log, GlLibMsg.InfoGlProgBereit);
 	}
 
 	/**
@@ -153,7 +147,7 @@ public final class Ganglinienprognose implements DatensatzUpdateListener {
 	 */
 	public void addAntwortListener(final GlProgAntwortListener listener) {
 		listeners.add(GlProgAntwortListener.class, listener);
-		log.fine("Neuer Listener für Prognoseantworten angemeldet", listener);
+		LogTools.log(log, GlLibMsg.FineGlProgNeuerListener, listener);
 	}
 
 	/**
@@ -198,7 +192,7 @@ public final class Ganglinienprognose implements DatensatzUpdateListener {
 	 */
 	public void removeAntwortListener(final GlProgAntwortListener listener) {
 		listeners.remove(GlProgAntwortListener.class, listener);
-		log.fine("Listener für Prognoseantworten abgemeldet", listener);
+		LogTools.log(log, GlLibMsg.FineGlLibListenerEntfernt, listener);
 	}
 
 	/**
@@ -228,7 +222,7 @@ public final class Ganglinienprognose implements DatensatzUpdateListener {
 		datum.addAll(anfragen);
 		odAnfrage.sendeDaten(aspAnfrage, datum);
 
-		log.fine("Anfrage \"" + absenderZeichen + "\" wurde gesendet");
+		LogTools.log(log, GlLibMsg.FineGlProgAnfrageGesendet, absenderZeichen);
 	}
 
 	/**
@@ -241,12 +235,11 @@ public final class Ganglinienprognose implements DatensatzUpdateListener {
 			final OdPrognoseGanglinienAntwort.Daten datum) {
 		final GlProgAntwortEvent e = new GlProgAntwortEvent(this, datum);
 
-		for (final GlProgAntwortListener l : listeners
-				.getListeners(GlProgAntwortListener.class)) {
+		for (final GlProgAntwortListener l : listeners.getListeners(GlProgAntwortListener.class)) {
 			l.antwortEingetroffen(e);
 		}
 
-		log.fine("Prognoseantwort wurde verteilt: " + e);
+		LogTools.log(log, GlLibMsg.FineGlProgAntwortVerteilt, e);
 	}
 
 }

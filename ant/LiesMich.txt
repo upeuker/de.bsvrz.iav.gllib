@@ -32,10 +32,19 @@ Versionsgeschichte
 1.2.0
 
   - Anpassung an überarbeitetet Funktionsbibliothek de.bsvrz.sys.funclib.bitctrl
+  
+  - Pattern-Matching überarbeitet
+  
+  - Berechnung der Approximation durch B-Spline extrem beschleunigt
+  
+  - Prüfprozedur und Prüfprotokoll in Release aufgenommen
+
+  - Betriebsinformation in Release aufgenommen
 
 1.1.0
 
   - Umstellung auf neue Paketstruktur.
+  
   - Erweiterung des Funktionsumfangs für SWE 5.1 und 5.3.
 
 1.0.0
