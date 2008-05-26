@@ -391,8 +391,10 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see #setPrognoseZeitraum(Interval)
+	 * @deprecated Die Intervalle müssen an den einzelnen Größen mit
+	 *             {@code getGanglinie*.getIntervalle()} abgerufen werden.
 	 */
+	@Deprecated
 	@Override
 	public List<Interval> getIntervalle() {
 		throw new UnsupportedOperationException("Es müssen die Intervalle der "
