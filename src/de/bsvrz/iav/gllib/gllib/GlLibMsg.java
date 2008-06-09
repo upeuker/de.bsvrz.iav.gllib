@@ -29,8 +29,6 @@ package de.bsvrz.iav.gllib.gllib;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 
-import com.bitctrl.i18n.MessageHandler;
-
 import de.bsvrz.sys.funclib.bitctrl.daf.LogNachricht;
 import de.bsvrz.sys.funclib.debug.Debug;
 import de.bsvrz.sys.funclib.operatingMessage.MessageGrade;
@@ -41,7 +39,7 @@ import de.bsvrz.sys.funclib.operatingMessage.MessageGrade;
  * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id: GlLibMsg.java 8834 2008-05-09 15:44:46Z Schumann $
  */
-public enum GlLibMsg implements MessageHandler, LogNachricht {
+public enum GlLibMsg implements LogNachricht {
 
 	/** Nicht für Log-Ausgaben vorgesehen. */
 	Applikationsname(null),
