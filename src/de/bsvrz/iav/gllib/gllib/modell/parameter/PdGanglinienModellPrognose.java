@@ -81,10 +81,10 @@ public class PdGanglinienModellPrognose extends
 		public Daten() {
 			datenStatus = Datum.Status.DATEN;
 			auswahlMethode = WAHRSCHEINLICHSTE_GANGLINIE;
-			matchingIntervall = 60 * 60 * 1000; // 1 Stunde
+			matchingIntervall = 15 * 60 * 1000; // 15 Minuten
 			maxMatchingFehler = 25;
 			patternMatchingHorizont = 2 * 60 * 60 * 1000; // 2 Stunden
-			patternMatchingOffset = 15 * 60 * 1000; // 15 Minuten
+			patternMatchingOffset = 60 * 60 * 1000; // 1 Stunde
 		}
 
 		/**
@@ -269,8 +269,7 @@ public class PdGanglinienModellPrognose extends
 		super(mq);
 
 		if (atg == null) {
-			final DataModel modell = ObjektFactory.getInstanz().getVerbindung()
-					.getDataModel();
+			final DataModel modell = ObjektFactory.getInstanz().getVerbindung().getDataModel();
 			atg = modell.getAttributeGroup(ATG_GANGLINIEN_MODELL_PROGNOSE);
 			assert atg != null;
 		}
@@ -306,8 +305,7 @@ public class PdGanglinienModellPrognose extends
 		if (result.hasData()) {
 			final Data daten = result.getData();
 
-			datum.setAuswahlMethode(daten.getUnscaledValue("GLAuswahlMethode")
-					.intValue());
+			datum.setAuswahlMethode(daten.getUnscaledValue("GLAuswahlMethode").intValue());
 			datum.setPatternMatchingHorizont(daten.getUnscaledValue(
 					"GLPatternMatchingHorizont").longValue()
 					* MILLIS_PER_SECOND);
