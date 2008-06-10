@@ -28,11 +28,13 @@ package de.bsvrz.iav.gllib.gllib.junit;
 
 import java.util.List;
 
+import com.bitctrl.Constants;
 import com.bitctrl.util.jar.JarTools;
 
 import de.bsvrz.dav.daf.main.ClientDavInterface;
 import de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ;
 import de.bsvrz.iav.gllib.gllib.modell.parameter.PdGanglinie;
+import de.bsvrz.iav.gllib.gllib.modell.parameter.PdGanglinienModellPrognose;
 import de.bsvrz.sys.funclib.application.StandardApplication;
 import de.bsvrz.sys.funclib.application.StandardApplicationRunner;
 import de.bsvrz.sys.funclib.bitctrl.modell.AnmeldeException;
@@ -74,8 +76,7 @@ public final class TestGanglinienParameterSetzer implements StandardApplication 
 	 *            die Startparameter.
 	 */
 	public static void main(final String[] args) {
-		StandardApplicationRunner
-				.run(new TestGanglinienParameterSetzer(), args);
+		StandardApplicationRunner.run(new TestGanglinienParameterSetzer(), args);
 	}
 
 	/**
@@ -102,14 +103,14 @@ public final class TestGanglinienParameterSetzer implements StandardApplication 
 		if (objektPids != null) {
 			objekte = factory.bestimmeModellobjekte(objektPids);
 		} else {
-			objekte = factory
-					.bestimmeModellobjekte(VerkehrsModellTypen.MESSQUERSCHNITTALLGEMEIN
-							.getPid());
+			objekte = factory.bestimmeModellobjekte(VerkehrsModellTypen.MESSQUERSCHNITTALLGEMEIN.getPid());
 		}
 		for (final SystemObjekt so : objekte) {
-			MessQuerschnittAllgemein mq;
-			PdGanglinie param;
-			PdGanglinie.Daten datum;
+			final MessQuerschnittAllgemein mq;
+			final PdGanglinie pdGanglinie;
+			final PdGanglinie.Daten datumGanglinie;
+			final PdGanglinienModellPrognose pdPrognose;
+			final PdGanglinienModellPrognose.Daten datumPrognose;
 
 			if (!(so instanceof MessQuerschnittAllgemein)) {
 				throw new IllegalStateException(
@@ -117,10 +118,20 @@ public final class TestGanglinienParameterSetzer implements StandardApplication 
 								+ " ist kein Messquerschnitt. Es können nur Messquerschnitte bearbeitet werden.");
 			}
 			mq = (MessQuerschnittAllgemein) so;
-			param = mq.getParameterDatensatz(PdGanglinie.class);
+
+			pdGanglinie = mq.getParameterDatensatz(PdGanglinie.class);
+
+			pdPrognose = mq.getParameterDatensatz(PdGanglinienModellPrognose.class);
+			datumPrognose = pdPrognose.erzeugeDatum();
+			datumPrognose.setAuswahlMethode(PdGanglinienModellPrognose.Daten.WAHRSCHEINLICHSTE_GANGLINIE);
+			datumPrognose.setMatchingIntervall(10 * Constants.MILLIS_PER_MINUTE);
+			datumPrognose.setMaxMatchingFehler(25);
+			datumPrognose.setPatternMatchingHorizont(2 * Constants.MILLIS_PER_HOUR);
+			datumPrognose.setPatternMatchingOffset(1 * Constants.MILLIS_PER_HOUR);
+
 			try {
-				param.anmeldenSender();
-				datum = param.erzeugeDatum();
+				pdGanglinie.anmeldenSender();
+				datumGanglinie = pdGanglinie.erzeugeDatum();
 				for (final String typ : pidEreignistypen) {
 					GanglinieMQ g;
 					EreignisTyp ereignisTyp;
@@ -128,20 +139,24 @@ public final class TestGanglinienParameterSetzer implements StandardApplication 
 					ereignisTyp = (EreignisTyp) factory.getModellobjekt(typ);
 					g = ganglinien.erzeugeGanglinie(mq, 60 * 60 * 1000);
 					g.setEreignisTyp(ereignisTyp);
-					datum.add(g);
+					datumGanglinie.add(g);
 				}
-				param.sendeDaten(datum, 60 * 1000);
+				pdGanglinie.sendeDaten(datumGanglinie, 60 * 1000);
 				System.out.println("Ganglinien für " + mq + " gesendet.");
+
+				pdPrognose.anmeldenSender();
+				pdPrognose.sendeDaten(datumPrognose);
+				System.out.println("Ganglinienprognoseparameter für " + mq
+						+ " gesendet.");
 			} catch (final AnmeldeException ex) {
-				System.err
-						.println("Kann mich nicht zum Senden der Ganglinien für "
-								+ mq + " anmelden.");
+				System.err.println("Kann mich nicht zum Senden der Ganglinien für "
+						+ mq + " anmelden.");
 			} catch (final DatensendeException ex) {
 				System.err.println("Kann Ganglinien für " + mq
 						+ " nicht senden.");
 			}
 
-			param.abmeldenSender();
+			pdGanglinie.abmeldenSender();
 		}
 
 		System.out.println("READY.");
@@ -162,8 +177,8 @@ public final class TestGanglinienParameterSetzer implements StandardApplication 
 	public void parseArguments(final ArgumentList argumentList)
 			throws Exception {
 		if (argumentList.hasArgument("-objekte")) {
-			objektPids = argumentList.fetchArgument("-objekte=")
-					.asNonEmptyString().split(",");
+			objektPids = argumentList.fetchArgument("-objekte=").asNonEmptyString().split(
+					",");
 		}
 	}
 
