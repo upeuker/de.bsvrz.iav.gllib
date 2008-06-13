@@ -29,6 +29,10 @@ sich in folgende Funktionsbereiche einteilen:
 Versionsgeschichte
 ==================
 
+1.2.1
+
+  - Betriebsinformation aktualisiert.
+
 1.2.0
 
   - Anpassung an überarbeitetet Funktionsbibliothek de.bsvrz.sys.funclib.bitctrl
