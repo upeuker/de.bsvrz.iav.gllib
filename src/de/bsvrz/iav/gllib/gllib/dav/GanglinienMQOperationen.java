@@ -109,12 +109,16 @@ public final class GanglinienMQOperationen {
 			txt += "\nKeine Stützstellen vorhanden.";
 		} else {
 			txt += "\nZeitpunkt\tQKfz\tQLkw\tVPkw\tVLkw\n";
-			for (final Stuetzstelle<Messwerte> s : g.getStuetzstellen()) {
-				txt += Timestamp.absoluteTime(s.getZeitstempel()) + "\t";
-				txt += s.getWert().getQKfz() + "\t";
-				txt += s.getWert().getQLkw() + "\t";
-				txt += s.getWert().getVPkw() + "\t";
-				txt += s.getWert().getVLkw() + "\n";
+			if (g.size() <= 100) {
+				for (final Stuetzstelle<Messwerte> s : g.getStuetzstellen()) {
+					txt += Timestamp.absoluteTime(s.getZeitstempel()) + "\t";
+					txt += s.getWert().getQKfz() + "\t";
+					txt += s.getWert().getQLkw() + "\t";
+					txt += s.getWert().getVPkw() + "\t";
+					txt += s.getWert().getVLkw() + "\n";
+				}
+			} else {
+				txt += "(Ganglinie hat mehr als 100 Stützstellen)\n";
 			}
 		}
 
@@ -139,14 +143,14 @@ public final class GanglinienMQOperationen {
 		final Ganglinie<Double> gVPkw;
 		final Ganglinie<Double> gVLkw;
 
-		gQKfz = GanglinienOperationen.addiere(g1.getGanglinieQKfz(),
-				g2.getGanglinieQKfz());
-		gQLkw = GanglinienOperationen.addiere(g1.getGanglinieQLkw(),
-				g2.getGanglinieQLkw());
-		gVPkw = GanglinienOperationen.addiere(g1.getGanglinieVPkw(),
-				g2.getGanglinieVPkw());
-		gVLkw = GanglinienOperationen.addiere(g1.getGanglinieVLkw(),
-				g2.getGanglinieVLkw());
+		gQKfz = GanglinienOperationen.addiere(g1.getGanglinieQKfz(), g2
+				.getGanglinieQKfz());
+		gQLkw = GanglinienOperationen.addiere(g1.getGanglinieQLkw(), g2
+				.getGanglinieQLkw());
+		gVPkw = GanglinienOperationen.addiere(g1.getGanglinieVPkw(), g2
+				.getGanglinieVPkw());
+		gVLkw = GanglinienOperationen.addiere(g1.getGanglinieVLkw(), g2
+				.getGanglinieVLkw());
 
 		return kopiereMetaDaten(zusammenfuehren(gQKfz, gQLkw, gVPkw, gVLkw), g1);
 	}
@@ -227,14 +231,14 @@ public final class GanglinienMQOperationen {
 
 		assert g1.getMessQuerschnitt().equals(g2.getMessQuerschnitt()) : "Die Ganglinien müssen zum gleichen Messquerschnitt gehören.";
 
-		gQKfz = GanglinienOperationen.dividiere(g1.getGanglinieQKfz(),
-				g2.getGanglinieQKfz());
-		gQLkw = GanglinienOperationen.dividiere(g1.getGanglinieQLkw(),
-				g2.getGanglinieQLkw());
-		gVPkw = GanglinienOperationen.dividiere(g1.getGanglinieVPkw(),
-				g2.getGanglinieVPkw());
-		gVLkw = GanglinienOperationen.dividiere(g1.getGanglinieVLkw(),
-				g2.getGanglinieVLkw());
+		gQKfz = GanglinienOperationen.dividiere(g1.getGanglinieQKfz(), g2
+				.getGanglinieQKfz());
+		gQLkw = GanglinienOperationen.dividiere(g1.getGanglinieQLkw(), g2
+				.getGanglinieQLkw());
+		gVPkw = GanglinienOperationen.dividiere(g1.getGanglinieVPkw(), g2
+				.getGanglinieVPkw());
+		gVLkw = GanglinienOperationen.dividiere(g1.getGanglinieVLkw(), g2
+				.getGanglinieVLkw());
 
 		return kopiereMetaDaten(zusammenfuehren(gQKfz, gQLkw, gVPkw, gVLkw), g1);
 	}
@@ -258,14 +262,14 @@ public final class GanglinienMQOperationen {
 
 		double fehlerQKfz, fehlerQLkw, fehlerVPkw, fehlerVLkw;
 
-		fehlerQKfz = GanglinienOperationen.komplexerAbstand(
-				g1.getGanglinieQKfz(), g2.getGanglinieQKfz(), intervalle);
-		fehlerQLkw = GanglinienOperationen.komplexerAbstand(
-				g1.getGanglinieQLkw(), g2.getGanglinieQLkw(), intervalle);
-		fehlerVPkw = GanglinienOperationen.komplexerAbstand(
-				g1.getGanglinieVPkw(), g2.getGanglinieVPkw(), intervalle);
-		fehlerVLkw = GanglinienOperationen.komplexerAbstand(
-				g1.getGanglinieVLkw(), g2.getGanglinieVLkw(), intervalle);
+		fehlerQKfz = GanglinienOperationen.komplexerAbstand(g1
+				.getGanglinieQKfz(), g2.getGanglinieQKfz(), intervalle);
+		fehlerQLkw = GanglinienOperationen.komplexerAbstand(g1
+				.getGanglinieQLkw(), g2.getGanglinieQLkw(), intervalle);
+		fehlerVPkw = GanglinienOperationen.komplexerAbstand(g1
+				.getGanglinieVPkw(), g2.getGanglinieVPkw(), intervalle);
+		fehlerVLkw = GanglinienOperationen.komplexerAbstand(g1
+				.getGanglinieVLkw(), g2.getGanglinieVLkw(), intervalle);
 
 		return (int) ((fehlerQKfz + fehlerQLkw + fehlerVLkw + fehlerVPkw) / 4);
 	}
@@ -289,14 +293,14 @@ public final class GanglinienMQOperationen {
 
 		double fehlerQKfz, fehlerQLkw, fehlerVPkw, fehlerVLkw;
 
-		fehlerQKfz = GanglinienOperationen.komplexerAbstand(
-				g1.getGanglinieQKfz(), g2.getGanglinieQKfz(), intervallBreite);
-		fehlerQLkw = GanglinienOperationen.komplexerAbstand(
-				g1.getGanglinieQLkw(), g2.getGanglinieQLkw(), intervallBreite);
-		fehlerVPkw = GanglinienOperationen.komplexerAbstand(
-				g1.getGanglinieQPkw(), g2.getGanglinieVPkw(), intervallBreite);
-		fehlerVLkw = GanglinienOperationen.komplexerAbstand(
-				g1.getGanglinieQLkw(), g2.getGanglinieVLkw(), intervallBreite);
+		fehlerQKfz = GanglinienOperationen.komplexerAbstand(g1
+				.getGanglinieQKfz(), g2.getGanglinieQKfz(), intervallBreite);
+		fehlerQLkw = GanglinienOperationen.komplexerAbstand(g1
+				.getGanglinieQLkw(), g2.getGanglinieQLkw(), intervallBreite);
+		fehlerVPkw = GanglinienOperationen.komplexerAbstand(g1
+				.getGanglinieQPkw(), g2.getGanglinieVPkw(), intervallBreite);
+		fehlerVLkw = GanglinienOperationen.komplexerAbstand(g1
+				.getGanglinieQLkw(), g2.getGanglinieVLkw(), intervallBreite);
 
 		return (int) ((fehlerQKfz + fehlerQLkw + fehlerVLkw + fehlerVPkw) / 4);
 	}
@@ -348,14 +352,14 @@ public final class GanglinienMQOperationen {
 		final Ganglinie<Double> gVPkw;
 		final Ganglinie<Double> gVLkw;
 
-		gQKfz = GanglinienOperationen.multipliziere(g1.getGanglinieQKfz(),
-				g2.getGanglinieQKfz());
-		gQLkw = GanglinienOperationen.multipliziere(g1.getGanglinieQLkw(),
-				g2.getGanglinieQLkw());
-		gVPkw = GanglinienOperationen.multipliziere(g1.getGanglinieVPkw(),
-				g2.getGanglinieVPkw());
-		gVLkw = GanglinienOperationen.multipliziere(g1.getGanglinieVLkw(),
-				g2.getGanglinieVLkw());
+		gQKfz = GanglinienOperationen.multipliziere(g1.getGanglinieQKfz(), g2
+				.getGanglinieQKfz());
+		gQLkw = GanglinienOperationen.multipliziere(g1.getGanglinieQLkw(), g2
+				.getGanglinieQLkw());
+		gVPkw = GanglinienOperationen.multipliziere(g1.getGanglinieVPkw(), g2
+				.getGanglinieVPkw());
+		gVLkw = GanglinienOperationen.multipliziere(g1.getGanglinieVLkw(), g2
+				.getGanglinieVLkw());
 
 		return kopiereMetaDaten(zusammenfuehren(gQKfz, gQLkw, gVPkw, gVLkw), g1);
 	}
@@ -447,8 +451,8 @@ public final class GanglinienMQOperationen {
 				g = liste.get(i).clone();
 				verschiebe(g, offset);
 				abstand = basisabstand(referenz, g);
-				ergebnisse.add(new PatternMatchingErgebnis<GanglinieMQ>(
-						g.clone(), i, abstand, offset));
+				ergebnisse.add(new PatternMatchingErgebnis<GanglinieMQ>(g
+						.clone(), i, abstand, offset));
 			}
 		}
 
@@ -474,14 +478,14 @@ public final class GanglinienMQOperationen {
 		final Ganglinie<Double> gVPkw;
 		final Ganglinie<Double> gVLkw;
 
-		gQKfz = GanglinienOperationen.subtrahiere(g1.getGanglinieQKfz(),
-				g2.getGanglinieQKfz());
-		gQLkw = GanglinienOperationen.subtrahiere(g1.getGanglinieQLkw(),
-				g2.getGanglinieQLkw());
-		gVPkw = GanglinienOperationen.subtrahiere(g1.getGanglinieVPkw(),
-				g2.getGanglinieVPkw());
-		gVLkw = GanglinienOperationen.subtrahiere(g1.getGanglinieVLkw(),
-				g2.getGanglinieVLkw());
+		gQKfz = GanglinienOperationen.subtrahiere(g1.getGanglinieQKfz(), g2
+				.getGanglinieQKfz());
+		gQLkw = GanglinienOperationen.subtrahiere(g1.getGanglinieQLkw(), g2
+				.getGanglinieQLkw());
+		gVPkw = GanglinienOperationen.subtrahiere(g1.getGanglinieVPkw(), g2
+				.getGanglinieVPkw());
+		gVLkw = GanglinienOperationen.subtrahiere(g1.getGanglinieVLkw(), g2
+				.getGanglinieVLkw());
 
 		return kopiereMetaDaten(zusammenfuehren(gQKfz, gQLkw, gVPkw, gVLkw), g1);
 	}
@@ -509,14 +513,14 @@ public final class GanglinienMQOperationen {
 			final GanglinieMQ g2, final long maxAbstand) {
 		final Ganglinie<Double> gQKfz, gQLkw, gVPkw, gVLkw;
 
-		gQKfz = GanglinienOperationen.verbinde(g1.getGanglinieQKfz(),
-				g2.getGanglinieQKfz(), maxAbstand);
-		gQLkw = GanglinienOperationen.verbinde(g1.getGanglinieQLkw(),
-				g2.getGanglinieQLkw(), maxAbstand);
-		gVPkw = GanglinienOperationen.verbinde(g1.getGanglinieVPkw(),
-				g2.getGanglinieVPkw(), maxAbstand);
-		gVLkw = GanglinienOperationen.verbinde(g1.getGanglinieVLkw(),
-				g2.getGanglinieVLkw(), maxAbstand);
+		gQKfz = GanglinienOperationen.verbinde(g1.getGanglinieQKfz(), g2
+				.getGanglinieQKfz(), maxAbstand);
+		gQLkw = GanglinienOperationen.verbinde(g1.getGanglinieQLkw(), g2
+				.getGanglinieQLkw(), maxAbstand);
+		gVPkw = GanglinienOperationen.verbinde(g1.getGanglinieVPkw(), g2
+				.getGanglinieVPkw(), maxAbstand);
+		gVLkw = GanglinienOperationen.verbinde(g1.getGanglinieVLkw(), g2
+				.getGanglinieVLkw(), maxAbstand);
 
 		return kopiereMetaDaten(zusammenfuehren(gQKfz, gQLkw, gVPkw, gVLkw), g1);
 	}
@@ -561,10 +565,14 @@ public final class GanglinienMQOperationen {
 	public static GanglinieMQ verschiebeUmHalbesIntervall(final GanglinieMQ g) {
 		Ganglinie<Double> gQKfz, gQLkw, gVPkw, gVLkw;
 
-		gQKfz = GanglinienOperationen.verschiebeUmHalbesIntervall(g.getGanglinieQKfz());
-		gQLkw = GanglinienOperationen.verschiebeUmHalbesIntervall(g.getGanglinieQLkw());
-		gVPkw = GanglinienOperationen.verschiebeUmHalbesIntervall(g.getGanglinieVPkw());
-		gVLkw = GanglinienOperationen.verschiebeUmHalbesIntervall(g.getGanglinieVLkw());
+		gQKfz = GanglinienOperationen.verschiebeUmHalbesIntervall(g
+				.getGanglinieQKfz());
+		gQLkw = GanglinienOperationen.verschiebeUmHalbesIntervall(g
+				.getGanglinieQLkw());
+		gVPkw = GanglinienOperationen.verschiebeUmHalbesIntervall(g
+				.getGanglinieVPkw());
+		gVLkw = GanglinienOperationen.verschiebeUmHalbesIntervall(g
+				.getGanglinieVLkw());
 
 		g.clear();
 		g.putAll(zusammenfuehren(gQKfz, gQLkw, gVPkw, gVLkw));
@@ -607,7 +615,8 @@ public final class GanglinienMQOperationen {
 
 		historGl.clear();
 		historGl.putAll(zusammenfuehren(gQKfz, gQLkw, gVPkw, gVLkw));
-		historGl.setAnzahlVerschmelzungen(historGl.getAnzahlVerschmelzungen() + 1);
+		historGl
+				.setAnzahlVerschmelzungen(historGl.getAnzahlVerschmelzungen() + 1);
 		if (ObjektFactory.getInstanz().getVerbindung() != null) {
 			zeitstempel = ObjektFactory.getInstanz().getVerbindung().getTime();
 		} else {
