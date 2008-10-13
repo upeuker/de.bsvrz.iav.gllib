@@ -29,6 +29,11 @@ sich in folgende Funktionsbereiche einteilen:
 Versionsgeschichte
 ==================
 
+1.3.0
+
+  - Betriebsinformation und Prüfprozedur liegen jetzt im Zustand "akzeptiert"
+    vor.
+    
 1.2.1
 
   - Betriebsinformation aktualisiert.
