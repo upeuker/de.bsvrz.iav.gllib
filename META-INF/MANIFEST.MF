@@ -5,9 +5,7 @@ Bundle-SymbolicName: de.bsvrz.iav.gllib;singleton:=true
 Bundle-Version: 1.0.0
 Bundle-Vendor: BitCtrl Systems GmbH
 Require-Bundle: de.bsvrz.sys.funclib.bitctrl,
- de.bsvrz.dav.daf,
- org.junit4
-Eclipse-LazyStart: false
+ org.junit4;resolution:=optional
 Export-Package: de.bsvrz.iav.gllib.gllib,
  de.bsvrz.iav.gllib.gllib.dav,
  de.bsvrz.iav.gllib.gllib.junit,
@@ -15,5 +13,5 @@ Export-Package: de.bsvrz.iav.gllib.gllib,
  de.bsvrz.iav.gllib.gllib.modell.objekte,
  de.bsvrz.iav.gllib.gllib.modell.onlinedaten,
  de.bsvrz.iav.gllib.gllib.modell.parameter
-Bundle-ClassPath: de.bsvrz.iav.gllib.jar
+Bundle-ClassPath: .
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
