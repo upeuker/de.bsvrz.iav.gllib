@@ -140,32 +140,32 @@ public class CubicSplineTest {
 		assertEquals(ganglinie.getStuetzstelle(t), spline.get(t));
 
 		t = 1 * MILLIS_PER_HOUR;
-		assertEquals(new RationaleZahl(1201000, 657).doubleValue(), spline.get(
+		assertEquals(new RationaleZahl(1201000, 657).doubleValue(), (Object) spline.get(
 				t).getWert());
 
 		t = 2 * MILLIS_PER_HOUR;
-		assertEquals(new RationaleZahl(1994000, 657).doubleValue(), spline.get(
+		assertEquals(new RationaleZahl(1994000, 657).doubleValue(), (Object) spline.get(
 				t).getWert());
 
 		t = 3 * MILLIS_PER_HOUR;
-		assertEquals(ganglinie.getStuetzstelle(t), spline.get(t));
+		assertEquals(ganglinie.getStuetzstelle(t), (Object) spline.get(t));
 
 		t = 4 * MILLIS_PER_HOUR;
 		assertEquals(ganglinie.getStuetzstelle(t), spline.get(t));
 
 		t = 5 * MILLIS_PER_HOUR;
-		assertEquals(new RationaleZahl(198500, 73).doubleValue(), spline.get(t)
+		assertEquals(new RationaleZahl(198500, 73).doubleValue(), (Object) spline.get(t)
 				.getWert());
 
 		t = 6 * MILLIS_PER_HOUR;
 		assertEquals(ganglinie.getStuetzstelle(t), spline.get(t));
 
 		t = 7 * MILLIS_PER_HOUR;
-		assertEquals(new RationaleZahl(2621000, 657).doubleValue(), spline.get(
+		assertEquals(new RationaleZahl(2621000, 657).doubleValue(), (Object) spline.get(
 				t).getWert());
 
 		t = 8 * MILLIS_PER_HOUR;
-		assertEquals(new RationaleZahl(1834000, 657).doubleValue(), spline.get(
+		assertEquals(new RationaleZahl(1834000, 657).doubleValue(), (Object) spline.get(
 				t).getWert());
 
 		t = 9 * MILLIS_PER_HOUR;
