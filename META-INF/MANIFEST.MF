@@ -6,7 +6,8 @@ Bundle-Version: 1.0.0
 Bundle-Vendor: BitCtrl Systems GmbH
 Require-Bundle: de.bsvrz.sys.funclib.bitctrl,
  org.junit4;resolution:=optional,
- de.bitctrl.lib.eclipse.dav;bundle-version="3.4.10"
+ de.bitctrl.lib.eclipse.dav;resolution:=optional,
+ de.bsvrz.kernsoftware.bibliothek;resolution:=optional
 Export-Package: de.bsvrz.iav.gllib.gllib,
  de.bsvrz.iav.gllib.gllib.dav,
  de.bsvrz.iav.gllib.gllib.junit,
