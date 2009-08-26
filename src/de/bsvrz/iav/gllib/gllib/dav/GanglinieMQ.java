@@ -54,35 +54,35 @@ import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.objekte.MessQuerschnittAllgem
 public class GanglinieMQ extends Ganglinie<Messwerte> {
 
 	/**
-	 * Die Attributgruppe, in der historische Ganglinien gesichert werden:
-	 * {@value}.
+	 * Die Attributgruppe, in der historische Ganglinien gesichert werden: * * *
+	 * * {@value} .
 	 */
 	public static final String ATG_GANGLINIE = "atg.ganglinie";
 
-	/** Datenkatalogkonstante für die unbestimmte Approximation: {@value}. */
+	/** Datenkatalogkonstante für die unbestimmte Approximation: {@value} . */
 	public static final int APPROX_UNBESTIMMT = 0;
 
-	/** Datenkatalogkonstante für einen B-Spline: {@value}. */
+	/** Datenkatalogkonstante für einen B-Spline: {@value} . */
 	public static final int APPROX_BSPLINE = 1;
 
-	/** Datenkatalogkonstante für einen Cubic-Spline: {@value}. */
+	/** Datenkatalogkonstante für einen Cubic-Spline: {@value} . */
 	public static final int APPROX_CUBICSPLINE = 2;
 
-	/** Datenkatalogkonstante für eine Polylinie: {@value}. */
+	/** Datenkatalogkonstante für eine Polylinie: {@value} . */
 	public static final int APPROX_POLYLINE = 3;
 
-	/** Standardordung der Approximation. Nur für B-Spline relevant: {@value}. */
+	/** Standardordung der Approximation. Nur für B-Spline relevant: {@value} . */
 	public static final byte APPROX_STANDARD_ORDNUNG = 5;
 
-	/** Datenkatalogkonstante für eine absolute Ganglinie: {@value}. */
+	/** Datenkatalogkonstante für eine absolute Ganglinie: {@value} . */
 	public static final int TYP_ABSOLUT = 0;
 
-	/** Datenkatalogkonstante für eine relative additive Ganglinie: {@value}. */
+	/** Datenkatalogkonstante für eine relative additive Ganglinie: {@value} . */
 	public static final int TYP_ADDITIV = 1;
 
 	/**
-	 * Datenkatalogkonstante für eine relative multiplikative Ganglinie:
-	 * {@value}.
+	 * Datenkatalogkonstante für eine relative multiplikative Ganglinie: * * * *
+	 * {@value} .
 	 */
 	public static final int TYP_MULTIPLIKATIV = 2;
 
@@ -92,10 +92,10 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	/** Der Messquerschnitt, zu dem die Ganglinie gehört. */
 	private MessQuerschnittAllgemein messQuerschnitt;
 
-	/** Parameter für die Berechnung von QB, Standard ist {@value}. */
+	/** Parameter für die Berechnung von QB, Standard ist {@value} . */
 	private float k1 = 2.0f;
 
-	/** Parameter für die Berechnung von QB, Standard ist {@value}. */
+	/** Parameter für die Berechnung von QB, Standard ist {@value} . */
 	private float k2 = 0.01f;
 
 	/**
@@ -104,18 +104,18 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 */
 	private long letzteVerschmelzung = System.currentTimeMillis();
 
-	/** Anzahl der Verschmelzung mit anderen Ganglinien, Standard ist {@value}. */
+	/** Anzahl der Verschmelzung mit anderen Ganglinien, Standard ist {@value} . */
 	private long anzahlVerschmelzungen = 1;
 
 	/**
-	 * Identifier für das mit der Ganglinie verknüpfte Ereignis, Standard ist
-	 * {@value}.
+	 * Identifier für das mit der Ganglinie verknüpfte Ereignis, Standard ist *
+	 * * {@value} .
 	 */
 	private EreignisTyp ereignisTyp = null;
 
 	/**
-	 * Flag, ob die Ganglinie eine Referenzganglinie darstellt, Standard ist
-	 * {@value}.
+	 * Flag, ob die Ganglinie eine Referenzganglinie darstellt, Standard ist * *
+	 * * {@value} .
 	 */
 	private boolean referenz = false;
 
@@ -203,10 +203,10 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @deprecated Die Approximation der einzelnen Größen kann mit
-	 *             {@code getGanglinie*.getApproximation()} abgerufen werden.
-	 *             Der Typ der Approximation kann mit
-	 *             {@link #getApproximationDaK()} erfragt werden.
+	 * @deprecated Die Approximation der einzelnen Größen kann mit {@code
+	 *             getGanglinie*.getApproximation()} abgerufen werden. Der Typ
+	 *             der Approximation kann mit {@link #getApproximationDaK()}
+	 *             erfragt werden.
 	 */
 	@Deprecated
 	@Override
@@ -391,8 +391,8 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @deprecated Die Intervalle müssen an den einzelnen Größen mit
-	 *             {@code getGanglinie*.getIntervalle()} abgerufen werden.
+	 * @deprecated Die Intervalle müssen an den einzelnen Größen mit {@code
+	 *             getGanglinie*.getIntervalle()} abgerufen werden.
 	 */
 	@Deprecated
 	@Override
@@ -468,11 +468,11 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 			setApproximationAktuell(true);
 		}
 
-		return new Stuetzstelle<Messwerte>(zeitstempel, new Messwerte(
-				gQKfz.getStuetzstelle(zeitstempel).getWert(),
-				gQLkw.getStuetzstelle(zeitstempel).getWert(),
-				gVPkw.getStuetzstelle(zeitstempel).getWert(),
-				gVLkw.getStuetzstelle(zeitstempel).getWert(), k1, k2));
+		return new Stuetzstelle<Messwerte>(zeitstempel, new Messwerte(gQKfz
+				.getStuetzstelle(zeitstempel).getWert(), gQLkw.getStuetzstelle(
+				zeitstempel).getWert(), gVPkw.getStuetzstelle(zeitstempel)
+				.getWert(), gVLkw.getStuetzstelle(zeitstempel).getWert(), k1,
+				k2));
 	}
 
 	/**
@@ -497,7 +497,8 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Gibt berechnete Stützstellen im angegebenen Intervall in der angegebenen
+	 * Schrittweite zurück.
 	 * 
 	 * @see #setPrognoseZeitraum(Interval)
 	 */
@@ -510,6 +511,37 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 		menge = subMap(intervall.getStart(), intervall.getEnd() + 1);
 		liste = new ArrayList<Stuetzstelle<Messwerte>>();
 		for (final long t : menge.keySet()) {
+			if (prognoseZeitraum != null && !prognoseZeitraum.contains(t)) {
+				continue;
+			}
+
+			liste.add(getStuetzstelle(t));
+		}
+
+		return liste;
+	}
+
+	/**
+	 * Gibt berechnete Stützstellen im prognostizierten Intervall in der
+	 * angegebenen Schrittweite zurück.
+	 * 
+	 * @see #setPrognoseZeitraum(Interval, long)
+	 */
+	public List<Stuetzstelle<Messwerte>> getStuetzstellen(long schrittweite) {
+		return getStuetzstellen(getPrognoseIntervall(), schrittweite);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see #setPrognoseZeitraum(Interval)
+	 */
+	public List<Stuetzstelle<Messwerte>> getStuetzstellen(
+			final Interval intervall, long schrittweite) {
+		List<Stuetzstelle<Messwerte>> liste;
+
+		liste = new ArrayList<Stuetzstelle<Messwerte>>();
+		for (long t = intervall.getStart(); t <= intervall.getEnd(); t += schrittweite) {
 			if (prognoseZeitraum != null && !prognoseZeitraum.contains(t)) {
 				continue;
 			}
@@ -662,9 +694,9 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 
 		neu = new TreeMap<Long, Messwerte>();
 		for (final Map.Entry<Long, Messwerte> e : entrySet()) {
-			neu.put(e.getKey(), new Messwerte(e.getValue().getQKfz(),
-					e.getValue().getQLkw(), e.getValue().getVPkw(),
-					e.getValue().getVLkw(), k1, k2));
+			neu.put(e.getKey(), new Messwerte(e.getValue().getQKfz(), e
+					.getValue().getQLkw(), e.getValue().getVPkw(), e.getValue()
+					.getVLkw(), k1, k2));
 		}
 		clear();
 		putAll(neu);
@@ -683,9 +715,9 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 
 		neu = new TreeMap<Long, Messwerte>();
 		for (final Map.Entry<Long, Messwerte> e : entrySet()) {
-			neu.put(e.getKey(), new Messwerte(e.getValue().getQKfz(),
-					e.getValue().getQLkw(), e.getValue().getVPkw(),
-					e.getValue().getVLkw(), k1, k2));
+			neu.put(e.getKey(), new Messwerte(e.getValue().getQKfz(), e
+					.getValue().getQLkw(), e.getValue().getVPkw(), e.getValue()
+					.getVLkw(), k1, k2));
 		}
 		clear();
 		putAll(neu);
@@ -735,8 +767,8 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
 	 * 
 	 * @param referenz
-	 *            <code>true</code>, wenn diese Ganglinie eine
-	 *            Referenzganglinie sein soll, sonst <code>false</code>
+	 *            <code>true</code>, wenn diese Ganglinie eine Referenzganglinie
+	 *            sein soll, sonst <code>false</code>
 	 */
 	public void setReferenz(final boolean referenz) {
 		this.referenz = referenz;
