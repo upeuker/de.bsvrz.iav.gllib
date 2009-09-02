@@ -80,10 +80,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	/** Datenkatalogkonstante für eine relative additive Ganglinie: {@value} . */
 	public static final int TYP_ADDITIV = 1;
 
-	/**
-	 * Datenkatalogkonstante für eine relative multiplikative Ganglinie: * * * *
-	 * {@value} .
-	 */
+	/** Datenkatalogkonstante für eine relative multiplikative Ganglinie: {@value} . */
 	public static final int TYP_MULTIPLIKATIV = 2;
 
 	/** Die Eigenschaft {@code serialVersionUID}. */
@@ -528,7 +525,8 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 * @see #setPrognoseZeitraum(Interval, long)
 	 */
 	public List<Stuetzstelle<Messwerte>> getStuetzstellen(long schrittweite) {
-		return getStuetzstellen(getPrognoseIntervall(), schrittweite);
+		return getStuetzstellen(getPrognoseIntervall() == null ? getIntervall()
+				: getPrognoseIntervall(), schrittweite);
 	}
 
 	/**
