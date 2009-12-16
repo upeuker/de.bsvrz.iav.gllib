@@ -44,20 +44,19 @@ import de.bsvrz.dav.daf.main.config.ObjectTimeSpecification;
 import de.bsvrz.dav.daf.main.config.SystemObject;
 import de.bsvrz.dav.daf.main.config.SystemObjectType;
 import de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ;
-import de.bsvrz.iav.gllib.gllib.modell.parameter.PdGanglinienModellAutomatischesLernenEreignis;
 import de.bsvrz.sys.funclib.application.StandardApplication;
 import de.bsvrz.sys.funclib.application.StandardApplicationRunner;
 import de.bsvrz.sys.funclib.bitctrl.modell.AnmeldeException;
 import de.bsvrz.sys.funclib.bitctrl.modell.DatensendeException;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
-import de.bsvrz.sys.funclib.bitctrl.modell.kalender.objekte.Ereignis;
-import de.bsvrz.sys.funclib.bitctrl.modell.kalender.objekte.EreignisTyp;
-import de.bsvrz.sys.funclib.bitctrl.modell.kalender.objekte.Kalender;
-import de.bsvrz.sys.funclib.bitctrl.modell.kalender.objekte.SystemKalenderEintrag;
-import de.bsvrz.sys.funclib.bitctrl.modell.kalender.parameter.PdEreignisParameter;
-import de.bsvrz.sys.funclib.bitctrl.modell.kalender.parameter.PdEreignisTypParameter;
-import de.bsvrz.sys.funclib.bitctrl.modell.kalender.parameter.PdSystemKalenderEintrag;
-import de.bsvrz.sys.funclib.bitctrl.modell.kalender.parameter.PdEreignisParameter.Daten.VerkehrlicheGueltigkeit;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmereigniskalenderglobal.objekte.Ereignis;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmereigniskalenderglobal.objekte.EreignisTyp;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmereigniskalenderglobal.parameter.PdEreignisParameter;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmereigniskalenderglobal.parameter.PdEreignisTypParameter;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmereigniskalenderglobal.parameter.PdGanglinienModellAutomatischesLernenEreignis;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmsystemkalenderglobal.objekte.Kalender;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmsystemkalenderglobal.objekte.SystemKalenderEintrag;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmsystemkalenderglobal.parameter.PdSystemKalenderEintrag;
 import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
 
 /**
@@ -65,7 +64,8 @@ import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
  * der Ostersonntag angelegt.
  * 
  * @author BitCtrl Systems GmbH, Falko Schumann
- * @version $Id$
+ * @version $Id: KalenderInitialisierer.java 8474 2008-04-18 16:44:39Z Schumann
+ *          $
  */
 public final class KalenderInitialisierer implements StandardApplication,
 		UncaughtExceptionHandler {
@@ -75,9 +75,9 @@ public final class KalenderInitialisierer implements StandardApplication,
 	 * <p>
 	 * Neben den Datenverteilerparametern kennt die Applikation noch:
 	 * <ul>
-	 * <li><code>-reset</code> ist der Parameter angegeben, werden
-	 * <em>alle</em> Ereignisse, Ereignistypen und Systemkalendereinträge
-	 * gelöscht, bevor die Standardereignisse angelgt werden.</li>
+	 * <li><code>-reset</code> ist der Parameter angegeben, werden <em>alle</em>
+	 * Ereignisse, Ereignistypen und Systemkalendereinträge gelöscht, bevor die
+	 * Standardereignisse angelgt werden.</li>
 	 * </ul>
 	 * 
 	 * @param args

@@ -28,7 +28,7 @@ package de.bsvrz.iav.gllib.gllib.dav;
 
 import com.bitctrl.math.MathTools;
 
-import de.bsvrz.sys.funclib.bitctrl.util.dav.Umrechung;
+import de.bsvrz.sys.funclib.bitctrl.util.Umrechung;
 
 /**
  * Für Messquerschnitte angepasste Stützstelle, die die Werte QKfz, QLkw, VLkw

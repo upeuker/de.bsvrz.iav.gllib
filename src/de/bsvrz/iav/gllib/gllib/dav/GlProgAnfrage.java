@@ -32,11 +32,8 @@ import java.util.Set;
 import com.bitctrl.Constants;
 import com.bitctrl.util.Interval;
 
-import de.bsvrz.dav.daf.main.Data;
-import de.bsvrz.dav.daf.main.Data.Array;
-import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
-import de.bsvrz.sys.funclib.bitctrl.modell.kalender.objekte.EreignisTyp;
-import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.objekte.MessQuerschnittAllgemein;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmereigniskalenderglobal.objekte.EreignisTyp;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmverkehrglobal.objekte.MessQuerschnittAllgemein;
 
 /**
  * Repräsentiert eine einzelne Anfrage einer Anfragenachricht an die
@@ -57,7 +54,7 @@ public class GlProgAnfrage {
 	private boolean nurLangfristigeAuswahl;
 
 	/** Diese Ereignistypen werden bei der Ganglinienauswahl ignoriert. */
-	private final Set<EreignisTyp> ereignisTypen;
+	private final Set<EreignisTyp> ereignisTypen = new HashSet<EreignisTyp>();
 
 	/** Soll eine zyklische Prognose erstellt werden? */
 	private boolean zyklischePrognose;
@@ -72,10 +69,10 @@ public class GlProgAnfrage {
 	private long sendeIntervall;
 
 	/**
-	 * Standardkonstruktor.
+	 * Erzeigt eine leere Anfrage.
 	 */
 	public GlProgAnfrage() {
-		ereignisTypen = new HashSet<EreignisTyp>();
+		// tut nichts
 	}
 
 	/**
@@ -121,75 +118,13 @@ public class GlProgAnfrage {
 			final boolean nurLangfristigeAuswahl,
 			final boolean zyklischePrognose, final long pruefIntervall,
 			final int schwelle, final long sendeIntervall) {
-		this();
-
-		this.messQuerschnitt = mq;
+		messQuerschnitt = mq;
 		this.prognoseZeitraum = prognoseZeitraum;
 		this.nurLangfristigeAuswahl = nurLangfristigeAuswahl;
 		this.zyklischePrognose = zyklischePrognose;
 		this.pruefIntervall = pruefIntervall;
 		this.schwelle = schwelle;
 		this.sendeIntervall = sendeIntervall;
-	}
-
-	/**
-	 * Baut aus den Informationen der Anfrage ein Datum.
-	 * <p>
-	 * Hinweis: Das Ergebnis wird auch im Parameter abgelegt!
-	 * <p>
-	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
-	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
-	 * 
-	 * @param daten
-	 *            ein Datum, welches eine (leere) Anfrage darstellt.
-	 * @return das ausgefüllte Datum.
-	 */
-	public Data getDaten(final Data daten) {
-		Array feld;
-		int i;
-
-		daten.getReferenceValue("Messquerschnitt").setSystemObject(
-				messQuerschnitt.getSystemObject());
-		daten.getTimeValue("ZeitpunktPrognoseBeginn").setMillis(
-				prognoseZeitraum.getStart());
-		daten.getTimeValue("ZeitpunktPrognoseEnde").setMillis(
-				prognoseZeitraum.getEnd());
-		daten.getScaledValue("Überprüfungsintervall").set(
-				pruefIntervall / Constants.MILLIS_PER_SECOND);
-		daten.getScaledValue("Aktualisierungsschwelle").set(schwelle);
-		daten.getScaledValue("Aktualisierungsintervall").set(
-				sendeIntervall / Constants.MILLIS_PER_SECOND);
-
-		if (nurLangfristigeAuswahl) {
-			daten.getUnscaledValue("NurLangfristigeAuswahl").setText("Ja");
-		} else {
-			daten.getUnscaledValue("NurLangfristigeAuswahl").setText("Nein");
-		}
-
-		if (zyklischePrognose) {
-			daten.getUnscaledValue("ZyklischePrognose").setText("Ja");
-		} else {
-			daten.getUnscaledValue("ZyklischePrognose").setText("Nein");
-		}
-
-		feld = daten.getArray("EreignisTyp");
-		feld.setLength(ereignisTypen.size());
-		i = 0;
-		for (final EreignisTyp et : ereignisTypen) {
-			feld.getItem(i++).asReferenceValue().setSystemObject(
-					et.getSystemObject());
-		}
-
-		return daten;
-	}
-
-	/**
-	 * Gibt die Menge der ausgeschlossenen Ereignistypen zurück.
-	 * 
-	 * @return Ereignistypeniterator
-	 */
-	public Set<EreignisTyp> getEreignisTypen() {
-		return new HashSet<EreignisTyp>(ereignisTypen);
 	}
 
 	/**
@@ -202,10 +137,21 @@ public class GlProgAnfrage {
 	}
 
 	/**
+	 * Ändert den Messquerschnitt für den angefragt wird.
+	 * 
+	 * @param messQuerschnitt
+	 *            ein Messquerschnitt.
+	 */
+	public void setMessQuerschnitt(
+			final MessQuerschnittAllgemein messQuerschnitt) {
+		this.messQuerschnitt = messQuerschnitt;
+	}
+
+	/**
 	 * Gibt den Prognosezeitraum zurück.
 	 * 
-	 * @return der Zeitraum für den die Ganglinie bestimmt wird oder
-	 *         {@code null}, wenn kein Intervall gesetzt ist bzw. das Intervall
+	 * @return der Zeitraum für den die Ganglinie bestimmt wird oder {@code
+	 *         null}, wenn kein Intervall gesetzt ist bzw. das Intervall
 	 *         ungültig ist. Bei einem ungültigen Intervall liegt der
 	 *         Startzeitpunkt <em>hinter</em> dem Endzeitpunkt.
 	 */
@@ -214,36 +160,22 @@ public class GlProgAnfrage {
 	}
 
 	/**
-	 * Spätestens nach dieser Zeit wird die Prognose geprüft.
+	 * Ändert den Prognosezeitraum.
 	 * 
-	 * @return das Prüfintervall
-	 * @see #isZyklischePrognose()
+	 * @param prognoseZeitraum
+	 *            der neue Prognosezeitraum.
 	 */
-	public long getPruefIntervall() {
-		return pruefIntervall;
+	public void setPrognoseZeitraum(final Interval prognoseZeitraum) {
+		this.prognoseZeitraum = prognoseZeitraum;
 	}
 
 	/**
-	 * Maximale &Auml;nderung in Prozent zwischen zwei zyklischen Prognosen.
-	 * Wird dieser Schwellwert überschritten, wird eine neue Prognose
-	 * publiziert.
+	 * Gibt die Menge der auszuschließenden Ereignistypen zurück.
 	 * 
-	 * @return Schwellwert in Prozent.
-	 * @see #isZyklischePrognose()
+	 * @return die Menge der auszuschließenden Ereignistypen.
 	 */
-	public int getSchwelle() {
-		return schwelle;
-	}
-
-	/**
-	 * Spätestens nach dieser Zeit wird eine Prognose publiziert. Die Ganglinie
-	 * wird nach dieser Zeit auch publiziert, wenn sie sich nicht geändert hat.
-	 * 
-	 * @return der Zyklus des Publizierens.
-	 * @see #isZyklischePrognose()
-	 */
-	public long getSendeIntervall() {
-		return sendeIntervall;
+	public Set<EreignisTyp> getEreignisTypen() {
+		return ereignisTypen;
 	}
 
 	/**
@@ -253,6 +185,17 @@ public class GlProgAnfrage {
 	 */
 	public boolean isNurLangfristigeAuswahl() {
 		return nurLangfristigeAuswahl;
+	}
+
+	/**
+	 * Setzt das Flag für die langfristigen Auswahlmethoden.
+	 * 
+	 * @param nurLangfristigeAuswahl
+	 *            {@code true}, wenn nur langfristige Auswahlmethoden verwendet
+	 *            werden sollen.
+	 */
+	public void setNurLangfristigeAuswahl(final boolean nurLangfristigeAuswahl) {
+		this.nurLangfristigeAuswahl = nurLangfristigeAuswahl;
 	}
 
 	/**
@@ -270,98 +213,6 @@ public class GlProgAnfrage {
 	}
 
 	/**
-	 * Entfernt einen Ereignistyp aus der Filterliste.
-	 * 
-	 * @param typ
-	 *            ein Ereignistyp der bei der Ganglinienprognose ignoriert
-	 *            werden soll.
-	 * @return {@code true}, wenn der Typ enthalten war und {@code false},
-	 *         wenn er bereits enthalten war.
-	 */
-	public boolean removeEreignisTyp(final EreignisTyp typ) {
-		return ereignisTypen.remove(typ);
-	}
-
-	/**
-	 * übernimmt die Informationen aus dem Datum als inneren Zustand.
-	 * <p>
-	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
-	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
-	 * 
-	 * @param daten
-	 *            ein Datum, welches <strong>eine</strong> Anfrage darstellt.
-	 */
-	public void setDaten(final Data daten) {
-		Array feld;
-		long start, ende;
-
-		messQuerschnitt = (MessQuerschnittAllgemein) ObjektFactory.getInstanz().getModellobjekt(
-				daten.getReferenceValue("Messquerschnitt").getSystemObject());
-		pruefIntervall = daten.getScaledValue("Überprüfungsintervall").longValue()
-				* Constants.MILLIS_PER_SECOND;
-		schwelle = daten.getScaledValue("Aktualisierungsschwelle").intValue();
-		sendeIntervall = daten.getScaledValue("Aktualisierungsintervall").longValue()
-				* Constants.MILLIS_PER_SECOND;
-
-		start = daten.getTimeValue("ZeitpunktPrognoseBeginn").getMillis();
-		ende = daten.getTimeValue("ZeitpunktPrognoseEnde").getMillis();
-		if (start <= ende) {
-			prognoseZeitraum = new Interval(start, ende);
-		} // Wenn Intervall ungültig, dann bleibt es null
-
-		if (daten.getUnscaledValue("NurLangfristigeAuswahl").intValue() == 0) {
-			nurLangfristigeAuswahl = false;
-		} else {
-			nurLangfristigeAuswahl = true;
-		}
-
-		if (daten.getUnscaledValue("ZyklischePrognose").intValue() == 0) {
-			zyklischePrognose = false;
-		} else {
-			zyklischePrognose = true;
-		}
-
-		ereignisTypen.clear();
-		feld = daten.getArray("EreignisTyp");
-		for (int i = 0; i < feld.getLength(); i++) {
-			ereignisTypen.add(new EreignisTyp(
-					feld.getItem(i).asReferenceValue().getSystemObject()));
-		}
-	}
-
-	/**
-	 * Ändert den Messquerschnitt für den angefragt wird.
-	 * 
-	 * @param messQuerschnitt
-	 *            ein Messquerschnitt.
-	 */
-	public void setMessQuerschnitt(
-			final MessQuerschnittAllgemein messQuerschnitt) {
-		this.messQuerschnitt = messQuerschnitt;
-	}
-
-	/**
-	 * Ändert den Prognosezeitraum.
-	 * 
-	 * @param prognoseZeitraum
-	 *            der neue Prognosezeitraum.
-	 */
-	public void setPrognoseZeitraum(final Interval prognoseZeitraum) {
-		this.prognoseZeitraum = prognoseZeitraum;
-	}
-
-	/**
-	 * Setzt das Flag für die langfristigen Auswahlmethoden.
-	 * 
-	 * @param nurLangfristigeAuswahl
-	 *            {@code true}, wenn nur langfristige Auswahlmethoden verwendet
-	 *            werden sollen.
-	 */
-	public void setNurLangfristigeAuswahl(final boolean nurLangfristigeAuswahl) {
-		this.nurLangfristigeAuswahl = nurLangfristigeAuswahl;
-	}
-
-	/**
 	 * Setzt Flag für eine zyklische Prognose.
 	 * 
 	 * @param zyklischePrognose
@@ -371,6 +222,16 @@ public class GlProgAnfrage {
 	 */
 	public void setZyklischePrognose(final boolean zyklischePrognose) {
 		this.zyklischePrognose = zyklischePrognose;
+	}
+
+	/**
+	 * Spätestens nach dieser Zeit wird die Prognose geprüft.
+	 * 
+	 * @return das Prüfintervall
+	 * @see #isZyklischePrognose()
+	 */
+	public long getPruefIntervall() {
+		return pruefIntervall;
 	}
 
 	/**
@@ -384,6 +245,18 @@ public class GlProgAnfrage {
 	}
 
 	/**
+	 * Maximale &Auml;nderung in Prozent zwischen zwei zyklischen Prognosen.
+	 * Wird dieser Schwellwert überschritten, wird eine neue Prognose
+	 * publiziert.
+	 * 
+	 * @return Schwellwert in Prozent.
+	 * @see #isZyklischePrognose()
+	 */
+	public int getSchwelle() {
+		return schwelle;
+	}
+
+	/**
 	 * Legt die Änderungsschwelle fest, bei der eine neue Prognoseganglinie
 	 * gesendet werden soll.
 	 * 
@@ -392,6 +265,17 @@ public class GlProgAnfrage {
 	 */
 	public void setSchwelle(final int schwelle) {
 		this.schwelle = schwelle;
+	}
+
+	/**
+	 * Spätestens nach dieser Zeit wird eine Prognose publiziert. Die Ganglinie
+	 * wird nach dieser Zeit auch publiziert, wenn sie sich nicht geändert hat.
+	 * 
+	 * @return der Zyklus des Publizierens.
+	 * @see #isZyklischePrognose()
+	 */
+	public long getSendeIntervall() {
+		return sendeIntervall;
 	}
 
 	/**

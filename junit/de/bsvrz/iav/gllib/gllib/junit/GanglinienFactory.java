@@ -41,13 +41,13 @@ import java.util.logging.Logger;
 
 import de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ;
 import de.bsvrz.iav.gllib.gllib.dav.Messwerte;
-import de.bsvrz.iav.gllib.gllib.modell.parameter.PdGanglinie;
 import de.bsvrz.sys.funclib.bitctrl.daf.DavTools;
 import de.bsvrz.sys.funclib.bitctrl.modell.AnmeldeException;
 import de.bsvrz.sys.funclib.bitctrl.modell.DatensendeException;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
-import de.bsvrz.sys.funclib.bitctrl.modell.kalender.objekte.EreignisTyp;
-import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.objekte.MessQuerschnittAllgemein;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmereigniskalenderglobal.objekte.EreignisTyp;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.parameter.PdGanglinie;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmverkehrglobal.objekte.MessQuerschnittAllgemein;
 
 /**
  * Liest aus einer Datenbank die notwendigen Daten zum Anlegen von Ganglinien
@@ -61,19 +61,29 @@ public class GanglinienFactory {
 	/** Enthält die Spaltennamen der Tabelle. */
 	public enum Ganglinien {
 
-		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		/**
+		 * Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1.
+		 */
 		ID,
 
-		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		/**
+		 * Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1.
+		 */
 		EREIGNISTYP,
 
-		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		/**
+		 * Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1.
+		 */
 		TYP,
 
-		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		/**
+		 * Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1.
+		 */
 		APPROXIMATION,
 
-		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		/**
+		 * Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1.
+		 */
 		REFERENZ;
 
 	}
@@ -81,25 +91,39 @@ public class GanglinienFactory {
 	/** Enthält die Spaltennamen der Tabelle. */
 	public enum Stuetzstellen {
 
-		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		/**
+		 * Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1.
+		 */
 		GL_ID,
 
-		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		/**
+		 * Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1.
+		 */
 		TAG,
 
-		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		/**
+		 * Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1.
+		 */
 		STUNDE,
 
-		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		/**
+		 * Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1.
+		 */
 		QKFZ,
 
-		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		/**
+		 * Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1.
+		 */
 		QLKW,
 
-		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		/**
+		 * Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1.
+		 */
 		VPKW,
 
-		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		/**
+		 * Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1.
+		 */
 		VLKW;
 
 	}
@@ -160,9 +184,9 @@ public class GanglinienFactory {
 
 	/**
 	 * Setzt die Ganglinien am Messquerschnitt. Die Ganglinien werden aus der
-	 * Datenbank aus der Tabelle <em>ganglinien</em> und deren Stützstellen
-	 * aus der Tabelle <em>stuetzstellen</em> gelesen. Die Ausgangsganglinie
-	 * hat die Stützstellen des Tags {@link #ERSTER_TAG}.
+	 * Datenbank aus der Tabelle <em>ganglinien</em> und deren Stützstellen aus
+	 * der Tabelle <em>stuetzstellen</em> gelesen. Die Ausgangsganglinie hat die
+	 * Stützstellen des Tags {@link #ERSTER_TAG}.
 	 * <p>
 	 * Die Tabelle mit den Gangliniendefinition muss folgenden Aufbau besitzen:
 	 * 

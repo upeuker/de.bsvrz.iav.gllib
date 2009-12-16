@@ -26,11 +26,10 @@
 
 package de.bsvrz.iav.gllib.gllib.dav;
 
-import java.util.Collections;
 import java.util.EventObject;
 import java.util.List;
 
-import de.bsvrz.iav.gllib.gllib.modell.onlinedaten.OdPrognoseGanglinienAntwort;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.onlinedaten.OdPrognoseGanglinienAntwort;
 
 /**
  * Repräsentiert eine Antwortnachricht der Ganglinienprognose. Enthalten sind
@@ -65,7 +64,7 @@ public class GlProgAntwortEvent extends EventObject {
 			final OdPrognoseGanglinienAntwort.Daten datum) {
 		super(quelle);
 		absenderZeichen = datum.getAbsenderZeichen();
-		prognosen = Collections.unmodifiableList(datum);
+		prognosen = GanglinieUtil.konvertiere(datum.getPrognoseGanglinie());
 	}
 
 	/**

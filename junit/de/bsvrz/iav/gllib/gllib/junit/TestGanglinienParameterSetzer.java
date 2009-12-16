@@ -33,17 +33,16 @@ import com.bitctrl.util.jar.JarTools;
 
 import de.bsvrz.dav.daf.main.ClientDavInterface;
 import de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ;
-import de.bsvrz.iav.gllib.gllib.modell.parameter.PdGanglinie;
-import de.bsvrz.iav.gllib.gllib.modell.parameter.PdGanglinienModellPrognose;
 import de.bsvrz.sys.funclib.application.StandardApplication;
 import de.bsvrz.sys.funclib.application.StandardApplicationRunner;
 import de.bsvrz.sys.funclib.bitctrl.modell.AnmeldeException;
 import de.bsvrz.sys.funclib.bitctrl.modell.DatensendeException;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjekt;
-import de.bsvrz.sys.funclib.bitctrl.modell.kalender.objekte.EreignisTyp;
-import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.VerkehrsModellTypen;
-import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.objekte.MessQuerschnittAllgemein;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmereigniskalenderglobal.objekte.EreignisTyp;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.parameter.PdGanglinie;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.parameter.PdGanglinienModellPrognose;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmverkehrglobal.objekte.MessQuerschnittAllgemein;
 import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
 
 /**
@@ -51,7 +50,8 @@ import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
  * wird je eine Ganglinie für jeden Wochentag und Ostermontag angelegt.
  * 
  * @author BitCtrl Systems GmbH, Falko Schumann
- * @version $Id$
+ * @version $Id: TestGanglinienParameterSetzer.java 9515 2008-06-10 12:38:57Z
+ *          Schumann $
  */
 public final class TestGanglinienParameterSetzer implements StandardApplication {
 
@@ -76,7 +76,8 @@ public final class TestGanglinienParameterSetzer implements StandardApplication 
 	 *            die Startparameter.
 	 */
 	public static void main(final String[] args) {
-		StandardApplicationRunner.run(new TestGanglinienParameterSetzer(), args);
+		StandardApplicationRunner
+				.run(new TestGanglinienParameterSetzer(), args);
 	}
 
 	/**
@@ -103,7 +104,9 @@ public final class TestGanglinienParameterSetzer implements StandardApplication 
 		if (objektPids != null) {
 			objekte = factory.bestimmeModellobjekte(objektPids);
 		} else {
-			objekte = factory.bestimmeModellobjekte(VerkehrsModellTypen.MESSQUERSCHNITTALLGEMEIN.getPid());
+			objekte = factory
+					.bestimmeModellobjekte(VerkehrsModellTypen.MESSQUERSCHNITTALLGEMEIN
+							.getPid());
 		}
 		for (final SystemObjekt so : objekte) {
 			final MessQuerschnittAllgemein mq;
@@ -121,13 +124,18 @@ public final class TestGanglinienParameterSetzer implements StandardApplication 
 
 			pdGanglinie = mq.getParameterDatensatz(PdGanglinie.class);
 
-			pdPrognose = mq.getParameterDatensatz(PdGanglinienModellPrognose.class);
+			pdPrognose = mq
+					.getParameterDatensatz(PdGanglinienModellPrognose.class);
 			datumPrognose = pdPrognose.erzeugeDatum();
-			datumPrognose.setAuswahlMethode(PdGanglinienModellPrognose.Daten.WAHRSCHEINLICHSTE_GANGLINIE);
-			datumPrognose.setMatchingIntervall(10 * Constants.MILLIS_PER_MINUTE);
+			datumPrognose
+					.setAuswahlMethode(PdGanglinienModellPrognose.Daten.WAHRSCHEINLICHSTE_GANGLINIE);
+			datumPrognose
+					.setMatchingIntervall(10 * Constants.MILLIS_PER_MINUTE);
 			datumPrognose.setMaxMatchingFehler(25);
-			datumPrognose.setPatternMatchingHorizont(2 * Constants.MILLIS_PER_HOUR);
-			datumPrognose.setPatternMatchingOffset(1 * Constants.MILLIS_PER_HOUR);
+			datumPrognose
+					.setPatternMatchingHorizont(2 * Constants.MILLIS_PER_HOUR);
+			datumPrognose
+					.setPatternMatchingOffset(1 * Constants.MILLIS_PER_HOUR);
 
 			try {
 				pdGanglinie.anmeldenSender();
@@ -149,8 +157,9 @@ public final class TestGanglinienParameterSetzer implements StandardApplication 
 				System.out.println("Ganglinienprognoseparameter für " + mq
 						+ " gesendet.");
 			} catch (final AnmeldeException ex) {
-				System.err.println("Kann mich nicht zum Senden der Ganglinien für "
-						+ mq + " anmelden.");
+				System.err
+						.println("Kann mich nicht zum Senden der Ganglinien für "
+								+ mq + " anmelden.");
 			} catch (final DatensendeException ex) {
 				System.err.println("Kann Ganglinien für " + mq
 						+ " nicht senden.");
@@ -166,9 +175,9 @@ public final class TestGanglinienParameterSetzer implements StandardApplication 
 	/**
 	 * Folgende Parameter werden unterstützt.
 	 * <ul>
-	 * <li><code>-objekte</code>: Die PIDs der Messquerschnitte die
-	 * parametriert werden sollen. Mehrere PIDs können als kommagetrennte Liste
-	 * angegeben werden (ohne Leerzeichen). Fehlt der Parameter, werden alle
+	 * <li><code>-objekte</code>: Die PIDs der Messquerschnitte die parametriert
+	 * werden sollen. Mehrere PIDs können als kommagetrennte Liste angegeben
+	 * werden (ohne Leerzeichen). Fehlt der Parameter, werden alle
 	 * Messquerschnitte parametriert.</li>
 	 * </ul>
 	 * 
@@ -177,8 +186,8 @@ public final class TestGanglinienParameterSetzer implements StandardApplication 
 	public void parseArguments(final ArgumentList argumentList)
 			throws Exception {
 		if (argumentList.hasArgument("-objekte")) {
-			objektPids = argumentList.fetchArgument("-objekte=").asNonEmptyString().split(
-					",");
+			objektPids = argumentList.fetchArgument("-objekte=")
+					.asNonEmptyString().split(",");
 		}
 	}
 

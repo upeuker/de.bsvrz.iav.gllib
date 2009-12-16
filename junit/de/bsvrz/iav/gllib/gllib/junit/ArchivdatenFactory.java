@@ -40,8 +40,11 @@ import java.util.logging.Logger;
 import de.bsvrz.iav.gllib.gllib.junit.GanglinienFactory.Stuetzstellen;
 import de.bsvrz.sys.funclib.bitctrl.modell.AnmeldeException;
 import de.bsvrz.sys.funclib.bitctrl.modell.DatensendeException;
-import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.objekte.MessQuerschnittAllgemein;
-import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.onlinedaten.OdVerkehrsDatenKurzZeitMq;
+import de.bsvrz.sys.funclib.bitctrl.modell.att.Zeitstempel;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmverkehrglobal.attribute.AttGeschwindigkeit;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmverkehrglobal.attribute.AttVerkehrsStaerkeStunde;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmverkehrglobal.objekte.MessQuerschnittAllgemein;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmverkehrglobal.onlinedaten.OdVerkehrsDatenKurzZeitMq;
 
 /**
  * Liest aus einer Datenbank die notwendigen Daten zum Anlegen von Archivdaten
@@ -55,22 +58,34 @@ public class ArchivdatenFactory {
 	/** Enthält die Spaltennamen der Tabelle. */
 	public enum Archivdaten {
 
-		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		/**
+		 * Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1.
+		 */
 		TAG,
 
-		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		/**
+		 * Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1.
+		 */
 		STUNDE,
 
-		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		/**
+		 * Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1.
+		 */
 		QKFZ,
 
-		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		/**
+		 * Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1.
+		 */
 		QLKW,
 
-		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		/**
+		 * Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1.
+		 */
 		VPKW,
 
-		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		/**
+		 * Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1.
+		 */
 		VLKW;
 
 	}
@@ -153,11 +168,9 @@ public class ArchivdatenFactory {
 		final ResultSet rs;
 		String sql;
 
-		onlinedaten = mq.getOnlineDatensatz(OdVerkehrsDatenKurzZeitMq.class);
-		onlinedaten.setQuelle(OdVerkehrsDatenKurzZeitMq.Aspekte.Analyse
-				.getAspekt(), true);
-		onlinedaten.anmeldenSender(OdVerkehrsDatenKurzZeitMq.Aspekte.Analyse
-				.getAspekt());
+		onlinedaten = mq.getOdVerkehrsDatenKurzZeitMq();
+		onlinedaten.setQuelle(OdVerkehrsDatenKurzZeitMq.Aspekte.Analyse, true);
+		onlinedaten.anmeldenSender(OdVerkehrsDatenKurzZeitMq.Aspekte.Analyse);
 
 		archivdaten = new ArrayList<OdVerkehrsDatenKurzZeitMq.Daten>();
 
@@ -169,7 +182,7 @@ public class ArchivdatenFactory {
 			final OdVerkehrsDatenKurzZeitMq.Daten datum;
 			Double qKfz, qLkw, vPkw, vLkw;
 
-			datum = onlinedaten.erzeugeDatum();
+			datum = onlinedaten.createDatum();
 
 			// Zeitstempel bestimmen
 			cal = Calendar.getInstance();
@@ -178,45 +191,41 @@ public class ArchivdatenFactory {
 			cal.set(Calendar.MINUTE, 0);
 			cal.set(Calendar.SECOND, 0);
 			cal.set(Calendar.MILLISECOND, 0);
-			datum.setZeitstempel(cal.getTimeInMillis());
+			datum.dSetZeitstempel(new Zeitstempel(cal.getTimeInMillis()));
 
 			// Messwerte aus Datenbank lesen
 			qKfz = rs.getDouble(Stuetzstellen.QKFZ.name());
 			if (rs.wasNull()) {
 				qKfz = null;
 			}
-			datum.setWert(OdVerkehrsDatenKurzZeitMq.Daten.Werte.QKfz.name(),
-					qKfz);
+			datum.getQKfz().setWert(
+					new AttVerkehrsStaerkeStunde(qKfz.intValue()));
 			qLkw = rs.getDouble(Stuetzstellen.QLKW.name());
 			if (rs.wasNull()) {
 				qLkw = null;
 			}
-			datum.setWert(OdVerkehrsDatenKurzZeitMq.Daten.Werte.QLkw.name(),
-					qLkw);
+			datum.getQLkw().setWert(
+					new AttVerkehrsStaerkeStunde(qLkw.intValue()));
 			vPkw = rs.getDouble(Stuetzstellen.VPKW.name());
 			if (rs.wasNull()) {
 				vPkw = null;
 			}
-			datum.setWert(OdVerkehrsDatenKurzZeitMq.Daten.Werte.VPkw.name(),
-					vPkw);
+			datum.getVPkw().setWert(new AttGeschwindigkeit(vPkw.shortValue()));
 			vLkw = rs.getDouble(Stuetzstellen.VLKW.name());
 			if (rs.wasNull()) {
 				vLkw = null;
 			}
-			datum.setWert(OdVerkehrsDatenKurzZeitMq.Daten.Werte.VLkw.name(),
-					vLkw);
+			datum.getVLkw().setWert(new AttGeschwindigkeit(vLkw.shortValue()));
 
 			// Datensatz senden
 			archivdaten.add(datum);
 			log.info("Sende Archivdaten für "
 					+ DateFormat.getDateTimeInstance().format(cal.getTime()));
-			onlinedaten.sendeDaten(OdVerkehrsDatenKurzZeitMq.Aspekte.Analyse
-					.getAspekt(), datum);
+			onlinedaten.sendeDatum(OdVerkehrsDatenKurzZeitMq.Aspekte.Analyse,
+					datum);
 		}
-		onlinedaten.abmeldenSender(OdVerkehrsDatenKurzZeitMq.Aspekte.Analyse
-				.getAspekt());
+		onlinedaten.abmeldenSender(OdVerkehrsDatenKurzZeitMq.Aspekte.Analyse);
 
 		return archivdaten;
 	}
-
 }

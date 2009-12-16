@@ -41,14 +41,13 @@ import java.util.logging.Logger;
 import com.bitctrl.util.Interval;
 
 import de.bsvrz.dav.daf.main.config.ConfigurationChangeException;
-import de.bsvrz.iav.gllib.gllib.modell.parameter.PdGanglinienModellAutomatischesLernenEreignis;
 import de.bsvrz.sys.funclib.bitctrl.daf.DavTools;
-import de.bsvrz.sys.funclib.bitctrl.kalender.Ereigniskalender;
 import de.bsvrz.sys.funclib.bitctrl.modell.AnmeldeException;
 import de.bsvrz.sys.funclib.bitctrl.modell.DatensendeException;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
-import de.bsvrz.sys.funclib.bitctrl.modell.kalender.objekte.Ereignis;
-import de.bsvrz.sys.funclib.bitctrl.modell.kalender.objekte.EreignisTyp;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmereigniskalenderglobal.objekte.Ereignis;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmereigniskalenderglobal.objekte.EreignisTyp;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmereigniskalenderglobal.parameter.PdGanglinienModellAutomatischesLernenEreignis;
 
 /**
  * Liest aus einer Datenbank die notwendigen Daten zum Anlegen von Ereignissen
@@ -62,62 +61,98 @@ public class EreignisFactory {
 	/** Enthält die Spaltennamen der Tabelle. */
 	public enum Ereignisse {
 
-		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		/**
+		 * Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1.
+		 */
 		EREIGNISTYP,
 
-		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		/**
+		 * Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1.
+		 */
 		TAG,
 
-		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		/**
+		 * Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1.
+		 */
 		STARTZEIT,
 
-		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		/**
+		 * Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1.
+		 */
 		ENDZEIT
 	}
 
 	/** Enthält die Spaltennamen der Tabelle. */
 	public enum Ereignistypen {
 
-		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		/**
+		 * Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1.
+		 */
 		EREIGNISTYP,
 
-		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		/**
+		 * Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1.
+		 */
 		PRIORITAET,
 
-		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		/**
+		 * Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1.
+		 */
 		AUSSCHLUSS,
 
-		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		/**
+		 * Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1.
+		 */
 		BEZUG,
 
-		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		/**
+		 * Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1.
+		 */
 		TYP,
 
-		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		/**
+		 * Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1.
+		 */
 		VERGLEICHSSCHRITTWEITE,
 
-		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		/**
+		 * Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1.
+		 */
 		MAX_ABSTAND,
 
-		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		/**
+		 * Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1.
+		 */
 		MAX_MATCHINGFEHLER,
 
-		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		/**
+		 * Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1.
+		 */
 		MATCHINGSCHRITTWEITE,
 
-		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		/**
+		 * Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1.
+		 */
 		MATCHINGINTERVALL_VOR,
 
-		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		/**
+		 * Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1.
+		 */
 		MATCHINGINTERVALL_NACH,
 
-		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		/**
+		 * Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1.
+		 */
 		MAX_WICHTUNGSFAKTOR,
 
-		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		/**
+		 * Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1.
+		 */
 		DARSTELLUNGSVERFAHREN,
 
-		/** Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1. */
+		/**
+		 * Spaltenname {@link #name()} und Spaltenposition {@link #ordinal()}+1.
+		 */
 		MAX_GANGLINIEN;
 
 	}
@@ -214,28 +249,27 @@ public class EreignisFactory {
 			String pid;
 
 			// Ereignistyp bestimmen
-			pid = DavTools.generierePID(
-					rs.getString(Ereignisse.EREIGNISTYP.name()),
-					EreignisTyp.PRAEFIX_PID);
+			pid = DavTools.generierePID(rs.getString(Ereignisse.EREIGNISTYP
+					.name()), EreignisTyp.PRAEFIX_PID);
 			ereignisTyp = (EreignisTyp) factory.getModellobjekt(pid);
 			assert ereignisTyp != null : "Der Ereignistyp " + pid
 					+ " muss existieren.";
 
 			// Ereignis anlegen
 			tag = rs.getInt(Ereignisse.TAG.name());
-			pid = DavTools.generierePID(
-					rs.getString(Ereignistypen.EREIGNISTYP.name()) + "Tag"
-							+ tag, Ereignis.PRAEFIX_PID);
+			pid = DavTools.generierePID(rs.getString(Ereignistypen.EREIGNISTYP
+					.name())
+					+ "Tag" + tag, Ereignis.PRAEFIX_PID);
 			calendar = Calendar.getInstance();
 			calendar.add(Calendar.DAY_OF_YEAR, tag);
-			calendar.set(Calendar.HOUR_OF_DAY,
-					rs.getInt(Ereignisse.STARTZEIT.name()));
+			calendar.set(Calendar.HOUR_OF_DAY, rs.getInt(Ereignisse.STARTZEIT
+					.name()));
 			calendar.set(Calendar.MINUTE, 0);
 			calendar.set(Calendar.SECOND, 0);
 			calendar.set(Calendar.MILLISECOND, 0);
 			start = calendar.getTimeInMillis();
-			calendar.set(Calendar.HOUR_OF_DAY,
-					rs.getInt(Ereignisse.ENDZEIT.name()));
+			calendar.set(Calendar.HOUR_OF_DAY, rs.getInt(Ereignisse.ENDZEIT
+					.name()));
 			ende = calendar.getTimeInMillis();
 			intervall = new Interval(start, ende);
 			ereignis = kalender.anlegenEreignis(pid, ereignisTyp.getName(), "",
@@ -316,32 +350,40 @@ public class EreignisFactory {
 			name = rs.getString(Ereignistypen.EREIGNISTYP.name());
 
 			// Ereignistyp anlegen
-			pid = DavTools.generierePID(
-					rs.getString(Ereignistypen.EREIGNISTYP.name()),
-					EreignisTyp.PRAEFIX_PID);
+			pid = DavTools.generierePID(rs.getString(Ereignistypen.EREIGNISTYP
+					.name()), EreignisTyp.PRAEFIX_PID);
 			if (factory.getModellobjekt(pid) != null) {
 				log.severe("Der Ereignistyp " + pid
 						+ " darf für den Test noch nicht existieren.");
 				System.exit(-1);
 			}
-			ereignisTyp = kalender.anlegenEreignisTyp(pid, name,
-					rs.getInt(Ereignistypen.PRIORITAET.name()));
+			ereignisTyp = kalender.anlegenEreignisTyp(pid, name, rs
+					.getInt(Ereignistypen.PRIORITAET.name()));
 			ereignisTypen.add(ereignisTyp);
 
 			// Lernparameter für Ereignistyp setzen
-			param = ereignisTyp.getParameterDatensatz(PdGanglinienModellAutomatischesLernenEreignis.class);
+			param = ereignisTyp
+					.getParameterDatensatz(PdGanglinienModellAutomatischesLernenEreignis.class);
 			param.anmeldenSender();
 			datum = param.erzeugeDatum();
-			datum.setDarstellungsverfahren(rs.getInt(Ereignistypen.DARSTELLUNGSVERFAHREN.name()));
+			datum.setDarstellungsverfahren(rs
+					.getInt(Ereignistypen.DARSTELLUNGSVERFAHREN.name()));
 			datum.setGanglinienTyp(rs.getInt(Ereignistypen.TYP.name()));
-			datum.setMatchingIntervallNach(rs.getLong(Ereignistypen.MATCHINGINTERVALL_NACH.name()));
-			datum.setMatchingIntervallVor(rs.getLong(Ereignistypen.MATCHINGINTERVALL_VOR.name()));
-			datum.setMatchingSchrittweite(rs.getLong(Ereignistypen.MATCHINGSCHRITTWEITE.name()));
+			datum.setMatchingIntervallNach(rs
+					.getLong(Ereignistypen.MATCHINGINTERVALL_NACH.name()));
+			datum.setMatchingIntervallVor(rs
+					.getLong(Ereignistypen.MATCHINGINTERVALL_VOR.name()));
+			datum.setMatchingSchrittweite(rs
+					.getLong(Ereignistypen.MATCHINGSCHRITTWEITE.name()));
 			datum.setMaxAbstand(rs.getInt(Ereignistypen.MAX_ABSTAND.name()));
-			datum.setMaxGanglinien(rs.getInt(Ereignistypen.MAX_GANGLINIEN.name()));
-			datum.setMaxMatchingFehler(rs.getInt(Ereignistypen.MAX_MATCHINGFEHLER.name()));
-			datum.setMaxWichtungsfaktor(rs.getInt(Ereignistypen.MAX_WICHTUNGSFAKTOR.name()));
-			datum.setVergleichsSchrittweite(rs.getLong(Ereignistypen.VERGLEICHSSCHRITTWEITE.name()));
+			datum.setMaxGanglinien(rs.getInt(Ereignistypen.MAX_GANGLINIEN
+					.name()));
+			datum.setMaxMatchingFehler(rs
+					.getInt(Ereignistypen.MAX_MATCHINGFEHLER.name()));
+			datum.setMaxWichtungsfaktor(rs
+					.getInt(Ereignistypen.MAX_WICHTUNGSFAKTOR.name()));
+			datum.setVergleichsSchrittweite(rs
+					.getLong(Ereignistypen.VERGLEICHSSCHRITTWEITE.name()));
 
 			pid = rs.getString(Ereignistypen.AUSSCHLUSS.name());
 			if (!rs.wasNull()) {
@@ -400,9 +442,9 @@ public class EreignisFactory {
 
 			// Ereignistyp bestimmen
 			tag = rs.getInt(Ereignisse.TAG.name());
-			pid = DavTools.generierePID(
-					rs.getString(Ereignisse.EREIGNISTYP.name()) + "Tag" + tag,
-					Ereignis.PRAEFIX_PID);
+			pid = DavTools.generierePID(rs.getString(Ereignisse.EREIGNISTYP
+					.name())
+					+ "Tag" + tag, Ereignis.PRAEFIX_PID);
 			ereignis = (Ereignis) factory.getModellobjekt(pid);
 			if (ereignis != null) {
 				kalender.loeschen(ereignis);
@@ -417,9 +459,8 @@ public class EreignisFactory {
 			final String pid;
 
 			// Ereignistyp bestimmen
-			pid = DavTools.generierePID(
-					rs.getString(Ereignistypen.EREIGNISTYP.name()),
-					EreignisTyp.PRAEFIX_PID);
+			pid = DavTools.generierePID(rs.getString(Ereignistypen.EREIGNISTYP
+					.name()), EreignisTyp.PRAEFIX_PID);
 			ereignisTyp = (EreignisTyp) factory.getModellobjekt(pid);
 			if (ereignisTyp != null) {
 				kalender.loeschen(ereignisTyp);

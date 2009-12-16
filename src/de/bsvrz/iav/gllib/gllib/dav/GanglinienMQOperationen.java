@@ -599,7 +599,7 @@ public final class GanglinienMQOperationen {
 	 *            das Gewicht der zweiten Ganglinie.
 	 * @return das Ergebnis der Verschmelzung.
 	 */
-	public static GanglinieMQ verschmelze(final GanglinieMQ ganglinie,
+	public static GanglinieMQ verschmelze(ObjektFactory objektFactory,final GanglinieMQ ganglinie,
 			final GanglinieMQ historGl, final long gewicht) {
 		final long zeitstempel;
 		final Ganglinie<Double> gQKfz, gQLkw, gVPkw, gVLkw;
@@ -617,8 +617,8 @@ public final class GanglinienMQOperationen {
 		historGl.putAll(zusammenfuehren(gQKfz, gQLkw, gVPkw, gVLkw));
 		historGl
 				.setAnzahlVerschmelzungen(historGl.getAnzahlVerschmelzungen() + 1);
-		if (ObjektFactory.getInstanz().getVerbindung() != null) {
-			zeitstempel = ObjektFactory.getInstanz().getVerbindung().getTime();
+		if (objektFactory != null && objektFactory.getDav() != null) {
+			zeitstempel = objektFactory.getDav().getTime();
 		} else {
 			zeitstempel = System.currentTimeMillis();
 		}
