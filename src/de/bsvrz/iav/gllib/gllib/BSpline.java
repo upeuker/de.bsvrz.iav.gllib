@@ -48,7 +48,7 @@ import de.bsvrz.sys.funclib.debug.Debug;
 public class BSpline extends AbstractApproximation<Double> {
 
 	/**
-	 * Die maximale Differenz ({@value}) zwischen Näherungswert und Zielwert.
+	 * Die maximale Differenz ({@value} ) zwischen Näherungswert und Zielwert.
 	 * 
 	 * @see #get(long)
 	 */
@@ -122,9 +122,6 @@ public class BSpline extends AbstractApproximation<Double> {
 		interpolationsintervall = Constants.MILLIS_PER_MINUTE;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public Stuetzstelle<Double> get(final long zeitstempel) {
 		if (OPTIMIERUNG) {
 			return polyline.get(zeitstempel);
@@ -191,8 +188,6 @@ public class BSpline extends AbstractApproximation<Double> {
 	 * mit n&nbsp;=&nbsp;Knotenanzahl und k&nbsp;=&nbsp;Ordnung des B-Spline.
 	 * Ist die Ordnung des B-Spline größer als die Anzahl der Stützstellen, dann
 	 * wird die Ordnung auf die Stützstellenanzahl reduziert.
-	 * 
-	 * {@inheritDoc}
 	 */
 	public void initialisiere() {
 		if (getStuetzstellen().size() == 0) {
@@ -275,9 +270,6 @@ public class BSpline extends AbstractApproximation<Double> {
 		this.ordnung = ordnung;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String toString() {
 		return "B-Spline mit Ordnung " + ordnung;

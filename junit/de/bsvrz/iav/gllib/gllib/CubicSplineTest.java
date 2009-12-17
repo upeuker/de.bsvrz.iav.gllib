@@ -41,6 +41,7 @@ import com.bitctrl.Constants;
 import com.bitctrl.util.Interval;
 import com.bitctrl.util.Timestamp;
 
+import de.bsvrz.iav.gllib.gllib.dav.ApproximationsVerfahren;
 import de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ;
 import de.bsvrz.iav.gllib.gllib.dav.GanglinienMQOperationen;
 import de.bsvrz.iav.gllib.gllib.dav.Messwerte;
@@ -140,33 +141,33 @@ public class CubicSplineTest {
 		assertEquals(ganglinie.getStuetzstelle(t), spline.get(t));
 
 		t = 1 * MILLIS_PER_HOUR;
-		assertEquals(new RationaleZahl(1201000, 657).doubleValue(), (Object) spline.get(
-				t).getWert());
+		assertEquals(new RationaleZahl(1201000, 657).doubleValue(),
+				(Object) spline.get(t).getWert());
 
 		t = 2 * MILLIS_PER_HOUR;
-		assertEquals(new RationaleZahl(1994000, 657).doubleValue(), (Object) spline.get(
-				t).getWert());
+		assertEquals(new RationaleZahl(1994000, 657).doubleValue(),
+				(Object) spline.get(t).getWert());
 
 		t = 3 * MILLIS_PER_HOUR;
-		assertEquals(ganglinie.getStuetzstelle(t), (Object) spline.get(t));
+		assertEquals(ganglinie.getStuetzstelle(t), spline.get(t));
 
 		t = 4 * MILLIS_PER_HOUR;
 		assertEquals(ganglinie.getStuetzstelle(t), spline.get(t));
 
 		t = 5 * MILLIS_PER_HOUR;
-		assertEquals(new RationaleZahl(198500, 73).doubleValue(), (Object) spline.get(t)
-				.getWert());
+		assertEquals(new RationaleZahl(198500, 73).doubleValue(),
+				(Object) spline.get(t).getWert());
 
 		t = 6 * MILLIS_PER_HOUR;
 		assertEquals(ganglinie.getStuetzstelle(t), spline.get(t));
 
 		t = 7 * MILLIS_PER_HOUR;
-		assertEquals(new RationaleZahl(2621000, 657).doubleValue(), (Object) spline.get(
-				t).getWert());
+		assertEquals(new RationaleZahl(2621000, 657).doubleValue(),
+				(Object) spline.get(t).getWert());
 
 		t = 8 * MILLIS_PER_HOUR;
-		assertEquals(new RationaleZahl(1834000, 657).doubleValue(), (Object) spline.get(
-				t).getWert());
+		assertEquals(new RationaleZahl(1834000, 657).doubleValue(),
+				(Object) spline.get(t).getWert());
 
 		t = 9 * MILLIS_PER_HOUR;
 		assertEquals(ganglinie.getStuetzstelle(t), spline.get(t));
@@ -276,7 +277,7 @@ public class CubicSplineTest {
 		GanglinienMQOperationen.verschiebe(g, cal.getTimeInMillis());
 		assertEquals("Die Anzahl der Stützstellen muss stimmen.", 25, g.size());
 
-		g.setApproximationDaK(GanglinieMQ.APPROX_CUBICSPLINE);
+		g.setApproximationsVerfahren(ApproximationsVerfahren.CubicSpline);
 
 		zeitstempel = System.currentTimeMillis();
 		i = 0;

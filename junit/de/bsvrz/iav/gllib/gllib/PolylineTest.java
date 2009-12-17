@@ -38,6 +38,7 @@ import com.bitctrl.Constants;
 import com.bitctrl.util.Interval;
 import com.bitctrl.util.Timestamp;
 
+import de.bsvrz.iav.gllib.gllib.dav.ApproximationsVerfahren;
 import de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ;
 import de.bsvrz.iav.gllib.gllib.dav.GanglinienMQOperationen;
 import de.bsvrz.iav.gllib.gllib.dav.Messwerte;
@@ -116,11 +117,11 @@ public class PolylineTest {
 
 		// Intervallgrenzen liegen auf Stützstellen
 		intervall = new Interval(0, 9000);
-		assertEquals(205000.0, polyline.integral(intervall));
+		assertEquals(205000.0, polyline.integral(intervall), 0.001);
 
 		// Intervallgrenzen liegen nicht auf Stützstellen
 		intervall = new Interval(2000, 8000);
-		assertEquals(170000.0, polyline.integral(intervall));
+		assertEquals(170000.0, polyline.integral(intervall), 0.001);
 	}
 
 	/**
@@ -203,7 +204,7 @@ public class PolylineTest {
 		GanglinienMQOperationen.verschiebe(g, cal.getTimeInMillis());
 		assertEquals("Die Anzahl der Stützstellen muss stimmen.", 25, g.size());
 
-		g.setApproximationDaK(GanglinieMQ.APPROX_POLYLINE);
+		g.setApproximationsVerfahren(ApproximationsVerfahren.Polyline);
 
 		zeitstempel = System.currentTimeMillis();
 		i = 0;

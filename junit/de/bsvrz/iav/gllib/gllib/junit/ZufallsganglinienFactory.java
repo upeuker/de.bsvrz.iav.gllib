@@ -34,6 +34,7 @@ import de.bsvrz.iav.gllib.gllib.Ganglinie;
 import de.bsvrz.iav.gllib.gllib.Stuetzstelle;
 import de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ;
 import de.bsvrz.iav.gllib.gllib.dav.Messwerte;
+import de.bsvrz.sys.funclib.bitctrl.modell.inovat.test.VerkehrsDatenKurzZeitMqGenerator;
 import de.bsvrz.sys.funclib.bitctrl.modell.tmverkehrglobal.objekte.MessQuerschnittAllgemein;
 import de.bsvrz.sys.funclib.bitctrl.modell.tmverkehrglobal.onlinedaten.OdVerkehrsDatenKurzZeitMq;
 
@@ -99,14 +100,10 @@ public final class ZufallsganglinienFactory {
 			Number qKfz, qLkw, vPkw, vLkw;
 
 			datum = generator.generiere();
-			qKfz = datum.getWert(OdVerkehrsDatenKurzZeitMq.Daten.Werte.QKfz
-					.name());
-			qLkw = datum.getWert(OdVerkehrsDatenKurzZeitMq.Daten.Werte.QLkw
-					.name());
-			vPkw = datum.getWert(OdVerkehrsDatenKurzZeitMq.Daten.Werte.VPkw
-					.name());
-			vLkw = datum.getWert(OdVerkehrsDatenKurzZeitMq.Daten.Werte.VLkw
-					.name());
+			qKfz = datum.getQKfz().getWert();
+			qLkw = datum.getQLkw().getWert();
+			vPkw = datum.getVPkw().getWert();
+			vLkw = datum.getVLkw().getWert();
 			messwerte = new Messwerte(qKfz != null ? qKfz.doubleValue() : null,
 					qLkw != null ? qLkw.doubleValue() : null,
 					vPkw != null ? vPkw.doubleValue() : null,

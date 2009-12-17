@@ -50,7 +50,7 @@ public class CubicSpline extends AbstractApproximation<Double> {
 
 	/**
 	 * Faktor mit dem der Zeitstempel für das Rechnen verkleinert wird, um
-	 * numerische Fehler zu verkleinern, Standard: {@value}.
+	 * numerische Fehler zu verkleinern.
 	 */
 	private long faktor = Constants.MILLIS_PER_MINUTE;
 
@@ -69,9 +69,6 @@ public class CubicSpline extends AbstractApproximation<Double> {
 	/** Die Abstände der Stützstellen. */
 	private RationaleZahl[] h;
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public Stuetzstelle<Double> get(final long zeitstempel) {
 		if (getStuetzstellen().size() == 0
 				|| zeitstempel < getStuetzstellen().get(0).getZeitstempel()
@@ -168,8 +165,6 @@ public class CubicSpline extends AbstractApproximation<Double> {
 	 * Verwendet eine Polyline-Approximation des Splines zur näherungsweisen
 	 * Bestimmung des Integrals.
 	 * 
-	 * {@inheritDoc}
-	 * 
 	 * @see #setIntegrationsintervall(long)
 	 */
 	public double integral(final Interval intervall) {
@@ -181,9 +176,6 @@ public class CubicSpline extends AbstractApproximation<Double> {
 		return polyline.integral(intervall);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String toString() {
 		return "Cubic-Spline";

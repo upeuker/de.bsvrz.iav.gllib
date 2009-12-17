@@ -38,12 +38,7 @@ import com.bitctrl.util.Interval;
  */
 public class Treppenfunktion extends AbstractApproximation<Double> {
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see de.bsvrz.iav.gllib.gllib.Approximation#get(long)
-	 */
-	public Stuetzstelle<Double> get(long zeitstempel) {
+	public Stuetzstelle<Double> get(final long zeitstempel) {
 		Double d = null;
 
 		if (getStuetzstellen().size() == 0
@@ -71,21 +66,12 @@ public class Treppenfunktion extends AbstractApproximation<Double> {
 
 	/**
 	 * Hier gibt es nichts zu tun.
-	 * 
-	 * {@inheritDoc}
-	 * 
-	 * @see de.bsvrz.iav.gllib.gllib.Approximation#initialisiere()
 	 */
 	public void initialisiere() {
 		// nix
 	}
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see de.bsvrz.iav.gllib.gllib.Approximation#integral(com.bitctrl.util.Interval)
-	 */
-	public double integral(Interval intervall) {
+	public double integral(final Interval intervall) {
 		final int start;
 		final int ende;
 		double flaeche = 0;
@@ -122,4 +108,5 @@ public class Treppenfunktion extends AbstractApproximation<Double> {
 
 		return flaeche;
 	}
+
 }

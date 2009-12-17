@@ -40,9 +40,6 @@ import com.bitctrl.util.Interval;
  */
 public class Polyline extends AbstractApproximation<Double> {
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public Stuetzstelle<Double> get(final long zeitstempel) {
 		Stuetzstelle<Double> s0, s1;
 		Double wert;
@@ -83,8 +80,6 @@ public class Polyline extends AbstractApproximation<Double> {
 
 	/**
 	 * Hier gibt es nichts zu tun.
-	 * <p>
-	 * {@inheritDoc}
 	 */
 	public void initialisiere() {
 		// nichts
@@ -93,8 +88,6 @@ public class Polyline extends AbstractApproximation<Double> {
 	/**
 	 * Die festgelegte Breite der Teilintervalle wird ignoriert, da sich das
 	 * Integral der Polylinie exakt bestimmen lässt.
-	 * 
-	 * {@inheritDoc}
 	 */
 	public double integral(final Interval intervall) {
 		final int start;
@@ -173,9 +166,6 @@ public class Polyline extends AbstractApproximation<Double> {
 		return flaeche;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String toString() {
 		return "Polylinie";

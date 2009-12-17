@@ -40,6 +40,7 @@ import com.bitctrl.Constants;
 import com.bitctrl.util.Interval;
 import com.bitctrl.util.Timestamp;
 
+import de.bsvrz.iav.gllib.gllib.dav.ApproximationsVerfahren;
 import de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ;
 import de.bsvrz.iav.gllib.gllib.dav.GanglinienMQOperationen;
 import de.bsvrz.iav.gllib.gllib.dav.Messwerte;
@@ -212,7 +213,7 @@ public class BSplineTest {
 
 	/**
 	 * Macht einen Performance-Test mit einer zufälligen
-	 * Messquerschnittsfanglinie mit Double-Stützstellen. Das Ergebnis wird nur
+	 * Messquerschnittsganglinie mit Double-Stützstellen. Das Ergebnis wird nur
 	 * auf der Konsole ausgegeben.
 	 */
 	@Test
@@ -237,7 +238,7 @@ public class BSplineTest {
 		GanglinienMQOperationen.verschiebe(g, cal.getTimeInMillis());
 		assertEquals("Die Anzahl der Stützstellen muss stimmen.", 25, g.size());
 
-		g.setApproximationDaK(GanglinieMQ.APPROX_BSPLINE);
+		g.setApproximationsVerfahren(ApproximationsVerfahren.BSpline);
 		g.setBSplineOrdnung(5);
 
 		zeitstempel = System.currentTimeMillis();

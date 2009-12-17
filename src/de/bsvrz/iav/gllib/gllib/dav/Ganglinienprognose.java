@@ -39,7 +39,7 @@ import de.bsvrz.sys.funclib.bitctrl.modell.DatensatzUpdateListener;
 import de.bsvrz.sys.funclib.bitctrl.modell.DatensendeException;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
 import de.bsvrz.sys.funclib.bitctrl.modell.OnlineDatensatz;
-import de.bsvrz.sys.funclib.bitctrl.modell.kappich.KappichModellUtil;
+import de.bsvrz.sys.funclib.bitctrl.modell.kappich.util.KappichModellUtil;
 import de.bsvrz.sys.funclib.bitctrl.modell.systemmodellglobal.objekte.Applikation;
 import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.objekte.ApplikationGanglinienPrognose;
 import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.onlinedaten.OdPrognoseGanglinienAnfrage;
@@ -67,64 +67,79 @@ import de.bsvrz.sys.funclib.debug.Debug;
  * </code>
  * </pre>
  * 
+ * Wird die Ganglinienprognose nicht mehr benötigt, muss sie mit
+ * {@link #dispose()} zerstört werden.
+ * 
+ * <p>
  * Die anfragende Klasse muss die Schnittstelle {@link GlProgAntwortListener}
  * implementieren, mit der die Antwort auf die Anfrage empfangen wird.
  * 
  * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
  */
-public final class Ganglinienprognose implements DatensatzUpdateListener {
+public final class Ganglinienprognose {
 
-	/** Der Logger. */
-	private final Debug log;
+	private final class InternalListener implements DatensatzUpdateListener {
+		public void datensatzAktualisiert(final DatensatzUpdateEvent event) {
+			assert event.getDatum() instanceof OdPrognoseGanglinienAntwort.Daten;
 
-	/** Angemeldete Listener. */
-	private final EventListenerList listeners;
+			OdPrognoseGanglinienAntwort.Daten datum;
 
-	/** Der Anfragedatensatz. */
-	private final OdPrognoseGanglinienAnfrage odAnfrage;
+			datum = (OdPrognoseGanglinienAntwort.Daten) event.getDatum();
+			if (datum.dContainsDaten()) {
+				fireAntwort(datum);
+			}
+		}
+	}
 
-	/** Der Aspekt zum Senden der Anfrage. */
-	private final Aspekt aspAnfrage;
-
+	private final Debug log = Debug.getLogger();
+	private final EventListenerList listeners = new EventListenerList();
+	private final InternalListener internalListener = new InternalListener();
 	private final ObjektFactory factory;
+	private final OdPrognoseGanglinienAnfrage odAnfrage;
+	private final Aspekt aspAnfrage;
+	private final OdPrognoseGanglinienAntwort odAntwort;
+	private final Aspekt aspAntwort;
 
 	/**
 	 * Initialisiert die Ganglinienprognose.
 	 * 
 	 * @param factory
 	 *            die Objekt Factory die für die Prognose verwendet werden soll.
+	 * @throws AnmeldeException
+	 *             wenn die Anmeldung als Empfänger für Prognoseantworten nicht
+	 *             erfolgreich war.
+	 * @see #dispose()
 	 */
-	public Ganglinienprognose(final ObjektFactory factory) {
+	public Ganglinienprognose(final ObjektFactory factory)
+			throws AnmeldeException {
 		this.factory = factory;
 
-		OdPrognoseGanglinienAntwort odAntwort;
-		Aspekt aspAntwort;
-		ApplikationGanglinienPrognose glProg;
-		Applikation klient;
+		final Applikation klient = KappichModellUtil.getApplikation(factory);
+		aspAntwort = OdPrognoseGanglinienAntwort.Aspekte.Antwort;
+		odAntwort = klient.getOdPrognoseGanglinienAntwort();
+		odAntwort.setSenke(aspAntwort, true);
+		odAntwort.addUpdateListener(aspAntwort, internalListener);
 
-		listeners = new EventListenerList();
-		log = Debug.getLogger();
-
-		glProg = (ApplikationGanglinienPrognose) factory
+		final ApplikationGanglinienPrognose glProg = (ApplikationGanglinienPrognose) factory
 				.getModellobjekt(factory.getDav()
 						.getLocalConfigurationAuthority());
 		aspAnfrage = OdPrognoseGanglinienAnfrage.Aspekte.Anfrage;
 		odAnfrage = glProg.getOdPrognoseGanglinienAnfrage();
-
-		klient = KappichModellUtil.getApplikation(factory);
-		aspAntwort = OdPrognoseGanglinienAntwort.Aspekte.Antwort;
-		odAntwort = klient.getOdPrognoseGanglinienAntwort();
-		odAntwort.setSenke(aspAntwort, true);
-		odAntwort.addUpdateListener(aspAntwort, this);
-
-		try {
-			odAnfrage.anmeldenSender(aspAnfrage);
-		} catch (final AnmeldeException ex) {
-			LogTools.log(log, GlLibMsg.ErrorAnmeldenSendenAnfrage, ex);
-		}
+		odAnfrage.anmeldenSender(aspAnfrage);
 
 		LogTools.log(log, GlLibMsg.InfoGlProgBereit);
+	}
+
+	/**
+	 * Entfernt alle Anmeldungen am Datenverteiler.
+	 * 
+	 * <em>Hinweis:</em> Diese Methode <em>muss</em> aufgerufen werden, damit
+	 * der Garbage Collector von Java eine Instanz dieser Klasse wegräumen kann.
+	 */
+	public void dispose() {
+		odAnfrage.abmeldenSender(aspAnfrage);
+		odAntwort.removeUpdateListener(aspAntwort, internalListener);
 	}
 
 	/**
@@ -154,17 +169,6 @@ public final class Ganglinienprognose implements DatensatzUpdateListener {
 			factory.getDav().sleep(100);
 		}
 		return odAnfrage.getStatusSendesteuerung(aspAnfrage) == OnlineDatensatz.Status.START;
-	}
-
-	public void datensatzAktualisiert(final DatensatzUpdateEvent event) {
-		assert event.getDatum() instanceof OdPrognoseGanglinienAntwort.Daten;
-
-		OdPrognoseGanglinienAntwort.Daten datum;
-
-		datum = (OdPrognoseGanglinienAntwort.Daten) event.getDatum();
-		if (datum.dContainsDaten()) {
-			fireAntwort(datum);
-		}
 	}
 
 	/**

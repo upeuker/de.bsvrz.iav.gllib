@@ -300,7 +300,7 @@ public class GanglinienFactory {
 			g.setMessQuerschnitt(mq);
 			g.setEreignisTyp(ereignisTyp);
 			g.setTyp(rsGl.getInt(Ganglinien.TYP.name()));
-			g.setApproximationDaK(rsGl.getInt(Ganglinien.APPROXIMATION.name()));
+			g.setApproximationsVerfahren(rsGl.getInt(Ganglinien.APPROXIMATION.name()));
 			g.setLetzteVerschmelzung(factory.getVerbindung().getTime());
 			g.setReferenz(rsGl.getBoolean(Ganglinien.REFERENZ.name()));
 

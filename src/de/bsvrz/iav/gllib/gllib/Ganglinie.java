@@ -46,7 +46,6 @@ import com.bitctrl.util.Interval;
  */
 public class Ganglinie<T> extends TreeMap<Long, T> {
 
-	/** Die Eigenschaft {@code serialVersionUID}. */
 	private static final long serialVersionUID = 0;
 
 	/** Verfahren zur Berechnung der Punkte zwischen den Stützstellen. */
@@ -68,10 +67,6 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 
 	/**
 	 * Markiert zusätzlich die Approximation als nicht mehr aktuell.
-	 * 
-	 * {@inheritDoc}
-	 * 
-	 * @see java.util.TreeMap#clear()
 	 */
 	@Override
 	public void clear() {
@@ -82,8 +77,6 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	/**
 	 * Kopiert die Stützstellen und das Approximationsverfahren. Der Wert für
 	 * {@code approximationAktuell} wird auf false gesetzt.
-	 * 
-	 * {@inheritDoc}
 	 */
 	@Override
 	public Ganglinie<T> clone() {
@@ -287,10 +280,6 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 
 	/**
 	 * Markiert zusätzlich die Approximation als nicht mehr aktuell.
-	 * 
-	 * {@inheritDoc}
-	 * 
-	 * @see java.util.TreeMap#put(java.lang.Object, java.lang.Object)
 	 */
 	@Override
 	public T put(final Long key, final T value) {
@@ -300,10 +289,6 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 
 	/**
 	 * Markiert zusätzlich die Approximation als nicht mehr aktuell.
-	 * 
-	 * {@inheritDoc}
-	 * 
-	 * @see java.util.TreeMap#putAll(java.util.Map)
 	 */
 	@Override
 	public void putAll(final Map<? extends Long, ? extends T> map) {
@@ -313,10 +298,6 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 
 	/**
 	 * Markiert zusätzlich die Approximation als nicht mehr aktuell.
-	 * 
-	 * {@inheritDoc}
-	 * 
-	 * @see java.util.TreeMap#remove(java.lang.Object)
 	 */
 	@Override
 	public T remove(final Object key) {
@@ -342,8 +323,8 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	 * 
 	 * @param s
 	 *            die neue Stuützstelle.
-	 * @return {@code true}, wenn die Stützstelle neu angelegt wurde und
-	 *         {@code false}, wenn eine vorhandene Stützstelle ersetzt wurde.
+	 * @return {@code true}, wenn die Stützstelle neu angelegt wurde und {@code
+	 *         false}, wenn eine vorhandene Stützstelle ersetzt wurde.
 	 */
 	public boolean setStuetzstelle(final Stuetzstelle<T> s) {
 		return put(s.getZeitstempel(), s.getWert()) == null;
@@ -363,11 +344,6 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
 		return getClass().getName() + "[" + getStuetzstellen().toString() + "]";

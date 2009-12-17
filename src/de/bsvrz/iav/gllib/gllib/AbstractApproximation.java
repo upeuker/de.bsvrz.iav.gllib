@@ -46,7 +46,7 @@ import com.bitctrl.util.Interval;
  */
 public abstract class AbstractApproximation<T> implements Approximation<T> {
 
-	/** Das Breite der Teilintervalle beim Integrieren, Standard: {@value}. */
+	/** Das Breite der Teilintervalle beim Integrieren, Standard: {@value} . */
 	private long integrationsintervall = Constants.MILLIS_PER_MINUTE;
 
 	/** Liste der verwendeten Stützstellen. */
@@ -59,24 +59,15 @@ public abstract class AbstractApproximation<T> implements Approximation<T> {
 		stuetzstellen = new ArrayList<Stuetzstelle<T>>();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public Interval getIntervall() {
 		return new Interval(stuetzstellen.get(0).getZeitstempel(),
 				stuetzstellen.get(stuetzstellen.size() - 1).getZeitstempel());
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public List<Stuetzstelle<T>> getStuetzstellen() {
 		return Collections.unmodifiableList(stuetzstellen);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public SortedSet<Stuetzstelle<T>> interpoliere(final long intervallBreite) {
 		if (intervallBreite <= 0) {
 			throw new IllegalArgumentException(
@@ -127,8 +118,6 @@ public abstract class AbstractApproximation<T> implements Approximation<T> {
 	/**
 	 * Bestimmt die Liste der verwendeten Stützstellen. Die Liste entspricht der
 	 * Ganglinie, abzüglich der undefinierten Stützstellen.
-	 * 
-	 * {@inheritDoc}
 	 */
 	public void setStuetzstellen(final Collection<Stuetzstelle<T>> stuetzstellen) {
 		this.stuetzstellen.clear();

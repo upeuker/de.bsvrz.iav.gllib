@@ -48,7 +48,8 @@ import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
  * bei der Ergebnisganglinie uninitialisiert.
  * 
  * @author BitCtrl Systems GmbH, Schumann
- * @version $Id$
+ * @version $Id: GanglinienMQOperationen.java 20824 2009-12-16 17:04:11Z
+ *          schumann $
  */
 public final class GanglinienMQOperationen {
 
@@ -66,44 +67,13 @@ public final class GanglinienMQOperationen {
 
 		txt = "Messquerschnitt: " + g.getMessQuerschnitt();
 		txt += "\nEreignistyp: " + g.getEreignisTyp();
-		txt += "\nTyp: ";
-		switch (g.getTyp()) {
-		case GanglinieMQ.TYP_ABSOLUT:
-			txt += "absolute Ganglinie";
-			break;
-		case GanglinieMQ.TYP_ADDITIV:
-			txt += "relative Ganglinie (additiv)";
-			break;
-		case GanglinieMQ.TYP_MULTIPLIKATIV:
-			txt += "relative Ganglinie (multiplikativ)";
-			break;
-		default:
-			txt += "fehlerhafte Angabe";
-			break;
-		}
+		txt += "\nTyp: " + g.getTyp();
 		txt += "\nAnzahl Verschmelzungen: " + g.getAnzahlVerschmelzungen();
 		txt += "\nLetzte Verschmelzung: "
 				+ Timestamp.absoluteTime(g.getLetzteVerschmelzung());
 		txt += "\nReferenzganglinie: " + g.isReferenz();
 		txt += "\nIntervall: " + g.getIntervall();
-		txt += "\nApproximation: ";
-		switch (g.getApproximationDaK()) {
-		case GanglinieMQ.APPROX_BSPLINE:
-			txt += "B-Spline, Ordnung " + g.getBSplineOrdnung();
-			break;
-		case GanglinieMQ.APPROX_CUBICSPLINE:
-			txt += "Cubic-Spline";
-			break;
-		case GanglinieMQ.APPROX_POLYLINE:
-			txt += "Polyline";
-			break;
-		case GanglinieMQ.APPROX_UNBESTIMMT:
-			txt += "unbestimmt";
-			break;
-		default:
-			txt += "fehlerhafte Angabe";
-			break;
-		}
+		txt += "\nApproximation: " + g.getApproximationsVerfahren();
 
 		if (g.size() == 0) {
 			txt += "\nKeine Stützstellen vorhanden.";
@@ -319,7 +289,7 @@ public final class GanglinienMQOperationen {
 	public static GanglinieMQ kopiereMetaDaten(final GanglinieMQ ziel,
 			final GanglinieMQ quelle) {
 		ziel.setAnzahlVerschmelzungen(quelle.getAnzahlVerschmelzungen());
-		ziel.setApproximationDaK(quelle.getApproximationDaK());
+		ziel.setApproximationsVerfahren(quelle.getApproximationsVerfahren());
 		ziel.setBSplineOrdnung(quelle.getBSplineOrdnung());
 		ziel.setEreignisTyp(quelle.getEreignisTyp());
 		ziel.setK1(quelle.getK1());
@@ -599,8 +569,9 @@ public final class GanglinienMQOperationen {
 	 *            das Gewicht der zweiten Ganglinie.
 	 * @return das Ergebnis der Verschmelzung.
 	 */
-	public static GanglinieMQ verschmelze(ObjektFactory objektFactory,final GanglinieMQ ganglinie,
-			final GanglinieMQ historGl, final long gewicht) {
+	public static GanglinieMQ verschmelze(final ObjektFactory objektFactory,
+			final GanglinieMQ ganglinie, final GanglinieMQ historGl,
+			final long gewicht) {
 		final long zeitstempel;
 		final Ganglinie<Double> gQKfz, gQLkw, gVPkw, gVLkw;
 

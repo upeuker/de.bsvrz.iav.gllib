@@ -36,10 +36,10 @@ import com.bitctrl.util.Timestamp;
  * <em>undefiniert</em>.
  * <p>
  * <strong>Hinweis:</strong> Die natürliche Ordnung der Stützstellen ist
- * <em>nicht</em> konsistent mit der Gleichheit. Zwei Stützstellen sind
- * gleich, wenn sie in Zeitstempel und Wert übereinstimmen. Die natürliche
- * Ordung hingegen bassiert ausschließlich auf den Zeitstempeln und ignoriert
- * die Werte.
+ * <em>nicht</em> konsistent mit der Gleichheit. Zwei Stützstellen sind gleich,
+ * wenn sie in Zeitstempel und Wert übereinstimmen. Die natürliche Ordung
+ * hingegen bassiert ausschließlich auf den Zeitstempeln und ignoriert die
+ * Werte.
  * 
  * @author BitCtrl Systems GmbH, Falko Schumann
  * @version $Id$
@@ -101,14 +101,10 @@ public class Stuetzstelle<T> implements Comparable<Stuetzstelle<T>> {
 	/**
 	 * Zwei Stützstellen sind identisch, wenn beide den selben Zeitstempel und
 	 * Wert haben.
-	 * 
-	 * {@inheritDoc}
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj instanceof Stuetzstelle) {
+		if (obj instanceof Stuetzstelle<?>) {
 			Stuetzstelle<?> s;
 
 			s = (Stuetzstelle<?>) obj;
@@ -119,6 +115,11 @@ public class Stuetzstelle<T> implements Comparable<Stuetzstelle<T>> {
 		}
 
 		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return Long.valueOf(zeitstempel).hashCode() ^ wert.hashCode();
 	}
 
 	/**
@@ -139,16 +140,10 @@ public class Stuetzstelle<T> implements Comparable<Stuetzstelle<T>> {
 		return zeitstempel;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
-		return getClass().getSimpleName() + "[zeitstempel="
-				+ Timestamp.absoluteTime(zeitstempel) + ", wert=" + wert
-				+ "]";
+		return getClass().getName() + "[zeitstempel="
+				+ Timestamp.absoluteTime(zeitstempel) + ", wert=" + wert + "]";
 	}
 
 }

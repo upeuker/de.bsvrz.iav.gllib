@@ -41,6 +41,8 @@ import de.bsvrz.iav.gllib.gllib.Ganglinie;
 import de.bsvrz.iav.gllib.gllib.Polyline;
 import de.bsvrz.iav.gllib.gllib.Stuetzstelle;
 import de.bsvrz.sys.funclib.bitctrl.modell.tmereigniskalenderglobal.objekte.EreignisTyp;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.attribute.AttGanglinienTyp;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.attribute.AttGanglinienVerfahren;
 import de.bsvrz.sys.funclib.bitctrl.modell.tmverkehrglobal.objekte.MessQuerschnittAllgemein;
 
 /**
@@ -53,46 +55,15 @@ import de.bsvrz.sys.funclib.bitctrl.modell.tmverkehrglobal.objekte.MessQuerschni
  */
 public class GanglinieMQ extends Ganglinie<Messwerte> {
 
-	/**
-	 * Die Attributgruppe, in der historische Ganglinien gesichert werden: * * *
-	 * * {@value} .
-	 */
-	public static final String ATG_GANGLINIE = "atg.ganglinie";
-
-	/** Datenkatalogkonstante für die unbestimmte Approximation: {@value} . */
-	public static final int APPROX_UNBESTIMMT = 0;
-
-	/** Datenkatalogkonstante für einen B-Spline: {@value} . */
-	public static final int APPROX_BSPLINE = 1;
-
-	/** Datenkatalogkonstante für einen Cubic-Spline: {@value} . */
-	public static final int APPROX_CUBICSPLINE = 2;
-
-	/** Datenkatalogkonstante für eine Polylinie: {@value} . */
-	public static final int APPROX_POLYLINE = 3;
-
-	/** Standardordung der Approximation. Nur für B-Spline relevant: {@value} . */
-	public static final byte APPROX_STANDARD_ORDNUNG = 5;
-
-	/** Datenkatalogkonstante für eine absolute Ganglinie: {@value} . */
-	public static final int TYP_ABSOLUT = 0;
-
-	/** Datenkatalogkonstante für eine relative additive Ganglinie: {@value} . */
-	public static final int TYP_ADDITIV = 1;
-
-	/** Datenkatalogkonstante für eine relative multiplikative Ganglinie: {@value} . */
-	public static final int TYP_MULTIPLIKATIV = 2;
-
-	/** Die Eigenschaft {@code serialVersionUID}. */
 	private static final long serialVersionUID = 0;
 
 	/** Der Messquerschnitt, zu dem die Ganglinie gehört. */
 	private MessQuerschnittAllgemein messQuerschnitt;
 
-	/** Parameter für die Berechnung von QB, Standard ist {@value} . */
+	/** Parameter für die Berechnung von QB. */
 	private float k1 = 2.0f;
 
-	/** Parameter für die Berechnung von QB, Standard ist {@value} . */
+	/** Parameter für die Berechnung von QB. */
 	private float k2 = 0.01f;
 
 	/**
@@ -101,29 +72,27 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 */
 	private long letzteVerschmelzung = System.currentTimeMillis();
 
-	/** Anzahl der Verschmelzung mit anderen Ganglinien, Standard ist {@value} . */
+	/** Anzahl der Verschmelzung mit anderen Ganglinien. */
 	private long anzahlVerschmelzungen = 1;
 
 	/**
-	 * Identifier für das mit der Ganglinie verknüpfte Ereignis, Standard ist *
-	 * * {@value} .
+	 * Identifier für das mit der Ganglinie verknüpfte Ereignis.
 	 */
-	private EreignisTyp ereignisTyp = null;
+	private EreignisTyp ereignisTyp;
 
 	/**
-	 * Flag, ob die Ganglinie eine Referenzganglinie darstellt, Standard ist * *
-	 * * {@value} .
+	 * Flag, ob die Ganglinie eine Referenzganglinie darstellt.
 	 */
-	private boolean referenz = false;
+	private boolean referenz;
 
-	/** Typ der Ganglinie, Standard ist {@link #TYP_ABSOLUT}. */
-	private int typ = TYP_ABSOLUT;
+	/** Typ der Ganglinie. */
+	private GanglinienTyp typ = GanglinienTyp.Absolut;
 
-	/** Art der Approximation, Standard ist {@link #APPROX_BSPLINE}. */
-	private int approximationDaK = APPROX_BSPLINE;
+	/** Art der Approximation. */
+	private ApproximationsVerfahren approximationsVerfahren = ApproximationsVerfahren.BSpline;
 
-	/** Ordnung des B-Spline, Standard ist {@link #APPROX_STANDARD_ORDNUNG}. */
-	private int bSplineOrdnung = APPROX_STANDARD_ORDNUNG;
+	/** Ordnung des B-Spline. */
+	private int bSplineOrdnung = 5;
 
 	/** Das Intervall für das die Ganglinie prognostiziert wird. */
 	private Interval prognoseZeitraum;
@@ -141,11 +110,9 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	private Ganglinie<Double> gVLkw;
 
 	/**
-	 * Kopiert die St&uumltzstellen, das Approximationsverfahren und alle
-	 * anderen Eigenschaften bis auf {@code approximationAktuell}. Der Wert für
-	 * {@code approximationAktuell} wird auf false gesetzt.
-	 * 
-	 * {@inheritDoc}
+	 * Kopiert die Stützstellen, das Approximationsverfahren und alle anderen
+	 * Eigenschaften bis auf {@code approximationAktuell}. Der Wert für {@code
+	 * approximationAktuell} wird auf false gesetzt.
 	 */
 	@Override
 	public GanglinieMQ clone() {
@@ -154,7 +121,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 		g = new GanglinieMQ();
 		g.putAll(this);
 		g.setAnzahlVerschmelzungen(anzahlVerschmelzungen);
-		g.setApproximationDaK(approximationDaK);
+		g.setApproximationsVerfahren(approximationsVerfahren);
 		g.setBSplineOrdnung(bSplineOrdnung);
 		g.setEreignisTyp(ereignisTyp);
 		g.setK1(k1);
@@ -172,17 +139,18 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 * Gibt die Approximation zur Datenverteilerapproximation zurück.
 	 * 
 	 * @return die Approximation.
-	 * @see #approximationDaK
 	 */
 	private Approximation<Double> erzeugeApproximation() {
-		switch (approximationDaK) {
-		case APPROX_BSPLINE:
+		if (AttGanglinienVerfahren.ZUSTAND_1_B_SPLINE_APPROXIMATION_BELIEBIGER_ORDNUNG
+				.equals(approximationsVerfahren)) {
 			return new BSpline(bSplineOrdnung);
-		case APPROX_CUBICSPLINE:
+		} else if (AttGanglinienVerfahren.ZUSTAND_2_CUBIC_SPLINE_INTERPOLATION
+				.equals(approximationsVerfahren)) {
 			return new CubicSpline();
-		case APPROX_POLYLINE:
+		} else if (AttGanglinienVerfahren.ZUSTAND_3_POLYLINE_VERFAHREN_LINEARE_INTERPOLATION
+				.equals(approximationsVerfahren)) {
 			return new Polyline();
-		default:
+		} else {
 			return new BSpline((byte) 5);
 		}
 	}
@@ -198,12 +166,10 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated Die Approximation der einzelnen Größen kann mit {@code
-	 *             getGanglinie*.getApproximation()} abgerufen werden. Der Typ
-	 *             der Approximation kann mit {@link #getApproximationDaK()}
-	 *             erfragt werden.
+	 * @deprecated Die Approximation der einzelnen Größen kann mit
+	 *             <code>getGanglinieXXX.getApproximation()</code> abgerufen
+	 *             werden. Der Typ der Approximation kann mit
+	 *             {@link #getApproximationsVerfahren()} erfragt werden.
 	 */
 	@Deprecated
 	@Override
@@ -214,12 +180,10 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	/**
 	 * Gibt die Art der Approximation als Datenkatalogkonstante zurück.
 	 * 
-	 * @return eine der Konstante {@link #APPROX_POLYLINE},
-	 *         {@link #APPROX_CUBICSPLINE}, {@link #APPROX_BSPLINE} oder
-	 *         {@link #APPROX_UNBESTIMMT}.
+	 * @return das Approximationsverfahren.
 	 */
-	public int getApproximationDaK() {
-		return approximationDaK;
+	public ApproximationsVerfahren getApproximationsVerfahren() {
+		return approximationsVerfahren;
 	}
 
 	/**
@@ -369,8 +333,6 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
-	 * {@inheritDoc}
-	 * 
 	 * @see #setPrognoseZeitraum(Interval)
 	 */
 	@Override
@@ -386,10 +348,9 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated Die Intervalle müssen an den einzelnen Größen mit {@code
-	 *             getGanglinie*.getIntervalle()} abgerufen werden.
+	 * @deprecated Die Intervalle müssen an den einzelnen Größen mit
+	 *             <code>getGanglinieXXX.getIntervalle()</code> abgerufen
+	 *             werden.
 	 */
 	@Deprecated
 	@Override
@@ -444,8 +405,6 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
-	 * {@inheritDoc}
-	 * 
 	 * @see #setPrognoseZeitraum(Interval)
 	 */
 	@Override
@@ -473,8 +432,6 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
-	 * {@inheritDoc}
-	 * 
 	 * @see #setPrognoseZeitraum(Interval)
 	 */
 	@Override
@@ -522,20 +479,19 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 * Gibt berechnete Stützstellen im prognostizierten Intervall in der
 	 * angegebenen Schrittweite zurück.
 	 * 
-	 * @see #setPrognoseZeitraum(Interval, long)
+	 * @see #setPrognoseZeitraum(Interval)
 	 */
-	public List<Stuetzstelle<Messwerte>> getStuetzstellen(long schrittweite) {
+	public List<Stuetzstelle<Messwerte>> getStuetzstellen(
+			final long schrittweite) {
 		return getStuetzstellen(getPrognoseIntervall() == null ? getIntervall()
 				: getPrognoseIntervall(), schrittweite);
 	}
 
 	/**
-	 * {@inheritDoc}
-	 * 
 	 * @see #setPrognoseZeitraum(Interval)
 	 */
 	public List<Stuetzstelle<Messwerte>> getStuetzstellen(
-			final Interval intervall, long schrittweite) {
+			final Interval intervall, final long schrittweite) {
 		List<Stuetzstelle<Messwerte>> liste;
 
 		liste = new ArrayList<Stuetzstelle<Messwerte>>();
@@ -554,11 +510,8 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 * Gibt den Ganglinientyp zurück.
 	 * 
 	 * @return der Typ der Ganglinie.
-	 * @see #TYP_ABSOLUT
-	 * @see #TYP_ADDITIV
-	 * @see #TYP_MULTIPLIKATIV
 	 */
-	public int getTyp() {
+	public GanglinienTyp getTyp() {
 		return typ;
 	}
 
@@ -569,7 +522,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 * @return {@code true}, wenn die Ganglinie absolut ist.
 	 */
 	public boolean isAbsolut() {
-		return typ == TYP_ABSOLUT;
+		return AttGanglinienTyp.ZUSTAND_0_ABSOLUT.equals(typ);
 	}
 
 	/**
@@ -583,10 +536,8 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated Es muss die Methode {@code getGanglinie*.isValid()} verwendet
-	 *             werden.
+	 * @deprecated Es muss die Methode <code>getGanglinieXXX.isValid()</code>
+	 *             verwendet werden.
 	 */
 	@Override
 	@Deprecated
@@ -597,10 +548,8 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated Es muss die Methode {@code getGanglinie*.isValid()} verwendet
-	 *             werden.
+	 * @deprecated Es muss die Methode <code>getGanglinieXXX.isValid()</code>
+	 *             verwendet werden.
 	 */
 	@Override
 	@Deprecated
@@ -624,10 +573,9 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
-	 * {@inheritDoc}
-	 * 
 	 * @deprecated der Typ der Ganglinie muss mit
-	 *             {@link #setApproximationDaK(int)} festgelegt werden.
+	 *             {@link #setApproximationsVerfahren(AttGanglinienVerfahren)}
+	 *             festgelegt werden.
 	 */
 	@Deprecated
 	@Override
@@ -639,20 +587,12 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 * Legt die zu verwendende Approximation mit Hilfe einer
 	 * Datenkatalogkonstante fest.
 	 * 
-	 * @param approximationDaK
-	 *            eine der Konstante {@link #APPROX_POLYLINE},
-	 *            {@link #APPROX_CUBICSPLINE}, {@link #APPROX_BSPLINE} oder
-	 *            {@link #APPROX_UNBESTIMMT}.
+	 * @param approximationsVerfahren
+	 *            das Approximationsverfahren.
 	 */
-	public void setApproximationDaK(final int approximationDaK) {
-		if (approximationDaK != APPROX_BSPLINE
-				&& approximationDaK != APPROX_CUBICSPLINE
-				&& approximationDaK != APPROX_POLYLINE
-				&& approximationDaK != APPROX_UNBESTIMMT) {
-			this.approximationDaK = APPROX_UNBESTIMMT;
-		} else {
-			this.approximationDaK = approximationDaK;
-		}
+	public void setApproximationsVerfahren(
+			final ApproximationsVerfahren approximationsVerfahren) {
+		this.approximationsVerfahren = approximationsVerfahren;
 	}
 
 	/**
@@ -781,12 +721,16 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 * @param typ
 	 *            der Typ der Ganglinie.
 	 */
-	public void setTyp(final int typ) {
+	public void setTyp(final GanglinienTyp typ) {
 		this.typ = typ;
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Gibt die Ganglinie als String Form einer Tabelle zurück.
+	 * 
+	 * <p>
+	 * <em>Hinweis:</em> Der String wird bei großen Ganglinien entsprechend auch
+	 * sehr groß!!
 	 */
 	@Override
 	public String toString() {
