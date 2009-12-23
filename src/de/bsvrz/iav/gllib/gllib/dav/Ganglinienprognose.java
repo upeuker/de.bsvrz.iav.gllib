@@ -39,7 +39,7 @@ import de.bsvrz.sys.funclib.bitctrl.modell.DatensatzUpdateListener;
 import de.bsvrz.sys.funclib.bitctrl.modell.DatensendeException;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
 import de.bsvrz.sys.funclib.bitctrl.modell.OnlineDatensatz;
-import de.bsvrz.sys.funclib.bitctrl.modell.kappich.util.KappichModellUtil;
+import de.bsvrz.sys.funclib.bitctrl.modell.kappich.KappichModellUtil;
 import de.bsvrz.sys.funclib.bitctrl.modell.systemmodellglobal.objekte.Applikation;
 import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.objekte.ApplikationGanglinienPrognose;
 import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.onlinedaten.OdPrognoseGanglinienAnfrage;
