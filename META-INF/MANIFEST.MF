@@ -5,7 +5,6 @@ Bundle-SymbolicName: de.bsvrz.iav.gllib
 Bundle-Version: 2.0.0
 Bundle-Vendor: BitCtrl Systems GmbH
 Require-Bundle: de.bsvrz.sys.funclib.bitctrl;bundle-version="2.0.0",
- de.bsvrz.sys.funclib.bitctrl.modell;bundle-version="2.0.0",
  de.bsvrz.sys.funclib.bitctrl.modell.inovat;bundle-version="2.0.0",
  de.bsvrz.sys.funclib.bitctrl.modell.kappich;bundle-version="2.0.0",
  org.junit4;resolution:=optional,
