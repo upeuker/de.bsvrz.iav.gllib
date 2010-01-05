@@ -38,6 +38,14 @@ public class TestAnfrage implements StandardApplication {
 
 			public void antwortEingetroffen(final GlProgAntwortEvent e) {
 				System.out.println(e);
+
+				try {
+					Thread.sleep(10 * Constants.MILLIS_PER_SECOND);
+				} catch (final InterruptedException ex) {
+					// TODO Auto-generated catch block
+					ex.printStackTrace();
+				}
+				System.exit(0);
 			}
 		});
 
@@ -52,6 +60,8 @@ public class TestAnfrage implements StandardApplication {
 		anfrage.setNurLangfristigeAuswahl(true);
 		anfrage.setPrognoseZeitraum(new Interval(start, start
 				+ Constants.MILLIS_PER_HOUR));
+		anfrage.setPruefIntervall(60 * Constants.MILLIS_PER_SECOND);
+		anfrage.setSendeIntervall(60 * Constants.MILLIS_PER_SECOND);
 		prognose.sendeAnfrage("Testanfrage", Collections.singleton(anfrage));
 	}
 

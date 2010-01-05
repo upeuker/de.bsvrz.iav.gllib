@@ -36,7 +36,6 @@ import com.bitctrl.util.Interval;
 import de.bsvrz.sys.funclib.bitctrl.modell.att.Feld;
 import de.bsvrz.sys.funclib.bitctrl.modell.att.Zeitstempel;
 import de.bsvrz.sys.funclib.bitctrl.modell.fachmodellglobal.attribute.AttProzent;
-import de.bsvrz.sys.funclib.bitctrl.modell.kappich.util.KappichModellUtil;
 import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.attribute.AtlGanglinie;
 import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.attribute.AtlPrognoseGanglinie;
 import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.attribute.AtlPrognoseGanglinienAnfrage;
@@ -44,6 +43,7 @@ import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.attribute.AtlStuet
 import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.attribute.AttAnzahlSekunden1Bis;
 import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.parameter.PdGanglinie;
 import de.bsvrz.sys.funclib.bitctrl.modell.tmverkehrglobal.objekte.MessQuerschnittAllgemein;
+import de.bsvrz.sys.funclib.bitctrl.modell.util.KappichModellUtil;
 
 /**
  * Enthält allgemeine Funktionen auf oder mit Datenverteilerganglinien.

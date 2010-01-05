@@ -5,12 +5,12 @@ Bundle-SymbolicName: de.bsvrz.iav.gllib
 Bundle-Version: 2.0.0
 Bundle-Vendor: BitCtrl Systems GmbH
 Require-Bundle: de.bsvrz.sys.funclib.bitctrl;bundle-version="2.0.0",
- de.bsvrz.sys.funclib.bitctrl.modell.inovat;bundle-version="2.0.0",
- de.bsvrz.sys.funclib.bitctrl.modell.kappich;bundle-version="2.0.0",
- org.junit4;resolution:=optional,
- de.bitctrl.lib.eclipse.dav;resolution:=optional
+ de.bsvrz.sys.funclib.bitctrl.modell;bundle-version="[2.0.0,3.0.0)",
+ de.bsvrz.sys.funclib.bitctrl.modell.util;bundle-version="[2.0.0,3.0.0)",
+ de.bsvrz.sys.funclib.bitctrl.modell.datenkatalog;bundle-version="[2.0.0,3.0.0)",
+ org.junit4;resolution:=optional
 Export-Package: de.bsvrz.iav.gllib.gllib,
  de.bsvrz.iav.gllib.gllib.dav,
  de.bsvrz.iav.gllib.gllib.junit
 Bundle-ClassPath: .
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
