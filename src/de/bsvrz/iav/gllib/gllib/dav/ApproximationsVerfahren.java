@@ -49,7 +49,7 @@ public enum ApproximationsVerfahren {
 
 	/** Das Approximationsverfahren Polyline. */
 	Polyline(
-			AttGanglinienVerfahren.ZUSTAND_3_POLYLINE_VERFAHREN_LINEARE_INTERPOLATION);
+			AttGanglinienVerfahren.ZUSTAND_3_POLYLINE_VERFAHREN_LINEARE_INTERPOLATION_);
 
 	/**
 	 * Bestimmt zu einem Datenverteilerzustand den äquivalenten Wert des Enums.
@@ -79,7 +79,7 @@ public enum ApproximationsVerfahren {
 				.equals(verfahren)) {
 			return CubicSpline;
 		}
-		if (AttGanglinienVerfahren.ZUSTAND_3_POLYLINE_VERFAHREN_LINEARE_INTERPOLATION
+		if (AttGanglinienVerfahren.ZUSTAND_3_POLYLINE_VERFAHREN_LINEARE_INTERPOLATION_
 				.equals(verfahren)) {
 			return Polyline;
 		}

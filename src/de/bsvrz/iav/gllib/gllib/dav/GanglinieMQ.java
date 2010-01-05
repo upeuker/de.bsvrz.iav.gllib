@@ -147,7 +147,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 		} else if (AttGanglinienVerfahren.ZUSTAND_2_CUBIC_SPLINE_INTERPOLATION
 				.equals(approximationsVerfahren)) {
 			return new CubicSpline();
-		} else if (AttGanglinienVerfahren.ZUSTAND_3_POLYLINE_VERFAHREN_LINEARE_INTERPOLATION
+		} else if (AttGanglinienVerfahren.ZUSTAND_3_POLYLINE_VERFAHREN_LINEARE_INTERPOLATION_
 				.equals(approximationsVerfahren)) {
 			return new Polyline();
 		} else {

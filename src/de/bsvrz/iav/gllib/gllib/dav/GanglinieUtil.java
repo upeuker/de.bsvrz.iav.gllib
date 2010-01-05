@@ -36,7 +36,7 @@ import com.bitctrl.util.Interval;
 import de.bsvrz.sys.funclib.bitctrl.modell.att.Feld;
 import de.bsvrz.sys.funclib.bitctrl.modell.att.Zeitstempel;
 import de.bsvrz.sys.funclib.bitctrl.modell.fachmodellglobal.attribute.AttProzent;
-import de.bsvrz.sys.funclib.bitctrl.modell.kappich.KappichModellUtil;
+import de.bsvrz.sys.funclib.bitctrl.modell.kappich.util.KappichModellUtil;
 import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.attribute.AtlGanglinie;
 import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.attribute.AtlPrognoseGanglinie;
 import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.attribute.AtlPrognoseGanglinienAnfrage;
