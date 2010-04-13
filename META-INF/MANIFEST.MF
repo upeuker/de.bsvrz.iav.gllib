@@ -1,16 +1,16 @@
 Manifest-Version: 1.0
+Bundle-ClassPath: .
 Bundle-ManifestVersion: 2
 Bundle-Name: Funktionen Ganglinie (SWE 5.5)
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-SymbolicName: de.bsvrz.iav.gllib
-Bundle-Version: 2.0.0
 Bundle-Vendor: BitCtrl Systems GmbH
-Require-Bundle: de.bsvrz.sys.funclib.bitctrl;bundle-version="[2.0.0,3.0.0)",
- de.bsvrz.sys.funclib.bitctrl.modell;bundle-version="[2.0.0,3.0.0)",
- de.bsvrz.sys.funclib.bitctrl.modell.util;bundle-version="[2.0.0,3.0.0)",
- de.bsvrz.sys.funclib.bitctrl.modell.datenkatalog;bundle-version="[2.0.0,3.0.0)",
- org.junit4;bundle-version="4.5.0";resolution:=optional
+Bundle-Version: 2.0.0
 Export-Package: de.bsvrz.iav.gllib.gllib,
  de.bsvrz.iav.gllib.gllib.dav,
  de.bsvrz.iav.gllib.gllib.junit
-Bundle-ClassPath: .
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: de.bsvrz.sys.funclib.bitctrl.modell.datenkatalog;bundle-version="[2.0.0,3.0.0)",
+ de.bsvrz.sys.funclib.bitctrl.modell.util;bundle-version="[2.0.0,3.0.0)",
+ de.bsvrz.sys.funclib.bitctrl.modell;bundle-version="[2.0.0,3.0.0)",
+ de.bsvrz.sys.funclib.bitctrl;bundle-version="[2.0.0,3.0.0)",
+ org.junit4;bundle-version="4.5.0";resolution:=optional
