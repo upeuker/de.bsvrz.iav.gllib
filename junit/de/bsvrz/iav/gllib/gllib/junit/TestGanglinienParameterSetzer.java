@@ -32,14 +32,23 @@ import com.bitctrl.Constants;
 import com.bitctrl.util.jar.JarTools;
 
 import de.bsvrz.dav.daf.main.ClientDavInterface;
-import de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ;
 import de.bsvrz.sys.funclib.application.StandardApplication;
 import de.bsvrz.sys.funclib.application.StandardApplicationRunner;
 import de.bsvrz.sys.funclib.bitctrl.modell.AnmeldeException;
 import de.bsvrz.sys.funclib.bitctrl.modell.DatensendeException;
+import de.bsvrz.sys.funclib.bitctrl.modell.DefaultObjektFactory;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjekt;
+import de.bsvrz.sys.funclib.bitctrl.modell.att.Zeitstempel;
+import de.bsvrz.sys.funclib.bitctrl.modell.fachmodellglobal.attribute.AttProzent;
+import de.bsvrz.sys.funclib.bitctrl.modell.fachmodellglobal.attribute.AttZahlPositiv;
+import de.bsvrz.sys.funclib.bitctrl.modell.metamodellglobal.attribute.AttJaNein;
 import de.bsvrz.sys.funclib.bitctrl.modell.tmereigniskalenderglobal.objekte.EreignisTyp;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.attribute.AtlGanglinie;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.attribute.AttAnzahlSekunden1Bis;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.attribute.AttGanglinienAuswahlMethode;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.attribute.AttGanglinienTyp;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.attribute.AttGanglinienVerfahren;
 import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.parameter.PdGanglinie;
 import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.parameter.PdGanglinienModellPrognose;
 import de.bsvrz.sys.funclib.bitctrl.modell.tmverkehrglobal.objekte.MessQuerschnittAllgemein;
@@ -54,17 +63,6 @@ import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
  *          Schumann $
  */
 public final class TestGanglinienParameterSetzer implements StandardApplication {
-
-	/** Die PIDs der Standardereignistypen Montag bis Sonntag und Ostermontag. */
-	private final String[] pidEreignistypen = new String[] {
-			EreignisTyp.PRAEFIX_PID + "montag",
-			EreignisTyp.PRAEFIX_PID + "dienstag",
-			EreignisTyp.PRAEFIX_PID + "mittwoch",
-			EreignisTyp.PRAEFIX_PID + "donnerstag",
-			EreignisTyp.PRAEFIX_PID + "freitag",
-			EreignisTyp.PRAEFIX_PID + "samstag",
-			EreignisTyp.PRAEFIX_PID + "sonntag",
-			EreignisTyp.PRAEFIX_PID + "ostersonntag" };
 
 	/** Liste von PIDs von Messquerschnitten, die parametriert werden sollen. */
 	private String[] objektPids;
@@ -92,12 +90,11 @@ public final class TestGanglinienParameterSetzer implements StandardApplication 
 	 */
 	public void initialize(final ClientDavInterface connection) {
 		ObjektFactory factory;
-		List<SystemObjekt> objekte;
+		List<? extends SystemObjekt> objekte;
 		ZufallsganglinienFactory ganglinien;
 
-		factory = ObjektFactory.getInstanz();
-		factory.setVerbindung(connection);
-		factory.registerStandardFactories();
+		DefaultObjektFactory.getInstanz().setDav(connection);
+		factory = DefaultObjektFactory.getInstanz();
 
 		ganglinien = ZufallsganglinienFactory.getInstance();
 
@@ -105,8 +102,7 @@ public final class TestGanglinienParameterSetzer implements StandardApplication 
 			objekte = factory.bestimmeModellobjekte(objektPids);
 		} else {
 			objekte = factory
-					.bestimmeModellobjekte(VerkehrsModellTypen.MESSQUERSCHNITTALLGEMEIN
-							.getPid());
+					.bestimmeModellobjekte(MessQuerschnittAllgemein.PID);
 		}
 		for (final SystemObjekt so : objekte) {
 			final MessQuerschnittAllgemein mq;
@@ -122,38 +118,48 @@ public final class TestGanglinienParameterSetzer implements StandardApplication 
 			}
 			mq = (MessQuerschnittAllgemein) so;
 
-			pdGanglinie = mq.getParameterDatensatz(PdGanglinie.class);
+			pdGanglinie = mq.getPdGanglinie();
 
-			pdPrognose = mq
-					.getParameterDatensatz(PdGanglinienModellPrognose.class);
-			datumPrognose = pdPrognose.erzeugeDatum();
+			pdPrognose = mq.getPdGanglinienModellPrognose();
+			datumPrognose = pdPrognose.createDatum();
 			datumPrognose
-					.setAuswahlMethode(PdGanglinienModellPrognose.Daten.WAHRSCHEINLICHSTE_GANGLINIE);
+					.dSetAspekt(PdGanglinienModellPrognose.Aspekte.ParameterVorgabe);
 			datumPrognose
-					.setMatchingIntervall(10 * Constants.MILLIS_PER_MINUTE);
-			datumPrognose.setMaxMatchingFehler(25);
+					.setGLAuswahlMethode(AttGanglinienAuswahlMethode.ZUSTAND_2_WAHRSCHEINLICHSTEGANGLINIE);
+			datumPrognose.setGLMatchingIntervall(new AttAnzahlSekunden1Bis(
+					10 * Constants.MILLIS_PER_MINUTE));
 			datumPrognose
-					.setPatternMatchingHorizont(2 * Constants.MILLIS_PER_HOUR);
+					.setGLMaximalerMatchingFehler(AttProzent.ZUSTAND_1N_NICHT_ERMITTELBAR);
 			datumPrognose
-					.setPatternMatchingOffset(1 * Constants.MILLIS_PER_HOUR);
+					.setGLPatternMatchingHorizont(new AttAnzahlSekunden1Bis(
+							2 * Constants.MILLIS_PER_HOUR));
+			datumPrognose.setGLPatterMatchingOffset(new AttAnzahlSekunden1Bis(
+					1 * Constants.MILLIS_PER_HOUR));
 
 			try {
 				pdGanglinie.anmeldenSender();
-				datumGanglinie = pdGanglinie.erzeugeDatum();
-				for (final String typ : pidEreignistypen) {
-					GanglinieMQ g;
-					EreignisTyp ereignisTyp;
-
-					ereignisTyp = (EreignisTyp) factory.getModellobjekt(typ);
+				datumGanglinie = pdGanglinie.createDatum();
+				datumGanglinie.dSetAspekt(PdGanglinie.Aspekte.ParameterVorgabe);
+				final List<EreignisTyp> ereignistypen = (List<EreignisTyp>) DefaultObjektFactory
+						.getInstanz().bestimmeModellobjekte(EreignisTyp.PID);
+				for (final EreignisTyp typ : ereignistypen) {
+					AtlGanglinie g;
 					g = ganglinien.erzeugeGanglinie(mq, 60 * 60 * 1000);
-					g.setEreignisTyp(ereignisTyp);
-					datumGanglinie.add(g);
+					g.setEreignisTyp(typ);
+					g.setAnzahlVerschmelzungen(new AttZahlPositiv(3l));
+					g.setGanglinienTyp(AttGanglinienTyp.ZUSTAND_0_ABSOLUT);
+					g.setReferenzganglinie(AttJaNein.ZUSTAND_0_NEIN);
+					g
+							.setGanglinienVerfahren(AttGanglinienVerfahren.ZUSTAND_1_B_SPLINE_APPROXIMATION_BELIEBIGER_ORDNUNG);
+					datumGanglinie.getGanglinie().add(g);
 				}
-				pdGanglinie.sendeDaten(datumGanglinie, 60 * 1000);
+				datumGanglinie.dSetZeitstempel(new Zeitstempel(System
+						.currentTimeMillis()));
+				pdGanglinie.sendeDatum(datumGanglinie, 60 * 1000);
 				System.out.println("Ganglinien für " + mq + " gesendet.");
 
 				pdPrognose.anmeldenSender();
-				pdPrognose.sendeDaten(datumPrognose);
+				pdPrognose.sendeDatum(datumPrognose);
 				System.out.println("Ganglinienprognoseparameter für " + mq
 						+ " gesendet.");
 			} catch (final AnmeldeException ex) {

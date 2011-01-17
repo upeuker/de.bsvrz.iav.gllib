@@ -32,11 +32,14 @@ import com.bitctrl.Constants;
 
 import de.bsvrz.iav.gllib.gllib.Ganglinie;
 import de.bsvrz.iav.gllib.gllib.Stuetzstelle;
-import de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ;
-import de.bsvrz.iav.gllib.gllib.dav.Messwerte;
-import de.bsvrz.sys.funclib.bitctrl.modell.inovat.test.VerkehrsDatenKurzZeitMqGenerator;
+import de.bsvrz.sys.funclib.bitctrl.modell.att.RelativerZeitstempel;
+import de.bsvrz.sys.funclib.bitctrl.modell.att.Zeitstempel;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.attribute.AtlGanglinie;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.attribute.AtlStuetzstelle;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.attribute.AttStuetzStellenWert;
 import de.bsvrz.sys.funclib.bitctrl.modell.tmverkehrglobal.objekte.MessQuerschnittAllgemein;
 import de.bsvrz.sys.funclib.bitctrl.modell.tmverkehrglobal.onlinedaten.OdVerkehrsDatenKurzZeitMq;
+import de.bsvrz.sys.funclib.bitctrl.modell.util.test.VerkehrsDatenKurzZeitMqGenerator;
 
 /**
  * Erzeugt für bestimmte Ereignistypen je eine Ganglinie.
@@ -82,33 +85,46 @@ public final class ZufallsganglinienFactory {
 	 *            der gewünschte Abstand Stützstellen in Millisekunden.
 	 * @return die generierte Ganglinie.
 	 */
-	public GanglinieMQ erzeugeGanglinie(final MessQuerschnittAllgemein mq,
+	public AtlGanglinie erzeugeGanglinie(final MessQuerschnittAllgemein mq,
 			final long abstand) {
-		GanglinieMQ g;
+		AtlGanglinie g;
 		long t;
 		VerkehrsDatenKurzZeitMqGenerator generator;
 
-		g = new GanglinieMQ();
-		g.setMessQuerschnitt(mq);
-		g.setLetzteVerschmelzung(System.currentTimeMillis());
+		g = new AtlGanglinie();
+		// g.setMessQuerschnitt(mq);
+		g.setLetzteVerschmelzung(new Zeitstempel(System.currentTimeMillis()));
 
 		t = 0;
 		generator = new VerkehrsDatenKurzZeitMqGenerator();
 		while (t <= 24 * 60 * 60 * 1000) {
 			OdVerkehrsDatenKurzZeitMq.Daten datum;
-			Messwerte messwerte;
-			Number qKfz, qLkw, vPkw, vLkw;
+			// final Messwerte messwerte;
+			// final Number qKfz, qLkw, vPkw, vLkw;
 
 			datum = generator.generiere();
-			qKfz = datum.getQKfz().getWert();
-			qLkw = datum.getQLkw().getWert();
-			vPkw = datum.getVPkw().getWert();
-			vLkw = datum.getVLkw().getWert();
-			messwerte = new Messwerte(qKfz != null ? qKfz.doubleValue() : null,
-					qLkw != null ? qLkw.doubleValue() : null,
-					vPkw != null ? vPkw.doubleValue() : null,
-					vLkw != null ? vLkw.doubleValue() : null);
-			g.setStuetzstelle(new Stuetzstelle<Messwerte>(t, messwerte));
+			final AtlStuetzstelle stuetzstelle = new AtlStuetzstelle();
+			stuetzstelle.setQKfz(new AttStuetzStellenWert(datum.getQKfz()
+					.getWert().doubleValue()));
+			stuetzstelle.setQLkw(new AttStuetzStellenWert(datum.getQLkw()
+					.getWert().doubleValue()));
+			stuetzstelle.setVPkw(new AttStuetzStellenWert(datum.getVPkw()
+					.getWert().doubleValue()));
+			stuetzstelle.setVLkw(new AttStuetzStellenWert(datum.getVLkw()
+					.getWert().doubleValue()));
+			stuetzstelle.setZeit(new RelativerZeitstempel(t));
+			// qKfz = datum.getQKfz().getWert();
+			// qLkw = datum.getQLkw().getWert();
+			// vPkw = datum.getVPkw().getWert();
+			// vLkw = datum.getVLkw().getWert();
+			// messwerte = new Messwerte(qKfz != null ? qKfz.doubleValue() :
+			// null,
+			// qLkw != null ? qLkw.doubleValue() : null,
+			// vPkw != null ? vPkw.doubleValue() : null,
+			// vLkw != null ? vLkw.doubleValue() : null);
+			// g.getStuetzstelle().add((new Stuetzstelle<Messwerte>(t,
+			// messwerte));
+			g.getStuetzstelle().add(stuetzstelle);
 
 			t += abstand;
 		}
