@@ -34,6 +34,7 @@ import java.util.TreeMap;
 
 import com.bitctrl.util.Interval;
 
+import de.bsvrz.dav.daf.main.config.SystemObject;
 import de.bsvrz.iav.gllib.gllib.Approximation;
 import de.bsvrz.iav.gllib.gllib.BSpline;
 import de.bsvrz.iav.gllib.gllib.CubicSpline;
@@ -80,6 +81,8 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 */
 	private EreignisTyp ereignisTyp;
 
+	private SystemObject ereignisTypObj;
+
 	/**
 	 * Flag, ob die Ganglinie eine Referenzganglinie darstellt.
 	 */
@@ -111,8 +114,8 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 
 	/**
 	 * Kopiert die Stützstellen, das Approximationsverfahren und alle anderen
-	 * Eigenschaften bis auf {@code approximationAktuell}. Der Wert für {@code
-	 * approximationAktuell} wird auf false gesetzt.
+	 * Eigenschaften bis auf {@code approximationAktuell}. Der Wert für
+	 * {@code approximationAktuell} wird auf false gesetzt.
 	 */
 	@Override
 	public GanglinieMQ clone() {
