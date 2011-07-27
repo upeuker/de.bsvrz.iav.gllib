@@ -30,6 +30,7 @@ package de.bsvrz.iav.gllib.gllib.dav;
 import java.util.List;
 
 import de.bsvrz.dav.daf.main.DataNotSubscribedException;
+import de.bsvrz.dav.daf.main.OneSubscriptionPerSendData;
 import de.bsvrz.dav.daf.main.SendSubscriptionNotConfirmed;
 import de.bsvrz.dav.daf.main.config.SystemObject;
 
@@ -55,10 +56,12 @@ public interface GlSpeicherClientInterface {
 	 *             wird weitergereicht.
 	 * @throws GlSpeicherServerException
 	 *             wird geworfen, wenn auf Serverseite ein Fehler auftritt.
+	 * @throws OneSubscriptionPerSendData
+	 *             wird weitergereicht.
 	 */
 	public List<GanglinieMQ> getGanglinien(final SystemObject mqSysObj)
 			throws DataNotSubscribedException, SendSubscriptionNotConfirmed,
-			GlSpeicherServerException;
+			GlSpeicherServerException, OneSubscriptionPerSendData;
 
 	/**
 	 * Setzt (speichert) die Ganglinien eines MQ (synchron).
@@ -75,10 +78,12 @@ public interface GlSpeicherClientInterface {
 	 *             wird weitergereicht.
 	 * @throws GlSpeicherServerException
 	 *             wird geworfen, wenn auf Serverseite ein Fehler auftritt.
+	 * @throws OneSubscriptionPerSendData
+	 *             wird weitergereicht.
 	 */
 	public void setGanglinien(final SystemObject mqSysObj,
 			final List<GanglinieMQ> ganglinien)
 			throws DataNotSubscribedException, SendSubscriptionNotConfirmed,
-			GlSpeicherServerException;
+			GlSpeicherServerException, OneSubscriptionPerSendData;
 
 }

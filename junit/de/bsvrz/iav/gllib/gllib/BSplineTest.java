@@ -201,8 +201,8 @@ public class BSplineTest {
 			assertEquals(
 					"Der Zeitstempel der berechneten Stützstelle muss mit der Anfrage übereinstimmen.",
 					t, s.getZeitstempel());
-			assertTrue("Der Stützstellenwert darf nicht null sein.", s
-					.getWert() != null);
+			assertTrue("Der Stützstellenwert darf nicht null sein.",
+					s.getWert() != null);
 			// System.out.println(s);
 			++i;
 		}
@@ -235,6 +235,7 @@ public class BSplineTest {
 
 		g = ZufallsganglinienFactory.getInstance().erzeugeGanglinie(null,
 				Constants.MILLIS_PER_HOUR);
+
 		GanglinienMQOperationen.verschiebe(g, cal.getTimeInMillis());
 		assertEquals("Die Anzahl der Stützstellen muss stimmen.", 25, g.size());
 

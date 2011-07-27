@@ -605,8 +605,8 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 * @param bSplineOrdnung
 	 *            die neue Ordnung des B-Spline.
 	 */
-	public void setBSplineOrdnung(final int bSplineOrdnung) {
-		this.bSplineOrdnung = bSplineOrdnung;
+	public void setBSplineOrdnung(final long bSplineOrdnung) {
+		this.bSplineOrdnung = (int) bSplineOrdnung;
 	}
 
 	/**

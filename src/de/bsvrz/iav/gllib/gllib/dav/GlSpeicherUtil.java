@@ -27,6 +27,8 @@
 
 package de.bsvrz.iav.gllib.gllib.dav;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import de.bsvrz.dav.daf.main.ClientDavInterface;
@@ -37,6 +39,7 @@ import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
 import de.bsvrz.sys.funclib.bitctrl.modell.tmereigniskalenderglobal.objekte.EreignisTyp;
 import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.attribute.AttGanglinienTyp;
 import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.attribute.AttGanglinienVerfahren;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmverkehrglobal.objekte.MessQuerschnittAllgemein;
 import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
@@ -100,10 +103,12 @@ public class GlSpeicherUtil {
 	 * @param objectFactory
 	 * @return
 	 */
-	public static final GanglinieMQ konvertiere(final Data atlGanglinie,
+	public static final GanglinieMQ konvertiere(
+			final MessQuerschnittAllgemein mqa, final Data atlGanglinie,
 			final ObjektFactory objectFactory) {
 		final GanglinieMQ gl = new GanglinieMQ();
 
+		gl.setMessQuerschnitt(mqa);
 		gl.setEreignisTyp((EreignisTyp) objectFactory
 				.getModellobjekt(atlGanglinie.getReferenceValue("EreignisTyp")
 						.getSystemObject()));
@@ -114,13 +119,13 @@ public class GlSpeicherUtil {
 		gl.setTyp(GanglinienTyp.valueOf(AttGanglinienTyp
 				.getZustand(atlGanglinie.getUnscaledValue("GanglinienTyp")
 						.byteValue())));
-		gl.setReferenz(atlGanglinie.getUnscaledValue("Referenzganglinie")
-				.getText().equals("Ja"));
+		gl.setReferenz(atlGanglinie.getTextValue("Referenzganglinie").getText()
+				.equals("Ja"));
 		gl.setApproximationsVerfahren(ApproximationsVerfahren
 				.valueOf(AttGanglinienVerfahren.getZustand(atlGanglinie
 						.getUnscaledValue("GanglinienVerfahren").byteValue())));
 		gl.setBSplineOrdnung(atlGanglinie.getUnscaledValue("Ordnung")
-				.intValue());
+				.longValue());
 
 		final Data.Array stuetzstellen = atlGanglinie.getArray("Stützstelle");
 		for (int i = 0; i < stuetzstellen.getLength(); i++) {
@@ -136,6 +141,10 @@ public class GlSpeicherUtil {
 		return gl;
 	}
 
+	/**
+	 * @param atlGanglinie
+	 * @param gl
+	 */
 	public static final void konvertiere(final Data atlGanglinie,
 			final GanglinieMQ gl) {
 		atlGanglinie.getReferenceValue("EreignisTyp").setSystemObject(
@@ -154,15 +163,40 @@ public class GlSpeicherUtil {
 
 		final Data.Array stuetzstellen = atlGanglinie.getArray("Stützstelle");
 		stuetzstellen.setLength(gl.size());
-		for (int i = 0; i < stuetzstellen.getLength(); i++) {
-			// stuetzstellen.getItem(i).getTimeValue("").setMillis();
-			final Data stuetzstelle = stuetzstellen.getItem(i);
-			final Messwerte mw = new Messwerte(stuetzstelle.getScaledValue(
-					"QKfz").doubleValue(), stuetzstelle.getScaledValue("QLkw")
-					.doubleValue(), stuetzstelle.getScaledValue("VPkw")
-					.doubleValue(), stuetzstelle.getScaledValue("VLkw")
-					.doubleValue());
-			gl.put(stuetzstelle.getTimeValue("Zeit").getMillis(), mw);
+
+		final List<Long> zeitStempelList = new ArrayList<Long>();
+		zeitStempelList.addAll(gl.keySet());
+		Collections.sort(zeitStempelList);
+		for (int i = 0; i < zeitStempelList.size(); i++) {
+			final Long zeitStempel = zeitStempelList.get(i);
+			final Messwerte mw = gl.get(zeitStempel);
+
+			stuetzstellen.getItem(i).getTimeValue("Zeit")
+					.setMillis(zeitStempel);
+			if (mw.getQKfz() >= 0.0) {
+				stuetzstellen.getItem(i).getScaledValue("QKfz")
+						.set(mw.getQKfz());
+			} else {
+				stuetzstellen.getItem(i).getUnscaledValue("QKfz").set(-1);
+			}
+			if (mw.getQLkw() >= 0.0) {
+				stuetzstellen.getItem(i).getScaledValue("QLkw")
+						.set(mw.getQLkw());
+			} else {
+				stuetzstellen.getItem(i).getUnscaledValue("QLkw").set(-1);
+			}
+			if (mw.getVPkw() >= 0.0) {
+				stuetzstellen.getItem(i).getScaledValue("VPkw")
+						.set(mw.getVPkw());
+			} else {
+				stuetzstellen.getItem(i).getUnscaledValue("VPkw").set(-1);
+			}
+			if (mw.getVLkw() >= 0.0) {
+				stuetzstellen.getItem(i).getScaledValue("VLkw")
+						.set(mw.getVLkw());
+			} else {
+				stuetzstellen.getItem(i).getUnscaledValue("VLkw").set(-1);
+			}
 		}
 	}
 }
