@@ -99,6 +99,9 @@ public class GlSpeicherClient implements GlSpeicherClientInterface,
 	/** Sendererlaubnis zum Senden von Gl-Anfragen. */
 	private boolean sendenErlaubt = false;
 
+	/** Timeout. */
+	private long timeout = TIMEOUT;
+
 	/**
 	 * Erfragt die statische Instanz dieser Klasse fuer die uebergebene
 	 * DAV-Objektfactory.
@@ -200,7 +203,7 @@ public class GlSpeicherClient implements GlSpeicherClientInterface,
 
 		while (inWait) {
 			try {
-				wait(TIMEOUT);
+				wait(timeout);
 				inWait = false;
 			} catch (final InterruptedException ex) {
 				//
@@ -292,7 +295,7 @@ public class GlSpeicherClient implements GlSpeicherClientInterface,
 
 		while (inWait) {
 			try {
-				wait(TIMEOUT);
+				wait(timeout);
 				inWait = false;
 			} catch (final InterruptedException ex) {
 				//
@@ -310,6 +313,16 @@ public class GlSpeicherClient implements GlSpeicherClientInterface,
 			throw new GlSpeicherServerException(
 					"Timeout: Keine Rueckmeldung von Server erhalten.");
 		}
+	}
+
+	@Override
+	public void setTimeout(final long timeoutInMillis) {
+		timeout = timeoutInMillis;
+	}
+
+	@Override
+	public long getTimeout() {
+		return timeout;
 	}
 
 	/**

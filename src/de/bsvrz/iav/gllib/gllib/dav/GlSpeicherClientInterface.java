@@ -86,4 +86,19 @@ public interface GlSpeicherClientInterface {
 			throws DataNotSubscribedException, SendSubscriptionNotConfirmed,
 			GlSpeicherServerException, OneSubscriptionPerSendData;
 
+	/**
+	 * Setzt das Timeout.
+	 * 
+	 * @param timeoutInMillis
+	 *            Timeout in Millisekunden.
+	 */
+	public void setTimeout(final long timeoutInMillis);
+
+	/**
+	 * Erfragt das aktuelle Timeout.
+	 * 
+	 * @return Timeout in Millisekunden.
+	 */
+	public long getTimeout();
+
 }
