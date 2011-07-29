@@ -87,7 +87,7 @@ public interface GlSpeicherClientInterface {
 			GlSpeicherServerException, OneSubscriptionPerSendData;
 
 	/**
-	 * Setzt das Timeout.
+	 * Setzt das Timeout auf Anfragen.
 	 * 
 	 * @param timeoutInMillis
 	 *            Timeout in Millisekunden.
@@ -95,7 +95,7 @@ public interface GlSpeicherClientInterface {
 	public void setTimeout(final long timeoutInMillis);
 
 	/**
-	 * Erfragt das aktuelle Timeout.
+	 * Erfragt das aktuelle Timeout auf Anfragen.
 	 * 
 	 * @return Timeout in Millisekunden.
 	 */

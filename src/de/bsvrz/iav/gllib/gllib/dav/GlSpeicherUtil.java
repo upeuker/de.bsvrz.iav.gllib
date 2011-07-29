@@ -98,36 +98,44 @@ public class GlSpeicherUtil {
 	}
 
 	/**
+	 * Konvertiert das uebergebene DAV-Datum (<code>atl.ganglinie</code>) in das
+	 * interne Format.
 	 * 
-	 * @param atlGanglinie
+	 * @param mqa
+	 *            der Messquerschnitt zu dem das Gangliniendatum gehoert.
+	 * @param davAtlGanglinie
+	 *            ein DAV-Datum <code>atl.ganglinie</code>.
 	 * @param objectFactory
-	 * @return
+	 *            die DAV-Objektfactory.
+	 * @return das uebergebene DAV-Datum (<code>atl.ganglinie</code>) im
+	 *         internen Format.
 	 */
 	public static final GanglinieMQ konvertiere(
-			final MessQuerschnittAllgemein mqa, final Data atlGanglinie,
+			final MessQuerschnittAllgemein mqa, final Data davAtlGanglinie,
 			final ObjektFactory objectFactory) {
 		final GanglinieMQ gl = new GanglinieMQ();
 
 		gl.setMessQuerschnitt(mqa);
 		gl.setEreignisTyp((EreignisTyp) objectFactory
-				.getModellobjekt(atlGanglinie.getReferenceValue("EreignisTyp")
-						.getSystemObject()));
-		gl.setAnzahlVerschmelzungen(atlGanglinie.getUnscaledValue(
+				.getModellobjekt(davAtlGanglinie.getReferenceValue(
+						"EreignisTyp").getSystemObject()));
+		gl.setAnzahlVerschmelzungen(davAtlGanglinie.getUnscaledValue(
 				"AnzahlVerschmelzungen").longValue());
-		gl.setLetzteVerschmelzung(atlGanglinie.getTimeValue(
+		gl.setLetzteVerschmelzung(davAtlGanglinie.getTimeValue(
 				"LetzteVerschmelzung").getMillis());
 		gl.setTyp(GanglinienTyp.valueOf(AttGanglinienTyp
-				.getZustand(atlGanglinie.getUnscaledValue("GanglinienTyp")
+				.getZustand(davAtlGanglinie.getUnscaledValue("GanglinienTyp")
 						.byteValue())));
-		gl.setReferenz(atlGanglinie.getTextValue("Referenzganglinie").getText()
-				.equals("Ja"));
+		gl.setReferenz(davAtlGanglinie.getTextValue("Referenzganglinie")
+				.getText().equals("Ja"));
 		gl.setApproximationsVerfahren(ApproximationsVerfahren
-				.valueOf(AttGanglinienVerfahren.getZustand(atlGanglinie
+				.valueOf(AttGanglinienVerfahren.getZustand(davAtlGanglinie
 						.getUnscaledValue("GanglinienVerfahren").byteValue())));
-		gl.setBSplineOrdnung(atlGanglinie.getUnscaledValue("Ordnung")
+		gl.setBSplineOrdnung(davAtlGanglinie.getUnscaledValue("Ordnung")
 				.longValue());
 
-		final Data.Array stuetzstellen = atlGanglinie.getArray("Stützstelle");
+		final Data.Array stuetzstellen = davAtlGanglinie
+				.getArray("Stützstelle");
 		for (int i = 0; i < stuetzstellen.getLength(); i++) {
 			final Data stuetzstelle = stuetzstellen.getItem(i);
 			final Messwerte mw = new Messwerte(stuetzstelle.getScaledValue(
@@ -142,34 +150,42 @@ public class GlSpeicherUtil {
 	}
 
 	/**
-	 * @param atlGanglinie
-	 * @param gl
+	 * Konvertiert die uebergebene Ganglinie im internen Format in das
+	 * uebergebene DAV-Datum.
+	 * 
+	 * @param davAtlGanglinie
+	 *            ein DAV-Datum <code>atl.ganglinie</code>.
+	 * @param ganglinieIntern
+	 *            eine Ganglinie im internen Format.
 	 */
-	public static final void konvertiere(final Data atlGanglinie,
-			final GanglinieMQ gl) {
-		atlGanglinie.getReferenceValue("EreignisTyp").setSystemObject(
-				gl.getEreignisTyp().getSystemObject());
-		atlGanglinie.getUnscaledValue("AnzahlVerschmelzungen").set(
-				gl.getAnzahlVerschmelzungen());
-		atlGanglinie.getTimeValue("LetzteVerschmelzung").setMillis(
-				gl.getLetzteVerschmelzung());
-		atlGanglinie.getUnscaledValue("GanglinienTyp").set(
-				gl.getTyp().getTyp().intValue());
-		atlGanglinie.getUnscaledValue("Referenzganglinie").setText(
-				gl.isReferenz() ? "Ja" : "Nein");
-		atlGanglinie.getUnscaledValue("GanglinienVerfahren").set(
-				gl.getApproximationsVerfahren().getVerfahren().intValue());
-		atlGanglinie.getUnscaledValue("Ordnung").set(gl.getBSplineOrdnung());
+	public static final void konvertiere(final Data davAtlGanglinie,
+			final GanglinieMQ ganglinieIntern) {
+		davAtlGanglinie.getReferenceValue("EreignisTyp").setSystemObject(
+				ganglinieIntern.getEreignisTyp().getSystemObject());
+		davAtlGanglinie.getUnscaledValue("AnzahlVerschmelzungen").set(
+				ganglinieIntern.getAnzahlVerschmelzungen());
+		davAtlGanglinie.getTimeValue("LetzteVerschmelzung").setMillis(
+				ganglinieIntern.getLetzteVerschmelzung());
+		davAtlGanglinie.getUnscaledValue("GanglinienTyp").set(
+				ganglinieIntern.getTyp().getTyp().intValue());
+		davAtlGanglinie.getUnscaledValue("Referenzganglinie").setText(
+				ganglinieIntern.isReferenz() ? "Ja" : "Nein");
+		davAtlGanglinie.getUnscaledValue("GanglinienVerfahren").set(
+				ganglinieIntern.getApproximationsVerfahren().getVerfahren()
+						.intValue());
+		davAtlGanglinie.getUnscaledValue("Ordnung").set(
+				ganglinieIntern.getBSplineOrdnung());
 
-		final Data.Array stuetzstellen = atlGanglinie.getArray("Stützstelle");
-		stuetzstellen.setLength(gl.size());
+		final Data.Array stuetzstellen = davAtlGanglinie
+				.getArray("Stützstelle");
+		stuetzstellen.setLength(ganglinieIntern.size());
 
 		final List<Long> zeitStempelList = new ArrayList<Long>();
-		zeitStempelList.addAll(gl.keySet());
+		zeitStempelList.addAll(ganglinieIntern.keySet());
 		Collections.sort(zeitStempelList);
 		for (int i = 0; i < zeitStempelList.size(); i++) {
 			final Long zeitStempel = zeitStempelList.get(i);
-			final Messwerte mw = gl.get(zeitStempel);
+			final Messwerte mw = ganglinieIntern.get(zeitStempel);
 
 			stuetzstellen.getItem(i).getTimeValue("Zeit")
 					.setMillis(zeitStempel);
@@ -199,4 +215,5 @@ public class GlSpeicherUtil {
 			}
 		}
 	}
+
 }
