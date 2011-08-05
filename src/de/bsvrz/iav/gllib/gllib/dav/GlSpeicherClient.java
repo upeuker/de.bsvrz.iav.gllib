@@ -88,7 +88,7 @@ public class GlSpeicherClient implements GlSpeicherClientInterface,
 	private final SystemObject serverObj;
 
 	/** Applikations-ID. */
-	private final long appId;
+	private final SystemObject app;
 
 	/** Indiziert, ob dieser Prozess gerade auf eine Antwort vom Server wartet. */
 	private boolean inWait = false;
@@ -136,7 +136,7 @@ public class GlSpeicherClient implements GlSpeicherClientInterface,
 		objektFactory = objectFactory;
 		dav = objectFactory.getDav();
 		serverObj = GlSpeicherUtil.getGanglinienSpeicherServerObjekt(dav);
-		appId = dav.getLocalApplicationObject().getId();
+		app = dav.getLocalApplicationObject();
 
 		final AttributeGroup atgAnfrage = dav.getDataModel().getAttributeGroup(
 				"atg.ganglinienSpeicherAnfrage");
@@ -169,8 +169,9 @@ public class GlSpeicherClient implements GlSpeicherClientInterface,
 		}
 
 		final Data anfrageData = dav.createData(anfrageDD.getAttributeGroup());
-		anfrageData.getUnscaledValue("applikationsId").set(appId);
-		anfrageData.getUnscaledValue("anfrageId").set(++anfrageId);
+		anfrageData.getReferenceValue("absenderId").setSystemObject(app);
+		anfrageData.getTextValue("AbsenderZeichen").setText(
+				new Long(++anfrageId).toString());
 		anfrageData.getItem("Anfrage").getReferenceValue("Messquerschnitt")
 				.setSystemObject(mqSysObj);
 		anfrageData.getItem("Anfrage").getArray("EreignisTyp").setLength(0);
@@ -249,8 +250,9 @@ public class GlSpeicherClient implements GlSpeicherClientInterface,
 		}
 
 		final Data anfrageData = dav.createData(anfrageDD.getAttributeGroup());
-		anfrageData.getUnscaledValue("applikationsId").set(appId);
-		anfrageData.getUnscaledValue("anfrageId").set(++anfrageId);
+		anfrageData.getReferenceValue("absenderId").setSystemObject(app);
+		anfrageData.getTextValue("AbsenderZeichen").setText(
+				new Long(++anfrageId).toString());
 		anfrageData.getItem("Anfrage").getReferenceValue("Messquerschnitt")
 				.setSystemObject(mqSysObj);
 		anfrageData.getItem("Anfrage").getArray("EreignisTyp").setLength(0);
@@ -334,12 +336,13 @@ public class GlSpeicherClient implements GlSpeicherClientInterface,
 			for (final ResultData result : results) {
 				if (result != null && result.hasData()
 						&& result.getData() != null) {
-					final long appIdEmpfangen = result.getData()
-							.getUnscaledValue("applikationsId").longValue();
-					final long anfrageIdEmpfangen = result.getData()
-							.getUnscaledValue("anfrageId").longValue();
-					if (appIdEmpfangen == appId
-							&& anfrageIdEmpfangen == anfrageId) {
+					final SystemObject appEmpfangen = result.getData()
+							.getReferenceValue("absenderId").getSystemObject();
+					final String anfrageIdEmpfangen = result.getData()
+							.getTextValue("AbsenderZeichen").getText();
+					if (appEmpfangen.equals(app)
+							&& anfrageIdEmpfangen.equals(new Long(anfrageId)
+									.toString())) {
 						lastResult = result;
 						inWait = false;
 						synchronized (this) {
