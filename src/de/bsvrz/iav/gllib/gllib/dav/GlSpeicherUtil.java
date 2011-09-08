@@ -189,29 +189,33 @@ public class GlSpeicherUtil {
 
 			stuetzstellen.getItem(i).getTimeValue("Zeit")
 					.setMillis(zeitStempel);
-			if (mw.getQKfz() >= 0.0) {
+			if (mw.getQKfz() != null) {
 				stuetzstellen.getItem(i).getScaledValue("QKfz")
 						.set(mw.getQKfz());
 			} else {
-				stuetzstellen.getItem(i).getUnscaledValue("QKfz").set(-1);
+				stuetzstellen.getItem(i).getScaledValue("QKfz")
+						.set(Messwerte.UNDEFINIERT);
 			}
-			if (mw.getQLkw() >= 0.0) {
+			if (mw.getQLkw() != null) {
 				stuetzstellen.getItem(i).getScaledValue("QLkw")
 						.set(mw.getQLkw());
 			} else {
-				stuetzstellen.getItem(i).getUnscaledValue("QLkw").set(-1);
+				stuetzstellen.getItem(i).getScaledValue("QLkw")
+						.set(Messwerte.UNDEFINIERT);
 			}
-			if (mw.getVPkw() >= 0.0) {
+			if (mw.getVPkw() != null) {
 				stuetzstellen.getItem(i).getScaledValue("VPkw")
 						.set(mw.getVPkw());
 			} else {
-				stuetzstellen.getItem(i).getUnscaledValue("VPkw").set(-1);
+				stuetzstellen.getItem(i).getScaledValue("VPkw")
+						.set(Messwerte.UNDEFINIERT);
 			}
-			if (mw.getVLkw() >= 0.0) {
+			if (mw.getVLkw() != null) {
 				stuetzstellen.getItem(i).getScaledValue("VLkw")
 						.set(mw.getVLkw());
 			} else {
-				stuetzstellen.getItem(i).getUnscaledValue("VLkw").set(-1);
+				stuetzstellen.getItem(i).getScaledValue("VLkw")
+						.set(Messwerte.UNDEFINIERT);
 			}
 		}
 	}
