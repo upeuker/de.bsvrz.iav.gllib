@@ -29,6 +29,10 @@ sich in folgende Funktionsbereiche einteilen:
 Versionsgeschichte
 ==================
 
+2.0.4
+
+  - Anpassung wegen Änderung des Buildprozesses von Los E.
+  
 1.3.0
 
   - Betriebsinformation und Prüfprozedur liegen jetzt im Zustand "akzeptiert"
