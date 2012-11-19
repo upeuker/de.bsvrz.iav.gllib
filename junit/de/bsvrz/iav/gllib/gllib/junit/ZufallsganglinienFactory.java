@@ -1,7 +1,7 @@
 /*
  * Segment 5 Intelligente Analyseverfahren, SWE 5.5 Funktionen Ganglinie
- * Copyright (C) 2007 BitCtrl Systems GmbH 
- * 
+ * Copyright (C) 2007 BitCtrl Systems GmbH
+ *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
@@ -32,6 +32,8 @@ import com.bitctrl.Constants;
 
 import de.bsvrz.iav.gllib.gllib.Ganglinie;
 import de.bsvrz.iav.gllib.gllib.Stuetzstelle;
+import de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ;
+import de.bsvrz.iav.gllib.gllib.dav.Messwerte;
 import de.bsvrz.sys.funclib.bitctrl.modell.att.RelativerZeitstempel;
 import de.bsvrz.sys.funclib.bitctrl.modell.att.Zeitstempel;
 import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.attribute.AtlGanglinie;
@@ -92,15 +94,12 @@ public final class ZufallsganglinienFactory {
 		VerkehrsDatenKurzZeitMqGenerator generator;
 
 		g = new AtlGanglinie();
-		// g.setMessQuerschnitt(mq);
 		g.setLetzteVerschmelzung(new Zeitstempel(System.currentTimeMillis()));
 
 		t = 0;
 		generator = new VerkehrsDatenKurzZeitMqGenerator();
 		while (t <= 24 * 60 * 60 * 1000) {
 			OdVerkehrsDatenKurzZeitMq.Daten datum;
-			// final Messwerte messwerte;
-			// final Number qKfz, qLkw, vPkw, vLkw;
 
 			datum = generator.generiere();
 			final AtlStuetzstelle stuetzstelle = new AtlStuetzstelle();
@@ -113,17 +112,6 @@ public final class ZufallsganglinienFactory {
 			stuetzstelle.setVLkw(new AttStuetzStellenWert(datum.getVLkw()
 					.getWert().doubleValue()));
 			stuetzstelle.setZeit(new RelativerZeitstempel(t));
-			// qKfz = datum.getQKfz().getWert();
-			// qLkw = datum.getQLkw().getWert();
-			// vPkw = datum.getVPkw().getWert();
-			// vLkw = datum.getVLkw().getWert();
-			// messwerte = new Messwerte(qKfz != null ? qKfz.doubleValue() :
-			// null,
-			// qLkw != null ? qLkw.doubleValue() : null,
-			// vPkw != null ? vPkw.doubleValue() : null,
-			// vLkw != null ? vLkw.doubleValue() : null);
-			// g.getStuetzstelle().add((new Stuetzstelle<Messwerte>(t,
-			// messwerte));
 			g.getStuetzstelle().add(stuetzstelle);
 
 			t += abstand;
@@ -154,5 +142,38 @@ public final class ZufallsganglinienFactory {
 		}
 
 		return g;
+	}
+
+	/**
+	 * Erzeugt eine Ganglinien mit zufälligen Stützstellen.
+	 * <p>
+	 * <em>Hinweis:</em> Die Ganglinie wird keinem Ereignistyp zugeordnet.
+	 * Dieser muss nachgetragen werden, bevor die Ganglinien an den
+	 * Datenverteiler gesendet werden kann.
+	 * 
+	 * @param mq
+	 *            der Messquerschnitt der Ganglinie.
+	 * @param abstand
+	 *            der gewünschte Abstand Stützstellen in Millisekunden.
+	 * @return die generierte Ganglinie.
+	 */
+	public GanglinieMQ erzeugeGanglinieMQ(final MessQuerschnittAllgemein mq,
+			final long abstand) {
+
+		final AtlGanglinie daten = erzeugeGanglinie(mq, abstand);
+		final GanglinieMQ result = new GanglinieMQ();
+
+		result.setMessQuerschnitt(mq);
+		result.setLetzteVerschmelzung(daten.getLetzteVerschmelzung().getTime());
+
+		for (final AtlStuetzstelle stuetzStelle : daten.getStuetzstelle()) {
+			result.put(stuetzStelle.getZeit().getTime(), new Messwerte(
+					stuetzStelle.getQKfz().doubleValue(), stuetzStelle
+							.getQLkw().doubleValue(), stuetzStelle.getVPkw()
+							.doubleValue(), stuetzStelle.getVLkw()
+							.doubleValue()));
+		}
+
+		return result;
 	}
 }

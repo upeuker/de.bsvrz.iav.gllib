@@ -1,7 +1,7 @@
 /*
  * Segment 5 Intelligente Analyseverfahren, SWE 5.5 Funktionen Ganglinie
- * Copyright (C) 2007 BitCtrl Systems GmbH 
- * 
+ * Copyright (C) 2007 BitCtrl Systems GmbH
+ *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
@@ -36,16 +36,22 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.Calendar;
-import java.util.List;
 import java.util.logging.Logger;
 
-import de.bsvrz.iav.gllib.gllib.dav.GanglinieMQ;
-import de.bsvrz.iav.gllib.gllib.dav.Messwerte;
 import de.bsvrz.sys.funclib.bitctrl.daf.DavTools;
 import de.bsvrz.sys.funclib.bitctrl.modell.AnmeldeException;
 import de.bsvrz.sys.funclib.bitctrl.modell.DatensendeException;
+import de.bsvrz.sys.funclib.bitctrl.modell.DefaultObjektFactory;
 import de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory;
+import de.bsvrz.sys.funclib.bitctrl.modell.att.RelativerZeitstempel;
+import de.bsvrz.sys.funclib.bitctrl.modell.att.Zeitstempel;
+import de.bsvrz.sys.funclib.bitctrl.modell.metamodellglobal.attribute.AttJaNein;
 import de.bsvrz.sys.funclib.bitctrl.modell.tmereigniskalenderglobal.objekte.EreignisTyp;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.attribute.AtlGanglinie;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.attribute.AtlStuetzstelle;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.attribute.AttGanglinienTyp;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.attribute.AttGanglinienVerfahren;
+import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.attribute.AttStuetzStellenWert;
 import de.bsvrz.sys.funclib.bitctrl.modell.tmganglinienglobal.parameter.PdGanglinie;
 import de.bsvrz.sys.funclib.bitctrl.modell.tmverkehrglobal.objekte.MessQuerschnittAllgemein;
 
@@ -214,7 +220,7 @@ public class GanglinienFactory {
 	 *     qlkw REAL,
 	 *     vpkw REAL,
 	 *     vlkw REAL,
-	 * 	
+	 * 
 	 *     PRIMARY KEY (gl_id, tag, stunde),
 	 *     FOREIGN KEY (gl_id) REFERENCES ganglinien(id)
 	 * );
@@ -234,20 +240,20 @@ public class GanglinienFactory {
 	 *             bei einem Fehler beim Daten senden.
 	 * @see #getGanglinienTestdaten(int)
 	 */
-	public List<GanglinieMQ> anlegenGanglinien(final int tag)
+	public PdGanglinie.Daten anlegenGanglinien(final int tag)
 			throws SQLException, AnmeldeException, DatensendeException {
 		final PdGanglinie param;
 		PdGanglinie.Daten datum;
 
-		param = mq.getParameterDatensatz(PdGanglinie.class);
+		param = mq.getPdGanglinie();
 		param.anmeldenSender();
-		datum = param.abrufenDatum();
+		datum = param.getDatum();
 
 		assertFalse("Am Testmessquerschnitt " + mq
-				+ " sind bereits Ganglinien vorhanden.", datum.isValid()
-				&& datum.size() > 0);
+				+ " sind bereits Ganglinien vorhanden.", datum.dContainsDaten()
+				&& datum.getGanglinie().size() > 0);
 		datum = getGanglinienTestdaten(tag);
-		param.sendeDaten(datum);
+		param.sendeDatum(datum);
 
 		log.info("Ganglinien gesendet.");
 		return datum;
@@ -273,9 +279,9 @@ public class GanglinienFactory {
 		Integer ersterTag;
 		String sql;
 
-		factory = ObjektFactory.getInstanz();
-		glParam = mq.getParameterDatensatz(PdGanglinie.class);
-		datum = glParam.erzeugeDatum();
+		factory = DefaultObjektFactory.getInstanz();
+		glParam = mq.getPdGanglinie();
+		datum = glParam.createDatum();
 
 		statGl = connection.createStatement();
 		sql = "SELECT * FROM ganglinien";
@@ -287,22 +293,27 @@ public class GanglinienFactory {
 			final EreignisTyp ereignisTyp;
 			final Statement statSt;
 			final ResultSet rsSt;
-			final GanglinieMQ g;
+			final AtlGanglinie g;
 
 			id = rsGl.getInt(Ganglinien.ID.name());
-			pid = DavTools.generierePID(rsGl.getString(Ganglinien.EREIGNISTYP
-					.name()), EreignisTyp.PRAEFIX_PID);
+			pid = DavTools.generierePID(
+					rsGl.getString(Ganglinien.EREIGNISTYP.name()),
+					EreignisFactory.PRAEFIX_PID);
 			ereignisTyp = (EreignisTyp) factory.getModellobjekt(pid);
 			assert ereignisTyp != null : "Der Ereignistyp " + pid
 					+ " muss existieren.";
 
-			g = new GanglinieMQ();
-			g.setMessQuerschnitt(mq);
+			g = new AtlGanglinie();
+			// g.setMessQuerschnitt(mq);
 			g.setEreignisTyp(ereignisTyp);
-			g.setTyp(rsGl.getInt(Ganglinien.TYP.name()));
-			g.setApproximationsVerfahren(rsGl.getInt(Ganglinien.APPROXIMATION.name()));
-			g.setLetzteVerschmelzung(factory.getVerbindung().getTime());
-			g.setReferenz(rsGl.getBoolean(Ganglinien.REFERENZ.name()));
+			g.setGanglinienTyp(AttGanglinienTyp.getZustand((byte) rsGl
+					.getInt(Ganglinien.TYP.name())));
+			g.setGanglinienVerfahren(AttGanglinienVerfahren
+					.getZustand((byte) rsGl.getInt(Ganglinien.APPROXIMATION
+							.name())));
+			g.setLetzteVerschmelzung(new Zeitstempel(factory.getDav().getTime()));
+			g.setReferenzganglinie(rsGl.getBoolean(Ganglinien.REFERENZ.name()) ? AttJaNein.ZUSTAND_1_JA
+					: AttJaNein.ZUSTAND_0_NEIN);
 
 			statSt = connection.createStatement();
 			if (tag == ERSTER_TAG) {
@@ -353,11 +364,17 @@ public class GanglinienFactory {
 					vLkw = null;
 				}
 
-				g.put(t, new Messwerte(qKfz, qLkw, vPkw, vLkw));
+				final AtlStuetzstelle stuetzstelle = new AtlStuetzstelle();
+				stuetzstelle.setQKfz(new AttStuetzStellenWert(qKfz));
+				stuetzstelle.setQLkw(new AttStuetzStellenWert(qLkw));
+				stuetzstelle.setVLkw(new AttStuetzStellenWert(vLkw));
+				stuetzstelle.setVPkw(new AttStuetzStellenWert(vPkw));
+				stuetzstelle.setZeit(new RelativerZeitstempel(t));
+				g.getStuetzstelle().add(stuetzstelle);
 			}
 			statSt.close();
-			if (g.size() > 0) {
-				datum.add(g);
+			if (g.getStuetzstelle().size() > 0) {
+				datum.getGanglinie().add(g);
 			}
 		}
 		statGl.close();
@@ -368,6 +385,7 @@ public class GanglinienFactory {
 			log.fine("Ganglinien für den Tag " + tag
 					+ " aus Datenbank gelesen.");
 		}
+
 		return datum;
 	}
 
@@ -386,10 +404,10 @@ public class GanglinienFactory {
 		final PdGanglinie.Daten datum;
 
 		log.info("Lösche die Testganglinien am Messquerschnitt " + mq + " ...");
-		param = mq.getParameterDatensatz(PdGanglinie.class);
+		param = mq.getPdGanglinie();
 		param.anmeldenSender();
-		datum = param.erzeugeDatum();
-		param.sendeDaten(datum);
+		datum = param.createDatum();
+		param.sendeDatum(datum);
 		param.abmeldenSender();
 	}
 

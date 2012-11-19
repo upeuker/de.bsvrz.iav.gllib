@@ -1,7 +1,7 @@
 /*
  * Segment 5 Intelligente Analyseverfahren, SWE 5.5 Funktionen Ganglinie
- * Copyright (C) 2007 BitCtrl Systems GmbH 
- * 
+ * Copyright (C) 2007 BitCtrl Systems GmbH
+ *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
@@ -240,8 +240,8 @@ public class CubicSplineTest {
 			assertEquals(
 					"Der Zeitstempel der berechneten Stützstelle muss mit der Anfrage übereinstimmen.",
 					t, s.getZeitstempel());
-			assertTrue("Der Stützstellenwert darf nicht null sein.", s
-					.getWert() != null);
+			assertTrue("Der Stützstellenwert darf nicht null sein.",
+					s.getWert() != null);
 			// System.out.println(s);
 			++i;
 		}
@@ -272,7 +272,7 @@ public class CubicSplineTest {
 		cal.set(Calendar.SECOND, 0);
 		cal.set(Calendar.MILLISECOND, 0);
 
-		g = ZufallsganglinienFactory.getInstance().erzeugeGanglinie(null,
+		g = ZufallsganglinienFactory.getInstance().erzeugeGanglinieMQ(null,
 				Constants.MILLIS_PER_HOUR);
 		GanglinienMQOperationen.verschiebe(g, cal.getTimeInMillis());
 		assertEquals("Die Anzahl der Stützstellen muss stimmen.", 25, g.size());
