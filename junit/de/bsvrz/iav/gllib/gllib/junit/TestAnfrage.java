@@ -19,6 +19,12 @@ import de.bsvrz.sys.funclib.bitctrl.modell.tmverkehrglobal.objekte.MessQuerschni
 import de.bsvrz.sys.funclib.bitctrl.modell.tmverkehrglobal.objekte.MessQuerschnittAllgemein;
 import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
 
+/**
+ * Ausführung einer Testanfrage an die Ganglinienpeorgnose-Application.
+ * 
+ * @author BitCtrl Systems GmbH, peuker
+ * @version $Id$
+ */
 public class TestAnfrage implements StandardApplication {
 
 	/**
@@ -28,6 +34,7 @@ public class TestAnfrage implements StandardApplication {
 		StandardApplicationRunner.run(new TestAnfrage(), args);
 	}
 
+	@Override
 	public void initialize(final ClientDavInterface connection)
 			throws Exception {
 		final ObjektFactory factory = DefaultObjektFactory.getInstanz();
@@ -36,6 +43,7 @@ public class TestAnfrage implements StandardApplication {
 		final Ganglinienprognose prognose = new Ganglinienprognose(factory);
 		prognose.addAntwortListener(new GlProgAntwortListener() {
 
+			@Override
 			public void antwortEingetroffen(final GlProgAntwortEvent e) {
 				System.out.println(e);
 
@@ -65,6 +73,7 @@ public class TestAnfrage implements StandardApplication {
 		prognose.sendeAnfrage("Testanfrage", Collections.singleton(anfrage));
 	}
 
+	@Override
 	public void parseArguments(final ArgumentList argumentList)
 			throws Exception {
 		// TODO Auto-generated method stub

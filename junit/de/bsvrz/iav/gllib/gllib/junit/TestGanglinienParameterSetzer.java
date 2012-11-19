@@ -88,6 +88,7 @@ public final class TestGanglinienParameterSetzer implements StandardApplication 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void initialize(final ClientDavInterface connection) {
 		ObjektFactory factory;
 		List<? extends SystemObjekt> objekte;
@@ -188,6 +189,7 @@ public final class TestGanglinienParameterSetzer implements StandardApplication 
 	 * 
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void parseArguments(final ArgumentList argumentList)
 			throws Exception {
 		if (argumentList.hasArgument("-objekte")) {
