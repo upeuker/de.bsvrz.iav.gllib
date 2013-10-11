@@ -29,6 +29,11 @@ sich in folgende Funktionsbereiche einteilen:
 Versionsgeschichte
 ==================
 
+3.0.0
+
+  - Version von 2.x auf 3.x erhöht, weil der Legacy-Branch auch einen Sprung von
+    1.x auf 2.x gemacht hat.
+
 2.0.4
 
   - Anpassung wegen Änderung des Buildprozesses von Los E.

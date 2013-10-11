@@ -5,7 +5,7 @@ Bundle-Name: Funktionen Ganglinie (SWE 5.5)
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-SymbolicName: de.bsvrz.iav.gllib
 Bundle-Vendor: BitCtrl Systems GmbH
-Bundle-Version: 2.0.5.qualifier
+Bundle-Version: 3.0.0.qualifier
 Export-Package: de.bsvrz.iav.gllib.gllib,
  de.bsvrz.iav.gllib.gllib.dav,
  de.bsvrz.iav.gllib.gllib.junit
