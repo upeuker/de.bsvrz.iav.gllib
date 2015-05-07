@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ClassPath: .
 Bundle-ManifestVersion: 2
 Bundle-Name: Funktionen Ganglinie (SWE 5.5)
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-SymbolicName: de.bsvrz.iav.gllib
 Bundle-Vendor: BitCtrl Systems GmbH
 Bundle-Version: 3.0.0.qualifier
