@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+	version="2.0">
+
+	<persistence-unit name="glSpeicher" transaction-type="RESOURCE_LOCAL">
+		<class>de.bsvrz.iav.gllib.gllib.modell.db.DbMessQuerschnitt</class>
+
+		<properties>
+			<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver" />
+
+			<!-- Hibernate-spezifische Einstellungen -->
+			<!-- <property name="hibernate.dialect" value="org.hibernate.dialect.DerbyDialect" />-->
+			<property name="hibernate.dialect" value="de.bsvrz.iav.gllib.gllib.speicher.GlDerbyDialect" />
+			
+			<property name="hibernate.default_schema" value="app" />
+			
+			<!-- validate, update, create oder create-drop Bis auf validate sind diese 
+				Optionen mit Bedacht zu benutzen!! -->
+			<property name="hibernate.hbm2ddl.auto" value="update" />
+
+			<!-- Tracing: Jede SQL-Query anzeigen (erzeugt sehr viele Konsolenausgaben!) -->
+			<property name="cache.use_second_level_cache" value="false" />
+			<property name="hibernate.show_sql" value="false" />
+			<property name="hibernate.format_sql" value="true" />
+			<property name="hibernate.use_sql_comments" value="true" />
+		</properties>
+	</persistence-unit>
+
+</persistence>

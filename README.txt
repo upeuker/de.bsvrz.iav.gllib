@@ -1,0 +1,129 @@
+********************************************************************************
+* Segment 5 Intelligente Analyseverfahren (IAV), SWE Funktionen Ganglinie      *
+********************************************************************************
+
+Version: ${version}
+
+Übersicht
+=========
+
+Die SWE Funktionen Ganglinie ist als Softwarebibliothek ausgelegt, die von
+beliebigen anderen SWE eingebunden und genutzt werden kann. Sie selbst hat keine
+externe Schnittstelle und keine Benutzerschnittstelle. Sie kapselt für die
+Verwaltung von Ganglinien die Kommunikation mit dem Datenverteiler.
+
+Es werden allgemeine Funktionen zur Verfügung gestellt, die bei der Analyse und
+Bearbeitung von Ganglinien verwendet werden. Die einzelnen Funktionen lassen
+sich in folgende Funktionsbereiche einteilen:
+
+ - allgemeine Verwaltungsfunktionen
+ - Auswerte und Berechnungsfunktionen
+ - mathematische Operationen auf Ganglinien
+ - Pattern Matching
+
+
+Versionsgeschichte
+==================
+
+2.2.0
+  - Umstellung auf Maven-Build
+
+2.1.2
+  - Hibernate-Entity-Manager wurde geschlossen und dann wiederverwendet (internal #2849)
+
+2.1.1
+
+  - Bei Abfrage von historischen Ganglinien konnte die SWE GlLernen abstürzen.
+    (Mantis #2102)
+  - Loggausgaben beim Unit-Test werden wieder angezeigt.
+  - Überarbeitung der JUnit-Tests damit sie nach DAF-Upgrade wieder wie gewohnt
+    funtionieren.
+
+2.1.0
+
+  - Betriebsmeldungen um Systemobjekt in ID ergänzen, wenn sinnvoll.
+    (Mantis #2092)
+  - Quelltext kompatibler mit Java 6 gemacht.
+
+2.0.2
+
+  - Speicherung der Ganglinien in Datenbank optimiert
+
+2.0.0
+
+  - Umstellung der Ganglinienspeicherung von der Behandlung als Parameter
+    (atg.ganglinie) auf eine separate Speicherung in einer Derby DB.
+  - Bereitstellung einer Datenverteiler-Schnittstelle für das Lesen und
+    Schreiben von Ganglinien durch andere Applikationen
+  - Verringerung der Stützstellenanzahl. Es ist Pro Approximationsverfahren per
+    Kommdozeilenparameter einstellbar, welcher Aspekt von
+    atg.verkehrsDatenKurzMq verwendet werden soll.
+  - Vermeidung von Datenlücken. Die Verschmelzungsregeln des Ganglinienlernens
+    wurde derart geändert:
+    Alt: (Datenlücke + keine Datenlücke = Datenlücke),
+    Neu: (Datenlücke + keine Datenlücke = keine Datenlücke)
+
+1.3.0
+
+  - Betriebsinformation und Prüfprozedur liegen jetzt im Zustand "akzeptiert"
+    vor.
+
+1.2.1
+
+  - Betriebsinformation aktualisiert.
+
+1.2.0
+
+  - Anpassung an überarbeitetet Funktionsbibliothek de.bsvrz.sys.funclib.bitctrl
+  - Pattern-Matching überarbeitet
+  - Berechnung der Approximation durch B-Spline extrem beschleunigt
+  - Prüfprozedur und Prüfprotokoll in Release aufgenommen
+  - Betriebsinformation in Release aufgenommen
+
+1.1.0
+
+  - Umstellung auf neue Paketstruktur.
+  - Erweiterung des Funktionsumfangs für SWE 5.1 und 5.3.
+
+1.0.0
+
+  - Erste Auslieferung
+
+
+Bemerkungen
+===========
+
+Die SWE stellt eine Softwarebibliothek dar. Die JAR-Datei muss zur Benutzung
+lediglich im Klassenpfad der Anwendung aufgenommen werden. Die Beschreibung der
+Schnittstelle kann in der API-Dokumentation nachgelesen werden.
+
+
+Disclaimer
+==========
+
+Segment 5 Intelligente Analyseverfahren (IAV), SWE Funktionen Ganglinie
+Copyright (C) 2007 BitCtrl Systems GmbH
+
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation; either version 2 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public License along with
+this program; if not, write to the Free Software Foundation, Inc., 51
+Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+
+
+Kontakt
+=======
+
+BitCtrl Systems GmbH
+Weißenfelser Straße 67
+04229 Leipzig
+Phone: +49 341-490670
+mailto: info@bitctrl.de

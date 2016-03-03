@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# Das Verzeichnis, in dem das Backup landen soll
+backupVerzeichnis="$1"
+
+# Das aktuelle Verzeichnis der Ganglinien-Datenbank
+name=/home/vrz3/Datenverteiler/VRZ3BaWue/test1
+
+# Datenbank-Nutzer
+nutzer=derby
+
+# Datenbank-Passwort
+pass=derby
+
+java -cp ../../de.bsvrz.iav.gllib-runtime.jar de.bsvrz.iav.gllib.gllib.Backup $backupVerzeichnis localhost:1527 -name=$name -nutzer=$nutzer -pass=$pass &
+
+
