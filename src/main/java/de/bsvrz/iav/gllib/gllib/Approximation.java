@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weißenfelser Straße 67
+ * WeiÃŸenfelser StraÃŸe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -33,7 +33,7 @@ import java.util.SortedSet;
 import com.bitctrl.util.Interval;
 
 /**
- * Schnittstelle für alle Approximationsmethoden von Ganglinien.
+ * Schnittstelle fÃ¼r alle Approximationsmethoden von Ganglinien.
  * Implementierende Klassen sollten einen parameterlosen Konstruktor besitzen.
  *
  * @param <T>
@@ -44,61 +44,61 @@ import com.bitctrl.util.Interval;
 public interface Approximation<T> {
 
 	/**
-	 * Gibt die Stützstelle zum angegebenen Zeitstempel zurück.
+	 * Gibt die StÃ¼tzstelle zum angegebenen Zeitstempel zurÃ¼ck.
 	 *
 	 * @param zeitstempel
 	 *            Zeitstempel
-	 * @return Wert als Stützstelle
+	 * @return Wert als StÃ¼tzstelle
 	 */
 	Stuetzstelle<T> get(long zeitstempel);
 
 	/**
-	 * Gibt das Intervall zurück, in dem die Approximation definiert ist.
+	 * Gibt das Intervall zurÃ¼ck, in dem die Approximation definiert ist.
 	 *
 	 * @return das Intervall der Approximation.
 	 */
 	Interval getIntervall();
 
 	/**
-	 * Gibt die Liste der Stützstellen zurück, die der Approximation zu Grunde
+	 * Gibt die Liste der StÃ¼tzstellen zurÃ¼ck, die der Approximation zu Grunde
 	 * liegen.
 	 *
-	 * @return die unveränderliche Liste der Stützstellen.
+	 * @return die unverÃ¤nderliche Liste der StÃ¼tzstellen.
 	 */
 	List<Stuetzstelle<T>> getStuetzstellen();
 
 	/**
-	 * Führt notwendige Initialisierungsarbeiten der Approximation aus.
+	 * FÃ¼hrt notwendige Initialisierungsarbeiten der Approximation aus.
 	 */
 	void initialisiere();
 
 	/**
-	 * Bestimmt das Integrall über ein Intervall der Approximation.
+	 * Bestimmt das Integrall Ã¼ber ein Intervall der Approximation.
 	 *
 	 * @param intervall
 	 *            ein Intervall.
-	 * @return das Integral bzw. der Flächeninhalt unter der Kurve im Intervall.
+	 * @return das Integral bzw. der FlÃ¤cheninhalt unter der Kurve im Intervall.
 	 */
 	double integral(Interval intervall);
 
 	/**
-	 * Gibt eine Interpolation der Approximation zurück. Nützlich für die
+	 * Gibt eine Interpolation der Approximation zurÃ¼ck. NÃ¼tzlich fÃ¼r die
 	 * grafische Darstellung von Ganglinien, indem in einem festen Abstand
-	 * Stützstellen berechnet werden, die als Polygonzug darstellbar sind.
+	 * StÃ¼tzstellen berechnet werden, die als Polygonzug darstellbar sind.
 	 *
 	 * @param intervallBreite
-	 *            Die gewünschte Breite der Intervalle
-	 * @return Nach Zeitstempel sortierte Liste der Stützstellen
+	 *            Die gewÃ¼nschte Breite der Intervalle
+	 * @return Nach Zeitstempel sortierte Liste der StÃ¼tzstellen
 	 * @throws IllegalArgumentException
 	 *             Wenn die Intervallbreite kleiner oder gleich 0 ist
 	 */
 	SortedSet<Stuetzstelle<T>> interpoliere(long intervallBreite);
 
 	/**
-	 * Legt die Stützstellen der Approximation fest.
+	 * Legt die StÃ¼tzstellen der Approximation fest.
 	 *
 	 * @param stuetzstellen
-	 *            die Menge der bekannten Stützstellen.
+	 *            die Menge der bekannten StÃ¼tzstellen.
 	 */
 	void setStuetzstellen(Collection<Stuetzstelle<T>> stuetzstellen);
 

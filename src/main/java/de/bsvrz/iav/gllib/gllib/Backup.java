@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weißenfelser Straße 67
+ * WeiÃŸenfelser StraÃŸe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -38,22 +38,22 @@ import java.sql.SQLException;
  */
 public class Backup {
 
-	/** Optionales Kommandozeilenargument für den Datenbankname. */
+	/** Optionales Kommandozeilenargument fÃ¼r den Datenbankname. */
 	private static final String ARG_DATENBANK_NAME = "-name="; //$NON-NLS-1$
 
-	/** Defaultwert für den Datenbankname. */
+	/** Defaultwert fÃ¼r den Datenbankname. */
 	private static final String DEFAULT_DATENBANK_NAME = "gldb"; //$NON-NLS-1$
 
-	/** Optionales Kommandozeilenargument für den Datenbanknutzer. */
+	/** Optionales Kommandozeilenargument fÃ¼r den Datenbanknutzer. */
 	private static final String ARG_DATENBANK_NUTZER = "-nutzer="; //$NON-NLS-1$
 
-	/** Defaultwert für den Datenbanknutzer. */
+	/** Defaultwert fÃ¼r den Datenbanknutzer. */
 	private static final String DEFAULT_DATENBANK_NUTZER = "derby"; //$NON-NLS-1$
 
-	/** Optionales Kommandozeilenargument für das Datenbankpasswort. */
+	/** Optionales Kommandozeilenargument fÃ¼r das Datenbankpasswort. */
 	private static final String ARG_DATENBANK_PASSWORT = "-pass="; //$NON-NLS-1$
 
-	/** Defaultwert für das Datenbankpasswort. */
+	/** Defaultwert fÃ¼r das Datenbankpasswort. */
 	private static final String DEFAULT_DATENBANK_PASSWORT = "derby"; //$NON-NLS-1$
 
 	/**

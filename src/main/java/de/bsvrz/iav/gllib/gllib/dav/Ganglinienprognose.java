@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weißenfelser Straße 67
+ * WeiÃŸenfelser StraÃŸe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -48,9 +48,9 @@ import de.bsvrz.sys.funclib.bitctrl.modell.systemmodellglobal.objekte.Applikatio
 import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
- * Mit dieser Klasse können Applikation bequem Anfragen an die
+ * Mit dieser Klasse kÃ¶nnen Applikation bequem Anfragen an die
  * Ganglinienprognose stellen, ohne sich mit dem Datenkatalog
- * auseinanderzusetzen müssen.
+ * auseinanderzusetzen mÃ¼ssen.
  * <p>
  * <em>Hinweis:</em> Die Ganglinienprognose benutzt die
  * {@link de.bsvrz.sys.funclib.bitctrl.modell.ObjektFactory}. Die Factory muss
@@ -81,7 +81,7 @@ public final class Ganglinienprognose implements DatensatzUpdateListener {
 	private static Ganglinienprognose singleton;
 
 	/**
-	 * Gibt eine Ganglinienprognose als Singleton zurück.
+	 * Gibt eine Ganglinienprognose als Singleton zurÃ¼ck.
 	 *
 	 * @return die Ganglinienprognose als Singleton.
 	 */
@@ -159,7 +159,7 @@ public final class Ganglinienprognose implements DatensatzUpdateListener {
 	 * Fragt, ob die Ganglinienprognose Anfragen entgegennimmt. Wenn die
 	 * Sendesteuerung noch nicht geantwortet hat, wartet die Methode maximal 30
 	 * Sekunden. Hat die Sendesteuerung schon geantwortet, entsteht keine
-	 * Verzögerung.
+	 * VerzÃ¶gerung.
 	 *
 	 * @return {@code true}, wenn der Kalender verwendet werden kann.
 	 */
@@ -203,7 +203,7 @@ public final class Ganglinienprognose implements DatensatzUpdateListener {
 
 	/**
 	 * Sendet eine Anfrage an die Ganglinienprognose. Die anfragende Applikation
-	 * wird über ein Event über die eingetroffene Antwort informiert.
+	 * wird Ã¼ber ein Event Ã¼ber die eingetroffene Antwort informiert.
 	 *
 	 * @param absenderZeichen
 	 *            ein beliebiger Text.
@@ -232,7 +232,7 @@ public final class Ganglinienprognose implements DatensatzUpdateListener {
 	}
 
 	/**
-	 * Informiert alle registrierten Listener über eine Antwort.
+	 * Informiert alle registrierten Listener Ã¼ber eine Antwort.
 	 *
 	 * @param datum
 	 *            ein Datum mit der Antwort auf eine Prognoseanfrage.

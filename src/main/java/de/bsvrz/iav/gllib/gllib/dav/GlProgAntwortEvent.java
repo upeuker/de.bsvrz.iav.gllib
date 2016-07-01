@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weißenfelser Straße 67
+ * WeiÃŸenfelser StraÃŸe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -33,8 +33,8 @@ import java.util.List;
 import de.bsvrz.iav.gllib.gllib.modell.onlinedaten.OdPrognoseGanglinienAntwort;
 
 /**
- * Repräsentiert eine Antwortnachricht der Ganglinienprognose. Enthalten sind
- * für alle angefragten Messquerschnitte die prognostizuierten Ganglinien.
+ * ReprÃ¤sentiert eine Antwortnachricht der Ganglinienprognose. Enthalten sind
+ * fÃ¼r alle angefragten Messquerschnitte die prognostizuierten Ganglinien.
  * <p>
  * Hinweis: Dieses Event ist nicht Serialisierbar, da enthaltene Objekt nicht
  * serialisierbar sind.
@@ -43,7 +43,7 @@ import de.bsvrz.iav.gllib.gllib.modell.onlinedaten.OdPrognoseGanglinienAntwort;
  */
 public class GlProgAntwortEvent extends EventObject {
 
-	/** Die ID für die Serialisierung. */
+	/** Die ID fÃ¼r die Serialisierung. */
 	private static final long serialVersionUID = 1L;
 
 	/** Eine beliebige Zeichenkette die der Absender frei eingetragen kann. */
@@ -68,7 +68,7 @@ public class GlProgAntwortEvent extends EventObject {
 	}
 
 	/**
-	 * Gibt das Zeichen des Absenders zurück. Der Text wurde bei der Anfrage in
+	 * Gibt das Zeichen des Absenders zurÃ¼ck. Der Text wurde bei der Anfrage in
 	 * die Anfragenachricht eingetragen und von der Ganglinienprognose in die
 	 * Antwort kopiert. Somit kann die anfragende Applikation mehrere Anfragen
 	 * unterscheiden.
@@ -80,10 +80,10 @@ public class GlProgAntwortEvent extends EventObject {
 	}
 
 	/**
-	 * Gibt die Menge der prognostizierten Ganglinien zurück.
+	 * Gibt die Menge der prognostizierten Ganglinien zurÃ¼ck.
 	 * <p>
 	 * <em>Hinweis:</em> Es werden nicht alle Eigenschaften der Ganglinie in der
-	 * Prognoseganglinie gesetzt. Gesetzt werden nur die Stütztstellen, das
+	 * Prognoseganglinie gesetzt. Gesetzt werden nur die StÃ¼tztstellen, das
 	 * Approximationsverfahren und der Messquerschnitt.
 	 *
 	 * @return eine Menge von Ganglinien.

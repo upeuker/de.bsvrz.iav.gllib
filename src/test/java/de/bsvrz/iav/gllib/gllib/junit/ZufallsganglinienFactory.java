@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weißenfelser Straße 67
+ * WeiÃŸenfelser StraÃŸe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -39,7 +39,7 @@ import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.onlinedaten.OdVerkehrsDatenKu
 import de.bsvrz.sys.funclib.bitctrl.test.zufallsdaten.verkehr.VerkehrsDatenKurzZeitMqGenerator;
 
 /**
- * Erzeugt für bestimmte Ereignistypen je eine Ganglinie.
+ * Erzeugt fÃ¼r bestimmte Ereignistypen je eine Ganglinie.
  *
  * @author BitCtrl Systems GmbH, Falko Schumann
  */
@@ -53,7 +53,7 @@ public final class ZufallsganglinienFactory {
 	}
 
 	/**
-	 * Erzeugt eine Ganglinien mit zufälligen Stützstellen.
+	 * Erzeugt eine Ganglinien mit zufÃ¤lligen StÃ¼tzstellen.
 	 * <p>
 	 * <em>Hinweis:</em> Die Ganglinie wird keinem Ereignistyp zugeordnet.
 	 * Dieser muss nachgetragen werden, bevor die Ganglinien an den
@@ -62,7 +62,7 @@ public final class ZufallsganglinienFactory {
 	 * @param mq
 	 *            der Messquerschnitt der Ganglinie.
 	 * @param abstand
-	 *            der gewünschte Abstand Stützstellen in Millisekunden.
+	 *            der gewÃ¼nschte Abstand StÃ¼tzstellen in Millisekunden.
 	 * @return die generierte Ganglinie.
 	 */
 	public static GanglinieMQ erzeugeGanglinie(
@@ -104,10 +104,10 @@ public final class ZufallsganglinienFactory {
 	}
 
 	/**
-	 * Erzeugt eine Ganglinien mit zufälligen Stützstellen.
+	 * Erzeugt eine Ganglinien mit zufÃ¤lligen StÃ¼tzstellen.
 	 *
 	 * @param abstand
-	 *            der gewünschte Abstand Stützstellen in Millisekunden.
+	 *            der gewÃ¼nschte Abstand StÃ¼tzstellen in Millisekunden.
 	 * @return die generierte Ganglinie.
 	 */
 	public static Ganglinie<Double> erzeugeGanglinie(final long abstand) {

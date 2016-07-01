@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weiﬂenfelser Straﬂe 67
+ * Wei√üenfelser Stra√üe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -110,7 +110,7 @@ public class DbMessQuerschnitt {
 
 				/*
 				 * Warnung wegen "type safety" muss ignoriert werden, weil mit
-				 * instanceof nicht der generische Typ der Liste gepr¸ft werden
+				 * instanceof nicht der generische Typ der Liste gepr√ºft werden
 				 * kann.
 				 */
 				ganglinienDb = (List<DbGanglinie>) ois.readObject();

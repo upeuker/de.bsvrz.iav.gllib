@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weiﬂenfelser Straﬂe 67
+ * Wei√üenfelser Stra√üe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -29,8 +29,8 @@ package de.bsvrz.iav.gllib.gllib;
 import com.bitctrl.util.Interval;
 
 /**
- * Approximation durch eine Treppenfunktion. Von jeder St¸tzstelle geht eine
- * "Stufe" nach rechts, d.&nbsp;h. bis zur n‰chsten St¸tzstelle ‰ndert sich der
+ * Approximation durch eine Treppenfunktion. Von jeder St√ºtzstelle geht eine
+ * "Stufe" nach rechts, d.&nbsp;h. bis zur n√§chsten St√ºtzstelle √§ndert sich der
  * Wert nicht.
  *
  * @author BitCtrl Systems GmbH, Falko Schumann
@@ -51,13 +51,13 @@ public class Treppenfunktion extends AbstractApproximation<Double> {
 						&& (zeitstempel > getStuetzstellen()
 								.get(getStuetzstellen().size() - 1)
 								.getZeitstempel()))) {
-			// Zeitstempel liegt auﬂerhalb der Ganglinie
+			// Zeitstempel liegt au√üerhalb der Ganglinie
 			return new Stuetzstelle<Double>(zeitstempel, null);
 		}
 
 		if (getStuetzstellen().get(getStuetzstellen().size() - 1)
 				.getZeitstempel() == zeitstempel) {
-			// Sonderfall letzte St¸tzstelle
+			// Sonderfall letzte St√ºtzstelle
 			return getStuetzstellen().get(getStuetzstellen().size() - 1);
 		}
 
@@ -107,7 +107,7 @@ public class Treppenfunktion extends AbstractApproximation<Double> {
 
 		if (getStuetzstellen().get(start).getZeitstempel() < intervall
 				.getStart()) {
-			// Erste St¸tzstelle liegt vor Intervall
+			// Erste St√ºtzstelle liegt vor Intervall
 			long breite;
 
 			breite = intervall.getStart()
@@ -117,7 +117,7 @@ public class Treppenfunktion extends AbstractApproximation<Double> {
 
 		if (getStuetzstellen().get(ende).getZeitstempel() > intervall
 				.getEnd()) {
-			// Letzte St¸tzstelle liegt vor Intervall
+			// Letzte St√ºtzstelle liegt vor Intervall
 			long breite;
 
 			breite = getStuetzstellen().get(ende).getZeitstempel()

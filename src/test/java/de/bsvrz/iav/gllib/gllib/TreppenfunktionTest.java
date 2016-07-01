@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weißenfelser Straße 67
+ * WeiÃŸenfelser StraÃŸe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -65,7 +65,7 @@ public class TreppenfunktionTest {
 	}
 
 	/**
-	 * Testet ob der Spline durch alle Stützstellen durchgeht.
+	 * Testet ob der Spline durch alle StÃ¼tzstellen durchgeht.
 	 */
 	@Test
 	public void testGet() {
@@ -75,7 +75,7 @@ public class TreppenfunktionTest {
 		treppe = new Treppenfunktion();
 		treppe.setStuetzstellen(ganglinie.getStuetzstellen());
 
-		// Die existierenden Stützstellen
+		// Die existierenden StÃ¼tzstellen
 		t = 0;
 		assertEquals(ganglinie.getStuetzstellen().get(0), treppe.get(t));
 		t = 3000;
@@ -87,7 +87,7 @@ public class TreppenfunktionTest {
 		t = 9000;
 		assertEquals(ganglinie.getStuetzstellen().get(4), treppe.get(t));
 
-		// Punkte zwischen den Stützstellen
+		// Punkte zwischen den StÃ¼tzstellen
 		t = 1000;
 		assertEquals(new Stuetzstelle<Double>(t, 0.0), treppe.get(t));
 		t = 2000;
@@ -111,18 +111,18 @@ public class TreppenfunktionTest {
 		treppe = new Treppenfunktion();
 		treppe.setStuetzstellen(ganglinie.getStuetzstellen());
 
-		// Intervallgrenzen liegen auf Stützstellen
+		// Intervallgrenzen liegen auf StÃ¼tzstellen
 		intervall = new Interval(0, 9000);
 		assertEquals(190000.0, treppe.integral(intervall), 0.1);
 
-		// Intervallgrenzen liegen nicht auf Stützstellen
+		// Intervallgrenzen liegen nicht auf StÃ¼tzstellen
 		intervall = new Interval(3500, 8500);
 		assertEquals(170000.0, treppe.integral(intervall), 0.1);
 	}
 
 	/**
-	 * Macht einen Performance-Test mit einer zufälligen Ganglinie mit
-	 * Double-Stützstellen. Das Ergebnis wird nur auf der Konsole ausgegeben.
+	 * Macht einen Performance-Test mit einer zufÃ¤lligen Ganglinie mit
+	 * Double-StÃ¼tzstellen. Das Ergebnis wird nur auf der Konsole ausgegeben.
 	 */
 	@Test
 	@SuppressWarnings("static-method")
@@ -135,7 +135,7 @@ public class TreppenfunktionTest {
 		int i;
 
 		System.out.println(
-				"Starte Performancetest Treppenfunktion für einfache Ganglinie ...");
+				"Starte Performancetest Treppenfunktion fÃ¼r einfache Ganglinie ...");
 
 		cal = Calendar.getInstance();
 		cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -146,7 +146,7 @@ public class TreppenfunktionTest {
 		g = ZufallsganglinienFactory
 				.erzeugeGanglinie(Constants.MILLIS_PER_HOUR / 20);
 		GanglinienOperationen.verschiebe(g, cal.getTimeInMillis());
-		assertEquals("Die Anzahl der Stützstellen muss stimmen.", 481,
+		assertEquals("Die Anzahl der StÃ¼tzstellen muss stimmen.", 481,
 				g.size());
 
 		treppe = new Treppenfunktion();
@@ -164,15 +164,15 @@ public class TreppenfunktionTest {
 
 			s = g.getStuetzstelle(t);
 			assertEquals(
-					"Der Zeitstempel der berechneten Stützstelle muss mit der Anfrage übereinstimmen.",
+					"Der Zeitstempel der berechneten StÃ¼tzstelle muss mit der Anfrage Ã¼bereinstimmen.",
 					t, s.getZeitstempel());
-			assertTrue("Der Stützstellenwert darf nicht null sein.",
+			assertTrue("Der StÃ¼tzstellenwert darf nicht null sein.",
 					s.getWert() != null);
 			// System.out.println(s);
 			++i;
 		}
 		zeitstempel = System.currentTimeMillis() - zeitstempel;
-		System.out.println("Berechnung von " + i + " Stützstellen in "
+		System.out.println("Berechnung von " + i + " StÃ¼tzstellen in "
 				+ Timestamp.relativeTime(zeitstempel));
 	}
 

@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weiﬂenfelser Straﬂe 67
+ * Wei√üenfelser Stra√üe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -189,7 +189,7 @@ public class GlSpeicherUtil {
 				.intValue());
 
 		final Data.Array stuetzstellen = davAtlGanglinie
-				.getArray("St¸tzstelle"); //$NON-NLS-1$
+				.getArray("St√ºtzstelle"); //$NON-NLS-1$
 		for (int i = 0; i < stuetzstellen.getLength(); i++) {
 			final Data stuetzstelle = stuetzstellen.getItem(i);
 			final Messwerte mw = new Messwerte(
@@ -233,7 +233,7 @@ public class GlSpeicherUtil {
 				ganglinieIntern.getBSplineOrdnung());
 
 		final Data.Array stuetzstellen = davAtlGanglinie
-				.getArray("St¸tzstelle"); //$NON-NLS-1$
+				.getArray("St√ºtzstelle"); //$NON-NLS-1$
 		stuetzstellen.setLength(ganglinieIntern.size());
 
 		final List<Long> zeitStempelList = new ArrayList<Long>();

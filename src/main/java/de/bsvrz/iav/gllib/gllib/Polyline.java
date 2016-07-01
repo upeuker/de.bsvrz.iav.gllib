@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weiﬂenfelser Straﬂe 67
+ * Wei√üenfelser Stra√üe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -30,9 +30,9 @@ import com.bitctrl.util.Interval;
 
 /**
  * Approximation einer Ganglinie mit Hilfe von Polylines. Der Wert der
- * St¸tzstelle zu einem Zeitstempel wird nach folgender Formel berechnet:
+ * St√ºtzstelle zu einem Zeitstempel wird nach folgender Formel berechnet:
  * <p>
- * <img src="doc-files/formel_polyline.png" alt="Formel f¸r Polylinie">
+ * <img src="doc-files/formel_polyline.png" alt="Formel f√ºr Polylinie">
  *
  *
  * @author BitCtrl Systems GmbH, Falko Schumann
@@ -54,7 +54,7 @@ public class Polyline extends AbstractApproximation<Double> {
 						&& (zeitstempel > getStuetzstellen()
 								.get(getStuetzstellen().size() - 1)
 								.getZeitstempel()))) {
-			// Zeitstempel liegt auﬂerhalb der Ganglinie
+			// Zeitstempel liegt au√üerhalb der Ganglinie
 			return new Stuetzstelle<Double>(zeitstempel, null);
 		}
 
@@ -70,7 +70,7 @@ public class Polyline extends AbstractApproximation<Double> {
 		}
 
 		if (index == -1) {
-			// Zeitstempel liegt auﬂerhalb der Ganglinie
+			// Zeitstempel liegt au√üerhalb der Ganglinie
 			return new Stuetzstelle<Double>(zeitstempel, null);
 		}
 
@@ -96,7 +96,7 @@ public class Polyline extends AbstractApproximation<Double> {
 
 	/**
 	 * Die festgelegte Breite der Teilintervalle wird ignoriert, da sich das
-	 * Integral der Polylinie exakt bestimmen l‰sst.
+	 * Integral der Polylinie exakt bestimmen l√§sst.
 	 *
 	 * {@inheritDoc}
 	 */
@@ -132,14 +132,14 @@ public class Polyline extends AbstractApproximation<Double> {
 
 		if (getStuetzstellen().get(start).getZeitstempel() < intervall
 				.getStart()) {
-			// Erste St¸tzstelle liegt vor Intervall
+			// Erste St√ºtzstelle liegt vor Intervall
 			long breite;
 			double hDreieck, hRechteck;
 
 			hRechteck = getStuetzstellen().get(start).getWert();
 			hDreieck = get(intervall.getStart()).getWert();
 			if (hRechteck > hDreieck) {
-				// Das Rechteck muss die kleinere Hˆhe haben.
+				// Das Rechteck muss die kleinere H√∂he haben.
 				double tmp;
 
 				tmp = hRechteck;
@@ -155,14 +155,14 @@ public class Polyline extends AbstractApproximation<Double> {
 
 		if (getStuetzstellen().get(ende).getZeitstempel() > intervall
 				.getEnd()) {
-			// Letzte St¸tzstelle liegt vor Intervall
+			// Letzte St√ºtzstelle liegt vor Intervall
 			long breite;
 			double hDreieck, hRechteck;
 
 			hRechteck = getStuetzstellen().get(ende).getWert();
 			hDreieck = get(intervall.getEnd()).getWert();
 			if (hRechteck > hDreieck) {
-				// Das Rechteck muss die kleinere Hˆhe haben.
+				// Das Rechteck muss die kleinere H√∂he haben.
 				double tmp;
 
 				tmp = hRechteck;

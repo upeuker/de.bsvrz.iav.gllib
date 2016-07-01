@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weißenfelser Straße 67
+ * WeiÃŸenfelser StraÃŸe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -48,7 +48,7 @@ import de.bsvrz.sys.funclib.bitctrl.math.algebra.Vektor;
 public class CubicSpline extends AbstractApproximation<Double> {
 
 	/**
-	 * Faktor mit dem der Zeitstempel für das Rechnen verkleinert wird, um
+	 * Faktor mit dem der Zeitstempel fÃ¼r das Rechnen verkleinert wird, um
 	 * numerische Fehler zu verkleinern, Standard: 1 Minute.
 	 */
 	private long faktor = Constants.MILLIS_PER_MINUTE;
@@ -65,7 +65,7 @@ public class CubicSpline extends AbstractApproximation<Double> {
 	/** Der vierte Koeffizient des Polynoms. */
 	private RationaleZahl[] d;
 
-	/** Die Abstände der Stützstellen. */
+	/** Die AbstÃ¤nde der StÃ¼tzstellen. */
 	private RationaleZahl[] h;
 
 	/**
@@ -77,11 +77,11 @@ public class CubicSpline extends AbstractApproximation<Double> {
 				|| (zeitstempel < getStuetzstellen().get(0).getZeitstempel())
 				|| (zeitstempel > getStuetzstellen()
 						.get(getStuetzstellen().size() - 1).getZeitstempel())) {
-			// Zeitstempel liegt außerhalb der Ganglinie
+			// Zeitstempel liegt auÃŸerhalb der Ganglinie
 			return new Stuetzstelle<Double>(zeitstempel, null);
 		}
 
-		// Ränder der Ganglinie unverändert ausliefern
+		// RÃ¤nder der Ganglinie unverÃ¤ndert ausliefern
 		if (getStuetzstellen().get(0).getZeitstempel() == zeitstempel) {
 			return getStuetzstellen().get(0);
 		} else if (getStuetzstellen().get(getStuetzstellen().size() - 1)
@@ -171,7 +171,7 @@ public class CubicSpline extends AbstractApproximation<Double> {
 	}
 
 	/**
-	 * Verwendet eine Polyline-Approximation des Splines zur näherungsweisen
+	 * Verwendet eine Polyline-Approximation des Splines zur nÃ¤herungsweisen
 	 * Bestimmung des Integrals.
 	 *
 	 * {@inheritDoc}
@@ -197,11 +197,11 @@ public class CubicSpline extends AbstractApproximation<Double> {
 	}
 
 	/**
-	 * Berechnet die Stützstelle.
+	 * Berechnet die StÃ¼tzstelle.
 	 *
 	 * @param zeitstempel
-	 *            Zeitstempel der gesuchten Stützstelle
-	 * @return Die gesuchte Stützstelle
+	 *            Zeitstempel der gesuchten StÃ¼tzstelle
+	 * @return Die gesuchte StÃ¼tzstelle
 	 */
 	private Stuetzstelle<Double> berechneStuetzstelle(final long zeitstempel) {
 		RationaleZahl r, x, xi;
@@ -227,8 +227,8 @@ public class CubicSpline extends AbstractApproximation<Double> {
 	}
 
 	/**
-	 * Gibt den Faktor mit dem der Zeitstempel für das Rechnen verkleinert wird
-	 * zurück.
+	 * Gibt den Faktor mit dem der Zeitstempel fÃ¼r das Rechnen verkleinert wird
+	 * zurÃ¼ck.
 	 *
 	 * @return der Faktor
 	 * @see #setFaktor(long)
@@ -238,13 +238,13 @@ public class CubicSpline extends AbstractApproximation<Double> {
 	}
 
 	/**
-	 * Legt den Faktor mit dem der Zeitstempel für das Rechnen verkleinert wird
+	 * Legt den Faktor mit dem der Zeitstempel fÃ¼r das Rechnen verkleinert wird
 	 * fest. Der Faktor dient dazu den numerischen Fehler bei der
 	 * Initialisierung des Cubic-Splines zu verkleinern.
 	 * <p>
-	 * <em>Hinweis:</em> Wenn der Faktor geändert wird, muss anschließend
-	 * {@link #initialisiere()} aufgerufen werden, um die Änderung zu
-	 * übernehmen.
+	 * <em>Hinweis:</em> Wenn der Faktor geÃ¤ndert wird, muss anschlieÃŸend
+	 * {@link #initialisiere()} aufgerufen werden, um die Ã„nderung zu
+	 * Ã¼bernehmen.
 	 *
 	 * @param faktor
 	 *            the faktor to set

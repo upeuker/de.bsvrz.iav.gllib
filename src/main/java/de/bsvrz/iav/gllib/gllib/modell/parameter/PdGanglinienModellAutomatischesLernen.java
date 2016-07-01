@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weiﬂenfelser Straﬂe 67
+ * Wei√üenfelser Stra√üe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -58,7 +58,7 @@ public class PdGanglinienModellAutomatischesLernen extends
 		private Status datenStatus = Datum.Status.UNDEFINIERT;
 
 		/**
-		 * Gibt an, in welchen Zeitabst‰nden der Lernvorgang gestartet werden
+		 * Gibt an, in welchen Zeitabst√§nden der Lernvorgang gestartet werden
 		 * soll.
 		 */
 		private CronPattern aktualisierungsintervall;
@@ -70,8 +70,8 @@ public class PdGanglinienModellAutomatischesLernen extends
 		private long datenMindestalter;
 
 		/**
-		 * Wenn dieses Abstandsmaﬂ (in Prozent) beim zyklischen Archivieren und
-		 * Vergleichen von Ganglinien ¸berschritten wird, wird eine Meldung
+		 * Wenn dieses Abstandsma√ü (in Prozent) beim zyklischen Archivieren und
+		 * Vergleichen von Ganglinien √ºberschritten wird, wird eine Meldung
 		 * erzeugt.
 		 */
 		private int maxVergleichsAbstand;
@@ -93,7 +93,7 @@ public class PdGanglinienModellAutomatischesLernen extends
 		}
 
 		/**
-		 * Gibt an, in welchen Zeitabst‰nden der Lernvorgang gestartet werden
+		 * Gibt an, in welchen Zeitabst√§nden der Lernvorgang gestartet werden
 		 * soll.
 		 *
 		 * @return das aktuelle Aktualisierungsintervall in Cron-Syntax.
@@ -121,8 +121,8 @@ public class PdGanglinienModellAutomatischesLernen extends
 		}
 
 		/**
-		 * Wenn dieses Abstandsmaﬂ beim zyklischen Archivieren und Vergleichen
-		 * von Ganglinien ¸berschritten wird, wird eine Meldung erzeugt.
+		 * Wenn dieses Abstandsma√ü beim zyklischen Archivieren und Vergleichen
+		 * von Ganglinien √ºberschritten wird, wird eine Meldung erzeugt.
 		 *
 		 * @return der aktuelle maximale Vergleichsabstand in Prozent.
 		 */
@@ -131,7 +131,7 @@ public class PdGanglinienModellAutomatischesLernen extends
 		}
 
 		/**
-		 * Gibt an, in welchen Zeitabst‰nden der Lernvorgang gestartet werden
+		 * Gibt an, in welchen Zeitabst√§nden der Lernvorgang gestartet werden
 		 * soll.
 		 *
 		 * @param aktualisierungsintervall
@@ -154,8 +154,8 @@ public class PdGanglinienModellAutomatischesLernen extends
 		}
 
 		/**
-		 * Wenn dieses Abstandsmaﬂ beim zyklischen Archivieren und Vergleichen
-		 * von Ganglinien ¸berschritten wird, wird eine Meldung erzeugt.
+		 * Wenn dieses Abstandsma√ü beim zyklischen Archivieren und Vergleichen
+		 * von Ganglinien √ºberschritten wird, wird eine Meldung erzeugt.
 		 *
 		 * @param maxVergleichsAbstand
 		 *            der neue maximale Vergleichsabstand in Prozent.

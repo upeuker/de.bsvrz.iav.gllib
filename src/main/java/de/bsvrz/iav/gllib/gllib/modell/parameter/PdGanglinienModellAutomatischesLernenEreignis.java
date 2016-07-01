@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weißenfelser Straße 67
+ * WeiÃŸenfelser StraÃŸe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -62,7 +62,7 @@ public class PdGanglinienModellAutomatischesLernenEreignis extends
 		/** Die Liste der Ausschlussereignistypen. */
 		private final List<EreignisTyp> ausschlussliste = new ArrayList<EreignisTyp>();
 
-		/** Die Liste der Bezugsereignistypen (nur für relative Ganglinien). */
+		/** Die Liste der Bezugsereignistypen (nur fÃ¼r relative Ganglinien). */
 		private final List<EreignisTyp> bezugsereignistypen = new ArrayList<EreignisTyp>();
 
 		/**
@@ -102,7 +102,7 @@ public class PdGanglinienModellAutomatischesLernenEreignis extends
 		/** Der maximale Abstand, bei dem Ganglinien verschmolzen werden. */
 		private int maxAbstand;
 
-		/** Die maximale Anzahl von Ganglinien für den Ereignistyp. */
+		/** Die maximale Anzahl von Ganglinien fÃ¼r den Ereignistyp. */
 		private long maxGanglinien;
 
 		/** Der maximal erlaubte Fehler beim Pattern-Matching. */
@@ -158,7 +158,7 @@ public class PdGanglinienModellAutomatischesLernenEreignis extends
 		}
 
 		/**
-		 * Gibt die Liste der Bezugsereignistypen (nur für relative Ganglinien)
+		 * Gibt die Liste der Bezugsereignistypen (nur fÃ¼r relative Ganglinien)
 		 * wieder.
 		 *
 		 * @return {@code bezugsereignistypen}.
@@ -243,7 +243,7 @@ public class PdGanglinienModellAutomatischesLernenEreignis extends
 		}
 
 		/**
-		 * Gibt die maximale Anzahl von Ganglinien für den Ereignistyp wieder.
+		 * Gibt die maximale Anzahl von Ganglinien fÃ¼r den Ereignistyp wieder.
 		 *
 		 * @return {@code maxGanglinien}.
 		 */

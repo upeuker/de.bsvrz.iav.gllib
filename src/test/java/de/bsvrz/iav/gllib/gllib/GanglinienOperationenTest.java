@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weißenfelser Straße 67
+ * WeiÃŸenfelser StraÃŸe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -78,11 +78,11 @@ public class GanglinienOperationenTest {
 		soll.put(90L, 50.0);
 		soll.put(100L, 40.0);
 
-		assertEquals("Die Anzahl der Stützstellen muss übereinstimmen.",
+		assertEquals("Die Anzahl der StÃ¼tzstellen muss Ã¼bereinstimmen.",
 				soll.size(), ist.size());
 		for (final Long t : soll.keySet()) {
 			assertEquals(
-					"Der Stützstellenwert für " + t + " muss übereinstimmen.",
+					"Der StÃ¼tzstellenwert fÃ¼r " + t + " muss Ã¼bereinstimmen.",
 					soll.get(t), ist.get(t));
 		}
 	}
@@ -120,11 +120,11 @@ public class GanglinienOperationenTest {
 		soll.put(90L, 0.25);
 		soll.put(100L, 0.3333333333);
 
-		assertEquals("Die Anzahl der Stützstellen muss übereinstimmen.",
+		assertEquals("Die Anzahl der StÃ¼tzstellen muss Ã¼bereinstimmen.",
 				soll.size(), ist.size());
 		for (final Long t : soll.keySet()) {
 			assertEquals(
-					"Der Stützstellenwert für " + t + " muss übereinstimmen.",
+					"Der StÃ¼tzstellenwert fÃ¼r " + t + " muss Ã¼bereinstimmen.",
 					soll.get(t), ist.get(t), 0.00001);
 		}
 	}
@@ -162,11 +162,11 @@ public class GanglinienOperationenTest {
 		soll.put(90L, 400.0);
 		soll.put(100L, 300.0);
 
-		assertEquals("Die Anzahl der Stützstellen muss übereinstimmen.",
+		assertEquals("Die Anzahl der StÃ¼tzstellen muss Ã¼bereinstimmen.",
 				soll.size(), ist.size());
 		for (final Long t : soll.keySet()) {
 			assertEquals(
-					"Der Stützstellenwert für " + t + " muss übereinstimmen.",
+					"Der StÃ¼tzstellenwert fÃ¼r " + t + " muss Ã¼bereinstimmen.",
 					soll.get(t), ist.get(t));
 		}
 	}
@@ -204,11 +204,11 @@ public class GanglinienOperationenTest {
 		soll.put(90L, -30.0);
 		soll.put(100L, -20.0);
 
-		assertEquals("Die Anzahl der Stützstellen muss übereinstimmen.",
+		assertEquals("Die Anzahl der StÃ¼tzstellen muss Ã¼bereinstimmen.",
 				soll.size(), ist.size());
 		for (final Long t : soll.keySet()) {
 			assertEquals(
-					"Der Stützstellenwert für " + t + " muss übereinstimmen.",
+					"Der StÃ¼tzstellenwert fÃ¼r " + t + " muss Ã¼bereinstimmen.",
 					soll.get(t), ist.get(t));
 		}
 	}

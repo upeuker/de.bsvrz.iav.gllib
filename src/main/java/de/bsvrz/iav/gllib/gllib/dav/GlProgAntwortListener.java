@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weißenfelser Straße 67
+ * WeiÃŸenfelser StraÃŸe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -29,7 +29,7 @@ package de.bsvrz.iav.gllib.gllib.dav;
 import java.util.EventListener;
 
 /**
- * Schnittsstelle die anfragende Applikationen implementieren müssen, um über
+ * Schnittsstelle die anfragende Applikationen implementieren mÃ¼ssen, um Ã¼ber
  * das Eintreffen der Prognoseantwort informiert zu werden.
  *
  * @author BitCtrl Systems GmbH, Schumann
@@ -37,7 +37,7 @@ import java.util.EventListener;
 public interface GlProgAntwortListener extends EventListener {
 
 	/**
-	 * Wird ausgelößt, wenn die Antwort auf eine Prognoseanfrage eingetroffen
+	 * Wird ausgelÃ¶ÃŸt, wenn die Antwort auf eine Prognoseanfrage eingetroffen
 	 * ist.
 	 *
 	 * @param e

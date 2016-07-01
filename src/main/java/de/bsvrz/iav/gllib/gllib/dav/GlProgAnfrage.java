@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weißenfelser Straße 67
+ * WeiÃŸenfelser StraÃŸe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -39,17 +39,17 @@ import de.bsvrz.sys.funclib.bitctrl.modell.kalender.objekte.EreignisTyp;
 import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.objekte.MessQuerschnittAllgemein;
 
 /**
- * Repräsentiert eine einzelne Anfrage einer Anfragenachricht an die
+ * ReprÃ¤sentiert eine einzelne Anfrage einer Anfragenachricht an die
  * Ganglinienprognose.
  *
  * @author BitCtrl Systems GmbH, Schumann
  */
 public class GlProgAnfrage {
 
-	/** Messquerschnitt für den eine Ganglinie angefragt wird. */
+	/** Messquerschnitt fÃ¼r den eine Ganglinie angefragt wird. */
 	private MessQuerschnittAllgemein messQuerschnitt;
 
-	/** Der Zeitraum in für den die Ganglinie bestimmt werden soll. */
+	/** Der Zeitraum in fÃ¼r den die Ganglinie bestimmt werden soll. */
 	private Interval prognoseZeitraum;
 
 	/** Nur Auswahlverfahren der langfristigen Prognose benutzen? */
@@ -61,13 +61,13 @@ public class GlProgAnfrage {
 	/** Soll eine zyklische Prognose erstellt werden? */
 	private boolean zyklischePrognose;
 
-	/** Spätestens nach dieser Zeit die Prognose prüfen. */
+	/** SpÃ¤testens nach dieser Zeit die Prognose prÃ¼fen. */
 	private long pruefIntervall;
 
 	/** Maximale &Auml;nderung in Prozent zwischen zwei zyklischen Prognosen. */
 	private int schwelle;
 
-	/** Spätestens nach dieser Zeit eine Prognose publizieren. */
+	/** SpÃ¤testens nach dieser Zeit eine Prognose publizieren. */
 	private long sendeIntervall;
 
 	/**
@@ -79,11 +79,11 @@ public class GlProgAnfrage {
 
 	/**
 	 * Generiert eine einmalige Anfrage. Die Option "zyklische Anfrage" wird auf
-	 * {@code false} gesetzt und die davon abhängigen Parameter mit
+	 * {@code false} gesetzt und die davon abhÃ¤ngigen Parameter mit
 	 * Defaultwerten belegt.
 	 *
 	 * @param mq
-	 *            der Messquerschnitt für den eine Ganglinie angefragt wird.
+	 *            der Messquerschnitt fÃ¼r den eine Ganglinie angefragt wird.
 	 * @param prognoseZeitraum
 	 *            der Zeitraum der Prognose.
 	 * @param nurLangfristigeAuswahl
@@ -100,7 +100,7 @@ public class GlProgAnfrage {
 	 * Generiert eine Anfrage.
 	 *
 	 * @param mq
-	 *            der Messquerschnitt für den eine Ganglinie angefragt wird.
+	 *            der Messquerschnitt fÃ¼r den eine Ganglinie angefragt wird.
 	 * @param prognoseZeitraum
 	 *            der Zeitraum der Prognose.
 	 * @param nurLangfristigeAuswahl
@@ -108,12 +108,12 @@ public class GlProgAnfrage {
 	 * @param zyklischePrognose
 	 *            Soll eine zyklische Prognose erstellt werden?
 	 * @param pruefIntervall
-	 *            Spätestens nach dieser Zeit die Prognose prüfen.
+	 *            SpÃ¤testens nach dieser Zeit die Prognose prÃ¼fen.
 	 * @param schwelle
 	 *            Maximale &Auml;nderung in Prozent zwischen zwei zyklischen
 	 *            Prognosen.
 	 * @param sendeIntervall
-	 *            Spätestens nach dieser Zeit eine Prognose publizieren.
+	 *            SpÃ¤testens nach dieser Zeit eine Prognose publizieren.
 	 */
 	public GlProgAnfrage(final MessQuerschnittAllgemein mq,
 			final Interval prognoseZeitraum,
@@ -136,12 +136,12 @@ public class GlProgAnfrage {
 	 * <p>
 	 * Hinweis: Das Ergebnis wird auch im Parameter abgelegt!
 	 * <p>
-	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
-	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
+	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der Ã¶ffentlichen API und
+	 * sollte nicht auÃŸerhalb der Ganglinie-API verwendet werden.
 	 *
 	 * @param daten
 	 *            ein Datum, welches eine (leere) Anfrage darstellt.
-	 * @return das ausgefüllte Datum.
+	 * @return das ausgefÃ¼llte Datum.
 	 */
 	public Data getDaten(final Data daten) {
 		Array feld;
@@ -153,7 +153,7 @@ public class GlProgAnfrage {
 				prognoseZeitraum.getStart());
 		daten.getTimeValue("ZeitpunktPrognoseEnde").setMillis( //$NON-NLS-1$
 				prognoseZeitraum.getEnd());
-		daten.getScaledValue("Überprüfungsintervall").set( //$NON-NLS-1$
+		daten.getScaledValue("ÃœberprÃ¼fungsintervall").set( //$NON-NLS-1$
 				pruefIntervall / Constants.MILLIS_PER_SECOND);
 		daten.getScaledValue("Aktualisierungsschwelle").set(schwelle); //$NON-NLS-1$
 		daten.getScaledValue("Aktualisierungsintervall").set( //$NON-NLS-1$
@@ -183,7 +183,7 @@ public class GlProgAnfrage {
 	}
 
 	/**
-	 * Gibt die Menge der ausgeschlossenen Ereignistypen zurück.
+	 * Gibt die Menge der ausgeschlossenen Ereignistypen zurÃ¼ck.
 	 *
 	 * @return Ereignistypeniterator
 	 */
@@ -192,7 +192,7 @@ public class GlProgAnfrage {
 	}
 
 	/**
-	 * Gibt den Messquerschnitt für den eine Ganglinie angefragt wird zurück.
+	 * Gibt den Messquerschnitt fÃ¼r den eine Ganglinie angefragt wird zurÃ¼ck.
 	 *
 	 * @return Ein Messquerschnitt
 	 */
@@ -201,11 +201,11 @@ public class GlProgAnfrage {
 	}
 
 	/**
-	 * Gibt den Prognosezeitraum zurück.
+	 * Gibt den Prognosezeitraum zurÃ¼ck.
 	 *
-	 * @return der Zeitraum für den die Ganglinie bestimmt wird oder
+	 * @return der Zeitraum fÃ¼r den die Ganglinie bestimmt wird oder
 	 *         {@code null}, wenn kein Intervall gesetzt ist bzw. das Intervall
-	 *         ungültig ist. Bei einem ungültigen Intervall liegt der
+	 *         ungÃ¼ltig ist. Bei einem ungÃ¼ltigen Intervall liegt der
 	 *         Startzeitpunkt <em>hinter</em> dem Endzeitpunkt.
 	 */
 	public Interval getPrognoseZeitraum() {
@@ -213,9 +213,9 @@ public class GlProgAnfrage {
 	}
 
 	/**
-	 * Spätestens nach dieser Zeit wird die Prognose geprüft.
+	 * SpÃ¤testens nach dieser Zeit wird die Prognose geprÃ¼ft.
 	 *
-	 * @return das Prüfintervall
+	 * @return das PrÃ¼fintervall
 	 * @see #isZyklischePrognose()
 	 */
 	public long getPruefIntervall() {
@@ -224,7 +224,7 @@ public class GlProgAnfrage {
 
 	/**
 	 * Maximale &Auml;nderung in Prozent zwischen zwei zyklischen Prognosen.
-	 * Wird dieser Schwellwert überschritten, wird eine neue Prognose
+	 * Wird dieser Schwellwert Ã¼berschritten, wird eine neue Prognose
 	 * publiziert.
 	 *
 	 * @return Schwellwert in Prozent.
@@ -235,8 +235,8 @@ public class GlProgAnfrage {
 	}
 
 	/**
-	 * Spätestens nach dieser Zeit wird eine Prognose publiziert. Die Ganglinie
-	 * wird nach dieser Zeit auch publiziert, wenn sie sich nicht geändert hat.
+	 * SpÃ¤testens nach dieser Zeit wird eine Prognose publiziert. Die Ganglinie
+	 * wird nach dieser Zeit auch publiziert, wenn sie sich nicht geÃ¤ndert hat.
 	 *
 	 * @return der Zyklus des Publizierens.
 	 * @see #isZyklischePrognose()
@@ -255,11 +255,11 @@ public class GlProgAnfrage {
 	}
 
 	/**
-	 * Gibt zurück, ob es sich um eine zyklische oder einmalige Prognose
+	 * Gibt zurÃ¼ck, ob es sich um eine zyklische oder einmalige Prognose
 	 * handelt.
 	 *
 	 * @return {@code true}, wenn die Prognose zyklisch wiederholt wird und
-	 *         {@code false}, wenn die Prognose nur einmal durchgeführt wird
+	 *         {@code false}, wenn die Prognose nur einmal durchgefÃ¼hrt wird
 	 * @see #getPruefIntervall()
 	 * @see #getSchwelle()
 	 * @see #getSendeIntervall()
@@ -282,10 +282,10 @@ public class GlProgAnfrage {
 	}
 
 	/**
-	 * übernimmt die Informationen aus dem Datum als inneren Zustand.
+	 * Ã¼bernimmt die Informationen aus dem Datum als inneren Zustand.
 	 * <p>
-	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
-	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
+	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der Ã¶ffentlichen API und
+	 * sollte nicht auÃŸerhalb der Ganglinie-API verwendet werden.
 	 *
 	 * @param daten
 	 *            ein Datum, welches <strong>eine</strong> Anfrage darstellt.
@@ -297,7 +297,7 @@ public class GlProgAnfrage {
 		messQuerschnitt = (MessQuerschnittAllgemein) ObjektFactory.getInstanz()
 				.getModellobjekt(daten.getReferenceValue("Messquerschnitt") //$NON-NLS-1$
 						.getSystemObject());
-		pruefIntervall = daten.getScaledValue("Überprüfungsintervall") //$NON-NLS-1$
+		pruefIntervall = daten.getScaledValue("ÃœberprÃ¼fungsintervall") //$NON-NLS-1$
 				.longValue()
 				* Constants.MILLIS_PER_SECOND;
 		schwelle = daten.getScaledValue("Aktualisierungsschwelle").intValue(); //$NON-NLS-1$
@@ -309,7 +309,7 @@ public class GlProgAnfrage {
 		ende = daten.getTimeValue("ZeitpunktPrognoseEnde").getMillis(); //$NON-NLS-1$
 		if (start <= ende) {
 			prognoseZeitraum = new Interval(start, ende);
-		} // Wenn Intervall ungültig, dann bleibt es null
+		} // Wenn Intervall ungÃ¼ltig, dann bleibt es null
 
 		if (daten.getUnscaledValue("NurLangfristigeAuswahl").intValue() == 0) { //$NON-NLS-1$
 			nurLangfristigeAuswahl = false;
@@ -332,7 +332,7 @@ public class GlProgAnfrage {
 	}
 
 	/**
-	 * Ändert den Messquerschnitt für den angefragt wird.
+	 * Ã„ndert den Messquerschnitt fÃ¼r den angefragt wird.
 	 *
 	 * @param messQuerschnitt
 	 *            ein Messquerschnitt.
@@ -343,7 +343,7 @@ public class GlProgAnfrage {
 	}
 
 	/**
-	 * Ändert den Prognosezeitraum.
+	 * Ã„ndert den Prognosezeitraum.
 	 *
 	 * @param prognoseZeitraum
 	 *            der neue Prognosezeitraum.
@@ -353,7 +353,7 @@ public class GlProgAnfrage {
 	}
 
 	/**
-	 * Setzt das Flag für die langfristigen Auswahlmethoden.
+	 * Setzt das Flag fÃ¼r die langfristigen Auswahlmethoden.
 	 *
 	 * @param nurLangfristigeAuswahl
 	 *            {@code true}, wenn nur langfristige Auswahlmethoden verwendet
@@ -365,11 +365,11 @@ public class GlProgAnfrage {
 	}
 
 	/**
-	 * Setzt Flag für eine zyklische Prognose.
+	 * Setzt Flag fÃ¼r eine zyklische Prognose.
 	 *
 	 * @param zyklischePrognose
-	 *            {@code false}, wenn die Prognose einmalig ausgeführt werden
-	 *            soll und {@code true}, wenn die Prognose zyklisch ausgeführt
+	 *            {@code false}, wenn die Prognose einmalig ausgefÃ¼hrt werden
+	 *            soll und {@code true}, wenn die Prognose zyklisch ausgefÃ¼hrt
 	 *            werdens soll.
 	 */
 	public void setZyklischePrognose(final boolean zyklischePrognose) {
@@ -377,17 +377,17 @@ public class GlProgAnfrage {
 	}
 
 	/**
-	 * Legt das Intervall fest in dem die Prognose überprüft werden soll.
+	 * Legt das Intervall fest in dem die Prognose Ã¼berprÃ¼ft werden soll.
 	 *
 	 * @param pruefIntervall
-	 *            das Prüfintervall.
+	 *            das PrÃ¼fintervall.
 	 */
 	public void setPruefIntervall(final long pruefIntervall) {
 		this.pruefIntervall = pruefIntervall;
 	}
 
 	/**
-	 * Legt die Änderungsschwelle fest, bei der eine neue Prognoseganglinie
+	 * Legt die Ã„nderungsschwelle fest, bei der eine neue Prognoseganglinie
 	 * gesendet werden soll.
 	 *
 	 * @param schwelle

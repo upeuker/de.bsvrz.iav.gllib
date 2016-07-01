@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weißenfelser Straße 67
+ * WeiÃŸenfelser StraÃŸe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -50,14 +50,14 @@ import javax.swing.event.ChangeListener;
 /**
  * Kleines Testprogramm, um die verschiedenen Approximationen zu visualisieren
  * und zu vergleichen. Es wird dazu ein Beispiel von fest vorgegebenen
- * Stützstellen verwendet.
+ * StÃ¼tzstellen verwendet.
  *
  * @author BitCtrl Systems GmbH, Falko Schumann
  */
 @SuppressWarnings("nls")
 public final class ApproximationAnzeige extends JFrame implements ItemListener {
 
-	/** Die ID für die Serialisierung. */
+	/** Die ID fÃ¼r die Serialisierung. */
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -75,7 +75,7 @@ public final class ApproximationAnzeige extends JFrame implements ItemListener {
 	 */
 	private class GanglinienComponent extends JComponent {
 
-		/** Die ID für die Serialisierung. */
+		/** Die ID fÃ¼r die Serialisierung. */
 		private static final long serialVersionUID = 1L;
 
 		/**
@@ -150,7 +150,7 @@ public final class ApproximationAnzeige extends JFrame implements ItemListener {
 
 	}
 
-	/** Die Liste der verwendeten Stützstellen. */
+	/** Die Liste der verwendeten StÃ¼tzstellen. */
 	private final List<Stuetzstelle<Double>> stuetzstellen;
 
 	/** Die Interpolation der Polylinie. */
@@ -174,7 +174,7 @@ public final class ApproximationAnzeige extends JFrame implements ItemListener {
 	/** Die Auswahlbox gibt an, ob der B-Spline angezeigt werden soll. */
 	private final JCheckBox showBSpline;
 
-	/** Ein Widget zum Ändern der Ordnung des B-Splines. */
+	/** Ein Widget zum Ã„ndern der Ordnung des B-Splines. */
 	private final JSpinner bSplineOrdnung;
 
 	/**

@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weißenfelser Straße 67
+ * WeiÃŸenfelser StraÃŸe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -175,7 +175,7 @@ public class DbGanglinie implements Serializable {
 	}
 
 	/**
-	 * Gibt die ID des Ereignistyps zurück.
+	 * Gibt die ID des Ereignistyps zurÃ¼ck.
 	 *
 	 * @return die ID des Ereignistyps.
 	 */
@@ -194,7 +194,7 @@ public class DbGanglinie implements Serializable {
 	}
 
 	/**
-	 * Gibt die PID des MQs zurück.
+	 * Gibt die PID des MQs zurÃ¼ck.
 	 *
 	 * @return die PID des MQs.
 	 */
@@ -233,7 +233,7 @@ public class DbGanglinie implements Serializable {
 	}
 
 	/**
-	 * Gibt den Zeitpunkt der letzten Verschmelzung in Millisekunden zurück.
+	 * Gibt den Zeitpunkt der letzten Verschmelzung in Millisekunden zurÃ¼ck.
 	 *
 	 * @return der Zeitstempel der letzten Verschmelzung in Millisekunden.
 	 */
@@ -252,7 +252,7 @@ public class DbGanglinie implements Serializable {
 	}
 
 	/**
-	 * Gibt die Anzahl der Verschmelzungen insgesamt zurück.
+	 * Gibt die Anzahl der Verschmelzungen insgesamt zurÃ¼ck.
 	 *
 	 * @return die Anzahl der Verschmelzungen.
 	 */
@@ -271,7 +271,7 @@ public class DbGanglinie implements Serializable {
 	}
 
 	/**
-	 * Gibt den Typ der Ganglinie zurück.
+	 * Gibt den Typ der Ganglinie zurÃ¼ck.
 	 *
 	 * @return der Ganglinientyp.
 	 */
@@ -290,7 +290,7 @@ public class DbGanglinie implements Serializable {
 	}
 
 	/**
-	 * Gibt das Approximationsverfahren der Ganglinie zurück.
+	 * Gibt das Approximationsverfahren der Ganglinie zurÃ¼ck.
 	 *
 	 * @return das Approximationsverfahren der Ganglinie.
 	 */
@@ -309,7 +309,7 @@ public class DbGanglinie implements Serializable {
 	}
 
 	/**
-	 * Gibt die Ordnung des B-Splines zurück. Diese Eigenschaft ist nur
+	 * Gibt die Ordnung des B-Splines zurÃ¼ck. Diese Eigenschaft ist nur
 	 * relevant, wenn als Approximationsverfahren B-Spline verwendet wird.
 	 *
 	 * @return die B-Spline-Ordnung.
@@ -332,19 +332,19 @@ public class DbGanglinie implements Serializable {
 	}
 
 	/**
-	 * Gibt die Liste der Stützstellen der Ganglinie zurück.
+	 * Gibt die Liste der StÃ¼tzstellen der Ganglinie zurÃ¼ck.
 	 *
-	 * @return die Stützstellen der Ganglinie.
+	 * @return die StÃ¼tzstellen der Ganglinie.
 	 */
 	public List<DbStuetzstelle> getStuetzstellen() {
 		return stuetzstellen;
 	}
 
 	/**
-	 * Legt die Liste der Stützstellen der Ganglinie fest.
+	 * Legt die Liste der StÃ¼tzstellen der Ganglinie fest.
 	 *
 	 * @param stuetzstellen
-	 *            die Stützstellen der Ganglinie.
+	 *            die StÃ¼tzstellen der Ganglinie.
 	 */
 	public void setStuetzstellen(final List<DbStuetzstelle> stuetzstellen) {
 		this.stuetzstellen.clear();

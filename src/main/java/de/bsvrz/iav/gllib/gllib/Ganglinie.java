@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weißenfelser Straße 67
+ * WeiÃŸenfelser StraÃŸe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -38,8 +38,8 @@ import java.util.TreeMap;
 import com.bitctrl.util.Interval;
 
 /**
- * Repräsentiert eine allgemeine Ganglinie, bestehend aus einer sortierten Menge
- * von Stützstellen und der Angabe eines Interpolationsverfahren.
+ * ReprÃ¤sentiert eine allgemeine Ganglinie, bestehend aus einer sortierten Menge
+ * von StÃ¼tzstellen und der Angabe eines Interpolationsverfahren.
  *
  * @param <T>
  *            der Typ der Ganglinie.
@@ -51,17 +51,17 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	/** Die Eigenschaft {@code serialVersionUID}. */
 	private static final long serialVersionUID = 0;
 
-	/** Verfahren zur Berechnung der Punkte zwischen den Stützstellen. */
+	/** Verfahren zur Berechnung der Punkte zwischen den StÃ¼tzstellen. */
 	private Approximation<T> approximation;
 
 	/** Flag, ob die Approximation aktuallisiert werden muss. */
 	private boolean approximationAktuell;
 
-	/** Cached die Teilintervalle der Ganglinie mit definierten Stützstellen. */
+	/** Cached die Teilintervalle der Ganglinie mit definierten StÃ¼tzstellen. */
 	private final List<Interval> intervalle;
 
 	/**
-	 * Konstruiert eine Ganglinie ohne Stützstellen.
+	 * Konstruiert eine Ganglinie ohne StÃ¼tzstellen.
 	 */
 	public Ganglinie() {
 		intervalle = new ArrayList<Interval>();
@@ -69,7 +69,7 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	}
 
 	/**
-	 * Markiert zusätzlich die Approximation als nicht mehr aktuell.
+	 * Markiert zusÃ¤tzlich die Approximation als nicht mehr aktuell.
 	 *
 	 * {@inheritDoc}
 	 *
@@ -82,7 +82,7 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	}
 
 	/**
-	 * Kopiert die Stützstellen und das Approximationsverfahren. Der Wert für
+	 * Kopiert die StÃ¼tzstellen und das Approximationsverfahren. Der Wert fÃ¼r
 	 * {@code approximationAktuell} wird auf false gesetzt.
 	 *
 	 * {@inheritDoc}
@@ -98,8 +98,8 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	}
 
 	/**
-	 * Gibt die Approximation der Ganglinie zurück. Die Approximation wird falls
-	 * nötig vorher initialisiert.
+	 * Gibt die Approximation der Ganglinie zurÃ¼ck. Die Approximation wird falls
+	 * nÃ¶tig vorher initialisiert.
 	 *
 	 * @return die Approximation.
 	 */
@@ -111,9 +111,9 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	}
 
 	/**
-	 * Gibt das Intervall der Ganglinie zurück. Das Intervall besteht aus der
-	 * ersten und letzten Stützstelle. Existieren keine Stützstellen wird
-	 * {@code null} zurückgegeben.
+	 * Gibt das Intervall der Ganglinie zurÃ¼ck. Das Intervall besteht aus der
+	 * ersten und letzten StÃ¼tzstelle. Existieren keine StÃ¼tzstellen wird
+	 * {@code null} zurÃ¼ckgegeben.
 	 *
 	 * @return das Ganglinienintervall oder {@code null}.
 	 */
@@ -146,7 +146,7 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 				// Beginn eines neuen Intervalls
 				if (get(t) != null) {
 					if (t == lastKey()) {
-						// Die letzte Stützstelle ist das letzte Intervall
+						// Die letzte StÃ¼tzstelle ist das letzte Intervall
 						intervalle.add(new Interval(t, t));
 					} else {
 						start = t;
@@ -154,7 +154,7 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 				}
 			} else {
 				if (get(t) == null) {
-					// Definitionslücke gefunden
+					// DefinitionslÃ¼cke gefunden
 					if (ende != null) {
 						intervalle.add(new Interval(start, ende));
 						start = null;
@@ -164,12 +164,12 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 						start = null;
 					}
 				} else {
-					// Intervall verlängern
+					// Intervall verlÃ¤ngern
 					if (get(t) != null) {
 						ende = t;
 					}
 					if (t == lastKey()) {
-						// Die letzte Stützstelle ist das letzte Intervall
+						// Die letzte StÃ¼tzstelle ist das letzte Intervall
 						/*
 						 * Die Warnung wegen "potential null pointer access"
 						 * kann ignoriert werden, weil in der Schleife der Wert
@@ -185,13 +185,13 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	}
 
 	/**
-	 * Gibt die Stützstelle zu einem bestimmten Zeitpunkt zurück. Es wird die
-	 * mit der Approximation berechnete Stützstelle ausgeliefert. Die
+	 * Gibt die StÃ¼tzstelle zu einem bestimmten Zeitpunkt zurÃ¼ck. Es wird die
+	 * mit der Approximation berechnete StÃ¼tzstelle ausgeliefert. Die
 	 * Approximation muss dazu zuvor festgelegt worden sein.
 	 *
 	 * @param zeitstempel
-	 *            der Zeitstempel zu dem eine Stützstelle gesucht wird.
-	 * @return die gesuchte Stützstelle.
+	 *            der Zeitstempel zu dem eine StÃ¼tzstelle gesucht wird.
+	 * @return die gesuchte StÃ¼tzstelle.
 	 */
 	public Stuetzstelle<T> getStuetzstelle(final long zeitstempel) {
 		if (!isValid(zeitstempel)) {
@@ -209,9 +209,9 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	}
 
 	/**
-	 * Gibt ein sortiertes Feld der existierenden Stützstellen zurück.
+	 * Gibt ein sortiertes Feld der existierenden StÃ¼tzstellen zurÃ¼ck.
 	 *
-	 * @return die nach Zeitstempel sortierten Stützstellen.
+	 * @return die nach Zeitstempel sortierten StÃ¼tzstellen.
 	 */
 	public List<Stuetzstelle<T>> getStuetzstellen() {
 		List<Stuetzstelle<T>> liste;
@@ -225,11 +225,11 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	}
 
 	/**
-	 * Gibt die existierenden Stützstellen im angegebenen Intervall zurück.
+	 * Gibt die existierenden StÃ¼tzstellen im angegebenen Intervall zurÃ¼ck.
 	 *
 	 * @param intervall
 	 *            ein Intervall.
-	 * @return die Liste der Stützstellen im Intervall, sortiert nach
+	 * @return die Liste der StÃ¼tzstellen im Intervall, sortiert nach
 	 *         Zeitstempel.
 	 */
 	public List<Stuetzstelle<T>> getStuetzstellen(final Interval intervall) {
@@ -246,13 +246,13 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	}
 
 	/**
-	 * Prüft ob ein Teilintervall der Ganglinie vollständig definiert ist, also
-	 * keine undefinierten Berreiche enthält.
+	 * PrÃ¼ft ob ein Teilintervall der Ganglinie vollstÃ¤ndig definiert ist, also
+	 * keine undefinierten Berreiche enthÃ¤lt.
 	 *
 	 * @param intervall
-	 *            das zu prüfende Intervall.
+	 *            das zu prÃ¼fende Intervall.
 	 * @return {@code true}, wenn das Teilintervall der Ganglinie keine
-	 *         undefinierten Bereiche enthält.
+	 *         undefinierten Bereiche enthÃ¤lt.
 	 * @see #getIntervalle()
 	 */
 	public boolean isValid(final Interval intervall) {
@@ -270,10 +270,10 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	}
 
 	/**
-	 * Prüft ob ein Zeitstempel im definiterten Bereich der Ganglinie liegt.
+	 * PrÃ¼ft ob ein Zeitstempel im definiterten Bereich der Ganglinie liegt.
 	 *
 	 * @param zeitstempel
-	 *            der zu prüfender Zeitstempel.
+	 *            der zu prÃ¼fender Zeitstempel.
 	 * @return {@code true}, wenn der Zeitstempel im definierten Bereich der
 	 *         Ganglinie liegt.
 	 * @see #getIntervalle()
@@ -293,7 +293,7 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	}
 
 	/**
-	 * Markiert zusätzlich die Approximation als nicht mehr aktuell.
+	 * Markiert zusÃ¤tzlich die Approximation als nicht mehr aktuell.
 	 *
 	 * {@inheritDoc}
 	 *
@@ -306,7 +306,7 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	}
 
 	/**
-	 * Markiert zusätzlich die Approximation als nicht mehr aktuell.
+	 * Markiert zusÃ¤tzlich die Approximation als nicht mehr aktuell.
 	 *
 	 * {@inheritDoc}
 	 *
@@ -319,7 +319,7 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	}
 
 	/**
-	 * Markiert zusätzlich die Approximation als nicht mehr aktuell.
+	 * Markiert zusÃ¤tzlich die Approximation als nicht mehr aktuell.
 	 *
 	 * {@inheritDoc}
 	 *
@@ -333,7 +333,7 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 
 	/**
 	 * Legt das Approximationsverfahren fest, mit dem die Werte zwischen den
-	 * Stützstellen bestimmt werden soll.
+	 * StÃ¼tzstellen bestimmt werden soll.
 	 *
 	 * @param approximation
 	 *            das Approximationsverfahren.
@@ -344,23 +344,23 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	}
 
 	/**
-	 * Nimmt eine Stützstelle in die Ganglinie auf. Existiert zu dem Zeitpunkt
-	 * bereits eine, wird diese überschrieben.
+	 * Nimmt eine StÃ¼tzstelle in die Ganglinie auf. Existiert zu dem Zeitpunkt
+	 * bereits eine, wird diese Ã¼berschrieben.
 	 *
 	 * @param s
-	 *            die neue Stuützstelle.
-	 * @return {@code true}, wenn die Stützstelle neu angelegt wurde und
-	 *         {@code false}, wenn eine vorhandene Stützstelle ersetzt wurde.
+	 *            die neue StuÃ¼tzstelle.
+	 * @return {@code true}, wenn die StÃ¼tzstelle neu angelegt wurde und
+	 *         {@code false}, wenn eine vorhandene StÃ¼tzstelle ersetzt wurde.
 	 */
 	public boolean setStuetzstelle(final Stuetzstelle<T> s) {
 		return put(s.getZeitstempel(), s.getWert()) == null;
 	}
 
 	/**
-	 * Ersetzt die Stützstellen der Ganglinie.
+	 * Ersetzt die StÃ¼tzstellen der Ganglinie.
 	 *
 	 * @param stuetzstellen
-	 *            die neuen Stützstellen
+	 *            die neuen StÃ¼tzstellen
 	 */
 	public void setStuetzstellen(
 			final Collection<Stuetzstelle<T>> stuetzstellen) {
@@ -391,7 +391,7 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	}
 
 	/**
-	 * Aktualisiert falls nötig die Approximation.
+	 * Aktualisiert falls nÃ¶tig die Approximation.
 	 */
 	private void aktualisiereApproximation() {
 		if (!isApproximationAktuell()) {
@@ -403,8 +403,8 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	}
 
 	/**
-	 * Gibt {@code false} zurück, wenn die Approximation aktuallisiert werden
-	 * muss, weil sich die Ganglinie geändert hat.
+	 * Gibt {@code false} zurÃ¼ck, wenn die Approximation aktuallisiert werden
+	 * muss, weil sich die Ganglinie geÃ¤ndert hat.
 	 *
 	 * @return {@code true}, wenn Ganglinie und Approximation konform gehen und
 	 *         {@code false}, wenn die Approximation aktualisiert werden muss.
@@ -414,7 +414,7 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	}
 
 	/**
-	 * Setzt das Flag, ob die Approximation noch gültig ist oder nicht.
+	 * Setzt das Flag, ob die Approximation noch gÃ¼ltig ist oder nicht.
 	 *
 	 * @param approximationAktuell
 	 *            {@code false}, wenn die Approximation aktualisiert werden

@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weißenfelser Straße 67
+ * WeiÃŸenfelser StraÃŸe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -50,11 +50,11 @@ public abstract class AbstractApproximation<T> implements Approximation<T> {
 	/** Das Breite der Teilintervalle beim Integrieren, Standard: 1 Minute. */
 	private long integrationsintervall = Constants.MILLIS_PER_MINUTE;
 
-	/** Liste der verwendeten Stützstellen. */
+	/** Liste der verwendeten StÃ¼tzstellen. */
 	private final List<Stuetzstelle<T>> stuetzstellen;
 
 	/**
-	 * Initialisiert die Stützstellenliste.
+	 * Initialisiert die StÃ¼tzstellenliste.
 	 */
 	public AbstractApproximation() {
 		stuetzstellen = new ArrayList<Stuetzstelle<T>>();
@@ -93,12 +93,12 @@ public abstract class AbstractApproximation<T> implements Approximation<T> {
 
 		interpolation = new TreeSet<Stuetzstelle<T>>();
 
-		// Sonderfall: keine Stützstellen vorhanden
+		// Sonderfall: keine StÃ¼tzstellen vorhanden
 		if (stuetzstellen.size() == 0) {
 			return interpolation;
 		}
 
-		// Stützstellen an den Intervallgrenzen bestimmen
+		// StÃ¼tzstellen an den Intervallgrenzen bestimmen
 		zeitstempel = stuetzstellen.get(0).getZeitstempel();
 		while (zeitstempel <= stuetzstellen.get(stuetzstellen.size() - 1)
 				.getZeitstempel()) {
@@ -113,10 +113,10 @@ public abstract class AbstractApproximation<T> implements Approximation<T> {
 	}
 
 	/**
-	 * Prüft ob für den Zeitstempel eine Stützstelle berechnet werden kann. Für
+	 * PrÃ¼ft ob fÃ¼r den Zeitstempel eine StÃ¼tzstelle berechnet werden kann. FÃ¼r
 	 * stetige Funktionen bedeutet dies, dass der Zeitstempel im Intervall der
-	 * Stützstellen liegt. Für unstetige Funktionen muss diese Methode passende
-	 * überschrieben werden.
+	 * StÃ¼tzstellen liegt. FÃ¼r unstetige Funktionen muss diese Methode passende
+	 * Ã¼berschrieben werden.
 	 *
 	 * @param t
 	 *            ein Zeitstempel.
@@ -130,8 +130,8 @@ public abstract class AbstractApproximation<T> implements Approximation<T> {
 	}
 
 	/**
-	 * Bestimmt die Liste der verwendeten Stützstellen. Die Liste entspricht der
-	 * Ganglinie, abzüglich der undefinierten Stützstellen.
+	 * Bestimmt die Liste der verwendeten StÃ¼tzstellen. Die Liste entspricht der
+	 * Ganglinie, abzÃ¼glich der undefinierten StÃ¼tzstellen.
 	 *
 	 * {@inheritDoc}
 	 */
@@ -148,12 +148,12 @@ public abstract class AbstractApproximation<T> implements Approximation<T> {
 	}
 
 	/**
-	 * Sucht nach der ersten Stützstelle nach einem Zeitstempel. Gibt es zu dem
-	 * Zeitstempel eine Stützstelle wird diese angenommen.
+	 * Sucht nach der ersten StÃ¼tzstelle nach einem Zeitstempel. Gibt es zu dem
+	 * Zeitstempel eine StÃ¼tzstelle wird diese angenommen.
 	 *
 	 * @param t
 	 *            ein Zeitstempel.
-	 * @return der Index der gefundenen Stützstelle oder {@code -1}, wenn es
+	 * @return der Index der gefundenen StÃ¼tzstelle oder {@code -1}, wenn es
 	 *         keine gibt.
 	 */
 	protected int findeStuetzstelleNach(final long t) {
@@ -194,12 +194,12 @@ public abstract class AbstractApproximation<T> implements Approximation<T> {
 	}
 
 	/**
-	 * Sucht nach der ersten Stützstelle vor einem Zeitstempel. Gibt es zu dem
-	 * Zeitstempel eine Stützstelle wird diese angenommen.
+	 * Sucht nach der ersten StÃ¼tzstelle vor einem Zeitstempel. Gibt es zu dem
+	 * Zeitstempel eine StÃ¼tzstelle wird diese angenommen.
 	 *
 	 * @param t
 	 *            ein Zeitstempel.
-	 * @return der Index der gefundenen Stützstelle oder {@code -1}, wenn es
+	 * @return der Index der gefundenen StÃ¼tzstelle oder {@code -1}, wenn es
 	 *         keine gibt.
 	 */
 	protected int findeStuetzstelleVor(final long t) {
@@ -240,7 +240,7 @@ public abstract class AbstractApproximation<T> implements Approximation<T> {
 	}
 
 	/**
-	 * Die Breite der Teilintervalle beim Integrieren zurück.
+	 * Die Breite der Teilintervalle beim Integrieren zurÃ¼ck.
 	 *
 	 * @return die Intervallbreite.
 	 */

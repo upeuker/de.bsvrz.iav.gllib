@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weißenfelser Straße 67
+ * WeiÃŸenfelser StraÃŸe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -76,7 +76,7 @@ public final class KalenderInitialisierer
 	 * Neben den Datenverteilerparametern kennt die Applikation noch:
 	 * <ul>
 	 * <li><code>-reset</code> ist der Parameter angegeben, werden <em>alle</em>
-	 * Ereignisse, Ereignistypen und Systemkalendereinträge gelöscht, bevor die
+	 * Ereignisse, Ereignistypen und SystemkalendereintrÃ¤ge gelÃ¶scht, bevor die
 	 * Standardereignisse angelgt werden.</li>
 	 * </ul>
 	 *
@@ -159,12 +159,12 @@ public final class KalenderInitialisierer
 	 * @param ereignisName
 	 *            der Name des Ereignisses.
 	 * @param prioritaet
-	 *            die Priorität des dazugehörigen Ereignistyps.
+	 *            die PrioritÃ¤t des dazugehÃ¶rigen Ereignistyps.
 	 * @throws ConfigurationChangeException
-	 *             wenn ein Objekt der Konfiguration nicht hinzugefügt werden
+	 *             wenn ein Objekt der Konfiguration nicht hinzugefÃ¼gt werden
 	 *             konnte.
 	 * @throws AnmeldeException
-	 *             wenn die Anmeldung zum Senden eines Parameters nicht möglich
+	 *             wenn die Anmeldung zum Senden eines Parameters nicht mÃ¶glich
 	 *             ist.
 	 * @throws DatensendeException
 	 *             wenn ein Parameter nicht gesendet werden kann.
@@ -240,10 +240,10 @@ public final class KalenderInitialisierer
 	}
 
 	/**
-	 * Lösche alle Objekt die angelegt werden.
+	 * LÃ¶sche alle Objekt die angelegt werden.
 	 *
 	 * @throws ConfigurationChangeException
-	 *             wenn das Löschen nicht möglich war.
+	 *             wenn das LÃ¶schen nicht mÃ¶glich war.
 	 */
 	private static void reset() throws ConfigurationChangeException {
 		DataModel modell;
@@ -269,7 +269,7 @@ public final class KalenderInitialisierer
 			menge.remove(so);
 		}
 
-		menge = aoe.getMutableSet("SystemKalenderEinträge");
+		menge = aoe.getMutableSet("SystemKalenderEintrÃ¤ge");
 		for (final SystemObject so : menge.getElements()) {
 			System.out.println("Entferne aus Menge " + so);
 			menge.remove(so);

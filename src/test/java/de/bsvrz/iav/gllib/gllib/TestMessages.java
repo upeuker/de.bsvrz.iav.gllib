@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weiﬂenfelser Straﬂe 67
+ * Wei√üenfelser Stra√üe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -33,7 +33,7 @@ import org.junit.Test;
 import com.bitctrl.i18n.Messages;
 
 /**
- * Pr¸ft ob alle Nachrichten, die verwendet werden auch in der Property-Datei
+ * Pr√ºft ob alle Nachrichten, die verwendet werden auch in der Property-Datei
  * enthalten sind.
  *
  * @author BitCtrl Systems GmbH, Schumann
@@ -53,7 +53,7 @@ public class TestMessages {
 	}
 
 	/**
-	 * Testet ob alle Nachrichten-Konstanten als Namenspr‰fix, den angegebenen
+	 * Testet ob alle Nachrichten-Konstanten als Namenspr√§fix, den angegebenen
 	 * Log-Level besitzen.
 	 */
 	@Test
@@ -68,7 +68,7 @@ public class TestMessages {
 
 			level = e.getLogLevel().getName().toLowerCase();
 			if (level.equals("severe")) {
-				// Umbenennung im Datenverteilerfunktionen r¸ckg‰ngig machen
+				// Umbenennung im Datenverteilerfunktionen r√ºckg√§ngig machen
 				level = "error";
 			}
 			prefix = e.name().substring(0, level.length()).toLowerCase();

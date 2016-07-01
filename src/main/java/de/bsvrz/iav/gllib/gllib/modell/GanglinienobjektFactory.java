@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weiﬂenfelser Straﬂe 67
+ * Wei√üenfelser Stra√üe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -39,7 +39,7 @@ import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjekt;
 import de.bsvrz.sys.funclib.bitctrl.modell.SystemObjektTyp;
 
 /**
- * Fabrikmethode f¸r gekapselte Systemobjekte aus dem Ganglinienmodell. Jedes
+ * Fabrikmethode f√ºr gekapselte Systemobjekte aus dem Ganglinienmodell. Jedes
  * gekapselte Objekt wird als Singleton behandelt und zwischengespeichert.
  *
  * @author BitCtrl Systems GmbH, Falko Schumann

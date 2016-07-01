@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weiﬂenfelser Straﬂe 67
+ * Wei√üenfelser Stra√üe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -29,7 +29,7 @@ package de.bsvrz.iav.gllib.gllib.modell.db;
 import java.io.Serializable;
 
 /**
- * Korrespondiert mit DAV-Attributliste <code>atl.st¸tzstelle</code>.
+ * Korrespondiert mit DAV-Attributliste <code>atl.st√ºtzstelle</code>.
  *
  * @author BitCtrl Systems GmbH, Thomas Thierfelder
  */

@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weißenfelser Straße 67
+ * WeiÃŸenfelser StraÃŸe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -41,7 +41,7 @@ import com.bitctrl.util.Interval;
 import com.bitctrl.util.Timestamp;
 
 /**
- * Helferklasse mit den Operationen auf Ganglinien, deren Stützstellen
+ * Helferklasse mit den Operationen auf Ganglinien, deren StÃ¼tzstellen
  * Gleitkommazahlen sind.
  *
  * @author BitCtrl Systems GmbH, Schumann
@@ -61,7 +61,7 @@ public final class GanglinienOperationen {
 		/** Die Ergebnisganglinie. */
 		private final T ganglinie;
 
-		/** Der Index der ausgewählten Ganglinie in der Vergleichsliste. */
+		/** Der Index der ausgewÃ¤hlten Ganglinie in der Vergleichsliste. */
 		private final int index;
 
 		/** Der Abstand der Ergebnisganglinie zur Referenzganglinie. */
@@ -76,7 +76,7 @@ public final class GanglinienOperationen {
 		 * @param ganglinie
 		 *            die Ergebnisganglinie.
 		 * @param index
-		 *            der Index der ausgewählten Ganglinie in der
+		 *            der Index der ausgewÃ¤hlten Ganglinie in der
 		 *            Vergleichsliste.
 		 * @param abstand
 		 *            der Abstand der Ergebnisganglinie zur Referenzganglinie.
@@ -92,22 +92,22 @@ public final class GanglinienOperationen {
 		}
 
 		/**
-		 * Gibt die Ergebnisganglinie zurück.
+		 * Gibt die Ergebnisganglinie zurÃ¼ck.
 		 *
 		 * @return die Ergebnisganglinie.
 		 */
 		@SuppressWarnings("unchecked")
 		public T getGanglinie() {
 			/*
-			 * Auf T kann nicht mit instanceof geprüft werden, deswegen kann die
+			 * Auf T kann nicht mit instanceof geprÃ¼ft werden, deswegen kann die
 			 * Warnung "type safety" nicht behoben werden.
 			 */
 			return (T) ganglinie.clone();
 		}
 
 		/**
-		 * Gibt den Index der ausgewählten Ganglinie in der Vergleichsliste
-		 * zurück.
+		 * Gibt den Index der ausgewÃ¤hlten Ganglinie in der Vergleichsliste
+		 * zurÃ¼ck.
 		 *
 		 * @return der Index.
 		 */
@@ -116,7 +116,7 @@ public final class GanglinienOperationen {
 		}
 
 		/**
-		 * Gibt den Abstand der Ergebnisganglinie zur Referenzganglinie zurück.
+		 * Gibt den Abstand der Ergebnisganglinie zur Referenzganglinie zurÃ¼ck.
 		 *
 		 * @return der Abstand.
 		 */
@@ -126,7 +126,7 @@ public final class GanglinienOperationen {
 
 		/**
 		 *
-		 * Gibt der Offset um den die Ergebnisganglinie verschoben wurde zurück.
+		 * Gibt der Offset um den die Ergebnisganglinie verschoben wurde zurÃ¼ck.
 		 *
 		 * @return der Offset der Ergebnisganglinie.
 		 */
@@ -191,12 +191,12 @@ public final class GanglinienOperationen {
 
 	/**
 	 * Konvertiert eine Ganglinie in einen lesbaren Text. Dazu wird zwischen
-	 * jeder Stützstelle einfach ein Zeilenbruch eingefügt. Enthält die
-	 * Ganglinie keine Stützstellen wird eine kurze Notiz ausgegeben.
+	 * jeder StÃ¼tzstelle einfach ein Zeilenbruch eingefÃ¼gt. EnthÃ¤lt die
+	 * Ganglinie keine StÃ¼tzstellen wird eine kurze Notiz ausgegeben.
 	 *
 	 * @param g
 	 *            eine Ganglinie.
-	 * @return ein String der jede Stützstelle auf eine eigene Zeile schreibt.
+	 * @return ein String der jede StÃ¼tzstelle auf eine eigene Zeile schreibt.
 	 */
 	public static String formatierterText(final Ganglinie<?> g) {
 		String txt;
@@ -208,16 +208,16 @@ public final class GanglinienOperationen {
 		}
 
 		if (g.size() == 0) {
-			txt += "\nKeine Stützstellen vorhanden."; //$NON-NLS-1$
+			txt += "\nKeine StÃ¼tzstellen vorhanden."; //$NON-NLS-1$
 		}
 
 		return txt;
 	}
 
 	/**
-	 * Addiert zwei Ganglinien, indem die Werte der vervollständigten
-	 * Stützstellenmenge addiert werden. Die beiden Ganglinien werden dabei
-	 * nicht verändert.
+	 * Addiert zwei Ganglinien, indem die Werte der vervollstÃ¤ndigten
+	 * StÃ¼tzstellenmenge addiert werden. Die beiden Ganglinien werden dabei
+	 * nicht verÃ¤ndert.
 	 *
 	 * @param g1
 	 *            Erste Ganglinie
@@ -302,8 +302,8 @@ public final class GanglinienOperationen {
 
 	/**
 	 * Schneidet ein Intervall aus einer Ganglinie heraus. Existieren keine
-	 * Stützstellen in den Intervallgrenzen, werden an diesen Stellen mittels
-	 * Approximation durch Polyline Stützstellen hinzugefügt.
+	 * StÃ¼tzstellen in den Intervallgrenzen, werden an diesen Stellen mittels
+	 * Approximation durch Polyline StÃ¼tzstellen hinzugefÃ¼gt.
 	 * <p>
 	 * <em>Hinweis:</em> Das Intervall wird aus der Ganglinie im Parameter
 	 * ausgeschnitten.
@@ -322,7 +322,7 @@ public final class GanglinienOperationen {
 		p.setStuetzstellen(g.getStuetzstellen());
 		p.initialisiere();
 
-		// Stützstellen an den beiden Schnittpunkten ergänzen, falls nötig
+		// StÃ¼tzstellen an den beiden Schnittpunkten ergÃ¤nzen, falls nÃ¶tig
 		if (!g.containsKey(i.getStart())) {
 			g.setStuetzstelle(p.get(i.getStart()));
 		}
@@ -330,7 +330,7 @@ public final class GanglinienOperationen {
 			g.setStuetzstelle(p.get(i.getEnd()));
 		}
 
-		// Stützstellen außerhalb des Intervalls entfernen
+		// StÃ¼tzstellen auÃŸerhalb des Intervalls entfernen
 		Iterator<Entry<Long, Double>> iterator;
 		iterator = g.entrySet().iterator();
 		while (iterator.hasNext()) {
@@ -347,8 +347,8 @@ public final class GanglinienOperationen {
 
 	/**
 	 * Berechnet den Abstand zweier Ganglinien mit Hilfe des
-	 * Basisabstandsverfahren. Es wir der Abstand anhand der vervollständigten
-	 * Stützstellenmenge bestimmt.
+	 * Basisabstandsverfahren. Es wir der Abstand anhand der vervollstÃ¤ndigten
+	 * StÃ¼tzstellenmenge bestimmt.
 	 *
 	 * @param g1
 	 *            Erste Ganglinie
@@ -376,9 +376,9 @@ public final class GanglinienOperationen {
 	}
 
 	/**
-	 * Division zweier Ganglinien, indem die Werte der vervollständigten
-	 * Stützstellenmenge dividiert werden. Die beiden Ganglinien werden dabei
-	 * nicht verändert.
+	 * Division zweier Ganglinien, indem die Werte der vervollstÃ¤ndigten
+	 * StÃ¼tzstellenmenge dividiert werden. Die beiden Ganglinien werden dabei
+	 * nicht verÃ¤ndert.
 	 *
 	 * @param g1
 	 *            Erste Ganglinie
@@ -551,7 +551,7 @@ public final class GanglinienOperationen {
 		}
 
 		if (start > ende) {
-			// Die beiden Ganglinienintervalle überschneiden sich nicht.
+			// Die beiden Ganglinienintervalle Ã¼berschneiden sich nicht.
 			return Integer.MAX_VALUE;
 		}
 
@@ -566,9 +566,9 @@ public final class GanglinienOperationen {
 	}
 
 	/**
-	 * Multiplikation zweier Ganglinien, indem die Werte der vervollständigten
-	 * Stützstellenmenge multipliziert werden. Die beiden Ganglinien werden
-	 * dabei nicht verändert.
+	 * Multiplikation zweier Ganglinien, indem die Werte der vervollstÃ¤ndigten
+	 * StÃ¼tzstellenmenge multipliziert werden. Die beiden Ganglinien werden
+	 * dabei nicht verÃ¤ndert.
 	 *
 	 * @param g1
 	 *            Erste Ganglinie
@@ -650,17 +650,17 @@ public final class GanglinienOperationen {
 	}
 
 	/**
-	 * Normiert die Stützstellen einer Ganglinie. Mehrere hintereinander
-	 * folgende undefinierte Stützstellen werden zusammengefasst. Der Abstand
-	 * der Stützstellen wird auf ein definiertes Intervall normiert. Der
-	 * Intervallzyklus beginnt mit dem Zeitstempel der ersten Stützstelle.
+	 * Normiert die StÃ¼tzstellen einer Ganglinie. Mehrere hintereinander
+	 * folgende undefinierte StÃ¼tzstellen werden zusammengefasst. Der Abstand
+	 * der StÃ¼tzstellen wird auf ein definiertes Intervall normiert. Der
+	 * Intervallzyklus beginnt mit dem Zeitstempel der ersten StÃ¼tzstelle.
 	 * <p>
-	 * <em>Hinweis:</em> die Ganglinie im Parameter wird verändert.
+	 * <em>Hinweis:</em> die Ganglinie im Parameter wird verÃ¤ndert.
 	 *
 	 * @param g
 	 *            eine Ganglinie.
 	 * @param abstand
-	 *            der gewünschte Stützstellenabstand.
+	 *            der gewÃ¼nschte StÃ¼tzstellenabstand.
 	 * @return die normierte Ganglinie.
 	 */
 	public static Ganglinie<Double> normiere(final Ganglinie<Double> g,
@@ -696,11 +696,11 @@ public final class GanglinienOperationen {
 	}
 
 	/**
-	 * Führt das Pattern-Matching einer Menge von Ganglinien mit einer
+	 * FÃ¼hrt das Pattern-Matching einer Menge von Ganglinien mit einer
 	 * Referenzganglinie aus. Das Ergebnis ist die Ganglinie aus der Menge mit
 	 * dem geringsten Abstand zur Referenzganglinie.
 	 * <p>
-	 * Zusätzlich zu der Liste von Vergleichsganglinien wird jede dieser
+	 * ZusÃ¤tzlich zu der Liste von Vergleichsganglinien wird jede dieser
 	 * Ganglinien im angegebenen Offset in {@code intervall} Schritten
 	 * verschoben. Jede dieser so entstanden Ganglinien wird ebenfalls mit der
 	 * Referenzganglinie verglichen.
@@ -773,9 +773,9 @@ public final class GanglinienOperationen {
 	}
 
 	/**
-	 * Subtraktion zweier Ganglinien, indem die Werte der vervollständigten
-	 * Stützstellenmenge subtrahiert werden. Die beiden Ganglinien werden dabei
-	 * nicht verändert.
+	 * Subtraktion zweier Ganglinien, indem die Werte der vervollstÃ¤ndigten
+	 * StÃ¼tzstellenmenge subtrahiert werden. Die beiden Ganglinien werden dabei
+	 * nicht verÃ¤ndert.
 	 *
 	 * @param g1
 	 *            Erste Ganglinie
@@ -857,13 +857,13 @@ public final class GanglinienOperationen {
 	}
 
 	/**
-	 * Verbindet zwei Ganglinien durch Konkatenation. Es werden die Stützstellen
+	 * Verbindet zwei Ganglinien durch Konkatenation. Es werden die StÃ¼tzstellen
 	 * beider Ganglinien zu einer neuen Ganglinien zusammengefasst. Dies ist nur
-	 * möglich, wenn sich die Stützstellenmengen nicht überschneiden. Berühren
-	 * sich die beiden Ganglinien wird im Berührungspunkt er Mittelwert der
-	 * beiden Stützstellen gebildet.
+	 * mÃ¶glich, wenn sich die StÃ¼tzstellenmengen nicht Ã¼berschneiden. BerÃ¼hren
+	 * sich die beiden Ganglinien wird im BerÃ¼hrungspunkt er Mittelwert der
+	 * beiden StÃ¼tzstellen gebildet.
 	 * <p>
-	 * Wird der maximale Abstand der beiden Ganglinien überschritten, ist der
+	 * Wird der maximale Abstand der beiden Ganglinien Ã¼berschritten, ist der
 	 * Bereich zwischen den Ganglinien undefiniert.
 	 *
 	 * @param g1
@@ -951,10 +951,10 @@ public final class GanglinienOperationen {
 
 	/**
 	 * Verschiebt eine Ganglinie auf der Zeitachse um ein halbes
-	 * Stützstellenintervall. Jede Stützstelle wird um den halben Abstand zur
-	 * nächsten Stützstelle verschoben. Die letzte Stützstelle wird um den
-	 * halben Abstand zur vorherigen Stützstelle verschoben. Gibt es nur eine
-	 * Stützstelle, wird diese nicht verschoben.
+	 * StÃ¼tzstellenintervall. Jede StÃ¼tzstelle wird um den halben Abstand zur
+	 * nÃ¤chsten StÃ¼tzstelle verschoben. Die letzte StÃ¼tzstelle wird um den
+	 * halben Abstand zur vorherigen StÃ¼tzstelle verschoben. Gibt es nur eine
+	 * StÃ¼tzstelle, wird diese nicht verschoben.
 	 * <p>
 	 * <em>Hinweis:</em> Es wird die Ganglinie im Parameter verschoben.
 	 *
@@ -993,7 +993,7 @@ public final class GanglinienOperationen {
 
 	/**
 	 * Verschmilzt eine Ganglinie mit einer anderen. Dabei wird das gewichtete
-	 * arithmetische Mittel der vervollständigten Stützstellen gebildet. Die
+	 * arithmetische Mittel der vervollstÃ¤ndigten StÃ¼tzstellen gebildet. Die
 	 * zweite Ganglinie hat immer das Gewicht 1.
 	 *
 	 * @param g1
@@ -1080,13 +1080,13 @@ public final class GanglinienOperationen {
 						- g1.getStuetzstelle(z).getWert();
 				summe += x * x;
 			} else {
-				// Undefinierte Stützstellen werden nicht berücksichtigt
+				// Undefinierte StÃ¼tzstellen werden nicht berÃ¼cksichtigt
 				undefinierte++;
 			}
 		}
 
 		if ((zeitstempel.size() - undefinierte) == 0) {
-			// Die beiden Ganglinienintevalle überschneiden sich nicht.
+			// Die beiden Ganglinienintevalle Ã¼berschneiden sich nicht.
 			return Double.POSITIVE_INFINITY;
 		}
 		fehler = Math.sqrt(summe / (zeitstempel.size() - undefinierte));
@@ -1108,13 +1108,13 @@ public final class GanglinienOperationen {
 	}
 
 	/**
-	 * Bestimmt die vereinigte Menge der Stützstellen beider Ganglinien.
+	 * Bestimmt die vereinigte Menge der StÃ¼tzstellen beider Ganglinien.
 	 *
 	 * @param g1
 	 *            Erste Ganglinie
 	 * @param g2
 	 *            Zweite Ganglinie
-	 * @return Menge von Stützstellenreferenzen in Form von Zeitstempeln
+	 * @return Menge von StÃ¼tzstellenreferenzen in Form von Zeitstempeln
 	 */
 	private static LinkedList<Long> vervollstaendigeStuetzstellen(
 			final Ganglinie<Double> g1, final Ganglinie<Double> g2) {

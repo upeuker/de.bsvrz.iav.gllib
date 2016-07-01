@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weißenfelser Straße 67
+ * WeiÃŸenfelser StraÃŸe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -54,7 +54,7 @@ import de.bsvrz.iav.gllib.gllib.junit.ZufallsganglinienFactory;
 public class BSplineTest {
 
 	/**
-	 * Prüft das Verhalten des B-Spline bei (zu) wenigen Stützstellen.
+	 * PrÃ¼ft das Verhalten des B-Spline bei (zu) wenigen StÃ¼tzstellen.
 	 */
 	@Test
 	@SuppressWarnings("static-method")
@@ -64,8 +64,8 @@ public class BSplineTest {
 
 		stuetzstellen = new ArrayList<Stuetzstelle<Double>>();
 
-		// Nur eine Stützstelle. Hier kann kein B-Spline bestimmt werden, also
-		// gibt es keine gültigen Stützstellen.
+		// Nur eine StÃ¼tzstelle. Hier kann kein B-Spline bestimmt werden, also
+		// gibt es keine gÃ¼ltigen StÃ¼tzstellen.
 		stuetzstellen
 				.add(new Stuetzstelle<Double>(100 * MILLIS_PER_HOUR, 30.0));
 		spline = new BSpline();
@@ -78,7 +78,7 @@ public class BSplineTest {
 		assertEquals(new Stuetzstelle<Double>(120 * MILLIS_PER_HOUR, null),
 				spline.get(120 * MILLIS_PER_HOUR));
 
-		// Nur zwei Stützstellen
+		// Nur zwei StÃ¼tzstellen
 		stuetzstellen
 				.add(new Stuetzstelle<Double>(200 * MILLIS_PER_HOUR, 80.0));
 		spline = new BSpline();
@@ -93,7 +93,7 @@ public class BSplineTest {
 		assertEquals(new Stuetzstelle<Double>(320 * MILLIS_PER_HOUR, null),
 				spline.get(320 * MILLIS_PER_HOUR));
 
-		// Nur drei Stützstellen
+		// Nur drei StÃ¼tzstellen
 		stuetzstellen
 				.add(new Stuetzstelle<Double>(300 * MILLIS_PER_HOUR, 40.0));
 		spline = new BSpline();
@@ -110,7 +110,7 @@ public class BSplineTest {
 		assertEquals(new Stuetzstelle<Double>(320 * MILLIS_PER_HOUR, null),
 				spline.get(320 * MILLIS_PER_HOUR));
 
-		// Nur drei Stützstellen, mit Ordnung 5
+		// Nur drei StÃ¼tzstellen, mit Ordnung 5
 		spline = new BSpline();
 		spline.setStuetzstellen(stuetzstellen);
 		spline.initialisiere();
@@ -126,7 +126,7 @@ public class BSplineTest {
 	}
 
 	/**
-	 * Prüft ob bei Anfrage einer Stützstelle auch der richtige Zeitstempel
+	 * PrÃ¼ft ob bei Anfrage einer StÃ¼tzstelle auch der richtige Zeitstempel
 	 * kommt. Beim B-Spline ist dies nicht trivial. Dieser Test arbeitet mit
 	 * einer vorgegebenen Ganglinie.
 	 */
@@ -159,8 +159,8 @@ public class BSplineTest {
 	}
 
 	/**
-	 * Macht einen Performance-Test mit einer zufälligen Ganglinie mit
-	 * Double-Stützstellen. Das Ergebnis wird nur auf der Konsole ausgegeben.
+	 * Macht einen Performance-Test mit einer zufÃ¤lligen Ganglinie mit
+	 * Double-StÃ¼tzstellen. Das Ergebnis wird nur auf der Konsole ausgegeben.
 	 */
 	@Test
 	@SuppressWarnings("static-method")
@@ -173,7 +173,7 @@ public class BSplineTest {
 		int i;
 
 		System.out.println(
-				"Starte Performancetest B-Spline für einfache Ganglinie ...");
+				"Starte Performancetest B-Spline fÃ¼r einfache Ganglinie ...");
 
 		cal = Calendar.getInstance();
 		cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -184,7 +184,7 @@ public class BSplineTest {
 		g = ZufallsganglinienFactory
 				.erzeugeGanglinie(Constants.MILLIS_PER_HOUR / 20);
 		GanglinienOperationen.verschiebe(g, cal.getTimeInMillis());
-		assertEquals("Die Anzahl der Stützstellen muss stimmen.", 481,
+		assertEquals("Die Anzahl der StÃ¼tzstellen muss stimmen.", 481,
 				g.size());
 
 		bspline = new BSpline(5);
@@ -202,21 +202,21 @@ public class BSplineTest {
 
 			s = g.getStuetzstelle(t);
 			assertEquals(
-					"Der Zeitstempel der berechneten Stützstelle muss mit der Anfrage übereinstimmen.",
+					"Der Zeitstempel der berechneten StÃ¼tzstelle muss mit der Anfrage Ã¼bereinstimmen.",
 					t, s.getZeitstempel());
-			assertTrue("Der Stützstellenwert darf nicht null sein.",
+			assertTrue("Der StÃ¼tzstellenwert darf nicht null sein.",
 					s.getWert() != null);
 			// System.out.println(s);
 			++i;
 		}
 		zeitstempel = System.currentTimeMillis() - zeitstempel;
-		System.out.println("Berechnung von " + i + " Stützstellen in "
+		System.out.println("Berechnung von " + i + " StÃ¼tzstellen in "
 				+ Timestamp.relativeTime(zeitstempel));
 	}
 
 	/**
-	 * Macht einen Performance-Test mit einer zufälligen
-	 * Messquerschnittsfanglinie mit Double-Stützstellen. Das Ergebnis wird nur
+	 * Macht einen Performance-Test mit einer zufÃ¤lligen
+	 * Messquerschnittsfanglinie mit Double-StÃ¼tzstellen. Das Ergebnis wird nur
 	 * auf der Konsole ausgegeben.
 	 */
 	@Test
@@ -229,7 +229,7 @@ public class BSplineTest {
 		int i;
 
 		System.out.println(
-				"Starte Performancetest B-Spline für Messquerschnittsganglinie ...");
+				"Starte Performancetest B-Spline fÃ¼r Messquerschnittsganglinie ...");
 
 		cal = Calendar.getInstance();
 		cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -240,7 +240,7 @@ public class BSplineTest {
 		g = ZufallsganglinienFactory.erzeugeGanglinie(null,
 				Constants.MILLIS_PER_HOUR);
 		GanglinienMQOperationen.verschiebe(g, cal.getTimeInMillis());
-		assertEquals("Die Anzahl der Stützstellen muss stimmen.", 25, g.size());
+		assertEquals("Die Anzahl der StÃ¼tzstellen muss stimmen.", 25, g.size());
 
 		g.setApproximationDaK(GanglinieMQ.APPROX_BSPLINE);
 		g.setBSplineOrdnung(5);
@@ -257,21 +257,21 @@ public class BSplineTest {
 
 			s = g.getStuetzstelle(t);
 			assertEquals(
-					"Der Zeitstempel der berechneten Stützstelle muss mit der Anfrage übereinstimmen.",
+					"Der Zeitstempel der berechneten StÃ¼tzstelle muss mit der Anfrage Ã¼bereinstimmen.",
 					t, s.getZeitstempel());
-			assertTrue("Der Stützstellenwert QKfz darf nicht null sein.",
+			assertTrue("Der StÃ¼tzstellenwert QKfz darf nicht null sein.",
 					s.getWert().getQKfz() != null);
-			assertTrue("Der Stützstellenwert QLkw darf nicht null sein.",
+			assertTrue("Der StÃ¼tzstellenwert QLkw darf nicht null sein.",
 					s.getWert().getQLkw() != null);
-			assertTrue("Der Stützstellenwert VPkw darf nicht null sein.",
+			assertTrue("Der StÃ¼tzstellenwert VPkw darf nicht null sein.",
 					s.getWert().getVPkw() != null);
-			assertTrue("Der Stützstellenwert VLkw darf nicht null sein.",
+			assertTrue("Der StÃ¼tzstellenwert VLkw darf nicht null sein.",
 					s.getWert().getVLkw() != null);
 			// System.out.println(s);
 			++i;
 		}
 		zeitstempel = System.currentTimeMillis() - zeitstempel;
-		System.out.println("Berechnung von " + i + " Stützstellen in "
+		System.out.println("Berechnung von " + i + " StÃ¼tzstellen in "
 				+ Timestamp.relativeTime(zeitstempel));
 	}
 

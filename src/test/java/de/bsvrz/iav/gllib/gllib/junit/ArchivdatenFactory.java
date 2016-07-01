@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weißenfelser Straße 67
+ * WeiÃŸenfelser StraÃŸe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -52,7 +52,7 @@ import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.onlinedaten.OdVerkehrsDatenKu
 @SuppressWarnings("nls")
 public class ArchivdatenFactory {
 
-	/** Enthält die Spaltennamen der Tabelle. */
+	/** EnthÃ¤lt die Spaltennamen der Tabelle. */
 	public enum Archivdaten {
 
 		/**
@@ -99,8 +99,8 @@ public class ArchivdatenFactory {
 	private final MessQuerschnittAllgemein mq;
 
 	/**
-	 * Intitialisiert den Datenbankzugriff. Der JDBC-Treiber für HSQLDB wird per
-	 * Standard geladen, andere müssen explizit vorher geladen werden.
+	 * Intitialisiert den Datenbankzugriff. Der JDBC-Treiber fÃ¼r HSQLDB wird per
+	 * Standard geladen, andere mÃ¼ssen explizit vorher geladen werden.
 	 *
 	 * @param mq
 	 *            der Messquerschnitt dessen Archivdaten geschrieben werden
@@ -108,7 +108,7 @@ public class ArchivdatenFactory {
 	 * @param url
 	 *            die URL der Datenbank in JDBC-Notation.
 	 * @param benutzer
-	 *            der Benutzername für der Datenbank.
+	 *            der Benutzername fÃ¼r der Datenbank.
 	 * @param kennwort
 	 *            das Kennwort des Benutzer.
 	 */
@@ -134,7 +134,7 @@ public class ArchivdatenFactory {
 	}
 
 	/**
-	 * Schreibt die benötigten Testdaten ins Archiv.
+	 * Schreibt die benÃ¶tigten Testdaten ins Archiv.
 	 * <p>
 	 * Die Tabelle mit den Ereignistypen muss folgenden Aufbau besitzen:
 	 *
@@ -220,7 +220,7 @@ public class ArchivdatenFactory {
 
 			// Datensatz senden
 			archivdaten.add(datum);
-			log.info("Sende Archivdaten für "
+			log.info("Sende Archivdaten fÃ¼r "
 					+ DateFormat.getDateTimeInstance().format(cal.getTime()));
 			onlinedaten.sendeDaten(
 					OdVerkehrsDatenKurzZeitMq.Aspekte.Analyse.getAspekt(),

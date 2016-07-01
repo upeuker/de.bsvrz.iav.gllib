@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weißenfelser Straße 67
+ * WeiÃŸenfelser StraÃŸe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -37,10 +37,10 @@ import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
  * Approximation einer Ganglinie mit Hilfe eines B-Splines beliebiger Ordung.
- * Der B-Spline legt eine geglättete Kurve zwischen der ersten und letzten
- * Stützstelle. Da hierbei sowohl der Stützstellenwert als auch der Zeitstempel
- * der Stützstellen gewichtet wird, wird die Kurve mit einer Polylinie
- * interpoliert. Das Intervall der Interpolation kann frei gewält werden,
+ * Der B-Spline legt eine geglÃ¤ttete Kurve zwischen der ersten und letzten
+ * StÃ¼tzstelle. Da hierbei sowohl der StÃ¼tzstellenwert als auch der Zeitstempel
+ * der StÃ¼tzstellen gewichtet wird, wird die Kurve mit einer Polylinie
+ * interpoliert. Das Intervall der Interpolation kann frei gewÃ¤lt werden,
  * Standard ist eine Minute.
  *
  * @author BitCtrl Systems GmbH, Falko Schumann
@@ -48,16 +48,16 @@ import de.bsvrz.sys.funclib.debug.Debug;
 public class BSpline extends AbstractApproximation<Double> {
 
 	/**
-	 * Die maximale Differenz ({@value} ) zwischen Näherungswert und Zielwert.
+	 * Die maximale Differenz ({@value} ) zwischen NÃ¤herungswert und Zielwert.
 	 *
 	 * @see #get(long)
 	 */
 	public static final long DELTA = 1000;
 
 	/**
-	 * Wenn die Optimierung eingeschalten ist, werden die Stützstellen des
+	 * Wenn die Optimierung eingeschalten ist, werden die StÃ¼tzstellen des
 	 * B-Splines im Abstand von einer Minute ausgerechnet und als Polylinie
-	 * gesichert. Die Optimierung ist standardmäßig eingeschalten.
+	 * gesichert. Die Optimierung ist standardmÃ¤ÃŸig eingeschalten.
 	 */
 	public static boolean OPTIMIERUNG = true;
 
@@ -71,7 +71,7 @@ public class BSpline extends AbstractApproximation<Double> {
 	private Polyline polyline;
 
 	/**
-	 * Das Interpolationsintervall für die Polylinie, die den B-Spline cacht.
+	 * Das Interpolationsintervall fÃ¼r die Polylinie, die den B-Spline cacht.
 	 */
 	private long interpolationsintervall;
 
@@ -79,8 +79,8 @@ public class BSpline extends AbstractApproximation<Double> {
 	private final Debug log;
 
 	/**
-	 * Gibt das Interpolationsintervall für die Polylinie, die den B-Spline
-	 * cacht, zurück.
+	 * Gibt das Interpolationsintervall fÃ¼r die Polylinie, die den B-Spline
+	 * cacht, zurÃ¼ck.
 	 *
 	 * @return das Interpolationsintervall.
 	 * @see #setInterpolationsintervall(long)
@@ -91,12 +91,12 @@ public class BSpline extends AbstractApproximation<Double> {
 
 	/**
 	 *
-	 * Legt das Interpolationsintervall für die Polylinie, die den B-Spline
+	 * Legt das Interpolationsintervall fÃ¼r die Polylinie, die den B-Spline
 	 * cacht, fest.
 	 * <p>
-	 * <em>Hinweis:</em> Nach Änderung des Interpolationsintervalls muss
-	 * {@link #initialisiere()} aufgerufen werden, um die Änderung zu
-	 * übernehmen.
+	 * <em>Hinweis:</em> Nach Ã„nderung des Interpolationsintervalls muss
+	 * {@link #initialisiere()} aufgerufen werden, um die Ã„nderung zu
+	 * Ã¼bernehmen.
 	 *
 	 * @param interpolationsintervall
 	 *            das Interpolationsintervall.
@@ -142,12 +142,12 @@ public class BSpline extends AbstractApproximation<Double> {
 						|| (zeitstempel > getStuetzstellen()
 								.get(getStuetzstellen().size() - 1)
 								.getZeitstempel()))) {
-			// Zeitstempel liegt außerhalb der Ganglinie
+			// Zeitstempel liegt auÃŸerhalb der Ganglinie
 			return new Stuetzstelle<Double>(zeitstempel, null);
 		}
 
 		// Da der B-Spline nicht die Enden enthalten muss, werden die erste und
-		// letzte Stützstelle einfach ausgeliefert.
+		// letzte StÃ¼tzstelle einfach ausgeliefert.
 		if (getStuetzstellen().get(0).getZeitstempel() == zeitstempel) {
 			return getStuetzstellen().get(0);
 		} else if (getStuetzstellen().get(getStuetzstellen().size() - 1)
@@ -184,7 +184,7 @@ public class BSpline extends AbstractApproximation<Double> {
 	}
 
 	/**
-	 * Gibt die Ordnung des B-Splines zurück.
+	 * Gibt die Ordnung des B-Splines zurÃ¼ck.
 	 *
 	 * @return Ordnung
 	 */
@@ -195,8 +195,8 @@ public class BSpline extends AbstractApproximation<Double> {
 	/**
 	 * Bestimmt die Intervallgrenzen der Interpolation. Es gibt n+k-1 Intervalle
 	 * mit n&nbsp;=&nbsp;Knotenanzahl und k&nbsp;=&nbsp;Ordnung des B-Spline.
-	 * Ist die Ordnung des B-Spline größer als die Anzahl der Stützstellen, dann
-	 * wird die Ordnung auf die Stützstellenanzahl reduziert.
+	 * Ist die Ordnung des B-Spline grÃ¶ÃŸer als die Anzahl der StÃ¼tzstellen, dann
+	 * wird die Ordnung auf die StÃ¼tzstellenanzahl reduziert.
 	 *
 	 * {@inheritDoc}
 	 */
@@ -207,7 +207,7 @@ public class BSpline extends AbstractApproximation<Double> {
 		}
 
 		if (getStuetzstellen().size() < getOrdnung()) {
-			// Ordnung größer als Anzahl der Stützstellen, Ordung anpassen
+			// Ordnung grÃ¶ÃŸer als Anzahl der StÃ¼tzstellen, Ordung anpassen
 			LogTools.log(log,
 					GlLibMsg.InfoOrdnungGroesserAlsAnzahlStuetzstellen,
 					getOrdnung(), getStuetzstellen().size());
@@ -254,7 +254,7 @@ public class BSpline extends AbstractApproximation<Double> {
 	}
 
 	/**
-	 * Verwendet eine Polyline-Approximation des Splines zur näherungsweisen
+	 * Verwendet eine Polyline-Approximation des Splines zur nÃ¤herungsweisen
 	 * Bestimmung des Integrals.
 	 *
 	 * {@inheritDoc}
@@ -290,17 +290,17 @@ public class BSpline extends AbstractApproximation<Double> {
 	}
 
 	/**
-	 * Berechnet die Stützstelle zu einer Intervallstelle.
+	 * Berechnet die StÃ¼tzstelle zu einer Intervallstelle.
 	 *
 	 * @param t0
 	 *            Eine Stelle im Intervall des Parameters t
-	 * @return Die berechnete Stützstelle
+	 * @return Die berechnete StÃ¼tzstelle
 	 */
 	private Stuetzstelle<Double> bspline(final double t0) {
 		double bx, by;
 		final int i;
 
-		// Ränder der Ganglinie werden 1:1 übernommen
+		// RÃ¤nder der Ganglinie werden 1:1 Ã¼bernommen
 		if (t0 <= t[0]) {
 			return getStuetzstellen().get(0);
 		} else if (t0 >= t[t.length - 1]) {
@@ -322,15 +322,15 @@ public class BSpline extends AbstractApproximation<Double> {
 	}
 
 	/**
-	 * Berechnet rekursiv das Gewicht einer Stützstelle.
+	 * Berechnet rekursiv das Gewicht einer StÃ¼tzstelle.
 	 *
 	 * @param i
-	 *            Index der Stützstelle, dessen Gewicht gesucht ist
+	 *            Index der StÃ¼tzstelle, dessen Gewicht gesucht ist
 	 * @param m
 	 *            Ordnung des B-Spline und gleichzeitig Invariante der Rekursion
 	 * @param t0
 	 *            Wert im Intervall des Parameters t
-	 * @return Das Gewicht der i-ten Stützstelle
+	 * @return Das Gewicht der i-ten StÃ¼tzstelle
 	 */
 	private double n(final int i, final int m, final double t0) {
 		double n; // Gewicht
@@ -375,7 +375,7 @@ public class BSpline extends AbstractApproximation<Double> {
 	 *
 	 * @param zeitstempel
 	 *            Ein Zeitstempel
-	 * @return Die dazugehörige Intervallposition
+	 * @return Die dazugehÃ¶rige Intervallposition
 	 */
 	private double zeitstempelNachT(final long zeitstempel) {
 		double t0;

@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weißenfelser Straße 67
+ * WeiÃŸenfelser StraÃŸe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -51,8 +51,8 @@ import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.objekte.MessQuerschnittAllgem
 import de.bsvrz.sys.funclib.commandLineArgs.ArgumentList;
 
 /**
- * Setzt für alle Messquerschnitte den Parameter mit der Ganglinienliste. Es
- * wird je eine Ganglinie für jeden Wochentag und Ostermontag angelegt.
+ * Setzt fÃ¼r alle Messquerschnitte den Parameter mit der Ganglinienliste. Es
+ * wird je eine Ganglinie fÃ¼r jeden Wochentag und Ostermontag angelegt.
  *
  * @author BitCtrl Systems GmbH, Falko Schumann
  */
@@ -123,7 +123,7 @@ public final class TestGanglinienParameterSetzer
 
 			if (!(so instanceof MessQuerschnittAllgemein)) {
 				throw new IllegalStateException(so
-						+ " ist kein Messquerschnitt. Es können nur Messquerschnitte bearbeitet werden.");
+						+ " ist kein Messquerschnitt. Es kÃ¶nnen nur Messquerschnitte bearbeitet werden.");
 			}
 			mq = (MessQuerschnittAllgemein) so;
 
@@ -155,19 +155,19 @@ public final class TestGanglinienParameterSetzer
 					datumGanglinie.add(g);
 				}
 				GlSpeicher.getInstanz().write(datumGanglinie);
-				System.out.println("Ganglinien für " + mq + " gesendet.");
+				System.out.println("Ganglinien fÃ¼r " + mq + " gesendet.");
 
 				pdPrognose.anmeldenSender();
 				pdPrognose.sendeDaten(datumPrognose);
 				System.out.println(
-						"Ganglinienprognoseparameter für " + mq + " gesendet.");
+						"Ganglinienprognoseparameter fÃ¼r " + mq + " gesendet.");
 			} catch (final AnmeldeException ex) {
 				System.err.println(
-						"Kann mich nicht zum Senden der Ganglinien für " + mq
+						"Kann mich nicht zum Senden der Ganglinien fÃ¼r " + mq
 								+ " anmelden.");
 			} catch (final DatensendeException ex) {
 				System.err.println(
-						"Kann Ganglinien für " + mq + " nicht senden.");
+						"Kann Ganglinien fÃ¼r " + mq + " nicht senden.");
 			}
 		}
 
@@ -176,10 +176,10 @@ public final class TestGanglinienParameterSetzer
 	}
 
 	/**
-	 * Folgende Parameter werden unterstützt.
+	 * Folgende Parameter werden unterstÃ¼tzt.
 	 * <ul>
 	 * <li><code>-objekte</code>: Die PIDs der Messquerschnitte die parametriert
-	 * werden sollen. Mehrere PIDs können als kommagetrennte Liste angegeben
+	 * werden sollen. Mehrere PIDs kÃ¶nnen als kommagetrennte Liste angegeben
 	 * werden (ohne Leerzeichen). Fehlt der Parameter, werden alle
 	 * Messquerschnitte parametriert.</li>
 	 * </ul>

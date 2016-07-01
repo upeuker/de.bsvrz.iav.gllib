@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weißenfelser Straße 67
+ * WeiÃŸenfelser StraÃŸe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -150,7 +150,7 @@ public class OdPrognoseGanglinienAntwort
 		}
 
 		/**
-		 * Es wird eine flache Kopie zurückgegeben.
+		 * Es wird eine flache Kopie zurÃ¼ckgegeben.
 		 *
 		 * {@inheritDoc}
 		 */
@@ -183,7 +183,7 @@ public class OdPrognoseGanglinienAntwort
 		}
 
 		/**
-		 * Gibt das Zeichen des Absenders zurück. Der Text wurde bei der Anfrage
+		 * Gibt das Zeichen des Absenders zurÃ¼ck. Der Text wurde bei der Anfrage
 		 * in die Anfragenachricht eingetragen und von der Ganglinienprognose in
 		 * die Antwort kopiert. Somit kann die anfragende Applikation mehrere
 		 * Anfragen unterscheiden.
@@ -246,8 +246,8 @@ public class OdPrognoseGanglinienAntwort
 		 * Setzt das Absenderzeichen. In der Regel wird dieses lediglich aus der
 		 * Anfrage in die Antwort kopiert.
 		 * <p>
-		 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API
-		 * und sollte nicht außerhalb der Ganglinie-API verwendet werden.
+		 * <em>Hinweis:</em> Diese Methode ist nicht Teil der Ã¶ffentlichen API
+		 * und sollte nicht auÃŸerhalb der Ganglinie-API verwendet werden.
 		 *
 		 * @param absenderZeichen
 		 *            ein beliebiger Text.
@@ -475,9 +475,9 @@ public class OdPrognoseGanglinienAntwort
 			ganglinien.getItem(i).getUnscaledValue("Ordnung").set( //$NON-NLS-1$
 					g.getBSplineOrdnung());
 
-			// Stützstellen
+			// StÃ¼tzstellen
 			liste = g.getStuetzstellen();
-			stuetzstellen = ganglinien.getItem(i).getArray("Stützstelle"); //$NON-NLS-1$
+			stuetzstellen = ganglinien.getItem(i).getArray("StÃ¼tzstelle"); //$NON-NLS-1$
 			stuetzstellen.setLength(liste.size());
 			for (int j = 0; j < liste.size(); j++) {
 				Stuetzstelle<Messwerte> s;
@@ -561,8 +561,8 @@ public class OdPrognoseGanglinienAntwort
 								.getMillis());
 				g.setPrognoseZeitraum(prognoseZeitraum);
 
-				// Stützstellen
-				feld = ganglinien.getItem(i).getArray("Stützstelle"); //$NON-NLS-1$
+				// StÃ¼tzstellen
+				feld = ganglinien.getItem(i).getArray("StÃ¼tzstelle"); //$NON-NLS-1$
 				for (int j = 0; j < feld.getLength(); j++) {
 					long zeitstempel;
 					Double qKfz0, qLkw0, vPkw0, vLkw0;

@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weiﬂenfelser Straﬂe 67
+ * Wei√üenfelser Stra√üe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -412,7 +412,7 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 				g.setBSplineOrdnung((byte) daten.getUnscaledValue("Ordnung") //$NON-NLS-1$
 						.longValue());
 
-				stuetzstellen = daten.getArray("St¸tzstelle"); //$NON-NLS-1$
+				stuetzstellen = daten.getArray("St√ºtzstelle"); //$NON-NLS-1$
 				for (int j = 0; j < stuetzstellen.getLength(); j++) {
 					long zeitstempel;
 					Double qKfz0, qLkw0, vPkw0, vLkw0;
@@ -495,7 +495,7 @@ public class PdGanglinie extends AbstractParameterDatensatz<PdGanglinie.Daten> {
 			ganglinien.getItem(i).getUnscaledValue("Ordnung").set( //$NON-NLS-1$
 					g.getBSplineOrdnung());
 
-			stuetzstellen = ganglinien.getItem(i).getArray("St¸tzstelle"); //$NON-NLS-1$
+			stuetzstellen = ganglinien.getItem(i).getArray("St√ºtzstelle"); //$NON-NLS-1$
 			final List<Stuetzstelle<Messwerte>> liste = g.getStuetzstellen();
 			int j = 0;
 			stuetzstellen.setLength(liste.size());

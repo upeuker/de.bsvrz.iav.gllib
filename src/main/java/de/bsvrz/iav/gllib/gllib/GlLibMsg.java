@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weißenfelser Straße 67
+ * WeiÃŸenfelser StraÃŸe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -40,22 +40,22 @@ import de.bsvrz.sys.funclib.operatingMessage.MessageGrade;
  */
 public enum GlLibMsg implements LogNachricht {
 
-	/** Nicht für Log-Ausgaben vorgesehen. */
+	/** Nicht fÃ¼r Log-Ausgaben vorgesehen. */
 	Applikationsname,
 
-	/** Nicht für Log-Ausgaben vorgesehen. */
+	/** Nicht fÃ¼r Log-Ausgaben vorgesehen. */
 	ApplikationsnameKurz,
 
-	/** Parameter: 1) Name des Parameters, der ungültig ist. */
+	/** Parameter: 1) Name des Parameters, der ungÃ¼ltig ist. */
 	IllegalArgumentExceptionNull,
 
-	/** Parameter: 1) Name des Parameters, der ungültig ist. */
+	/** Parameter: 1) Name des Parameters, der ungÃ¼ltig ist. */
 	IllegalArgumentExceptionGroesserNull,
 
-	/** Parameter: 1) Name des Parameters, der ungültig ist. */
+	/** Parameter: 1) Name des Parameters, der ungÃ¼ltig ist. */
 	IllegalArgumentExceptionGroesserGleichNull,
 
-	/** Parameter: 1) Name des Parameters, der ungültig ist. */
+	/** Parameter: 1) Name des Parameters, der ungÃ¼ltig ist. */
 	IllegalArgumentExceptionLeereListe,
 
 	/** Parameter: keine. */
@@ -106,7 +106,7 @@ public enum GlLibMsg implements LogNachricht {
 	/** Parameter: 1) der Ganglinienspeicher. */
 	InfoGanglinienSpeicher(Debug.INFO),
 
-	/** Paramater: 1) gewünschte Ordnung, 2) angepasste Ordnung. */
+	/** Paramater: 1) gewÃ¼nschte Ordnung, 2) angepasste Ordnung. */
 	InfoOrdnungGroesserAlsAnzahlStuetzstellen(Debug.INFO),
 
 	/** Parameter: 1) der Listener. */

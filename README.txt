@@ -4,15 +4,15 @@
 
 Version: ${version}
 
-Übersicht
+Ãœbersicht
 =========
 
 Die SWE Funktionen Ganglinie ist als Softwarebibliothek ausgelegt, die von
 beliebigen anderen SWE eingebunden und genutzt werden kann. Sie selbst hat keine
-externe Schnittstelle und keine Benutzerschnittstelle. Sie kapselt für die
+externe Schnittstelle und keine Benutzerschnittstelle. Sie kapselt fÃ¼r die
 Verwaltung von Ganglinien die Kommunikation mit dem Datenverteiler.
 
-Es werden allgemeine Funktionen zur Verfügung gestellt, die bei der Analyse und
+Es werden allgemeine Funktionen zur VerfÃ¼gung gestellt, die bei der Analyse und
 Bearbeitung von Ganglinien verwendet werden. Die einzelnen Funktionen lassen
 sich in folgende Funktionsbereiche einteilen:
 
@@ -25,6 +25,10 @@ sich in folgende Funktionsbereiche einteilen:
 Versionsgeschichte
 ==================
 
+2.3.0
+=====
+- Umstellung auf Java 8 und UTF-8
+
 2.2.0
   - Umstellung auf Maven-Build
 
@@ -33,15 +37,15 @@ Versionsgeschichte
 
 2.1.1
 
-  - Bei Abfrage von historischen Ganglinien konnte die SWE GlLernen abstürzen.
+  - Bei Abfrage von historischen Ganglinien konnte die SWE GlLernen abstÃ¼rzen.
     (Mantis #2102)
   - Loggausgaben beim Unit-Test werden wieder angezeigt.
-  - Überarbeitung der JUnit-Tests damit sie nach DAF-Upgrade wieder wie gewohnt
+  - Ãœberarbeitung der JUnit-Tests damit sie nach DAF-Upgrade wieder wie gewohnt
     funtionieren.
 
 2.1.0
 
-  - Betriebsmeldungen um Systemobjekt in ID ergänzen, wenn sinnvoll.
+  - Betriebsmeldungen um Systemobjekt in ID ergÃ¤nzen, wenn sinnvoll.
     (Mantis #2092)
   - Quelltext kompatibler mit Java 6 gemacht.
 
@@ -53,19 +57,19 @@ Versionsgeschichte
 
   - Umstellung der Ganglinienspeicherung von der Behandlung als Parameter
     (atg.ganglinie) auf eine separate Speicherung in einer Derby DB.
-  - Bereitstellung einer Datenverteiler-Schnittstelle für das Lesen und
+  - Bereitstellung einer Datenverteiler-Schnittstelle fÃ¼r das Lesen und
     Schreiben von Ganglinien durch andere Applikationen
-  - Verringerung der Stützstellenanzahl. Es ist Pro Approximationsverfahren per
+  - Verringerung der StÃ¼tzstellenanzahl. Es ist Pro Approximationsverfahren per
     Kommdozeilenparameter einstellbar, welcher Aspekt von
     atg.verkehrsDatenKurzMq verwendet werden soll.
-  - Vermeidung von Datenlücken. Die Verschmelzungsregeln des Ganglinienlernens
-    wurde derart geändert:
-    Alt: (Datenlücke + keine Datenlücke = Datenlücke),
-    Neu: (Datenlücke + keine Datenlücke = keine Datenlücke)
+  - Vermeidung von DatenlÃ¼cken. Die Verschmelzungsregeln des Ganglinienlernens
+    wurde derart geÃ¤ndert:
+    Alt: (DatenlÃ¼cke + keine DatenlÃ¼cke = DatenlÃ¼cke),
+    Neu: (DatenlÃ¼cke + keine DatenlÃ¼cke = keine DatenlÃ¼cke)
 
 1.3.0
 
-  - Betriebsinformation und Prüfprozedur liegen jetzt im Zustand "akzeptiert"
+  - Betriebsinformation und PrÃ¼fprozedur liegen jetzt im Zustand "akzeptiert"
     vor.
 
 1.2.1
@@ -74,16 +78,16 @@ Versionsgeschichte
 
 1.2.0
 
-  - Anpassung an überarbeitetet Funktionsbibliothek de.bsvrz.sys.funclib.bitctrl
-  - Pattern-Matching überarbeitet
+  - Anpassung an Ã¼berarbeitetet Funktionsbibliothek de.bsvrz.sys.funclib.bitctrl
+  - Pattern-Matching Ã¼berarbeitet
   - Berechnung der Approximation durch B-Spline extrem beschleunigt
-  - Prüfprozedur und Prüfprotokoll in Release aufgenommen
+  - PrÃ¼fprozedur und PrÃ¼fprotokoll in Release aufgenommen
   - Betriebsinformation in Release aufgenommen
 
 1.1.0
 
   - Umstellung auf neue Paketstruktur.
-  - Erweiterung des Funktionsumfangs für SWE 5.1 und 5.3.
+  - Erweiterung des Funktionsumfangs fÃ¼r SWE 5.1 und 5.3.
 
 1.0.0
 
@@ -123,7 +127,7 @@ Kontakt
 =======
 
 BitCtrl Systems GmbH
-Weißenfelser Straße 67
+WeiÃŸenfelser StraÃŸe 67
 04229 Leipzig
 Phone: +49 341-490670
 mailto: info@bitctrl.de

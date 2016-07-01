@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weißenfelser Straße 67
+ * WeiÃŸenfelser StraÃŸe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -43,11 +43,11 @@ import org.junit.Test;
  */
 public class AbstractApproximationTest {
 
-	/** Die Teststützstellen. */
+	/** Die TeststÃ¼tzstellen. */
 	private List<Stuetzstelle<Double>> stuetzstellen;
 
 	/**
-	 * Teststütztellen initialisieren.
+	 * TeststÃ¼tztellen initialisieren.
 	 */
 	@Before
 	public void setUp() {
@@ -71,7 +71,7 @@ public class AbstractApproximationTest {
 		polyline = new Polyline();
 		polyline.setStuetzstellen(stuetzstellen);
 
-		// Die Stützstellen selber
+		// Die StÃ¼tzstellen selber
 		assertEquals(0, polyline.findeStuetzstelleNach(1000));
 		assertEquals(1, polyline.findeStuetzstelleNach(2000));
 		assertEquals(2, polyline.findeStuetzstelleNach(3000));
@@ -99,7 +99,7 @@ public class AbstractApproximationTest {
 		polyline = new Polyline();
 		polyline.setStuetzstellen(stuetzstellen);
 
-		// Die Stützstellen selber
+		// Die StÃ¼tzstellen selber
 		assertEquals(0, polyline.findeStuetzstelleVor(1000));
 		assertEquals(1, polyline.findeStuetzstelleVor(2000));
 		assertEquals(2, polyline.findeStuetzstelleVor(3000));

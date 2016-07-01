@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weißenfelser Straße 67
+ * WeiÃŸenfelser StraÃŸe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -33,7 +33,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
- * Testet die Verwendung einer Stützstelle.
+ * Testet die Verwendung einer StÃ¼tzstelle.
  *
  * @author BitCtrl Systems GmbH, Schumann
  */
@@ -41,7 +41,7 @@ import org.junit.Test;
 public class StuetzstelleTest {
 
 	/**
-	 * Test der Verwendung einer "normalen", also defierten Stützstelle.
+	 * Test der Verwendung einer "normalen", also defierten StÃ¼tzstelle.
 	 */
 	@Test
 	@SuppressWarnings("static-method")
@@ -54,7 +54,7 @@ public class StuetzstelleTest {
 	}
 
 	/**
-	 * Testet den Test auf Gleichheit zweier Stützstellen.
+	 * Testet den Test auf Gleichheit zweier StÃ¼tzstellen.
 	 */
 	@Test
 	@SuppressWarnings("static-method")
@@ -80,11 +80,11 @@ public class StuetzstelleTest {
 		s2 = new Stuetzstelle<Integer>(30, null);
 		assertFalse(s1.equals(s2));
 
-		assertFalse(s1.equals("Keine Stützstelle"));
+		assertFalse(s1.equals("Keine StÃ¼tzstelle"));
 	}
 
 	/**
-	 * Testet die Ordung auf Stützstellen.
+	 * Testet die Ordung auf StÃ¼tzstellen.
 	 */
 	@Test
 	@SuppressWarnings("static-method")
@@ -112,7 +112,7 @@ public class StuetzstelleTest {
 	}
 
 	/**
-	 * Test der Verwendung einer undefierten Stützstelle.
+	 * Test der Verwendung einer undefierten StÃ¼tzstelle.
 	 */
 	@Test
 	@SuppressWarnings("static-method")

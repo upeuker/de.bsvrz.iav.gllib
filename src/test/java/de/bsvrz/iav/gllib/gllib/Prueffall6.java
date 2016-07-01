@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weißenfelser Straße 67
+ * WeiÃŸenfelser StraÃŸe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -34,10 +34,10 @@ import org.junit.Test;
 import com.bitctrl.util.Interval;
 
 /**
- * Führt den Prüffall 6 "Cut-Operation" laut Prüfspezifikation aus.
+ * FÃ¼hrt den PrÃ¼ffall 6 "Cut-Operation" laut PrÃ¼fspezifikation aus.
  * <p>
  * Aus einer Ganglinie wird ein Teilintervall rausgeschnitten. Auf der linken
- * Seit liegt eine Stützstelle direkt auf der Intervallgrenze und auf der
+ * Seit liegt eine StÃ¼tzstelle direkt auf der Intervallgrenze und auf der
  * rechten Seite nicht. Auf der rechten Seite muss der Wert interpoliert werden.
  *
  * @author BitCtrl Systems GmbH, Schumann
@@ -46,13 +46,13 @@ public class Prueffall6 {
 
 	/**
 	 * Aus einer Ganglinie im Intervall 5 bis 80 Minuten wird das Teilintervall
-	 * 20 bis 70 herausgeschnitten. Für die linke Intervallseite (20) existiert
-	 * eine Stützstelle in der Ganglinie. Für die rechte Seite des
-	 * Teilintervalls (70) existiert keine Stützstelle.
+	 * 20 bis 70 herausgeschnitten. FÃ¼r die linke Intervallseite (20) existiert
+	 * eine StÃ¼tzstelle in der Ganglinie. FÃ¼r die rechte Seite des
+	 * Teilintervalls (70) existiert keine StÃ¼tzstelle.
 	 * <p>
-	 * Im Ergebnis umfasst die herausgeschnitte Ganglinie das gewünschte
-	 * Intervall. Die Stützstelle am linken Rand wird aus der Originalganglinie
-	 * übernommen. Die Stützstelle an der rechten Seite wird interpoliert.
+	 * Im Ergebnis umfasst die herausgeschnitte Ganglinie das gewÃ¼nschte
+	 * Intervall. Die StÃ¼tzstelle am linken Rand wird aus der Originalganglinie
+	 * Ã¼bernommen. Die StÃ¼tzstelle an der rechten Seite wird interpoliert.
 	 */
 	@Test
 	@SuppressWarnings("static-method")

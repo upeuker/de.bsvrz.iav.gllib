@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weißenfelser Straße 67
+ * WeiÃŸenfelser StraÃŸe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -46,9 +46,9 @@ import de.bsvrz.sys.funclib.bitctrl.modell.kalender.objekte.EreignisTyp;
 import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.objekte.MessQuerschnittAllgemein;
 
 /**
- * Für Messquerschnitte angepasste Ganglinie. Die vier Verkehrswerte QKfz, QLkw,
+ * FÃ¼r Messquerschnitte angepasste Ganglinie. Die vier Verkehrswerte QKfz, QLkw,
  * VPkw und VLkw werden als Gruppe pro Zeitstempel gesichert. Aus diesen Werten
- * lassen sich die drei davon abhängigen Größe QPkw, VKfz und QB berechnen.
+ * lassen sich die drei davon abhÃ¤ngigen GrÃ¶ÃŸe QPkw, VKfz und QB berechnen.
  *
  * @author BitCtrl Systems GmbH, Falko Schumann
  */
@@ -60,33 +60,33 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	 */
 	public static final String ATG_GANGLINIE = "atg.ganglinie"; //$NON-NLS-1$
 
-	/** Datenkatalogkonstante für die unbestimmte Approximation: {@value} . */
+	/** Datenkatalogkonstante fÃ¼r die unbestimmte Approximation: {@value} . */
 	public static final int APPROX_UNBESTIMMT = 0;
 
-	/** Datenkatalogkonstante für einen B-Spline: {@value} . */
+	/** Datenkatalogkonstante fÃ¼r einen B-Spline: {@value} . */
 	public static final int APPROX_BSPLINE = 1;
 
-	/** Datenkatalogkonstante für einen Cubic-Spline: {@value} . */
+	/** Datenkatalogkonstante fÃ¼r einen Cubic-Spline: {@value} . */
 	public static final int APPROX_CUBICSPLINE = 2;
 
-	/** Datenkatalogkonstante für eine Polylinie: {@value} . */
+	/** Datenkatalogkonstante fÃ¼r eine Polylinie: {@value} . */
 	public static final int APPROX_POLYLINE = 3;
 
 	/**
-	 * Standardordung der Approximation. Nur für B-Spline relevant: {@value} .
+	 * Standardordung der Approximation. Nur fÃ¼r B-Spline relevant: {@value} .
 	 */
 	public static final byte APPROX_STANDARD_ORDNUNG = 5;
 
-	/** Datenkatalogkonstante für eine absolute Ganglinie: {@value} . */
+	/** Datenkatalogkonstante fÃ¼r eine absolute Ganglinie: {@value} . */
 	public static final int TYP_ABSOLUT = 0;
 
 	/**
-	 * Datenkatalogkonstante für eine relative additive Ganglinie: {@value} .
+	 * Datenkatalogkonstante fÃ¼r eine relative additive Ganglinie: {@value} .
 	 */
 	public static final int TYP_ADDITIV = 1;
 
 	/**
-	 * Datenkatalogkonstante für eine relative multiplikative Ganglinie: * * * *
+	 * Datenkatalogkonstante fÃ¼r eine relative multiplikative Ganglinie: * * * *
 	 * * {@value} .
 	 */
 	public static final int TYP_MULTIPLIKATIV = 2;
@@ -94,13 +94,13 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	/** Die Eigenschaft {@code serialVersionUID}. */
 	private static final long serialVersionUID = 0;
 
-	/** Der Messquerschnitt, zu dem die Ganglinie gehört. */
+	/** Der Messquerschnitt, zu dem die Ganglinie gehÃ¶rt. */
 	private MessQuerschnittAllgemein messQuerschnitt;
 
-	/** Parameter für die Berechnung von QB, Standard ist 2.0. */
+	/** Parameter fÃ¼r die Berechnung von QB, Standard ist 2.0. */
 	private float k1 = 2.0f;
 
-	/** Parameter für die Berechnung von QB, Standard ist 0.01. */
+	/** Parameter fÃ¼r die Berechnung von QB, Standard ist 0.01. */
 	private float k2 = 0.01f;
 
 	/**
@@ -113,7 +113,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	private long anzahlVerschmelzungen = 1;
 
 	/**
-	 * Identifier für das mit der Ganglinie verknüpfte Ereignis, Standard ist
+	 * Identifier fÃ¼r das mit der Ganglinie verknÃ¼pfte Ereignis, Standard ist
 	 * null.
 	 */
 	private EreignisTyp ereignisTyp = null;
@@ -133,7 +133,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	/** Ordnung des B-Spline, Standard ist {@link #APPROX_STANDARD_ORDNUNG}. */
 	private int bSplineOrdnung = APPROX_STANDARD_ORDNUNG;
 
-	/** Das Intervall für das die Ganglinie prognostiziert wird. */
+	/** Das Intervall fÃ¼r das die Ganglinie prognostiziert wird. */
 	private Interval prognoseZeitraum;
 
 	/** Cache der Einzelganglinie. */
@@ -206,7 +206,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 
 	/**
 	 * Kopiert die St&uuml;tzstellen, das Approximationsverfahren und alle
-	 * anderen Eigenschaften bis auf {@code approximationAktuell}. Der Wert für
+	 * anderen Eigenschaften bis auf {@code approximationAktuell}. Der Wert fÃ¼r
 	 * {@code approximationAktuell} wird auf false gesetzt.
 	 *
 	 * {@inheritDoc}
@@ -233,7 +233,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
-	 * Gibt die Approximation zur Datenverteilerapproximation zurück.
+	 * Gibt die Approximation zur Datenverteilerapproximation zurÃ¼ck.
 	 *
 	 * @return die Approximation.
 	 * @see #approximationDaK
@@ -253,7 +253,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 
 	/**
 	 * Gibt die Anzahl der bisherigen Verschmelzungen beim automatischen Lernen
-	 * zurück.
+	 * zurÃ¼ck.
 	 *
 	 * @return Anzahl bisheriger Verschmelzungen
 	 */
@@ -264,7 +264,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @deprecated Die Approximation der einzelnen Größen kann mit
+	 * @deprecated Die Approximation der einzelnen GrÃ¶ÃŸen kann mit
 	 *             {@code getGanglinie*.getApproximation()} abgerufen werden.
 	 *             Der Typ der Approximation kann mit
 	 *             {@link #getApproximationDaK()} erfragt werden.
@@ -276,7 +276,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
-	 * Gibt die Art der Approximation als Datenkatalogkonstante zurück.
+	 * Gibt die Art der Approximation als Datenkatalogkonstante zurÃ¼ck.
 	 *
 	 * @return eine der Konstante {@link #APPROX_POLYLINE},
 	 *         {@link #APPROX_CUBICSPLINE}, {@link #APPROX_BSPLINE} oder
@@ -287,7 +287,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
-	 * Gibt die Ordnung des B-Spline zurück. Wird zur Approximation kein
+	 * Gibt die Ordnung des B-Spline zurÃ¼ck. Wird zur Approximation kein
 	 * B-Spline benutzt, wird der Wert ignoriert.
 	 *
 	 * @return die Ordnung des B-Spline.
@@ -297,7 +297,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
-	 * Gibt den Ereignistyp der Ganglinie zurück.
+	 * Gibt den Ereignistyp der Ganglinie zurÃ¼ck.
 	 *
 	 * @return der Ereignistyp.
 	 */
@@ -306,9 +306,9 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
-	 * Gibt die Ganglinie für QB zurück.
+	 * Gibt die Ganglinie fÃ¼r QB zurÃ¼ck.
 	 *
-	 * @return eine einfache mathematische Ganglinie mit den Stützstellen von
+	 * @return eine einfache mathematische Ganglinie mit den StÃ¼tzstellen von
 	 *         QB.
 	 */
 	public Ganglinie<Double> getGanglinieQB() {
@@ -324,9 +324,9 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
-	 * Gibt die Ganglinie für QKfz zurück.
+	 * Gibt die Ganglinie fÃ¼r QKfz zurÃ¼ck.
 	 *
-	 * @return eine einfache mathematische Ganglinie mit den Stützstellen von
+	 * @return eine einfache mathematische Ganglinie mit den StÃ¼tzstellen von
 	 *         QKfz.
 	 */
 	public Ganglinie<Double> getGanglinieQKfz() {
@@ -342,9 +342,9 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
-	 * Gibt die Ganglinie für QLkw zurück.
+	 * Gibt die Ganglinie fÃ¼r QLkw zurÃ¼ck.
 	 *
-	 * @return eine einfache mathematische Ganglinie mit den Stützstellen von
+	 * @return eine einfache mathematische Ganglinie mit den StÃ¼tzstellen von
 	 *         QLkw.
 	 */
 	public Ganglinie<Double> getGanglinieQLkw() {
@@ -360,9 +360,9 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
-	 * Gibt die Ganglinie für QPkw zurück.
+	 * Gibt die Ganglinie fÃ¼r QPkw zurÃ¼ck.
 	 *
-	 * @return eine einfache mathematische Ganglinie mit den Stützstellen von
+	 * @return eine einfache mathematische Ganglinie mit den StÃ¼tzstellen von
 	 *         QPkw.
 	 */
 	public Ganglinie<Double> getGanglinieQPkw() {
@@ -378,9 +378,9 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
-	 * Gibt die Ganglinie für VKfz zurück.
+	 * Gibt die Ganglinie fÃ¼r VKfz zurÃ¼ck.
 	 *
-	 * @return eine einfache mathematische Ganglinie mit den Stützstellen von
+	 * @return eine einfache mathematische Ganglinie mit den StÃ¼tzstellen von
 	 *         VKfz.
 	 */
 	public Ganglinie<Double> getGanglinieVKfz() {
@@ -397,9 +397,9 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
-	 * Gibt die Ganglinie für VLkw zurück.
+	 * Gibt die Ganglinie fÃ¼r VLkw zurÃ¼ck.
 	 *
-	 * @return eine einfache mathematische Ganglinie mit den Stützstellen von
+	 * @return eine einfache mathematische Ganglinie mit den StÃ¼tzstellen von
 	 *         VLkw.
 	 */
 	public Ganglinie<Double> getGanglinieVLkw() {
@@ -415,9 +415,9 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
-	 * Gibt die Ganglinie für QPkw zurück.
+	 * Gibt die Ganglinie fÃ¼r QPkw zurÃ¼ck.
 	 *
-	 * @return eine einfache mathematische Ganglinie mit den Stützstellen von
+	 * @return eine einfache mathematische Ganglinie mit den StÃ¼tzstellen von
 	 *         QPkw.
 	 */
 	public Ganglinie<Double> getGanglinieVPkw() {
@@ -452,7 +452,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @deprecated Die Intervalle müssen an den einzelnen Größen mit
+	 * @deprecated Die Intervalle mÃ¼ssen an den einzelnen GrÃ¶ÃŸen mit
 	 *             {@code getGanglinie*.getIntervalle()} abgerufen werden.
 	 */
 	@Deprecated
@@ -462,7 +462,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
-	 * Gibt einen Parameter für die Berechnung von QB zurück.
+	 * Gibt einen Parameter fÃ¼r die Berechnung von QB zurÃ¼ck.
 	 *
 	 * @return der Parameter.
 	 */
@@ -471,7 +471,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
-	 * Gibt einen Parameter für die Berechnung von QB zurück.
+	 * Gibt einen Parameter fÃ¼r die Berechnung von QB zurÃ¼ck.
 	 *
 	 * @return der Parameter
 	 */
@@ -480,7 +480,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
-	 * Gibt den Zeitpunkt der letzten Verschmelzung als Zeitstempel zurück.
+	 * Gibt den Zeitpunkt der letzten Verschmelzung als Zeitstempel zurÃ¼ck.
 	 *
 	 * @return Zeitstempel
 	 */
@@ -489,7 +489,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
-	 * Gibt den Messquerschnitt der Ganglinie zurück.
+	 * Gibt den Messquerschnitt der Ganglinie zurÃ¼ck.
 	 *
 	 * @return ein Messquerschnitt.
 	 */
@@ -498,7 +498,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
-	 * Gibt das Prognoseintervall der Ganglinie zurück.
+	 * Gibt das Prognoseintervall der Ganglinie zurÃ¼ck.
 	 *
 	 * @return das Prognoseintervall.
 	 */
@@ -558,8 +558,8 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
-	 * Gibt berechnete Stützstellen im angegebenen Intervall in der angegebenen
-	 * Schrittweite zurück.
+	 * Gibt berechnete StÃ¼tzstellen im angegebenen Intervall in der angegebenen
+	 * Schrittweite zurÃ¼ck.
 	 *
 	 * @see #setPrognoseZeitraum(Interval)
 	 */
@@ -583,12 +583,12 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
-	 * Gibt berechnete Stützstellen im prognostizierten Intervall in der
-	 * angegebenen Schrittweite zurück.
+	 * Gibt berechnete StÃ¼tzstellen im prognostizierten Intervall in der
+	 * angegebenen Schrittweite zurÃ¼ck.
 	 *
 	 * @param schrittweite
-	 *            die Schrittweite der Stützstellen für die Berechnung.
-	 * @return die berechneten Stützstellen.
+	 *            die Schrittweite der StÃ¼tzstellen fÃ¼r die Berechnung.
+	 * @return die berechneten StÃ¼tzstellen.
 	 * @see #setPrognoseZeitraum(Interval)
 	 */
 	public List<Stuetzstelle<Messwerte>> getStuetzstellen(
@@ -598,15 +598,15 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
-	 * Gibt berechnete Stützstellen in einem bestimmten Intervall in der
-	 * angegebenen Schrittweite zurück.
+	 * Gibt berechnete StÃ¼tzstellen in einem bestimmten Intervall in der
+	 * angegebenen Schrittweite zurÃ¼ck.
 	 *
 	 * @param intervall
-	 *            das Intervall der Ganglinie für das die Stützstellen berechnet
+	 *            das Intervall der Ganglinie fÃ¼r das die StÃ¼tzstellen berechnet
 	 *            werden sollen.
 	 * @param schrittweite
-	 *            die Schrittweite der Stützstellen für die Berechnung.
-	 * @return die berechneten Stützstellen.
+	 *            die Schrittweite der StÃ¼tzstellen fÃ¼r die Berechnung.
+	 * @return die berechneten StÃ¼tzstellen.
 	 * @see #setPrognoseZeitraum(Interval)
 	 */
 	public List<Stuetzstelle<Messwerte>> getStuetzstellen(
@@ -627,7 +627,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
-	 * Gibt den Ganglinientyp zurück.
+	 * Gibt den Ganglinientyp zurÃ¼ck.
 	 *
 	 * @return der Typ der Ganglinie.
 	 * @see #TYP_ABSOLUT
@@ -639,7 +639,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
-	 * Bestimmt, ob die Ganglinie absolut oder relativ ist. Für eine relative
+	 * Bestimmt, ob die Ganglinie absolut oder relativ ist. FÃ¼r eine relative
 	 * Ganglinie wird nicht zwischen additiv und multiplikativ unterschieden.
 	 *
 	 * @return {@code true}, wenn die Ganglinie absolut ist.
@@ -685,8 +685,8 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	/**
 	 * Legt die Anzahl der bisherigen Verschmelzungen fest.
 	 * <p>
-	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
-	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
+	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der Ã¶ffentlichen API und
+	 * sollte nicht auÃŸerhalb der Ganglinie-API verwendet werden.
 	 *
 	 * @param anzahlVerschmelzungen
 	 *            Anzahl der Verschmelzungen
@@ -741,8 +741,8 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	/**
 	 * Legt den Ereignistyp der Ganglinie fest.
 	 * <p>
-	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
-	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
+	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der Ã¶ffentlichen API und
+	 * sollte nicht auÃŸerhalb der Ganglinie-API verwendet werden.
 	 *
 	 * @param ereignisTyp
 	 *            PID des Ereignistyp
@@ -752,7 +752,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
-	 * Legt den Parameter k1 für die Berechnung von QB fest.
+	 * Legt den Parameter k1 fÃ¼r die Berechnung von QB fest.
 	 *
 	 * @param k1
 	 *            der parameter k1
@@ -774,7 +774,7 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
-	 * Legt den Parameter k2 für die Berechnung von QB fest.
+	 * Legt den Parameter k2 fÃ¼r die Berechnung von QB fest.
 	 *
 	 * @param k2
 	 *            der parameter k2
@@ -798,8 +798,8 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	/**
 	 * Legt die Anzahl der bisherigen Verschmelzungen fest.
 	 * <p>
-	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
-	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
+	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der Ã¶ffentlichen API und
+	 * sollte nicht auÃŸerhalb der Ganglinie-API verwendet werden.
 	 *
 	 * @param letzteVerschmelzung
 	 *            die neue Anzahl der Verschmelzungen.
@@ -820,10 +820,10 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	}
 
 	/**
-	 * Legt das Prognoseintervall fest. Die getter-Methoden für Stützstellen
-	 * liefern nur Stützstellen innerhalb dieses Intervalls. Ist das
+	 * Legt das Prognoseintervall fest. Die getter-Methoden fÃ¼r StÃ¼tzstellen
+	 * liefern nur StÃ¼tzstellen innerhalb dieses Intervalls. Ist das
 	 * Prognoseintervall gleich {@code null}, dann werden alle vorhanden
-	 * Stützstellen berücksichtigt.
+	 * StÃ¼tzstellen berÃ¼cksichtigt.
 	 *
 	 * @param prognoseZeitraum
 	 *            ein Intervall.
@@ -835,8 +835,8 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	/**
 	 * Kennzeichnet die Ganglinie als Referenzganglinie.
 	 * <p>
-	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
-	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
+	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der Ã¶ffentlichen API und
+	 * sollte nicht auÃŸerhalb der Ganglinie-API verwendet werden.
 	 *
 	 * @param referenz
 	 *            <code>true</code>, wenn diese Ganglinie eine Referenzganglinie
@@ -849,8 +849,8 @@ public class GanglinieMQ extends Ganglinie<Messwerte> {
 	/**
 	 * Legt den Ganglinientyp fest.
 	 * <p>
-	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der öffentlichen API und
-	 * sollte nicht außerhalb der Ganglinie-API verwendet werden.
+	 * <em>Hinweis:</em> Diese Methode ist nicht Teil der Ã¶ffentlichen API und
+	 * sollte nicht auÃŸerhalb der Ganglinie-API verwendet werden.
 	 *
 	 * @param typ
 	 *            der Typ der Ganglinie.

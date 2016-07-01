@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weißenfelser Straße 67
+ * WeiÃŸenfelser StraÃŸe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -108,11 +108,11 @@ public class PdGanglinienModellPrognose
 		}
 
 		/**
-		 * Gibt die Auswahlmethode zurück, die verwendet wird, wenn das
+		 * Gibt die Auswahlmethode zurÃ¼ck, die verwendet wird, wenn das
 		 * Pattern-Matching kein Ergebnis liefert oder nicht verwendet werden
 		 * soll.
 		 *
-		 * @return die Auswahlmethode für die Rückfallebene.
+		 * @return die Auswahlmethode fÃ¼r die RÃ¼ckfallebene.
 		 */
 		public int getAuswahlMethode() {
 			return auswahlMethode;
@@ -127,7 +127,7 @@ public class PdGanglinienModellPrognose
 		}
 
 		/**
-		 * Gibt die Schrittweite zurück, in der beim Pattern-Matching verschoben
+		 * Gibt die Schrittweite zurÃ¼ck, in der beim Pattern-Matching verschoben
 		 * wird.
 		 *
 		 * @return die Schrittweite.
@@ -137,7 +137,7 @@ public class PdGanglinienModellPrognose
 		}
 
 		/**
-		 * Gibt den maximal erlaubten Fehler beim Pattern-Matching zurück.
+		 * Gibt den maximal erlaubten Fehler beim Pattern-Matching zurÃ¼ck.
 		 *
 		 * @return der maximale Fehler.
 		 */
@@ -147,7 +147,7 @@ public class PdGanglinienModellPrognose
 
 		/**
 		 * Gibt den Horizont der mittelfristigen Prognose (Pattern-Matching)
-		 * zurück.
+		 * zurÃ¼ck.
 		 *
 		 * @return der Horizont.
 		 */
@@ -156,7 +156,7 @@ public class PdGanglinienModellPrognose
 		}
 
 		/**
-		 * Gibt den Offset zurück, um den beim Pattern-Matching verschoben wird.
+		 * Gibt den Offset zurÃ¼ck, um den beim Pattern-Matching verschoben wird.
 		 *
 		 * @return der Offset.
 		 */
@@ -170,7 +170,7 @@ public class PdGanglinienModellPrognose
 		 * soll.
 		 *
 		 * @param auswahlMethode
-		 *            die Auswahlmethode für die Rückfallebene.
+		 *            die Auswahlmethode fÃ¼r die RÃ¼ckfallebene.
 		 */
 
 		public void setAuswahlMethode(final int auswahlMethode) {

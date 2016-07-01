@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weißenfelser Straße 67
+ * WeiÃŸenfelser StraÃŸe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -29,33 +29,33 @@ package de.bsvrz.iav.gllib.gllib;
 import com.bitctrl.util.Timestamp;
 
 /**
- * Repräsentiert eine allgemeine Stützstelle für Ganglinien bestehend aus
- * Zeitstempel und Wert. Die Stützstellen können nach den Zeitstempeln sortiert
- * werden. Ist der Wert einer Stützstelle <em>undefiniert</em> ({@code null}),
- * so ist auch das Intervall bis zur vorherigen und nächsten Stützstelle
+ * ReprÃ¤sentiert eine allgemeine StÃ¼tzstelle fÃ¼r Ganglinien bestehend aus
+ * Zeitstempel und Wert. Die StÃ¼tzstellen kÃ¶nnen nach den Zeitstempeln sortiert
+ * werden. Ist der Wert einer StÃ¼tzstelle <em>undefiniert</em> ({@code null}),
+ * so ist auch das Intervall bis zur vorherigen und nÃ¤chsten StÃ¼tzstelle
  * <em>undefiniert</em>.
  * <p>
- * <strong>Hinweis:</strong> Die natürliche Ordnung der Stützstellen ist
- * <em>nicht</em> konsistent mit der Gleichheit. Zwei Stützstellen sind gleich,
- * wenn sie in Zeitstempel und Wert übereinstimmen. Die natürliche Ordung
- * hingegen bassiert ausschließlich auf den Zeitstempeln und ignoriert die
+ * <strong>Hinweis:</strong> Die natÃ¼rliche Ordnung der StÃ¼tzstellen ist
+ * <em>nicht</em> konsistent mit der Gleichheit. Zwei StÃ¼tzstellen sind gleich,
+ * wenn sie in Zeitstempel und Wert Ã¼bereinstimmen. Die natÃ¼rliche Ordung
+ * hingegen bassiert ausschlieÃŸlich auf den Zeitstempeln und ignoriert die
  * Werte.
  *
  * @param <T>
- *            der Typ des Wertes der Stützstelle.
+ *            der Typ des Wertes der StÃ¼tzstelle.
  * 
  * @author BitCtrl Systems GmbH, Falko Schumann
  */
 public class Stuetzstelle<T> implements Comparable<Stuetzstelle<T>> {
 
-	/** Der Wert an der Stützstelle. */
+	/** Der Wert an der StÃ¼tzstelle. */
 	private final T wert;
 
-	/** Zeitpunkt der Stützstelle. */
+	/** Zeitpunkt der StÃ¼tzstelle. */
 	private final long zeitstempel;
 
 	/**
-	 * Initialisierung. Für den Wert wird <code>null</code> (=undefiniert)
+	 * Initialisierung. FÃ¼r den Wert wird <code>null</code> (=undefiniert)
 	 * angenommen.
 	 *
 	 * @param zeitstempel
@@ -71,7 +71,7 @@ public class Stuetzstelle<T> implements Comparable<Stuetzstelle<T>> {
 	 * @param zeitstempel
 	 *            Zeitstempel
 	 * @param wert
-	 *            Wert oder {@code null} für "undefiniert"
+	 *            Wert oder {@code null} fÃ¼r "undefiniert"
 	 */
 	public Stuetzstelle(final long zeitstempel, final T wert) {
 		this.zeitstempel = zeitstempel;
@@ -79,13 +79,13 @@ public class Stuetzstelle<T> implements Comparable<Stuetzstelle<T>> {
 	}
 
 	/**
-	 * Eine Stützstelle ist kleiner bzw größer, wenn der Zeitstempel kleiner bzw
-	 * größer ist.
+	 * Eine StÃ¼tzstelle ist kleiner bzw grÃ¶ÃŸer, wenn der Zeitstempel kleiner bzw
+	 * grÃ¶ÃŸer ist.
 	 *
 	 * @param stuetzstelle
-	 *            Eine Stützstelle zum Vergleichen
-	 * @return -1, 0 oder +1, wenn der Zeitstempel dieser Stützstelle kleiner,
-	 *         gleich oder größer als die Stützstelle im Parameter ist
+	 *            Eine StÃ¼tzstelle zum Vergleichen
+	 * @return -1, 0 oder +1, wenn der Zeitstempel dieser StÃ¼tzstelle kleiner,
+	 *         gleich oder grÃ¶ÃŸer als die StÃ¼tzstelle im Parameter ist
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	@Override
@@ -100,7 +100,7 @@ public class Stuetzstelle<T> implements Comparable<Stuetzstelle<T>> {
 	}
 
 	/**
-	 * Zwei Stützstellen sind identisch, wenn beide den selben Zeitstempel und
+	 * Zwei StÃ¼tzstellen sind identisch, wenn beide den selben Zeitstempel und
 	 * Wert haben.
 	 */
 	@Override
@@ -119,7 +119,7 @@ public class Stuetzstelle<T> implements Comparable<Stuetzstelle<T>> {
 	}
 
 	/**
-	 * Der Hashcode bassiert nur auf dem Zeitstempel der Stützstelle.
+	 * Der Hashcode bassiert nur auf dem Zeitstempel der StÃ¼tzstelle.
 	 */
 	@Override
 	public int hashCode() {
@@ -127,16 +127,16 @@ public class Stuetzstelle<T> implements Comparable<Stuetzstelle<T>> {
 	}
 
 	/**
-	 * Gibt den Wert der Stützstelle zurück.
+	 * Gibt den Wert der StÃ¼tzstelle zurÃ¼ck.
 	 *
-	 * @return Wert oder {@code null} für "undefiniert"
+	 * @return Wert oder {@code null} fÃ¼r "undefiniert"
 	 */
 	public T getWert() {
 		return wert;
 	}
 
 	/**
-	 * Gibt den Zeitstempel der Stützstelle zurück.
+	 * Gibt den Zeitstempel der StÃ¼tzstelle zurÃ¼ck.
 	 *
 	 * @return Zeitstempel
 	 */

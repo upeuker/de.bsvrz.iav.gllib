@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weiﬂenfelser Straﬂe 67
+ * Wei√üenfelser Stra√üe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -148,7 +148,7 @@ public class OdPrognoseGanglinienAnfrage
 		}
 
 		/**
-		 * Es wird eine flache Kopie zur¸ckgegeben.
+		 * Es wird eine flache Kopie zur√ºckgegeben.
 		 *
 		 * {@inheritDoc}
 		 */
@@ -182,7 +182,7 @@ public class OdPrognoseGanglinienAnfrage
 		}
 
 		/**
-		 * Gibt die anfragende Applikation zur¸ck.
+		 * Gibt die anfragende Applikation zur√ºck.
 		 *
 		 * @return die Applikation.
 		 */
@@ -191,7 +191,7 @@ public class OdPrognoseGanglinienAnfrage
 		}
 
 		/**
-		 * Gibt die Zeichenkette zur¸ck, die der Absender in der Nachricht frei
+		 * Gibt die Zeichenkette zur√ºck, die der Absender in der Nachricht frei
 		 * eintragen darf.
 		 *
 		 * @return Eine Zeichenkette

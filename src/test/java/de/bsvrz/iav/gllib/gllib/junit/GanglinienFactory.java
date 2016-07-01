@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weißenfelser Straße 67
+ * WeiÃŸenfelser StraÃŸe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -64,7 +64,7 @@ import de.bsvrz.sys.funclib.bitctrl.modell.verkehr.objekte.MessQuerschnittAllgem
 @SuppressWarnings("nls")
 public class GanglinienFactory {
 
-	/** Enthält die Spaltennamen der Tabelle. */
+	/** EnthÃ¤lt die Spaltennamen der Tabelle. */
 	public enum Ganglinien {
 
 		/**
@@ -94,7 +94,7 @@ public class GanglinienFactory {
 
 	}
 
-	/** Enthält die Spaltennamen der Tabelle. */
+	/** EnthÃ¤lt die Spaltennamen der Tabelle. */
 	public enum Stuetzstellen {
 
 		/**
@@ -135,7 +135,7 @@ public class GanglinienFactory {
 	}
 
 	/**
-	 * Kosntante für den ersten Tag, für den Ganglinien in der Datenbank
+	 * Kosntante fÃ¼r den ersten Tag, fÃ¼r den Ganglinien in der Datenbank
 	 * gesichert sind.
 	 */
 	public static final int ERSTER_TAG = Integer.MIN_VALUE;
@@ -154,8 +154,8 @@ public class GanglinienFactory {
 	private final MessQuerschnittAllgemein mq;
 
 	/**
-	 * Intitialisiert den Datenbankzugriff. Der JDBC-Treiber für HSQLDB wird per
-	 * Standard geladen, andere müssen explizit vorher geladen werden.
+	 * Intitialisiert den Datenbankzugriff. Der JDBC-Treiber fÃ¼r HSQLDB wird per
+	 * Standard geladen, andere mÃ¼ssen explizit vorher geladen werden.
 	 *
 	 * @param mq
 	 *            der Messquerschnitt dessen Archivdaten geschrieben werden
@@ -163,7 +163,7 @@ public class GanglinienFactory {
 	 * @param url
 	 *            die URL der Datenbank in JDBC-Notation.
 	 * @param benutzer
-	 *            der Benutzername für der Datenbank.
+	 *            der Benutzername fÃ¼r der Datenbank.
 	 * @param kennwort
 	 *            das Kennwort des Benutzer.
 	 * @param glDbVerzeichnis
@@ -197,9 +197,9 @@ public class GanglinienFactory {
 
 	/**
 	 * Setzt die Ganglinien am Messquerschnitt. Die Ganglinien werden aus der
-	 * Datenbank aus der Tabelle <em>ganglinien</em> und deren Stützstellen aus
+	 * Datenbank aus der Tabelle <em>ganglinien</em> und deren StÃ¼tzstellen aus
 	 * der Tabelle <em>stuetzstellen</em> gelesen. Die Ausgangsganglinie hat die
-	 * Stützstellen des Tags {@link #ERSTER_TAG}.
+	 * StÃ¼tzstellen des Tags {@link #ERSTER_TAG}.
 	 * <p>
 	 * Die Tabelle mit den Gangliniendefinition muss folgenden Aufbau besitzen:
 	 *
@@ -216,7 +216,7 @@ public class GanglinienFactory {
 	 * );
 	 * </pre>
 	 *
-	 * Die Tabelle mit den Stützstellen muss folgenden Aufbau besitzen:
+	 * Die Tabelle mit den StÃ¼tzstellen muss folgenden Aufbau besitzen:
 	 *
 	 * <pre>
 	 * CREATE TABLE stuetzstellen (
@@ -264,7 +264,7 @@ public class GanglinienFactory {
 
 	/**
 	 * Liest den Sollwert des Ganglinienparameters aus der Datenbank und gibt
-	 * ihn zurück.
+	 * ihn zurÃ¼ck.
 	 *
 	 * @param tag
 	 *            der gesuchte Tag: heute 0, gestern -1 usw.
@@ -378,9 +378,9 @@ public class GanglinienFactory {
 		statGl.close();
 
 		if (tag == ERSTER_TAG) {
-			log.fine("Ganglinien für den ersten Tag aus Datenbank gelesen.");
+			log.fine("Ganglinien fÃ¼r den ersten Tag aus Datenbank gelesen.");
 		} else {
-			log.fine("Ganglinien für den Tag " + tag
+			log.fine("Ganglinien fÃ¼r den Tag " + tag
 					+ " aus Datenbank gelesen.");
 		}
 		return datum;
@@ -393,11 +393,11 @@ public class GanglinienFactory {
 	 * @throws AnmeldeException
 	 *             wenn das Anmelden zu Senden fehlschlug.
 	 * @throws DatensendeException
-	 *             wenn der Parameter mit den Ganglinien nicht gelöscht werden
+	 *             wenn der Parameter mit den Ganglinien nicht gelÃ¶scht werden
 	 *             konnte.
 	 */
 	public void aufraeumen() throws AnmeldeException, DatensendeException {
-		log.info("Lösche die Testganglinien am Messquerschnitt " + mq + " ...");
+		log.info("LÃ¶sche die Testganglinien am Messquerschnitt " + mq + " ...");
 		GlSpeicher.getInstanz().removeAlleGanglinien(mq.getPid());
 	}
 

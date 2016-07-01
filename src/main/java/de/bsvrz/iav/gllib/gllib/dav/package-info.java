@@ -18,15 +18,15 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weißenfelser Straße 67
+ * WeiÃŸenfelser StraÃŸe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
  */
 
 /**
- * Mit der Klasse {@link de.bsvrz.iav.gllib.gllib.dav.Ganglinienprognose} können
+ * Mit der Klasse {@link de.bsvrz.iav.gllib.gllib.dav.Ganglinienprognose} kÃ¶nnen
  * Anfragen an die Ganglinienprognose gestellt werden, ohne den Datenkatalog
- * kennen zu müssen.
+ * kennen zu mÃ¼ssen.
  */
 package de.bsvrz.iav.gllib.gllib.dav;

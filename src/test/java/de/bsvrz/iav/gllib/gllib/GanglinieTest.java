@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weißenfelser Straße 67
+ * WeiÃŸenfelser StraÃŸe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -90,7 +90,7 @@ public class GanglinieTest {
 	}
 
 	/**
-	 * Testet den Umgang einer Ganglinie ohne Stützstellen.
+	 * Testet den Umgang einer Ganglinie ohne StÃ¼tzstellen.
 	 */
 	@Test
 	@SuppressWarnings("static-method")

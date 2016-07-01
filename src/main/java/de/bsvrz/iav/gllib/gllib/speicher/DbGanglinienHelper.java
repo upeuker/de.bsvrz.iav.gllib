@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weiﬂenfelser Straﬂe 67
+ * Wei√üenfelser Stra√üe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -183,7 +183,7 @@ class DbGanglinienHelper {
 				ganglinien.getItem(i).getUnscaledValue("Ordnung") //$NON-NLS-1$
 						.set(g.getOrdnung());
 
-				stuetzstellen = ganglinien.getItem(i).getArray("St¸tzstelle"); //$NON-NLS-1$
+				stuetzstellen = ganglinien.getItem(i).getArray("St√ºtzstelle"); //$NON-NLS-1$
 				final List<DbStuetzstelle> liste = g.getStuetzstellen();
 				int j = 0;
 				stuetzstellen.setLength(liste.size());
@@ -259,7 +259,7 @@ class DbGanglinienHelper {
 			final DbGanglinie dbGanglinie = new DbGanglinie();
 
 			final Data.Array stuetzstellen = ganglinien.getItem(i)
-					.getArray("St¸tzstelle"); //$NON-NLS-1$
+					.getArray("St√ºtzstelle"); //$NON-NLS-1$
 			final List<DbStuetzstelle> dbStuetzstellen = new ArrayList<DbStuetzstelle>();
 			for (int j = 0; j < stuetzstellen.getLength(); j++) {
 				final Data ss = stuetzstellen.getItem(j);

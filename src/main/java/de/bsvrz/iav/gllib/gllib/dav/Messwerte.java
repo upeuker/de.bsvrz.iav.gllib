@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weißenfelser Straße 67
+ * WeiÃŸenfelser StraÃŸe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -31,40 +31,40 @@ import com.bitctrl.math.MathTools;
 import de.bsvrz.sys.funclib.bitctrl.util.dav.Umrechung;
 
 /**
- * Für Messquerschnitte angepasste Stützstelle, die die Werte QKfz, QLkw, VLkw
- * und VPkw für den Zeitstempel enthält.
+ * FÃ¼r Messquerschnitte angepasste StÃ¼tzstelle, die die Werte QKfz, QLkw, VLkw
+ * und VPkw fÃ¼r den Zeitstempel enthÃ¤lt.
  * <p>
- * <strong>Abkürzungen:</strong>
+ * <strong>AbkÃ¼rzungen:</strong>
  * </p>
  * <ul>
- * <li><em>Qx</em> - Verkehrsstärken [Fahrzeuge / h]</li>
+ * <li><em>Qx</em> - VerkehrsstÃ¤rken [Fahrzeuge / h]</li>
  * <li><em>Vx</em> - Mittlere Geschwindigkeiten [km/h]</li>
- * <li><em>QB</em> - Bemessungsverkehrsstärke [PKW-Einheiten / Stunde]</li>
+ * <li><em>QB</em> - BemessungsverkehrsstÃ¤rke [PKW-Einheiten / Stunde]</li>
  * </ul>
  *
  * @author BitCtrl Systems GmbH, Falko Schumann
  */
 public class Messwerte {
 
-	/** Konstante für einen undefinierten Wert ({@value} ). */
+	/** Konstante fÃ¼r einen undefinierten Wert ({@value} ). */
 	public static final double UNDEFINIERT = -2147483.648;
 
-	/** Wert für die Verkehrsstärke der Lkw. */
+	/** Wert fÃ¼r die VerkehrsstÃ¤rke der Lkw. */
 	private final Double qLkw;
 
-	/** Wert für die Verkehrsstärke der Kfz. */
+	/** Wert fÃ¼r die VerkehrsstÃ¤rke der Kfz. */
 	private final Double qKfz;
 
-	/** Wert für die Geschwindigkeit der Pkw. */
+	/** Wert fÃ¼r die Geschwindigkeit der Pkw. */
 	private final Double vPkw;
 
-	/** Wert für die Geschwindigkeit der Lkw. */
+	/** Wert fÃ¼r die Geschwindigkeit der Lkw. */
 	private final Double vLkw;
 
-	/** Parameter für die Berechnung von QB. */
+	/** Parameter fÃ¼r die Berechnung von QB. */
 	private final float k1;
 
-	/** Parameter für die Berechnung von QB. */
+	/** Parameter fÃ¼r die Berechnung von QB. */
 	private final float k2;
 
 	/**
@@ -108,9 +108,9 @@ public class Messwerte {
 	 * @param vLkw
 	 *            Geschwindigkeit Lkw
 	 * @param k1
-	 *            Parameter für die Berechnung von QB
+	 *            Parameter fÃ¼r die Berechnung von QB
 	 * @param k2
-	 *            Parameter für die Berechnung von QB
+	 *            Parameter fÃ¼r die Berechnung von QB
 	 */
 	Messwerte(final Double qKfz, final Double qLkw, final Double vPkw,
 			final Double vLkw, final float k1, final float k2) {
@@ -142,9 +142,9 @@ public class Messwerte {
 	}
 
 	/**
-	 * Zwei Stützstellen sind identisch, wenn beide den selben Zeitstempel und
-	 * die selben Werte haben. Die Stützstellenwert müssen lediglich auf fünf
-	 * Kommastellen übereinstimmen.
+	 * Zwei StÃ¼tzstellen sind identisch, wenn beide den selben Zeitstempel und
+	 * die selben Werte haben. Die StÃ¼tzstellenwert mÃ¼ssen lediglich auf fÃ¼nf
+	 * Kommastellen Ã¼bereinstimmen.
 	 *
 	 * {@inheritDoc}
 	 */
@@ -199,37 +199,37 @@ public class Messwerte {
 	}
 
 	/**
-	 * Gibt den Wert für QB zurück. Diese Property ist read-only, da sie aus den
+	 * Gibt den Wert fÃ¼r QB zurÃ¼ck. Diese Property ist read-only, da sie aus den
 	 * in der Ganglinie gesicherten Werten berechnet wird.
 	 *
-	 * @return Wert für QB
+	 * @return Wert fÃ¼r QB
 	 */
 	public Double getQB() {
 		return Umrechung.getQB(qLkw, qKfz, vPkw, vLkw, k1, k2);
 	}
 
 	/**
-	 * Gibt den Wert für QKfz zurück.
+	 * Gibt den Wert fÃ¼r QKfz zurÃ¼ck.
 	 *
-	 * @return Wert für QKfz
+	 * @return Wert fÃ¼r QKfz
 	 */
 	public Double getQKfz() {
 		return qKfz;
 	}
 
 	/**
-	 * Gibt den Wert für QLkw zurück.
+	 * Gibt den Wert fÃ¼r QLkw zurÃ¼ck.
 	 *
-	 * @return Wert für QLkw
+	 * @return Wert fÃ¼r QLkw
 	 */
 	public Double getQLkw() {
 		return qLkw;
 	}
 
 	/**
-	 * Gibt den Wert für QKfz zurück.
+	 * Gibt den Wert fÃ¼r QKfz zurÃ¼ck.
 	 *
-	 * @return Wert für QKfz oder {@link #UNDEFINIERT}, wenn QKfz
+	 * @return Wert fÃ¼r QKfz oder {@link #UNDEFINIERT}, wenn QKfz
 	 *         <code>null</code> ist.
 	 */
 	public Double getQKfzNichtNull() {
@@ -237,9 +237,9 @@ public class Messwerte {
 	}
 
 	/**
-	 * Gibt den Wert für QLkw zurück.
+	 * Gibt den Wert fÃ¼r QLkw zurÃ¼ck.
 	 *
-	 * @return Wert für QLkw oder {@link #UNDEFINIERT}, wenn QLkw
+	 * @return Wert fÃ¼r QLkw oder {@link #UNDEFINIERT}, wenn QLkw
 	 *         <code>null</code> ist.
 	 */
 	public Double getQLkwNichtNull() {
@@ -247,47 +247,47 @@ public class Messwerte {
 	}
 
 	/**
-	 * Gibt den Wert für QPkw zurück. Diese Property ist read-only, da sie aus
+	 * Gibt den Wert fÃ¼r QPkw zurÃ¼ck. Diese Property ist read-only, da sie aus
 	 * den in der Ganglinie gesicherten Werten berechnet wird.
 	 *
-	 * @return Wert für QPkw
+	 * @return Wert fÃ¼r QPkw
 	 */
 	public Double getQPkw() {
 		return Umrechung.getQPkw(qKfz, qLkw);
 	}
 
 	/**
-	 * Gibt den Wert für VKfz zurück. Diese Property ist read-only, da sie aus
+	 * Gibt den Wert fÃ¼r VKfz zurÃ¼ck. Diese Property ist read-only, da sie aus
 	 * den in der Ganglinie gesicherten Werten berechnet wird.
 	 *
-	 * @return Wert für VKfz
+	 * @return Wert fÃ¼r VKfz
 	 */
 	public Double getVKfz() {
 		return Umrechung.getVKfz(qLkw, qKfz, vPkw, vLkw);
 	}
 
 	/**
-	 * Gibt den Wert für VLkw zurück.
+	 * Gibt den Wert fÃ¼r VLkw zurÃ¼ck.
 	 *
-	 * @return Wert für VLkw
+	 * @return Wert fÃ¼r VLkw
 	 */
 	public Double getVLkw() {
 		return vLkw;
 	}
 
 	/**
-	 * Gibt den Wert für VPkw zurück.
+	 * Gibt den Wert fÃ¼r VPkw zurÃ¼ck.
 	 *
-	 * @return Wert für VPkw
+	 * @return Wert fÃ¼r VPkw
 	 */
 	public Double getVPkw() {
 		return vPkw;
 	}
 
 	/**
-	 * Gibt den Wert für VLkw zurück.
+	 * Gibt den Wert fÃ¼r VLkw zurÃ¼ck.
 	 *
-	 * @return Wert für VLkw oder {@link #UNDEFINIERT}, wenn VLkw
+	 * @return Wert fÃ¼r VLkw oder {@link #UNDEFINIERT}, wenn VLkw
 	 *         <code>null</code> ist.
 	 */
 	public Double getVLkwNichtNull() {
@@ -295,9 +295,9 @@ public class Messwerte {
 	}
 
 	/**
-	 * Gibt den Wert für VPkw zurück.
+	 * Gibt den Wert fÃ¼r VPkw zurÃ¼ck.
 	 *
-	 * @return Wert für VPkw oder {@link #UNDEFINIERT}, wenn VPkw
+	 * @return Wert fÃ¼r VPkw oder {@link #UNDEFINIERT}, wenn VPkw
 	 *         <code>null</code> ist.
 	 */
 	public Double getVPkwNichtNull() {
@@ -305,7 +305,7 @@ public class Messwerte {
 	}
 
 	/**
-	 * Gibt ein Tupel (Zeitstempel, QKfz, QLkw, VPkw, VLkw) zurück.
+	 * Gibt ein Tupel (Zeitstempel, QKfz, QLkw, VPkw, VLkw) zurÃ¼ck.
 	 *
 	 * {@inheritDoc}
 	 */

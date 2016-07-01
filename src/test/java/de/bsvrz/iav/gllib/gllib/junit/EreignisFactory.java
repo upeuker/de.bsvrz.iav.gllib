@@ -18,7 +18,7 @@
  *
  * Contact Information:
  * BitCtrl Systems GmbH
- * Weißenfelser Straße 67
+ * WeiÃŸenfelser StraÃŸe 67
  * 04229 Leipzig
  * Phone: +49 341-490670
  * mailto: info@bitctrl.de
@@ -59,7 +59,7 @@ import de.bsvrz.sys.funclib.bitctrl.modell.kalender.objekte.EreignisTyp;
 @SuppressWarnings("nls")
 public class EreignisFactory {
 
-	/** Enthält die Spaltennamen der Tabelle. */
+	/** EnthÃ¤lt die Spaltennamen der Tabelle. */
 	public enum Ereignisse {
 
 		/**
@@ -83,7 +83,7 @@ public class EreignisFactory {
 		ENDZEIT
 	}
 
-	/** Enthält die Spaltennamen der Tabelle. */
+	/** EnthÃ¤lt die Spaltennamen der Tabelle. */
 	public enum Ereignistypen {
 
 		/**
@@ -165,13 +165,13 @@ public class EreignisFactory {
 	private final Connection connection;
 
 	/**
-	 * Intitialisiert den Datenbankzugriff. Der JDBC-Treiber für HSQLDB wird per
-	 * Standard geladen, andere müssen explizit vorher geladen werden.
+	 * Intitialisiert den Datenbankzugriff. Der JDBC-Treiber fÃ¼r HSQLDB wird per
+	 * Standard geladen, andere mÃ¼ssen explizit vorher geladen werden.
 	 *
 	 * @param url
 	 *            die URL der Datenbank in JDBC-Notation.
 	 * @param benutzer
-	 *            der Benutzername für der Datenbank.
+	 *            der Benutzername fÃ¼r der Datenbank.
 	 * @param kennwort
 	 *            das Kennwort des Benutzer.
 	 */
@@ -195,7 +195,7 @@ public class EreignisFactory {
 	}
 
 	/**
-	 * Legt die Ereignisse für den Test an.
+	 * Legt die Ereignisse fÃ¼r den Test an.
 	 * <p>
 	 * Die Tabelle mit den Ereignistypen muss folgenden Aufbau besitzen:
 	 *
@@ -216,7 +216,7 @@ public class EreignisFactory {
 	 * @throws DatensendeException
 	 *             bei einem Fehler beim Daten senden.
 	 * @throws ConfigurationChangeException
-	 *             bei einem Fehler beim Ändern der Konfiguration.
+	 *             bei einem Fehler beim Ã„ndern der Konfiguration.
 	 * @throws SQLException
 	 *             bei einem Fehler beim Datenbankzugriff.
 	 */
@@ -230,7 +230,7 @@ public class EreignisFactory {
 		final String sql;
 		final List<Ereignis> ereignisse;
 
-		log.info("Erzeuge die Ereignisse für den Test ...");
+		log.info("Erzeuge die Ereignisse fÃ¼r den Test ...");
 
 		factory = ObjektFactory.getInstanz();
 		kalender = Ereigniskalender.getInstanz();
@@ -284,7 +284,7 @@ public class EreignisFactory {
 	}
 
 	/**
-	 * Legt die Ereignistypen für den Test an. Die Ereignistypen werden aus der
+	 * Legt die Ereignistypen fÃ¼r den Test an. Die Ereignistypen werden aus der
 	 * Datenbank aus Tabelle <em>ereignistypen</em> gelesen.
 	 * <p>
 	 * Die Tabelle mit den Ereignistypen muss folgenden Aufbau besitzen:
@@ -318,7 +318,7 @@ public class EreignisFactory {
 	 * @throws DatensendeException
 	 *             bei einem Fehler beim Daten senden.
 	 * @throws ConfigurationChangeException
-	 *             bei einem Fehler beim Ändern der Konfiguration.
+	 *             bei einem Fehler beim Ã„ndern der Konfiguration.
 	 * @throws SQLException
 	 *             bei einem Fehler beim Datenbankzugriff.
 	 */
@@ -332,7 +332,7 @@ public class EreignisFactory {
 		final String sql;
 		final List<EreignisTyp> ereignisTypen;
 
-		log.info("Erzeuge die Ereignistypen für den Test ...");
+		log.info("Erzeuge die Ereignistypen fÃ¼r den Test ...");
 
 		factory = ObjektFactory.getInstanz();
 		kalender = Ereigniskalender.getInstanz();
@@ -357,14 +357,14 @@ public class EreignisFactory {
 					EreignisTyp.PRAEFIX_PID);
 			if (factory.getModellobjekt(pid) != null) {
 				log.severe("Der Ereignistyp " + pid
-						+ " darf für den Test noch nicht existieren.");
+						+ " darf fÃ¼r den Test noch nicht existieren.");
 				System.exit(-1);
 			}
 			ereignisTyp = kalender.anlegenEreignisTyp(pid, name,
 					rs.getInt(Ereignistypen.PRIORITAET.name()));
 			ereignisTypen.add(ereignisTyp);
 
-			// Lernparameter für Ereignistyp setzen
+			// Lernparameter fÃ¼r Ereignistyp setzen
 			param = ereignisTyp.getParameterDatensatz(
 					PdGanglinienModellAutomatischesLernenEreignis.class);
 			param.anmeldenSender();
@@ -417,7 +417,7 @@ public class EreignisFactory {
 	 * entsprechende Objekte werden aus den Tabellen entnommen.
 	 *
 	 * @throws ConfigurationChangeException
-	 *             wenn das Löschen der angelegten Ereignisse und Ereignistypen
+	 *             wenn das LÃ¶schen der angelegten Ereignisse und Ereignistypen
 	 *             fehlschlug.
 	 * @throws SQLException
 	 *             bei einem Datenbankfehler.
@@ -435,7 +435,7 @@ public class EreignisFactory {
 		kalender = Ereigniskalender.getInstanz();
 		stat = connection.createStatement();
 
-		log.info("Lösche die für den Test angelegten Ereignisse ...");
+		log.info("LÃ¶sche die fÃ¼r den Test angelegten Ereignisse ...");
 		sql = "SELECT * FROM ereignisse";
 		rs = stat.executeQuery(sql);
 		while (rs.next()) {
@@ -454,7 +454,7 @@ public class EreignisFactory {
 			}
 		}
 
-		log.info("Lösche die für den Test angelegten Ereignistypen ...");
+		log.info("LÃ¶sche die fÃ¼r den Test angelegten Ereignistypen ...");
 		sql = "SELECT * FROM ereignistypen";
 		rs = stat.executeQuery(sql);
 		while (rs.next()) {
