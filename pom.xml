@@ -51,32 +51,32 @@
 		<dependency>
 			<groupId>de.bsvrz.dav</groupId>
 			<artifactId>de.bsvrz.dav.daf</artifactId>
-			<version>3.6.2</version>
+			<version>3.8.0</version>
 		</dependency>
 		<dependency>
-			<groupId>de.bsvrz.sys.funclib</groupId>
+			<groupId>de.bsvrz.sys</groupId>
 			<artifactId>de.bsvrz.sys.funclib.dataSerializer</artifactId>
-			<version>3.6.2</version>
+			<version>3.8.0</version>
 		</dependency>
 		<dependency>
-			<groupId>de.bsvrz.sys.funclib</groupId>
+			<groupId>de.bsvrz.sys</groupId>
 			<artifactId>de.bsvrz.sys.funclib.dataIdentificationSettings</artifactId>
-			<version>3.6.2</version>
+			<version>3.8.0</version>
 		</dependency>
 		<dependency>
 			<groupId>de.bsvrz.pat</groupId>
 			<artifactId>de.bsvrz.pat.onlprot</artifactId>
-			<version>3.6.2</version>
+			<version>3.8.0</version>
 		</dependency>
 		<dependency>
-			<groupId>de.bsvrz.sys.funclib</groupId>
+			<groupId>de.bsvrz.sys</groupId>
 			<artifactId>de.bsvrz.sys.funclib.operatingMessage</artifactId>
-			<version>3.6.2</version>
+			<version>3.8.0</version>
 		</dependency>
 		<dependency>
-			<groupId>de.bsvrz.sys.funclib</groupId>
+			<groupId>de.bsvrz.sys</groupId>
 			<artifactId>de.bsvrz.sys.funclib.application</artifactId>
-			<version>3.6.2</version>
+			<version>3.8.0</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -87,7 +87,7 @@
 		<dependency>
 			<groupId>de.bsvrz.sys</groupId>
 			<artifactId>de.bsvrz.sys.funclib.bitctrl</artifactId>
-			<version>[1.2.4,2.0.0)</version>
+			<version>1.5.0</version>
 		</dependency>
 		<dependency>
     		<groupId>org.hibernate</groupId>
