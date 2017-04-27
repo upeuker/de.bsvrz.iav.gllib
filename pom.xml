@@ -5,7 +5,7 @@
 
 	<groupId>de.bsvrz.iav</groupId>
 	<artifactId>de.bsvrz.iav.gllib</artifactId>
-	<version>2.3.0</version>
+	<version>2.3.1-SNAPSHOT</version>
 
 	<name>Funktionen Ganglinie (SWE 5.5) - Legacy-Version</name>
 
@@ -18,7 +18,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>8</java.version>
-		<project.status>FREI</project.status>
+		<project.status>BETA</project.status>
 		<project.standDatum>2016-07-21</project.standDatum>
 		<project.com.bitctrl.version>1.2.2</project.com.bitctrl.version>
 	</properties>
