@@ -15,9 +15,10 @@
 	</organization>
 
 	<properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+    	<maven.compiler.target>1.8</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>8</java.version>
 		<project.status>BETA</project.status>
 		<project.standDatum>2016-07-21</project.standDatum>
 		<project.com.bitctrl.version>1.2.2</project.com.bitctrl.version>
@@ -111,15 +112,6 @@
 				<configuration>
 					<propertyExpansion>basedir=${project.basedir}</propertyExpansion>
 					<configLocation>${basedir}/releng/checkstyle.xml</configLocation>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
-				<configuration>
-					<source>${java.version}</source>
-					<target>${java.version}</target>
 				</configuration>
 			</plugin>
 			<plugin>
