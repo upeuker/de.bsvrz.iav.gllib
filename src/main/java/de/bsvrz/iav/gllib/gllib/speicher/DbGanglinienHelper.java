@@ -159,29 +159,29 @@ class DbGanglinienHelper {
 					}
 					em.getTransaction().commit();
 					return "Ereignistyp " + g.getEreignisTypId()
-							+ " in Ganglinie existiert nicht mehr";
+					+ " in Ganglinie existiert nicht mehr";
 				}
 				ganglinien.getItem(i).getReferenceValue("EreignisTyp") //$NON-NLS-1$
-						.setSystemObject(et);
+				.setSystemObject(et);
 				ganglinien.getItem(i).getUnscaledValue("AnzahlVerschmelzungen") //$NON-NLS-1$
-						.set(g.getAnzahlVerschmelzungen());
+				.set(g.getAnzahlVerschmelzungen());
 				ganglinien.getItem(i).getTimeValue("LetzteVerschmelzung") //$NON-NLS-1$
-						.setMillis(g.getLetzteVerschmelzung());
+				.setMillis(g.getLetzteVerschmelzung());
 				ganglinien.getItem(i).getUnscaledValue("GanglinienTyp") //$NON-NLS-1$
-						.set(g.getTyp());
+				.set(g.getTyp());
 
 				if (g.isReferenzGanglinie()) {
 					ganglinien.getItem(i).getUnscaledValue("Referenzganglinie") //$NON-NLS-1$
-							.setText("Ja"); //$NON-NLS-1$
+					.setText("Ja"); //$NON-NLS-1$
 				} else {
 					ganglinien.getItem(i).getUnscaledValue("Referenzganglinie") //$NON-NLS-1$
-							.setText("Nein"); //$NON-NLS-1$
+					.setText("Nein"); //$NON-NLS-1$
 				}
 
 				ganglinien.getItem(i).getUnscaledValue("GanglinienVerfahren") //$NON-NLS-1$
-						.set(g.getApproximationsverfahren());
+				.set(g.getApproximationsverfahren());
 				ganglinien.getItem(i).getUnscaledValue("Ordnung") //$NON-NLS-1$
-						.set(g.getOrdnung());
+				.set(g.getOrdnung());
 
 				stuetzstellen = ganglinien.getItem(i).getArray("Stützstelle"); //$NON-NLS-1$
 				final List<DbStuetzstelle> liste = g.getStuetzstellen();
@@ -189,42 +189,42 @@ class DbGanglinienHelper {
 				stuetzstellen.setLength(liste.size());
 				for (final DbStuetzstelle s : liste) {
 					stuetzstellen.getItem(j).getTimeValue("Zeit") //$NON-NLS-1$
-							.setMillis(s.getZeit());
+					.setMillis(s.getZeit());
 
 					if (Double.isInfinite(s.getqKfz())
 							|| Double.isNaN(s.getqKfz())) {
 						stuetzstellen.getItem(j).getScaledValue("QKfz") //$NON-NLS-1$
-								.set(Messwerte.UNDEFINIERT);
+						.set(Messwerte.UNDEFINIERT);
 					} else {
 						stuetzstellen.getItem(j).getScaledValue("QKfz") //$NON-NLS-1$
-								.set(s.getqKfz());
+						.set(s.getqKfz());
 					}
 
 					if (Double.isInfinite(s.getqLkw())
 							|| Double.isNaN(s.getqLkw())) {
 						stuetzstellen.getItem(j).getScaledValue("QLkw") //$NON-NLS-1$
-								.set(Messwerte.UNDEFINIERT);
+						.set(Messwerte.UNDEFINIERT);
 					} else {
 						stuetzstellen.getItem(j).getScaledValue("QLkw") //$NON-NLS-1$
-								.set(s.getqLkw());
+						.set(s.getqLkw());
 					}
 
 					if (Double.isInfinite(s.getvLkw())
 							|| Double.isNaN(s.getvLkw())) {
 						stuetzstellen.getItem(j).getScaledValue("VLkw") //$NON-NLS-1$
-								.set(Messwerte.UNDEFINIERT);
+						.set(Messwerte.UNDEFINIERT);
 					} else {
 						stuetzstellen.getItem(j).getScaledValue("VLkw") //$NON-NLS-1$
-								.set(s.getvLkw());
+						.set(s.getvLkw());
 					}
 
 					if (Double.isInfinite(s.getvPkw())
 							|| Double.isNaN(s.getvPkw())) {
 						stuetzstellen.getItem(j).getScaledValue("VPkw") //$NON-NLS-1$
-								.set(Messwerte.UNDEFINIERT);
+						.set(Messwerte.UNDEFINIERT);
 					} else {
 						stuetzstellen.getItem(j).getScaledValue("VPkw") //$NON-NLS-1$
-								.set(s.getvPkw());
+						.set(s.getvPkw());
 					}
 
 					j++;
@@ -280,7 +280,7 @@ class DbGanglinienHelper {
 					.getUnscaledValue("AnzahlVerschmelzungen").longValue()); //$NON-NLS-1$
 			dbGanglinie.setEreignisTypId(
 					ganglinien.getItem(i).getReferenceValue("EreignisTyp") //$NON-NLS-1$
-							.getSystemObject().getId());
+					.getSystemObject().getId());
 			dbGanglinie.setLetzteVerschmelzung(ganglinien.getItem(i)
 					.getTimeValue("LetzteVerschmelzung").getMillis()); //$NON-NLS-1$
 			dbGanglinie.setMqPid(mqPid);
@@ -301,8 +301,11 @@ class DbGanglinienHelper {
 		try {
 			tx = em.getTransaction();
 			tx.begin();
-			final DbMessQuerschnitt mq = em.find(DbMessQuerschnitt.class,
+			DbMessQuerschnitt mq = em.find(DbMessQuerschnitt.class,
 					mqPid);
+			if (mq == null) {
+				mq = new DbMessQuerschnitt(mqPid);
+			}
 			mq.setGanglinien(neueGanglinien);
 			em.persist(mq);
 			tx.commit();

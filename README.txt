@@ -25,6 +25,11 @@ sich in folgende Funktionsbereiche einteilen:
 Versionsgeschichte
 ==================
 
+2.3.1
+=====
+- Ganglinienliste MQ in Derby wird angelegt, wenn sie noch nicht existiert und über die Datenverteiler-Schnittstelle
+  angelegt werden soll
+
 2.3.0
 =====
 - Umstellung auf Java 8 und UTF-8

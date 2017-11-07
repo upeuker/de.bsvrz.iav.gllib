@@ -81,7 +81,7 @@ public class DbMessQuerschnitt {
 	 * @param mqPid
 	 *            PID des MQ.
 	 */
-	DbMessQuerschnitt(final String mqPid) {
+	public DbMessQuerschnitt(final String mqPid) {
 		this.mqPid = mqPid;
 	}
 
