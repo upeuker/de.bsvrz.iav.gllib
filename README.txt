@@ -25,6 +25,10 @@ sich in folgende Funktionsbereiche einteilen:
 Versionsgeschichte
 ==================
 
+2.3.2
+=====
+- Bugfix: Löschen von Ganglinien über die Anfrage-Schnittstelle wurde korrigiert 
+
 2.3.1
 =====
 - Ganglinienliste MQ in Derby wird angelegt, wenn sie noch nicht existiert und über die Datenverteiler-Schnittstelle

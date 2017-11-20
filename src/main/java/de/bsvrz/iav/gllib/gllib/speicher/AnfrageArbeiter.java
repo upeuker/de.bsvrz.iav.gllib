@@ -91,19 +91,19 @@ public class AnfrageArbeiter extends Thread {
 		antwortData.getTextValue("AbsenderZeichen").setText( //$NON-NLS-1$
 				anfrageData.getTextValue("AbsenderZeichen").getText()); //$NON-NLS-1$
 		antwortData.getItem("Antwort") //$NON-NLS-1$
+		.getReferenceValue("Messquerschnitt") //$NON-NLS-1$
+		.setSystemObject(anfrageData.getItem("Anfrage") //$NON-NLS-1$
 				.getReferenceValue("Messquerschnitt") //$NON-NLS-1$
-				.setSystemObject(anfrageData.getItem("Anfrage") //$NON-NLS-1$
-						.getReferenceValue("Messquerschnitt") //$NON-NLS-1$
-						.getSystemObject());
+				.getSystemObject());
 
 		switch (anfrageData.getItem("Anfrage") //$NON-NLS-1$
 				.getUnscaledValue("KommandoAnfrage").intValue()) { //$NON-NLS-1$
-		case REQ_LESEN_SCHREIBEN:
-			workGetSet(anfrageData, antwortData);
-			break;
-		case REQ_LOESCHEN:
-			workDelete(anfrageData, antwortData);
-			break;
+				case REQ_LESEN_SCHREIBEN:
+					workGetSet(anfrageData, antwortData);
+					break;
+				case REQ_LOESCHEN:
+					workDelete(anfrageData, antwortData);
+					break;
 		}
 
 		return new ResultData(server.getServerObj(),
@@ -127,10 +127,10 @@ public class AnfrageArbeiter extends Thread {
 				.getItem("Anfrage") //$NON-NLS-1$
 				.getArray("ZuSpeicherndeGanglinien"); //$NON-NLS-1$
 		antwortData.getItem("Antwort") //$NON-NLS-1$
+		.getReferenceValue("Messquerschnitt") //$NON-NLS-1$
+		.setSystemObject(anfrageData.getItem("Anfrage") //$NON-NLS-1$
 				.getReferenceValue("Messquerschnitt") //$NON-NLS-1$
-				.setSystemObject(anfrageData.getItem("Anfrage") //$NON-NLS-1$
-						.getReferenceValue("Messquerschnitt") //$NON-NLS-1$
-						.getSystemObject());
+				.getSystemObject());
 		String err = null;
 		if (zuSpeicherndeGanglinien.getLength() == 0) {
 			final Data.Array ganglinien = antwortData.getItem("Antwort") //$NON-NLS-1$
@@ -139,18 +139,18 @@ public class AnfrageArbeiter extends Thread {
 			err = helper.read(mqPid, ganglinien);
 		} else {
 			antwortData.getItem("Antwort").getArray("GespeicherteGanglinien") //$NON-NLS-1$ //$NON-NLS-2$
-					.setLength(0);
+			.setLength(0);
 			err = helper.write(mqPid, zuSpeicherndeGanglinien);
 		}
 
 		if (err != null) {
 			antwortData.getItem("Antwort").getArray("Fehlermeldung") //$NON-NLS-1$//$NON-NLS-2$
-					.setLength(1);
+			.setLength(1);
 			antwortData.getItem("Antwort").getArray("Fehlermeldung").getItem(0) //$NON-NLS-1$ //$NON-NLS-2$
-					.asTextValue().setText(err);
+			.asTextValue().setText(err);
 		} else {
 			antwortData.getItem("Antwort").getArray("Fehlermeldung") //$NON-NLS-1$//$NON-NLS-2$
-					.setLength(0);
+			.setLength(0);
 		}
 	}
 
@@ -163,25 +163,25 @@ public class AnfrageArbeiter extends Thread {
 	 *            die Antwort (wird hier manipuliert).
 	 */
 	private void workDelete(final Data anfrageData, final Data antwortData) {
-		final String mqPid = anfrageData.getReferenceValue("Messquerschnitt") //$NON-NLS-1$
-				.getSystemObjectPid();
+		final String mqPid = anfrageData.getItem("Anfrage") //$NON-NLS-1$
+				.getReferenceValue("Messquerschnitt").getSystemObjectPid(); //$NON-NLS-1$
 		antwortData.getItem("Antwort") //$NON-NLS-1$
+		.getReferenceValue("Messquerschnitt") //$NON-NLS-1$
+		.setSystemObject(anfrageData.getItem("Anfrage") //$NON-NLS-1$
 				.getReferenceValue("Messquerschnitt") //$NON-NLS-1$
-				.setSystemObject(anfrageData.getItem("Anfrage") //$NON-NLS-1$
-						.getReferenceValue("Messquerschnitt") //$NON-NLS-1$
-						.getSystemObject());
+				.getSystemObject());
 		final String err = helper.delete(mqPid);
 		if (err != null) {
 			antwortData.getItem("Antwort").getArray("Fehlermeldung") //$NON-NLS-1$ //$NON-NLS-2$
-					.setLength(1);
+			.setLength(1);
 			antwortData.getItem("Antwort").getArray("Fehlermeldung").getItem(0) //$NON-NLS-1$ //$NON-NLS-2$
-					.asTextValue().setText(err);
+			.asTextValue().setText(err);
 		} else {
 			antwortData.getItem("Antwort").getArray("Fehlermeldung") //$NON-NLS-1$ //$NON-NLS-2$
-					.setLength(0);
+			.setLength(0);
 		}
 		antwortData.getItem("Antwort").getArray("GespeicherteGanglinien") //$NON-NLS-1$ //$NON-NLS-2$
-				.setLength(0);
+		.setLength(0);
 	}
 
 	/**
