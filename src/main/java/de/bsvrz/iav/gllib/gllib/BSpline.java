@@ -59,7 +59,7 @@ public class BSpline extends AbstractApproximation<Double> {
 	 * B-Splines im Abstand von einer Minute ausgerechnet und als Polylinie
 	 * gesichert. Die Optimierung ist standardmäßig eingeschalten.
 	 */
-	public static boolean OPTIMIERUNG = true;
+	public static final boolean OPTIMIERUNG = true;
 
 	/** Die Ordnung des B-Splines. */
 	private int ordnung;
@@ -220,12 +220,12 @@ public class BSpline extends AbstractApproximation<Double> {
 				t[j] = 0;
 			} else
 				if ((ordnung <= j) && (j <= (getStuetzstellen().size() - 1))) {
-				t[j] = (j - ordnung) + 1;
-			} else if (j > (getStuetzstellen().size() - 1)) {
-				t[j] = (getStuetzstellen().size() - 1 - ordnung) + 2;
-			} else {
-				throw new IllegalStateException();
-			}
+					t[j] = (j - ordnung) + 1;
+				} else if (j > (getStuetzstellen().size() - 1)) {
+					t[j] = (getStuetzstellen().size() - 1 - ordnung) + 2;
+				} else {
+					throw new IllegalStateException();
+				}
 		}
 
 		final List<Stuetzstelle<Double>> liste;
