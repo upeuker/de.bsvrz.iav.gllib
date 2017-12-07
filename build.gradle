@@ -4,12 +4,12 @@ plugins {
 }
 
 group = 'de.bsvrz.iav'
-version = '2.3.3-SNAPSHOT'
+version = '2.3.3'
 
 description = 'Funktionen Ganglinie (SWE 5.5) - Legacy-Version'
 
 nerzswe {
-   	sweStatus = 'BETA'
+   	sweStatus = 'FREI'
 	sweDatum = '2017-12-06'
 }
 

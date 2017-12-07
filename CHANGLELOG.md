@@ -1,6 +1,11 @@
 Versionsverlauf
 ===============
 
+## Noch nicht veröffentlicht
+
+## Version 2.3.3
+
+- Umbau auf Gradle-Build
 
 ## Version 2.3.2
 
