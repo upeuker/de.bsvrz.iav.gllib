@@ -1,5 +1,23 @@
+/*
+buildscript {
+    repositories {
+     mavenLocal()
+     maven {
+	     url "https://plugins.gradle.org/m2/"
+     }
+    }
+    dependencies {
+        classpath ':de.bsvrz.gradle.nerzswe:0.3.0'
+        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0"
+    }
+}
+apply plugin: 'de.bsvrz.gradle.nerzswe'
+apply plugin: "com.jfrog.bintray"
+*/
+
+
 plugins {
-  id "de.bsvrz.gradle.nerzswe" version "0.2.0"
+  id "de.bsvrz.gradle.nerzswe" version "0.3.0"
   id "com.jfrog.bintray" version "1.8.0"
 }
 
