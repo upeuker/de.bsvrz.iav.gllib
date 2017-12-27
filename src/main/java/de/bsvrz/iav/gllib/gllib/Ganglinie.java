@@ -89,9 +89,8 @@ public class Ganglinie<T> extends TreeMap<Long, T> {
 	 */
 	@Override
 	public Ganglinie<T> clone() {
-		Ganglinie<T> g;
-
-		g = new Ganglinie<T>();
+		@SuppressWarnings("unchecked")
+		Ganglinie<T> g = (Ganglinie<T>) super.clone();
 		g.putAll(this);
 		g.setApproximation(approximation);
 		return g;

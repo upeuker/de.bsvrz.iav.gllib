@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<FindBugsFilter>
-    <Match>
-        <Bug pattern="RC_REF_COMPARISON"/>
-    </Match>
-    <Match>
-        <Bug pattern="CN_IDIOM_NO_SUPER_CALL"/>
-    </Match>
-</FindBugsFilter>
